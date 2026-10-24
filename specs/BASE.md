@@ -1,6 +1,6 @@
 # K-GroundControl 기반 문서 (BASE)
 
-- 상태: **초안 4 (검토 1~3 반영, 참조 없이 완결, 승인 대기)** — 2026-10-24, PM 작성
+- 상태: **초안 5 (검토 1~4 반영, 승인 대기)** — 2026-10-24, PM 작성
 - 이 문서가 정하는 것: **무엇을 어떻게 구분해서 어디에 두는가.** 모듈의 모양과 경계, 설정·상태·고정값·공통 함수·저장소·주기 작업·서비스·입출력의 자리, 로그·오류·알림의 규칙, 그것을 지키는 자동 검사. 기능이 무엇을 하는지는 `specs/REQUIREMENTS.md`와 `specs/features/`가 정한다.
 - 이 문서가 승인되기 전에는 기능 스펙을 쓰지 않는다. 기능 스펙의 "기반" 절은 이 문서의 이름을 그대로 쓴다. 구현 중에 여기 없는 자리가 필요해지면 만들지 않고 이 문서로 돌아온다.
 - **문서의 권위**: BASE가 원본이고, 저장소 루트 `AGENTS.md`(구현자 GPT용, 영어)는 그 번역이다. 어긋나면 BASE를 따른다. 구현 주체가 GPT(D12)이므로 이 문서만 읽고도 같은 구조를 세울 수 있게 **다른 판이나 문서를 참조하지 않고** 쓴다.
@@ -61,7 +61,7 @@ k-groundcontrol/
 ├─ src/
 │  ├─ platform/
 │  │  ├─ app/       0   boot settings secrets paths store scheduler job net log errors notify i18n units geo crc util
-│  │  ├─ comm/      1   links(serial udp tcp mock) rawport(RawPort PortRegistry) lease(PortLease) mavlink(parser channel signing) tlog joystick
+│  │  ├─ comm/      1   links(serial udp tcp mock) rawport(RawPort PortRegistry) lease(PortLease) mavlink(parser channel signing) espflash(ESP 시리얼 부트로더 클라이언트) tlog joystick
 │  │  ├─ vehicle/   2   registry Vehicle states firmware(px4 ardupilot generic) outbound(VehicleSender) safety(ArmGuard WorkLock ArmedPolicy RebootWindow) command(CommandQueue)
 │  │  └─ ui/        2.5 Theme components(HoldToConfirm JobView Pill Chip TimerBox) PanelRegistry Slots(Topbar StatusChip RightTab MapLayer) Navigator
 │  ├─ features/<id>/   api/kgc/<id>/  internal/  ui/  CMakeLists.txt  MODULE.md
@@ -74,7 +74,7 @@ k-groundcontrol/
 ```
 
 - 바탕 모듈의 하위 영역(`comm/mavlink`, `vehicle/firmware` 등)은 **각각 타깃 하나·`api/` 하나·`MODULE.md` 하나·네임스페이스 하나**. 같은 바탕 안의 순서는 그 바탕 모듈 `MODULE.md`가 적는다.
-- 모듈 폴더 안: `api/kgc/<id>/`(공개 헤더 — `<Id>Service.h`, `<Id>States.h`, `Errors.h`, 생성 `Settings.h`), `internal/`(로직, `Constants.h`, `Events.h`, `settings/<id>.settings.json`, `paths/`), `ui/`(`<Id>Panel.qml`, `<Id>Controller.{h,cpp}`, `register.cpp`), `CMakeLists.txt`, `MODULE.md`. 바탕 모듈과 화면 없는 기능은 `ui/`가 없다.
+- 모듈 폴더 안: `api/kgc/<id>/`(공개 헤더 — `<Id>Service.h`, `<Id>States.h`, `Errors.h`, `ModuleId.h`, 생성 `Settings.h`), `internal/`(로직, `Constants.h`, `Events.h`, `settings/<id>.settings.json`, `paths/`), `ui/`(`<Id>Panel.qml`, `<Id>Controller.{h,cpp}`, `register.cpp`), `CMakeLists.txt`, `MODULE.md`. 바탕 모듈과 화면 없는 기능은 `ui/`가 없다.
 
 ### 3.1 기능 모듈 표 — id · 수명 · 보이는 곳
 
@@ -85,10 +85,10 @@ k-groundcontrol/
 | `ai` | AI 세팅 | 전역 패널 + 기체별 서비스 | 상단 오른쪽 아이콘·패널, 첫 사용 동의 | R-D4~D8, R-N23 |
 | `appSettings` | 앱 설정 | 전역 | 좌 메뉴 15, **정보 창**(버전·라이선스·고지·소스) | R-N16·17·22 |
 | `analyze` | 인스펙터·콘솔·앱 로그 뷰어·진동 | 기체별 + 전역(앱 로그) | 좌 메뉴(나중 순서) | E3, C-55·57 |
-| `link` | 연결 | 전역 | 하단 기체 칩(링크 상태) + 연결 팝업, 링크 목록 편집은 appSettings가 연다 | R-Q1, C-1~C-8 |
+| `link` | 연결 | 전역 | 하단 기체 칩(링크 상태) + 연결 팝업. 저장된 링크 목록의 편집 화면은 `appSettings`가 갖고, 둘 다 바탕 `comm/links/LinkManager` api를 직접 쓴다(같은 순위라 서로 부르지 않음) | R-Q1, C-1~C-8 |
 | `fly` | 비행 조작 | 기체별 | 상단바 조작 띠(슬롯), 유도 명령(지도 클릭 팝업·표식 레이어) | R-Q4·R-Q5 |
 | `mission` | 미션 | **전역 편집기**(`MissionEditor`: .plan 편집·저장, 기체 없이도) + **기체별** `MissionService`(전송·동기·현재 항목) | 지도 패널 편집 레이어, 상단바 미션 선택·시작 슬롯 | R-Q7·R-Q8, R-N13 |
-| `vehicleInfo` | 기체 정보 | 기체별 | 우 사이드바 계기 + 개요·상세·메시지 탭 | B2~B5, F-9 |
+| `vehicleInfo` | 기체 정보 | 기체별 | 우 사이드바 계기 + 개요·상세·메시지 탭, 하단 센서 ✓/✕·배터리·RSSI 칩 | B2~B5, F-7, F-9 |
 | `preflight` | 비행 전 점검 | 기체별 | 우 사이드바 점검 탭; 점검표 정의 `resources/data/preflight/` | F-46·47 |
 | `logs` | 로그 분석 | 전역 뷰어 + 기체별 내려받기 | 좌 메뉴 10, 우 사이드바 로그 탭, tlog 재생 | E1·E2, C-12 |
 | `layout` | 기체 구성도(+기체 종류) | 기체별 | 좌 메뉴 2 | 5.5절, S-34~37 |
@@ -103,7 +103,7 @@ k-groundcontrol/
 | `esc` | ESC 설정 | 전역 | 좌 메뉴 11 | 5.2절 |
 | `elrs` | ELRS 설정 | 전역 | 좌 메뉴 12 | 5.3절 |
 | `tracker` | 안테나 트래커 | 전역 | 좌 메뉴 13, 하단 칩, 지도 부채꼴 레이어 | 5.4절 |
-| `map` | 지도 | 전역 | 가운데 바탕(타일·궤적·기체 아이콘·펜스·랠리·ADS-B), 레이어 슬롯의 그릇 | B10 |
+| `map` | 지도 | 전역 | 가운데 바탕(타일·축척·기체 아이콘·궤적·홈), 레이어 슬롯의 그릇. 펜스·랠리·ADS-B는 그리지 않는다(기여 레이어) | B10 |
 | `video` | 영상 | 전역 | 지도 PiP 레이어 | B11 |
 | `terrain` | 지형 | 전역 조회 + 기체별 응답(TERRAIN_REQUEST) | 지도 단면 레이어 | C6, F-56 |
 | `gcsposition` | GCS GPS | 전역 | 하단 칩 | R-Q3, C-47 |
@@ -125,11 +125,11 @@ k-groundcontrol/
 | 6 | `map` |
 | 7 | `video` `terrain` `gcsposition` |
 | 8 | `params` |
-| 9 | `extras`(쪼개질 때 각 모듈의 순위를 정함; 기본 5) |
-| — | 바탕: `platform/ui` < `vehicle` < `comm` < `app` |
+| 9 | `extras`(쪼개질 때 각 모듈의 순위를 기능 스펙이 정한다; 정하기 전에는 9) |
+| — | 바탕(모든 기능보다 아래): `app`(0) < `comm`(1) < `vehicle`(2) < `platform/ui`(2.5) — 왼쪽이 더 아래 |
 
 - 위가 아래의 `api/`를 쓴다. **아래가 위를 쓰지 않는다** — 위에 보이려면 §9.8 기여 등록, 위를 열려면 `Navigator::open(id, arg)`, 위의 값이 필요하면 그 값을 더 아래 모듈이나 상태로 내린다.
-- 예: `layout`(4)이 `motors`(5)의 api를 불러 **그림 모터 시험**을 한다(주인은 layout, OperationKind `MotorTest`). `motors`가 구성도 표식과 기체값의 차이가 필요하면 `layout`을 부르지 않고 `params`(8)의 값과 자기 표식 캐시 없이 `LayoutStates`를… 쓸 수 없으므로, 그 판정(R-D35 "표식≠기체값이면 잠금")은 **layout이 하고 결과를 motors api 호출의 인자로 넘긴다**.
+- 예: `layout`(4)이 `motors`(5)의 api를 불러 **그림 모터 시험**을 한다(주인은 layout, OperationKind `MotorTest`). R-D35의 "표식≠기체값이면 시험 잠금" 판정은 `motors`가 할 수 없으므로(위의 `LayoutStates`를 읽을 수 없다) **`layout`이 판정해 그 결과를 `motors` api 호출의 인자로 넘긴다**.
 - `esc`·`elrs`·`tracker`(5)가 파라미터(`SERVO_BLH_*`, `PASSTHRU_EN`)를 읽고 쓰는 것은 `params`(8)가 아래라서 허용.
 - `map`(6)은 레이어 슬롯의 그릇이고 `video`·`terrain`(7)·`tracker`·`mission`·`fly`는 `platform/ui`의 `MapLayerSlot`에 등록한다(§9.8). `map`은 그들을 모른다.
 - 순환은 `tools/check`가 `cmake --graphviz` 출력을 이 표와 대조해 잡는다.
@@ -182,7 +182,7 @@ k-groundcontrol/
 - **고정값**: 모듈 `internal/Constants.h`. 여러 모듈이 쓰는 값만 `platform/app/constants/`: `mavlink.h`(ACK 1200ms·3회, GCS 하트비트 1Hz, 끊김 3500ms), `safety.h`(비상 정지 21196, 강제 시동 2989, 모터 시험 3초), `mission.h`(1500ms·250ms·5회). CRC 다항식은 `app/crc`, 트래커 프로토콜 상수는 공용 헤더(§11)에만.
 - 검사 범위: `chrono` 리터럴, 타이머·Timeout 인자, 4자리 이상 16진수, 3자리 이상 10진수(허용 360·180·90·1000·60). 오프셋·시프트·인덱스(<256)는 대상 아님. QML은 `width`·`height`·`padding`·`margins`·`spacing`·`radius`·색 리터럴만 `Theme`에(anchors·z·opacity 등은 대상 아님).
 - **열거**: 모듈 `api/`의 `enum class`. 펌웨어가 정하는 열거(모드·회전·서보 기능)는 플러그인이 메타데이터에서 읽어 제공.
-- **모듈 id**: 모듈마다 `api/kgc/<id>/ModuleId.h`에 `inline constexpr kgc::app::ModuleId kModuleId{0x0012};`(16비트, 모듈별 고유). 바탕 `app/errors/ModuleId`는 형만 정의하고 값을 모른다. 중복은 검사가 모아 본다.
+- **모듈 id**: 모듈마다 `api/kgc/<id>/ModuleId.h`에 `inline constexpr kgc::app::errors::ModuleId kModuleId{18};`(16비트, 모듈별 고유, 10진). 바탕 `app/errors/ModuleId`는 형만 정의하고 값을 모른다. 중복은 검사가 모아 본다. `ModuleId.h`는 고정값 검사에서 제외한다.
 - **오류 코드**: `platform/app/errors/ErrorCode = {ModuleId module; uint16 code;}` 하나의 형. 모듈은 `api/kgc/<id>/Errors.h`에 `enum class EscError : uint16_t`와 `ErrorCode make(EscError)`를 둔다. `Result<T> = std::expected<T, ErrorCode>`. 사용자 문구는 모듈이 `errorText(ErrorCode)`(번역 대상)로.
 - **로그 사건**: `platform/app/log/LogEvent = {ModuleId, uint16}` 형. 모듈은 `internal/Events.h`에 `enum class EscEvent : uint16_t`. 검사가 전부 모아 중복·미등록을 본다.
 
@@ -214,7 +214,7 @@ k-groundcontrol/
 - 검사: `vehicle/firmware/` 밖에서 `MAV_AUTOPILOT_PX4`·`MAV_AUTOPILOT_ARDUPILOTMEGA` 비교, `"PX4"`·`"ArduPilot"`·`"APM"` 문자열 비교를 잡되 **허용 목록**: `features/fcFlash`(펌웨어 선택 화면), `features/logs`(.ulg/.bin), `features/params`(메타데이터 출처 표시), 번역 파일. 기능 모듈 안에 펌웨어 이름의 하위 폴더는 금지.
 
 ### 8.1 전송 방식별 절차의 자리
-펌웨어가 아니라 **전송 방식**에 따라 절차가 다른 것은 기능 모듈 `internal/paths/<방식>/`: `esc/internal/paths/{blhPassthrough, serialControl, direct}`, `elrs/internal/paths/{uart, wifi, bfPassthrough, etxPassthrough, fcPassthrough}`. 어느 방식을 쓸지는 `Capabilities`와 사용자 선택으로 고른다.
+펌웨어가 아니라 **전송 방식**에 따라 절차가 다른 것은 기능 모듈 `internal/paths/<방식>/`: `esc/internal/paths/{blhPassthrough, serialControl, direct}`, `elrs/internal/paths/{uart, wifi, bfPassthrough, etxPassthrough, fcPassthrough}`. 어느 방식을 쓸지는 `Capabilities`와 사용자 선택으로 고른다. **ESP 시리얼 부트로더 클라이언트**(SLIP·스텁·DTR/RTS 리셋·MD5 검증)는 `elrs`와 `tracker`가 함께 쓰므로 바탕 `platform/comm/espflash`에 둔다(`<kgc/comm/espflash/EspFlasher.h>`); `elrs/paths/uart`와 `tracker`의 굽기는 이것을 부른다.
 
 ## 9. 조립·수명·송신·공통 틀
 
@@ -223,12 +223,13 @@ k-groundcontrol/
 - `comm/links/LinkManager`(링크), `vehicle/registry/VehicleRegistry`(기체, sysid 키; compid 1이 자동조종기, 다른 compid는 그 기체의 `Component`). **활성 기체** `VehicleRegistry::active` 하나 — 상단바 기체 표시, 트래커 기본 대상, 구성도 편집 대상이 본다.
 - 수명은 §3.1 규칙. 기체 삭제: `vehicleRemoved` → `deleteLater`. 참조는 `QPointer`/활성 기체 프로퍼티.
 - **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다.
+- **임대의 동작**(R-Q1a (가)): `PortLease::acquire(port)`는 그 포트를 쓰던 MAVLink 링크에 `LinkManager::suspend(link)`를 걸어 **GCS 하트비트·자동 재접속·끊김 경고를 멈추고** 포트를 넘긴다(`Link.suspended`=true, 기체는 "작업 중"으로 표시). `release()`가 `resume(link)`으로 되돌린다. AP BLHeli 패스스루의 4초 침묵은 임대 뒤 `PortLease`가 기다려 준다.
 - **의도한 재부팅 구간** `vehicle/safety/RebootWindow`: 기능이 `begin(vehicle, timeout)`으로 열면 그동안 끊김 판정이 "끊김"이 아니라 "재부팅 중"(`Link.rebooting`)이 된다(R-Q1a (나)).
 
 ### 9.2 기체로 나가는 문 하나와 시동 중 규칙
 - `vehicle/outbound/VehicleSender`가 기체로 가는 **모든 MAVLink 송신**의 유일한 문(주 링크 선택, sysid·compid 채움). 송신마다 `OutboundKind`(Arm, Motion, Command, Param, Mission, Other).
 - **시동 중 규칙(R-N10)은 두 곳에서 판정한다.**
-  - ① **작업 시작 때**: 호출자가 `OperationKind`를 밝히고 `vehicle/safety/ArmedPolicy::check(kind, scope)`를 부른다. `scope`는 `VehicleScope::None`(기체 없는 작업: ESC 직접 연결·ELRS UART), `One(vehicle)`, `Any`(연결된 기체 중 하나라도 — 트래커 굽기). 결과는 `Allow / AllowWithWarning(길게 눌러 확인) / Deny`. 표는 R-N10을 그대로 옮긴다:
+  - ① **작업 시작 때**: 호출자가 `OperationKind`를 밝히고 `vehicle/safety/ArmedPolicy::check(kind, scope)`를 부른다. `scope`는 `One(vehicle)`(그 기체만 본다) 또는 `Any`(연결된 기체 중 하나라도 시동 중이면 시동 중으로 본다). **기체 없는 작업**(ESC 직접 연결·ELRS UART/WiFi·트래커 굽기)은 모두 `Any`로 판정한다 — 어느 기체든 시동 중이면 조종 중인 장치를 구울 수 있으므로. 결과는 `Allow / AllowWithWarning(길게 눌러 확인) / Deny`. 표는 R-N10을 그대로 옮긴다:
 
     | OperationKind | 시동 중 |
     |---|---|
@@ -236,8 +237,8 @@ k-groundcontrol/
     | `ParamSingle`, `Tuning`, `Autotune` | AllowWithWarning |
     | `TrackerConfig`, `TrackerCalib`, `TrackerManual` | Allow(추적 중단 경고) |
     | `FlyAction`(시동·이륙·착륙·RTL·일시정지·유도), `MissionStartStop`, `Read`(읽기·내려받기) | Allow(각자의 길게 누르기 규칙) |
-  - ② **Sender에서**: `OperationKind`를 모르므로 **`WorkLock`과 `RebootWindow`만** 본다 — 토큰을 쥔 작업의 송신만 통과(그 작업 자신의 단계는 예외), 재부팅 구간의 기체에는 `Arm`·`Motion`을 보내지 않는다. 시동 중의 `Param`·`Mission` 송신은 ②에서 막지 않는다(판정은 ①에서 끝남).
-  - **작업 도중 시동이 걸리면**: `Job`이 `Arming.armed` 변화를 구독해 Deny 종류는 **중단**(안전한 단계까지 끝낸 뒤), AllowWithWarning 종류는 경고만.
+  - ② **Sender에서**: `OperationKind`를 모르므로 **`WorkLock`과 `RebootWindow`만** 본다 — 잠금 중에는 `Arm`·`Motion`·`Command`·`Param`·`Mission` 가운데 토큰을 쥔 작업의 송신만 통과하고(그 작업 자신의 단계는 예외), **`Other`(GCS 하트비트·스트림 요청 등 링크 유지 송신)는 막지 않는다**(R-Q1a (나) 하트비트 유지). 재부팅 구간의 기체에는 `Arm`·`Motion`을 보내지 않는다. 시동 중의 `Param`·`Mission` 송신은 ②에서 막지 않는다(판정은 ①에서 끝남).
+  - **작업 도중 시동이 걸리면**: `vehicle/safety/JobArmWatch`(Job에 붙은 도우미)가 `Arming.armed` 변화를 보고 Deny 종류는 Job을 **중단**(안전한 단계까지 끝낸 뒤), AllowWithWarning 종류는 경고만.
 - `vehicle/command/CommandQueue`는 Sender 위의 **재시도 계층**(COMMAND_LONG/INT·ACK·타임아웃·재시도). 보정 시작처럼 ACK가 늦는 명령은 `{retries=0, timeout=설정값}` 모드로 큐를 탄다 — 예외 목록 없음. AP 가속도 보정의 "다음"(COMMAND_ACK 송신)도 Sender를 지난다.
 - 보내기 스레드: Sender가 `QMetaObject::invokeMethod(link, …, Qt::QueuedConnection)`으로 링크 워커에 넘긴다.
 - 검사: 링크 쓰기 API는 `comm/`·`vehicle/outbound/` 밖 금지; `command_(long|int)_(pack|encode)`는 `vehicle/command/` 밖 금지.
@@ -254,7 +255,7 @@ k-groundcontrol/
 | TTS | `platform/app/notify/Speech` | — |
 
 ### 9.4 오래 걸리는 작업과 오류
-- `platform/app/job/Job`(QObject): `OperationKind`, 상태(대기·진행·성공·실패·취소), 단계 이름, 진행률, 남은 시간, `cancel()`, 끝날 때 `finished(Result<void>)` 한 번, `errorCode`·`errorText` 프로퍼티. 임대·잠금·ArmGuard 토큰은 Job이 **RAII**로 쥔다. 화면은 `platform/ui/components/JobView.qml`로 보여 준다. FC·ESC·ELRS·트래커 굽기, 미션 전송, 파라미터 내려받기, 보정, 로그 내려받기가 전부 Job이다.
+- `platform/app/job/Job`(QObject): `OperationKind`(열거는 0층 `<kgc/app/job/OperationKind.h>`에 정의 — 기체를 모르는 이름표일 뿐), 상태(대기·진행·성공·실패·취소), 단계 이름, 진행률, 남은 시간, `cancel()`, 끝날 때 `finished(Result<void>)` 한 번, `errorCode`·`errorText` 프로퍼티. 임대·잠금·ArmGuard 토큰은 Job이 **RAII**로 쥔다. Job은 기체를 모른다: 시동 감시는 2층 `vehicle/safety/JobArmWatch`가 `attach(job, scope)`로 붙여서 `Arming.armed` 변화에 Job을 중단·경고한다(§9.2). 화면은 `platform/ui/components/JobView.qml`로 보여 준다. FC·ESC·ELRS·트래커 굽기, 미션 전송, 파라미터 내려받기, 보정, 로그 내려받기가 전부 Job이다.
 - `Result<T> = std::expected<T, ErrorCode>`. 함수는 예외 대신 Result. 예외·`Q_ASSERT`·`qFatal`은 프로그램 버그에만. 워커 스레드의 오류는 `ErrorCode`를 큐드 시그널로 소유 객체에 올리고, 알림은 소유 객체만 낸다.
 
 ### 9.5 주기 작업·타임아웃·스레드
@@ -283,7 +284,7 @@ k-groundcontrol/
 | 하단 센서 ✓/✕ 칩 | `vehicleInfo` | `StatusChipSlot(왼쪽)` |
 | 하단 트래커·GCS GPS 칩 | `tracker`, `gcsposition` | `StatusChipSlot(오른쪽)` |
 | 우 사이드바 탭 | `vehicleInfo`(계기·개요·상세·메시지), `logs`(로그), `preflight`(점검) | `RightTabSlot` |
-| 지도 레이어 | `mission`(편집·경로), `fly`(유도 표식), `tracker`(부채꼴), `terrain`(단면), `video`(PiP) | `MapLayerSlot` — `map`이 그릇 |
+| 지도 레이어 | `mission`(편집·경로·**펜스·랠리**), `fly`(유도 표식), `tracker`(부채꼴), `terrain`(단면), `video`(PiP), `extras`의 ADS-B 모듈(교통) | `MapLayerSlot` — `map`이 그릇 |
 | 좌 메뉴 패널 | §3.1 좌 메뉴 모듈 | `PanelRegistry` |
 | 정보 창 | `appSettings` | `Navigator.open("appSettings","about")` |
 
@@ -402,5 +403,6 @@ k-groundcontrol/
 | 2026-10-24 | reviewer-2 | 설계 검토 2: fail, 이전 15 해결·5 부분, 새 12개(`.pm/base/reviewer-2.md`) → 초안 3 |
 | 2026-10-24 | reviewer-3 | 설계 검토 3: fail, 이전 6 해결·6 부분, 새 8개(`.pm/base/reviewer-3.md`) → 초안 4(참조 없이 완결, params 순위 8, 슬롯은 platform/ui 한 곳, ArmedPolicy 표·VehicleScope·② 범위, `link` 모듈, mission 분리, QML import 허용, 하위 영역 접두어·ModuleId, 기여 표 보완) |
 | 2026-10-24 | 사용자 | §17 9·10·11 승인(R-N6·R-N2 개정, 기능 id, 폴더 변경) |
-| | reviewer-4 | (진행 중) |
+| 2026-10-24 | reviewer-4 | 설계 검토 4: fail, 이전 7 해결·1 부분, 새 6개(`.pm/base/reviewer-4.md`) → 초안 5(comm/espflash, map 레이어 정리, OperationKind 0층·JobArmWatch, scope Any 통일·② Other 통과, 문장·순위·부등호, ModuleId, PortLease 동작, 센서 칩·링크 편집 주인) |
+| | reviewer-5 | (대기) |
 | | 사용자 | (대기) |

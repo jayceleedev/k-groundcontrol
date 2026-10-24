@@ -23,6 +23,7 @@ add_custom_target(package
         "-DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}"
         "-DPROJECT_BINARY_DIR=${CMAKE_BINARY_DIR}"
         "-DPROJECT_VERSION=${PROJECT_VERSION}"
+        "-DCMAKE_LIBRARY_ARCHITECTURE=${CMAKE_LIBRARY_ARCHITECTURE}"
         "-DQT_ROOT=${QT6_INSTALL_PREFIX}"
         -P "${PROJECT_SOURCE_DIR}/cmake/deploy/$<IF:$<PLATFORM_ID:Windows>,windows,linux>.cmake"
     DEPENDS KGroundControl)

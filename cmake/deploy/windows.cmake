@@ -7,5 +7,8 @@ find_program(WINDEPLOYQT windeployqt HINTS "${QT_ROOT}/bin" REQUIRED)
 execute_process(COMMAND "${WINDEPLOYQT}" --release --compiler-runtime
     --qmldir "${PROJECT_SOURCE_DIR}/src" "${stage}/KGroundControl.exe"
     COMMAND_ERROR_IS_FATAL ANY)
-file(ARCHIVE_CREATE OUTPUT "${PROJECT_BINARY_DIR}/K-GroundControl-${PROJECT_VERSION}-windows-x86_64.zip"
-    PATHS "${stage}" FORMAT zip)
+# 빌드 경로가 압축 파일 안에 들어가지 않도록 배포 폴더에서 묶어요.
+execute_process(COMMAND ${CMAKE_COMMAND} -E tar cf
+    "${PROJECT_BINARY_DIR}/K-GroundControl-${PROJECT_VERSION}-windows-x86_64.zip"
+    --format=zip K-GroundControl
+    WORKING_DIRECTORY "${PROJECT_BINARY_DIR}/package" COMMAND_ERROR_IS_FATAL ANY)

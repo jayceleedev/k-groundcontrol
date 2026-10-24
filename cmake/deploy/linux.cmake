@@ -17,7 +17,9 @@ file(COPY "${PROJECT_SOURCE_DIR}/LICENSE" "${PROJECT_BINARY_DIR}/THIRD_PARTY_NOT
 file(WRITE "${tools}/KGroundControl.desktop"
     "[Desktop Entry]\nType=Application\nName=K-GroundControl\nExec=KGroundControl\nIcon=KGroundControl\nCategories=Science;\n")
 file(COPY_FILE "${PROJECT_SOURCE_DIR}/resources/icons/app.svg" "${tools}/KGroundControl.svg")
-find_library(XCB_CURSOR NAMES xcb-cursor REQUIRED)
+# 스크립트 실행에는 컴파일러 초기화가 없으므로 구성 때 얻은 다중 아키텍처 경로를 써요.
+find_library(XCB_CURSOR NAMES xcb-cursor libxcb-cursor.so.0
+    PATHS "/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}" "/lib/${CMAKE_LIBRARY_ARCHITECTURE}" REQUIRED)
 execute_process(COMMAND ${CMAKE_COMMAND} -E env
     "PATH=${tools}:$ENV{PATH}" "QMAKE=${QT_ROOT}/bin/qmake" "QML_SOURCES_PATHS=${PROJECT_SOURCE_DIR}/src"
     "EXTRA_QT_PLUGINS=svg;iconengines" "VERSION=${PROJECT_VERSION}" "ARCH=x86_64"

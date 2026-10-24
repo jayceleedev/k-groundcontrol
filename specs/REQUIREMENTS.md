@@ -189,7 +189,7 @@ QGC에는 없는 기능. Mission Planner의 GCS 주도형 트래커(GPL-3)가 �
 - Linux(이 개발 머신): **PX4 SITL** — Docker 이미지 `px4io/px4-sitl`은 1.18 시험판 태그만 있어 1.18 검증에만 쓴다. 1.15~1.17 안정판은 PX4 소스를 **릴리스 태그로 받아 `make px4_sitl_sih`로 빌드**해 쓴다(빌드 시간·용량 미확인, 10절). UDP 14550. **ArduPilot SITL** — 미리 빌드된 바이너리(`firmware.ardupilot.org/<Vehicle>/stable-4.x.y/SITL_x86_64_linux_gnu/`) 또는 `sim_vehicle.py`, 버전 고정, TCP 5760 / MAVProxy UDP 14550. GCS 둘이 한 머신이면 MAVProxy `--out`으로 포트 추가. D17을 승인할 때 **SITL로 검증하는 버전**과 **연결만 시험하는 버전**을 나눈다
 - Windows: 사용자 PC에서 Actions 아티팩트 실행(비공개 저장소라 GitHub 로그인 필요; 보존 기간·러너 분 한도는 확인 필요)
 - 실기: 사용자가 FC 하나 연결(개발 머신 계정을 `dialout` 그룹에 넣어야 함). ESC·ELRS 경로별 시험 장비는 그 기능 스펙 때 정한다
-- GCS 위치 수신기(R-Q3, R-D23 ②): **사용자 보유 u-blox GPS 모듈**(M8N 또는 M10 계열, UART → USB-UART 어댑터로 PC에 연결)을 기준 장치로 쓴다. NMEA 기본 출력과 UBX(NAV-PVT) 둘 다로 시험한다. 정확한 모델명은 기능 스펙 때 적는다
+- GPS 모듈: **사용자 보유 u-blox GPS 모듈**(M8N 또는 M10 계열, UART)을 기준 장치로 쓴다. 두 자리에서 시험한다 — ① **안테나 트래커 ESP32의 UART에 직접 연결**(R-D23 ①, 트래커 위치의 1순위 출처) ② USB-UART 어댑터로 PC에 연결해 GCS 위치 수신기로(R-Q3, R-D23 ②). NMEA 기본 출력과 UBX(NAV-PVT) 둘 다로 시험한다. GPS 하나로는 정지 상태의 헤딩을 얻을 수 없으므로 헤딩은 자력계(R-D25)가 맡는다. 정확한 모델명은 기능 스펙 때 적는다
 
 ## 10. 미확인 (스펙 쓸 때 다시 확인)
 

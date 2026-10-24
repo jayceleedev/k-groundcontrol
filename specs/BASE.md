@@ -389,9 +389,9 @@ k-groundcontrol/
 | 6 | 번역 원문 한국어 | **확정** |
 | 7 | 검사용 Python 3 + lizard 고정 | **확정** |
 | 8 | 네임스페이스·크기 상한 400/60/300 | **확정** |
-| 9 | **요구사항 개정**: R-N6을 "모듈러 모놀리스(§1.2 대응표)"로, R-N2를 "api·의존 변경 커밋에서 함께"로 좁힘. 기능 간 의존은 순위표(§3.2)로 허용, 역방향은 기여 등록·Navigator·상태로 | **승인 대기** |
-| 10 | 기능 id: `firmware`→`fcFlash`, `safety`→`failsafe`; 와이어프레임 id 맞춤 | **승인 대기** |
-| 11 | **초안 3·4의 폴더 변경**: `platform/ui` 신설, `api/kgc/<경로>/` include 형식, 기능 모듈 `link`·`map`·`vehicleInfo`·`preflight`·`analyze`·`extras` 추가, `mission` 전역 편집기+기체별 서비스 분리 | **승인 대기** |
+| 9 | **요구사항 개정**: R-N6을 "모듈러 모놀리스(§1.2 대응표)"로, R-N2를 "api·의존 변경 커밋에서 함께"로 좁힘. 기능 간 의존은 순위표(§3.2)로 허용, 역방향은 기여 등록·Navigator·상태로 | **확정** 2026-10-24 |
+| 10 | 기능 id: `firmware`→`fcFlash`, `safety`→`failsafe`; 와이어프레임 id 맞춤 | **확정** 2026-10-24 |
+| 11 | **초안 3·4의 폴더 변경**: `platform/ui` 신설, `api/kgc/<경로>/` include 형식, 기능 모듈 `link`·`map`·`vehicleInfo`·`preflight`·`analyze`·`extras` 추가, `mission` 전역 편집기+기체별 서비스 분리 | **확정** 2026-10-24 |
 
 ## 18. 검토·승인 기록
 
@@ -401,5 +401,6 @@ k-groundcontrol/
 | 2026-10-24 | 사용자 | §17 1~8 확정 |
 | 2026-10-24 | reviewer-2 | 설계 검토 2: fail, 이전 15 해결·5 부분, 새 12개(`.pm/base/reviewer-2.md`) → 초안 3 |
 | 2026-10-24 | reviewer-3 | 설계 검토 3: fail, 이전 6 해결·6 부분, 새 8개(`.pm/base/reviewer-3.md`) → 초안 4(참조 없이 완결, params 순위 8, 슬롯은 platform/ui 한 곳, ArmedPolicy 표·VehicleScope·② 범위, `link` 모듈, mission 분리, QML import 허용, 하위 영역 접두어·ModuleId, 기여 표 보완) |
-| | reviewer-4 | (대기) |
+| 2026-10-24 | 사용자 | §17 9·10·11 승인(R-N6·R-N2 개정, 기능 id, 폴더 변경) |
+| | reviewer-4 | (진행 중) |
 | | 사용자 | (대기) |

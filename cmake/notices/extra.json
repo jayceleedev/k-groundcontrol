@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Qt",
+    "version": "6.12.0",
+    "license": "LGPL-3.0",
+    "url": "https://www.qt.io/licensing/",
+    "platform": "all"
+  },
+  {
+    "name": "Microsoft Visual C++ Redistributable",
+    "version": "2022",
+    "license": "Microsoft Visual Studio License Terms",
+    "url": "https://visualstudio.microsoft.com/license-terms/",
+    "platform": "Windows"
+  },
+  {
+    "name": "linuxdeploy",
+    "version": "1-alpha-20250213-2",
+    "license": "MIT",
+    "url": "https://github.com/linuxdeploy/linuxdeploy",
+    "platform": "Linux"
+  },
+  {
+    "name": "linuxdeploy-plugin-qt",
+    "version": "1-alpha-20250213-1",
+    "license": "MIT",
+    "url": "https://github.com/linuxdeploy/linuxdeploy-plugin-qt",
+    "platform": "Linux"
+  }
+]

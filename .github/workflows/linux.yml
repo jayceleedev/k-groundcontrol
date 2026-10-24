@@ -1,0 +1,35 @@
+name: Linux
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: sudo apt-get update && sudo apt-get install -y libxcb-cursor0 libxcb-cursor-dev libfuse2 libxkbcommon-x11-0 libgl1-mesa-dev ninja-build
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.12.0'
+          arch: linux_gcc_64
+          cache: true
+      - name: 구성
+        shell: bash
+        run: QT_ROOT="$QT_ROOT_DIR" cmake --preset linux-release
+      - run: cmake --build --preset linux-release
+      - run: ctest --preset linux-release
+      - run: cmake --build build/linux-release --target package
+      - uses: actions/upload-artifact@v4
+        with:
+          name: K-GroundControl-linux
+          path: build/linux-release/*.AppImage
+      - uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: build/linux-release/*.AppImage

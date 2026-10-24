@@ -1,0 +1,21 @@
+<RCC>
+  <qresource prefix="/kgc">
+    <file alias="LICENSE">../LICENSE</file>
+    <file>icons/app.svg</file>
+    <file>icons/menu/fcFlash.svg</file>
+    <file>icons/menu/layout.svg</file>
+    <file>icons/menu/sensors.svg</file>
+    <file>icons/menu/radio.svg</file>
+    <file>icons/menu/flightModes.svg</file>
+    <file>icons/menu/power.svg</file>
+    <file>icons/menu/failsafe.svg</file>
+    <file>icons/menu/motors.svg</file>
+    <file>icons/menu/tuning.svg</file>
+    <file>icons/menu/logs.svg</file>
+    <file>icons/menu/esc.svg</file>
+    <file>icons/menu/elrs.svg</file>
+    <file>icons/menu/tracker.svg</file>
+    <file>icons/menu/params.svg</file>
+    <file>icons/menu/appSettings.svg</file>
+  </qresource>
+</RCC>

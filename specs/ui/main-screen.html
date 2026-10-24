@@ -37,6 +37,19 @@
   .instrument small { color: var(--dim); }
   .right .rest { flex: 1; display: flex; align-items: center; justify-content: center; }
 
+  /* 우 사이드바: 기체 정보 블록 */
+  .right { overflow: hidden; }
+  .info { border: 1px solid var(--line); background: #fff; padding: 6px 8px; font-size: 12px; color: var(--ink); }
+  .info h4 { margin: 0 0 4px; font-size: 11px; font-weight: 600; color: var(--dim); letter-spacing: .02em; }
+  .info .row { display: flex; justify-content: space-between; gap: 8px; padding: 1px 0; }
+  .info .row b { font-weight: 600; }
+  .info .bar { height: 6px; border: 1px solid var(--line); background: #fff; position: relative; margin-top: 3px; }
+  .info .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); }
+  .info .status { display: flex; gap: 6px; flex-wrap: wrap; }
+  .info .status span { border: 1px solid var(--line); border-radius: 10px; padding: 1px 7px; }
+  .info .msgs { font-size: 11px; color: var(--dim); line-height: 1.4; max-height: 54px; overflow: hidden; }
+  .right .fill { flex: 1; }
+
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) { --bg:#111827; --box:#1f2937; --line:#4b5563; --ink:#e5e7eb; --dim:#9ca3af; --accent:#d1d5db;
       --map: repeating-linear-gradient(45deg,#1f2937 0 12px,#243042 12px 24px); }
@@ -63,7 +76,44 @@
       <div class="horizon"></div>
       <small>계기 화면 — 자세(인공 수평선) · 나침반/헤딩</small>
     </div>
-    <div class="rest">(아래 비어 있음)</div>
+
+    <div class="info">
+      <h4>상태</h4>
+      <div class="status"><span><b>Ready To Fly</b></span><span>Position</span><span>시동 꺼짐</span></div>
+    </div>
+
+    <div class="info">
+      <h4>배터리</h4>
+      <div class="row"><span>잔량</span><b>87 %</b></div>
+      <div class="bar"><i style="width:87%"></i></div>
+      <div class="row"><span>전압 · 전류</span><span>16.1 V · 12.4 A</span></div>
+    </div>
+
+    <div class="info">
+      <h4>위치 · GPS</h4>
+      <div class="row"><span>고도(상대 / AMSL)</span><span>52.3 m / 118.0 m</span></div>
+      <div class="row"><span>속도(수평 / 수직)</span><span>8.1 m/s / +0.4 m/s</span></div>
+      <div class="row"><span>GPS</span><span>3D Fix · 위성 14 · HDOP 0.8</span></div>
+      <div class="row"><span>홈까지 거리</span><span>412 m</span></div>
+    </div>
+
+    <div class="info">
+      <h4>링크</h4>
+      <div class="row"><span>USB 115200</span><span>손실 0 % · 1 Hz</span></div>
+      <div class="row"><span>RC RSSI · 텔레메트리 RSSI</span><span>▮▮▮▯ · ▮▮▯▯</span></div>
+    </div>
+
+    <div class="info">
+      <h4>비행</h4>
+      <div class="row"><span>비행 시간</span><span>06:42</span></div>
+      <div class="row"><span>비행 거리</span><span>2.3 km</span></div>
+    </div>
+
+    <div class="info">
+      <h4>기체 메시지</h4>
+      <div class="msgs">[12:03:11] EKF3 IMU0 is using GPS<br>[12:03:04] PreArm: Compass not calibrated<br>[12:02:58] GPS 1: detected as u-blox</div>
+    </div>
+    <div class="fill"></div>
   </div>
   <div class="region bottom">하단바</div>
 </div>

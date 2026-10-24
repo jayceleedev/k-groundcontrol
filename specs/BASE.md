@@ -1,6 +1,6 @@
 # K-GroundControl 기반 문서 (BASE)
 
-- 상태: **초안 6 (검토 1~5 반영, 승인 대기)** — 2026-10-24, PM 작성
+- 상태: **초안 7 (검토 1~6 반영, 검토 6 pass, 승인 대기)** — 2026-10-24, PM 작성
 - 이 문서가 정하는 것: **무엇을 어떻게 구분해서 어디에 두는가.** 모듈의 모양과 경계, 설정·상태·고정값·공통 함수·저장소·주기 작업·서비스·입출력의 자리, 로그·오류·알림의 규칙, 그것을 지키는 자동 검사. 기능이 무엇을 하는지는 `specs/REQUIREMENTS.md`와 `specs/features/`가 정한다.
 - 이 문서가 승인되기 전에는 기능 스펙을 쓰지 않는다. 기능 스펙의 "기반" 절은 이 문서의 이름을 그대로 쓴다. 구현 중에 여기 없는 자리가 필요해지면 만들지 않고 이 문서로 돌아온다.
 - **문서의 권위**: BASE가 원본이고, 저장소 루트 `AGENTS.md`(구현자 GPT용, 영어)는 그 번역이다. 어긋나면 BASE를 따른다. 구현 주체가 GPT(D12)이므로 이 문서만 읽고도 같은 구조를 세울 수 있게 **다른 판이나 문서를 참조하지 않고** 쓴다.
@@ -61,7 +61,7 @@ k-groundcontrol/
 ├─ src/
 │  ├─ platform/
 │  │  ├─ app/       0   boot settings secrets paths store scheduler job net log errors notify i18n units geo crc util
-│  │  ├─ comm/      1   links(serial udp tcp mock) rawport(RawPort PortRegistry) lease(PortLease) mavlink(parser channel signing) espflash(ESP 시리얼 부트로더 클라이언트) tlog joystick
+│  │  ├─ comm/      1   links(serial udp tcp mock) rawport(ByteStream RawPort PortRegistry) lease(PortLease) mavlink(parser channel signing) espflash(ESP 시리얼 부트로더 클라이언트) tlog joystick
 │  │  ├─ vehicle/   2   registry Vehicle states firmware(px4 ardupilot generic) outbound(VehicleSender) safety(ArmGuard WorkLock ArmedPolicy RebootWindow JobArmWatch) command(CommandQueue)
 │  │  └─ ui/        2.5 Theme components(HoldToConfirm JobView Pill Chip TimerBox) PanelRegistry Slots(Topbar StatusChip RightTab MapLayer) Navigator
 │  ├─ features/<id>/   api/kgc/<id>/  internal/  ui/  CMakeLists.txt  MODULE.md
@@ -223,8 +223,8 @@ k-groundcontrol/
 - `comm/links/LinkManager`(링크), `vehicle/registry/VehicleRegistry`(기체, sysid 키; compid 1이 자동조종기, 다른 compid는 그 기체의 `Component`). **활성 기체** `VehicleRegistry::active` 하나 — 상단바 기체 표시, 트래커 기본 대상, 구성도 편집 대상이 본다.
 - 수명은 §3.1 규칙. 기체 삭제: `vehicleRemoved` → `deleteLater`. 참조는 `QPointer`/활성 기체 프로퍼티.
 - **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다.
-- **임대의 동작**(R-Q1a (가)): `PortLease::acquire(port, quietFor)`는 그 포트를 쓰던 MAVLink 링크에 `LinkManager::suspend(link)`를 걸어 **GCS 하트비트·자동 재접속·끊김 경고를 멈추고**, `quietFor`만큼 조용히 기다린 뒤(값은 호출한 기능이 넘긴다 — AP BLHeli 경로의 4초는 `esc/internal/paths/blhPassthrough`가 안다; 바탕은 그 뜻을 모른다) **`RawPort` 손잡이**를 넘긴다. `Link.suspended`=true가 되고 기체는 "작업 중"으로 표시된다. 임대 중 그 기체로 가는 Sender 송신은 `ErrorCode LinkSuspended`로 즉시 실패한다(명령 큐 멈춤). `release()`가 포트를 돌려받고 `resume(link)`으로 되돌린다.
-- **포트 손잡이** `comm/rawport/RawPort`: 바이트 읽기·쓰기(시그널), 보율 변경, DTR/RTS 제어를 가진 **유일한 비-MAVLink 시리얼 인터페이스**. `espflash`·`esc/paths/direct`·`elrs/paths/uart`는 이것만 쓴다(`QSerialPort`를 직접 만들지 않는다). BF·EdgeTX 패스스루처럼 다른 통로 위에 ESP 부트로더를 태울 때는 `RawPort`와 같은 인터페이스(`ByteStream`)를 구현한 래퍼를 넘긴다.
+- **임대의 동작**(R-Q1a (가)): `PortLease::acquire(port, quietFor)`는 그 포트를 쓰던 MAVLink 링크에 `LinkManager::suspend(link)`를 걸어 **GCS 하트비트·자동 재접속·끊김 경고를 멈추고**, `quietFor`만큼 조용히 기다린 뒤(값은 호출한 기능이 넘긴다 — AP BLHeli 경로의 4초는 `esc/internal/paths/blhPassthrough`가 안다; 바탕은 그 뜻을 모른다) **`RawPort` 손잡이**를 넘긴다. `Link.suspended`=true가 되고 기체는 "작업 중"으로 표시된다. 임대 중 그 기체로 가는 Sender 송신은 `ErrorCode LinkSuspended`(`vehicle/outbound`의 `Errors.h`)로 즉시 실패한다. **큐에 남아 있던 명령도 `LinkSuspended`로 끝내고 재시도하지 않는다**(R-Q1a (가)의 "명령 큐를 멈춘다"는 뜻이 이것이다; 임대가 풀린 뒤 필요한 명령은 작업이 다시 보낸다). **기체의 링크 중 하나라도 임대 중이면 그 기체 전체를 `suspended`로 본다**(보수적; 살아 있는 다른 링크로도 보내지 않고, 끊김 판정도 멈춘다). `release()`가 포트를 돌려받고 `resume(link)`으로 되돌린다.
+- **포트 손잡이**: `comm/rawport/ByteStream`(인터페이스 — 바이트 읽기·쓰기 시그널, 그리고 **선택적** 제어 `canControlLine()`·`setBaud()`·`setDtrRts()`)과 그것을 실제 시리얼 포트로 구현한 `RawPort`. 이것이 **유일한 비-MAVLink 시리얼 통로**다. `espflash`·`esc/internal/paths/direct`·`elrs/internal/paths/uart`는 `ByteStream`만 받는다(`QSerialPort`를 직접 만들지 않는다). BF·EdgeTX 패스스루처럼 다른 통로 위에 ESP 부트로더를 태울 때는 `ByteStream`을 구현한 래퍼를 넘기고, 래퍼는 `canControlLine()==false`를 돌려 `EspFlasher`가 DTR/RTS 리셋 대신 패스스루 쪽 리셋 절차를 쓰게 한다.
 - **의도한 재부팅 구간** `vehicle/safety/RebootWindow`: 기능이 `begin(vehicle, timeout)`으로 열면 그동안 끊김 판정이 "끊김"이 아니라 "재부팅 중"(`Link.rebooting`)이 된다(R-Q1a (나)).
 
 ### 9.2 기체로 나가는 문 하나와 시동 중 규칙
@@ -407,5 +407,5 @@ k-groundcontrol/
 | 2026-10-24 | 사용자 | §17 9·10·11 승인(R-N6·R-N2 개정, 기능 id, 폴더 변경) |
 | 2026-10-24 | reviewer-4 | 설계 검토 4: fail, 이전 7 해결·1 부분, 새 6개(`.pm/base/reviewer-4.md`) → 초안 5(comm/espflash, map 레이어 정리, OperationKind 0층·JobArmWatch, scope Any 통일·② Other 통과, 문장·순위·부등호, ModuleId, PortLease 동작, 센서 칩·링크 편집 주인) |
 | 2026-10-24 | reviewer-5 | 설계 검토 5: fail, 이전 6 해결·2 부분, 새 4개(`.pm/base/reviewer-5.md`) → 초안 6(Link.suspended·끊김 검사 예외·LinkSuspended 오류, acquire(quietFor), RawPort/ByteStream 손잡이, Job Releaser·OperationKind 예외 명시, 사소 5건) |
-| | reviewer-6 | (대기) |
-| | 사용자 | (대기) |
+| 2026-10-24 | reviewer-6 | 설계 검토 6: **pass**, 사소 3건(`.pm/base/reviewer-6.md`) → 초안 7(임대 중 큐 처리·기체 단위 suspended, ByteStream/RawPort 경계) |
+| | 사용자 | 전체 승인 (대기) |

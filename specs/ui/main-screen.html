@@ -13,7 +13,9 @@
   header.doc h1 { margin: 0 0 4px; font-size: 18px; }
   header.doc p { margin: 2px 0; color: var(--dim); font-size: 13px; }
 
-  .frame { margin: 0 24px 24px; border: 2px solid var(--accent); background: #fff; width: 1392px; max-width: calc(100vw - 48px); height: 820px;
+  /* 창 최소 1920x900, 그 위로는 반응형: 가운데 지도가 늘어나고 사이드바·바는 고정 */
+  .frame { margin: 0 24px 24px; border: 2px solid var(--accent); background: #fff;
+    width: calc(100vw - 48px); min-width: 1920px; height: calc(100vh - 120px); min-height: 900px;
     display: grid; grid-template-rows: 48px 1fr 32px; grid-template-columns: 200px 1fr 280px;
     grid-template-areas: "top top top" "left center right" "bottom bottom bottom"; }
   .region { border: 1px dashed var(--line); background: var(--box); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--dim); }
@@ -70,7 +72,7 @@
 <header class="doc">
   <h1>K-GroundControl 메인 화면 — 와이어프레임</h1>
   <p>2026-10-24 · PM · 상태: <b>초안(승인 전)</b> · 사용자 지시대로 한 칸씩 채움</p>
-  <p>틀: 상단바 48px / 좌 사이드바 200px / 가운데 지도 / 우 사이드바 280px / 하단바 32px</p>
+  <p>틀: 상단바 48px / 좌 사이드바 200px / 가운데 지도 / 우 사이드바 280px / 하단바 32px · <b>창 최소 1920×900</b>, 그보다 크면 반응형(가운데 지도가 늘어남, 바와 사이드바는 고정). 브라우저 창을 늘리거나 줄여서 확인(1920 아래로는 가로 스크롤)</p>
 </header>
 
 <div class="frame">

@@ -130,6 +130,50 @@
       --map: repeating-linear-gradient(45deg,#1f2937 0 12px,#243042 12px 24px); }
     :root:not([data-theme="light"]) .frame { background:#0b1220; }
   }
+
+  /* ---- 아래: 메뉴별 패널 그림 ---- */
+  .panels { margin: 0 24px 40px; width: 1392px; max-width: calc(100vw - 48px); }
+  .panels h2 { font-size: 16px; margin: 24px 0 8px; }
+  .panels p.lead { color: var(--dim); font-size: 13px; margin: 0 0 16px; }
+  .card { border: 2px solid var(--accent); background: #fff; margin-bottom: 28px; display: flex; flex-direction: column; min-height: 380px; color: var(--ink); }
+  .card .ph { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+  .card .ph small { color: var(--dim); font-weight: 400; margin-left: 8px; }
+  .card .ph .x { border: 1px solid var(--line); background: #fff; padding: 2px 8px; font-size: 12px; font-weight: 400; }
+  .card .pb { flex: 1; display: grid; gap: 10px; padding: 10px; font-size: 12px; }
+  .bx { border: 1px dashed var(--line); background: var(--box); padding: 8px; display: flex; flex-direction: column; gap: 6px; }
+  .bx h5 { margin: 0; font-size: 12px; font-weight: 600; }
+  .bx .ln { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+  .bx .ln span, .pill { border: 1px solid var(--line); background: #fff; padding: 2px 8px; border-radius: 10px; font-size: 11px; white-space: nowrap; }
+  .pill.on { background: var(--accent); color: #fff; }
+  .pill.warn { border-width: 2px; }
+  .btn2 { border: 1px solid var(--line); background: #fff; padding: 4px 10px; font-size: 12px; display: inline-block; }
+  .btn2.main { border-width: 2px; font-weight: 600; }
+  .btn2.danger { border-width: 2px; font-weight: 700; }
+  .btn2.off { color: var(--dim); border-style: dashed; }
+  .bar2 { height: 8px; border: 1px solid var(--line); background: #fff; position: relative; }
+  .bar2 i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--accent); }
+  .tbl { width: 100%; border-collapse: collapse; font-size: 11px; background: #fff; }
+  .tbl th, .tbl td { border: 1px solid var(--line); padding: 3px 6px; text-align: left; }
+  .tbl th { background: var(--box); }
+  .canvas { position: relative; border: 1px solid var(--line); background: #fff; min-height: 260px; }
+  .silh { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 420px; height: 220px; }
+  .mk { position: absolute; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--accent); background: #fff; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; transform: translate(-50%,-50%); }
+  .mk.sq { border-radius: 4px; }
+  .mk.on { background: var(--accent); color: #fff; }
+  .chart { border: 1px solid var(--line); background: repeating-linear-gradient(0deg,#fff 0 24px,#f1f3f5 24px 25px), #fff; min-height: 140px; display: flex; align-items: center; justify-content: center; color: var(--dim); }
+  .mini { border: 1px solid var(--line); background: #fff; min-height: 120px; position: relative; }
+  .steps { display: flex; gap: 6px; flex-wrap: wrap; }
+  .steps span { border: 1px solid var(--line); background: #fff; padding: 3px 8px; font-size: 11px; }
+  .steps span.on { background: var(--accent); color: #fff; }
+  .steps span.done { text-decoration: line-through; color: var(--dim); }
+  .log { background: #fff; border: 1px solid var(--line); font-family: ui-monospace, monospace; font-size: 10px; color: var(--dim); padding: 6px; min-height: 60px; }
+  .note { color: var(--dim); font-size: 11px; }
+  .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: 1fr 1fr 1fr; } .g31 { grid-template-columns: 3fr 1fr; } .g13 { grid-template-columns: 1fr 3fr; } .g121 { grid-template-columns: 1fr 2fr 1fr; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .card, :root:not([data-theme="light"]) .canvas, :root:not([data-theme="light"]) .mini, :root:not([data-theme="light"]) .tbl, :root:not([data-theme="light"]) .chart, :root:not([data-theme="light"]) .log,
+    :root:not([data-theme="light"]) .bx .ln span, :root:not([data-theme="light"]) .pill, :root:not([data-theme="light"]) .btn2, :root:not([data-theme="light"]) .steps span, :root:not([data-theme="light"]) .mk, :root:not([data-theme="light"]) .bar2, :root:not([data-theme="light"]) .card .ph .x { background: #0b1220; color: var(--ink); }
+    :root:not([data-theme="light"]) .chart { background: repeating-linear-gradient(0deg,#0b1220 0 24px,#111a2b 24px 25px), #0b1220; }
+  }
 </style>
 </head>
 <body>
@@ -292,6 +336,346 @@
     </div>
   </div>
 </div>
+
+<section class="panels">
+  <h2>메뉴별 패널 (메뉴를 누르면 가운데 지도 위에 뜨는 화면) — 초안 1</h2>
+  <p class="lead">위 틀의 가운데 영역 크기로 뜬다. 각 패널의 ✕는 지도로 돌아간다. 근거는 specs/REQUIREMENTS.md의 R-Q10, 5.1~5.5절과 조사 보고(setup S-xx). 배치만 정하는 그림이고 글자·값은 예시.</p>
+
+  <!-- 1 펌웨어 세팅 -->
+  <div class="card" id="p-firmware">
+    <div class="ph"><span>펌웨어 세팅 <small>R-Q10 · S-22~S-33</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><h5>1. 보드 연결</h5>
+        <div class="steps"><span class="on">보드 선택</span><span>펌웨어 선택</span><span>굽기</span><span>→ 기체 구성도</span></div>
+        <div class="note">USB에 직접 연결(허브·배터리 없이). 다른 링크는 끊김(포트 임대 R-Q1a)</div>
+        <div class="ln"><span class="pill on">COM7 · Pixhawk 6X (BL)</span><span class="pill">COM3 · SiK Radio</span></div>
+        <div class="note">보드가 안 보이면: "USB를 뽑았다 다시 꽂으세요" 안내 + Linux dialout 안내</div>
+      </div>
+      <div class="bx"><h5>2. 펌웨어 선택</h5>
+        <div class="ln"><span class="pill on">PX4</span><span class="pill">ArduPilot</span><span class="pill">사용자 파일(.px4/.apj/.bin)</span></div>
+        <div class="ln"><b>PX4</b> <span class="pill on">안정 v1.17.0</span><span class="pill">베타</span><span class="pill warn">개발(master)</span> <span class="note">보드: px4_fmu-v6x_default (자동)</span></div>
+        <div class="ln"><b>ArduPilot</b> <span class="pill">Copter</span><span class="pill">Plane</span><span class="pill">Rover</span><span class="pill">Sub</span> → 보드 <span class="pill">Pixhawk6X</span> → <span class="pill">안정 4.7.x</span><span class="pill">베타</span></div>
+        <div class="note">ArduPilot은 여기서 큰 기체 종류를 고름(펌웨어가 기종별). 프레임(쿼드 X 등)은 다음 단계 "기체 구성도"에서</div>
+        <div class="ln"><span class="btn2 main">굽기</span><span class="btn2 off">취소</span> <span class="note">굽는 동안 시동 명령 잠금, 끝나면 보드 재부팅 → 자동으로 기체 구성도로</span></div>
+        <div class="bar2"><i style="width:35%"></i></div>
+        <div class="log">지우는 중… 20초까지 걸림<br>프로그램 쓰기 35% (64B 블록)<br>검증은 CRC로</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 기체 구성도 -->
+  <div class="card" id="p-frame">
+    <div class="ph"><span>기체 구성도 <small>5.5절 R-D31~R-D37 · Xpadder식</small></span><span class="x">✕</span></div>
+    <div class="pb g121">
+      <div class="bx"><h5>부품 팔레트 (끌어다 놓기)</h5>
+        <div class="ln"><span class="pill">● 모터</span><span class="pill">▣ ESC</span><span class="pill">▭ 서보</span></div>
+        <div class="ln"><span class="pill">◆ FC</span><span class="pill">◎ GPS+나침반</span><span class="pill">⇅ 수신기</span></div>
+        <div class="ln"><span class="pill">▮ 배터리</span><span class="pill">▧ 카메라·짐벌</span></div>
+        <h5>바탕 그림</h5>
+        <div class="ln"><span class="pill">멀티콥터</span><span class="pill on">비행기</span><span class="pill">VTOL</span><span class="pill">사진 올리기…</span></div>
+        <div class="ln">축척: 날개폭 <span class="pill">1.80 m</span> · 원점 <span class="pill">무게중심(찍기)</span></div>
+        <h5>판정</h5>
+        <div class="note">PX4: 커스텀 기하로 씀<br>AP: 비행기 — 표준 프레임 판정 없음(조종면 역할만)</div>
+        <div class="note">VTOL이면: "모터 배치 = AP QUADPLANE X / PX4 커스텀" 같은 판정 표시</div>
+      </div>
+      <div class="canvas">
+        <svg class="silh" viewBox="0 0 420 220"><g fill="none" stroke="#9ca3af" stroke-width="2"><path d="M210 20 L222 60 L400 100 L400 118 L222 112 L218 180 L250 196 L250 206 L210 200 L170 206 L170 196 L202 180 L198 112 L20 118 L20 100 L198 60 Z"/></g></svg>
+        <div class="mk" style="left:16%;top:46%">1</div><div class="mk" style="left:84%;top:46%">2</div>
+        <div class="mk sq on" style="left:22%;top:56%" title="서보 3 · 에일러론 L">3</div><div class="mk sq" style="left:78%;top:56%" title="서보 4 · 에일러론 R">4</div>
+        <div class="mk sq" style="left:43%;top:88%" title="서보 5 · V-테일 L">5</div><div class="mk sq" style="left:57%;top:88%" title="서보 6 · V-테일 R">6</div>
+        <div class="mk" style="left:50%;top:14%" title="모터 7 · 추진">7</div>
+        <div class="mk sq" style="left:50%;top:50%; border-style:double" title="FC · 방향 ↑">◆</div>
+        <div class="mk" style="left:50%;top:34%; border-style:dotted" title="GPS1 · 나침반2 · ↑">◎</div>
+        <div class="note" style="position:absolute; left:8px; bottom:6px">표식을 끌어 놓고 번호를 붙임. 자리는 그림용(모터는 PX4 기하에도). 역할은 오른쪽에서 목록으로 고름</div>
+      </div>
+      <div class="bx"><h5>선택한 표식: 서보 3</h5>
+        <div class="ln">번호(출력) <span class="pill on">3</span> · 역할 <span class="pill on">에일러론 좌 ▾</span></div>
+        <div class="note">목록(연결된 펌웨어): 에일러론·엘리베이터·러더·엘레본 L/R·플래퍼론 L/R·V-테일 L/R·플랩·스포일러·틸트… · 추천: "날개 끝 → 보통 에일러론" (제안만)</div>
+        <div class="ln">반전 <span class="pill">아니오</span> · 위치 X <span class="pill">0.12</span> Y <span class="pill">-0.62</span> Z <span class="pill">0.00</span> m</div>
+        <div class="note">그림 위치는 추정값. 이 숫자 표의 값만 파라미터로 씀</div>
+        <h5>변경안 (4건)</h5>
+        <table class="tbl"><tr><th>파라미터</th><th>현재</th><th>→</th><th></th></tr>
+          <tr><td>SERVO3_FUNCTION</td><td>0</td><td>4 (Aileron)</td><td>☑</td></tr>
+          <tr><td>SERVO5_FUNCTION</td><td>0</td><td>79 (VTail L)</td><td>☑</td></tr>
+          <tr><td><b>AHRS_ORIENTATION</b></td><td>0</td><td>0</td><td>— 위험 행</td></tr>
+          <tr><td>COMPASS_ORIENT2</td><td>0</td><td>0</td><td>—</td></tr></table>
+        <div class="ln"><span class="btn2 main">비교 · 확인 → 쓰기</span><span class="btn2">되돌리기</span><span class="btn2">구성도 저장</span></div>
+        <div class="note">시동 중엔 쓰기 잠금. 방향·프레임 변경 뒤 재부팅·재보정까지 시동 잠금(R-N9)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 센서 보정 -->
+  <div class="card" id="p-sensors">
+    <div class="ph"><span>센서 보정 <small>S-38~S-48 · PX4는 STATUSTEXT 진행, AP는 기체가 GCS에 명령</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><h5>센서</h5>
+        <div class="ln"><span class="pill warn">나침반 ✕ 미보정</span></div><div class="ln"><span class="pill">가속도계 ✓</span></div><div class="ln"><span class="pill">자이로 ✓</span></div><div class="ln"><span class="pill">수평 ✓</span></div><div class="ln"><span class="pill">기압계 ✓</span></div><div class="ln"><span class="pill off">속도계 — 고정익만</span></div>
+        <h5>방향(구성도에서 가져옴)</h5>
+        <div class="note">FC ↑ ROTATION_NONE · 외장 나침반(2) ↑ · 바꾸려면 기체 구성도</div>
+      </div>
+      <div class="bx"><h5>나침반 보정</h5>
+        <div class="pb g2" style="padding:0">
+          <div class="mini"><div class="mk on" style="left:50%;top:40%; border-style:dotted">◎</div><div class="note" style="position:absolute;left:6px;bottom:4px">구성도 미니 그림: 보정 중인 부품이 켜짐</div></div>
+          <div class="bx" style="background:#fff"><div class="ln"><span class="pill">꼬리 아래 ✓</span><span class="pill">기수 아래 ✓</span><span class="pill on">왼쪽 ●</span><span class="pill">오른쪽</span><span class="pill">뒤집어</span><span class="pill">바로</span></div>
+            <div class="bar2"><i style="width:40%"></i></div>
+            <div class="note">PX4: 6방향 그림이 차례로 켜짐([cal] progress) · AP: 모든 축으로 돌리며 막대가 참, 나침반별 적합도 표시</div></div>
+        </div>
+        <div class="ln"><span class="btn2 main">시작</span><span class="btn2">취소</span> <span class="note">시동 중 잠금. 끝나면 "재부팅 필요" — 재부팅 전까지 시동 잠금(R-N9)</span></div>
+        <div class="log">[cal] calibration started: 2 mag<br>[cal] left orientation detected<br>[cal] progress 40</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 조종기 -->
+  <div class="card" id="p-radio">
+    <div class="ph"><span>조종기 <small>S-49~S-52 · RC_CHANNELS 실시간</small></span><span class="x">✕</span></div>
+    <div class="pb g31">
+      <div class="bx"><h5>채널 모니터</h5>
+        <div class="ln" style="align-items:flex-end; gap:4px"><span style="display:inline-block;width:14px;height:30px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:32px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:18px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:31px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:40px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:45px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span><span style="display:inline-block;width:14px;height:10px;background:var(--accent);border-radius:0;padding:0"></span></div>
+        <div class="note">1 롤 · 2 피치 · 3 스로틀 · 4 요 · 5 모드 · 6~16 보조. 스틱을 움직이면 막대가 움직임. 값 1500 중앙</div>
+        <h5>보정 마법사</h5>
+        <div class="steps"><span class="done">송신기 모드</span><span class="on">롤 스틱 움직이기</span><span>피치</span><span>스로틀</span><span>요</span><span>끝까지 움직이기</span><span>중앙(트림)</span><span>스위치</span><span>저장</span></div>
+        <div class="note">스틱 그림이 할 동작을 보여 줌. 스로틀 반전 자동 감지. 저장 전까지 기체에 쓰지 않음</div>
+      </div>
+      <div class="bx"><h5>수신기(구성도 ⇅)</h5><div class="note">ELRS · CRSF · 포트 SERIAL6 — 바꾸려면 ELRS 설정</div>
+        <div class="ln"><span class="btn2">ELRS 바인드</span><span class="btn2">Spektrum 바인드</span></div>
+        <h5>탭</h5><div class="ln"><span class="pill on">조종기</span><span class="pill">조이스틱(PC)</span></div>
+        <div class="note">조이스틱 탭: 장치 선택, 축·버튼 모니터, 같은 보정 마법사, 버튼 동작 배정(S-52)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 비행 모드 -->
+  <div class="card" id="p-modes">
+    <div class="ph"><span>비행 모드 <small>S-53 PX4 / S-54 AP</small></span><span class="x">✕</span></div>
+    <div class="pb g2">
+      <div class="bx"><h5>모드 채널</h5>
+        <div class="ln">채널 <span class="pill on">5</span> · 현재 PWM <span class="pill">1480</span> → 슬롯 3</div>
+        <table class="tbl"><tr><th>슬롯</th><th>PWM 범위</th><th>모드</th></tr>
+          <tr><td>1</td><td>≤1230</td><td>Stabilize ▾</td></tr><tr><td>2</td><td>1231~1360</td><td>AltHold ▾</td></tr><tr style="font-weight:600"><td>3 ●</td><td>1361~1490</td><td>Loiter ▾</td></tr>
+          <tr><td>4</td><td>1491~1620</td><td>Auto ▾</td></tr><tr><td>5</td><td>1621~1749</td><td>RTL ▾</td></tr><tr><td>6</td><td>≥1750</td><td>Land ▾</td></tr></table>
+        <div class="note">스위치를 움직이면 지금 슬롯이 굵게. 바꾸면 바로 저장(AP) / PX4는 COM_FLTMODE1~6</div>
+      </div>
+      <div class="bx"><h5>보조 스위치</h5>
+        <table class="tbl"><tr><th>채널</th><th>기능</th><th>지금</th></tr>
+          <tr><td>7</td><td>RTL ▾</td><td>꺼짐</td></tr><tr><td>8</td><td>비상 정지(Kill) ▾</td><td>꺼짐</td></tr><tr><td>9</td><td>랜딩기어 ▾</td><td>—</td></tr><tr><td>10</td><td>없음 ▾</td><td></td></tr></table>
+        <div class="note">두 기능이 같은 채널이면 경고. 모드 이름은 연결된 펌웨어 목록(PX4 표준 모드·AP 기종별 표)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 배터리·전원 -->
+  <div class="card" id="p-power">
+    <div class="ph"><span>배터리 · 전원 <small>S-55~S-57</small></span><span class="x">✕</span></div>
+    <div class="pb g2">
+      <div class="bx"><h5>배터리 1 (구성도 ▮)</h5>
+        <div class="ln">모니터 <span class="pill on">아날로그 전압+전류 ▾</span> · 셀 <span class="pill">6S</span> · 용량 <span class="pill">5000 mAh</span></div>
+        <div class="ln">셀 전압 가득 <span class="pill">4.20</span> 빈 <span class="pill">3.50</span> V · 전원 모듈 프리셋 <span class="pill">Holybro PM02 ▾</span></div>
+        <h5>보정</h5>
+        <div class="ln">지금 읽는 전압 <span class="pill">22.9 V</span> · 멀티미터 값 <span class="pill">23.1</span> → <span class="btn2">전압 계수 계산</span></div>
+        <div class="ln">지금 읽는 전류 <span class="pill">0.4 A</span> · 측정값 <span class="pill">—</span> → <span class="btn2">전류 계수 계산</span></div>
+      </div>
+      <div class="bx"><h5>지금 값</h5>
+        <div class="ln"><span class="pill">22.9 V</span><span class="pill">0.4 A</span><span class="pill">87 %</span><span class="pill">소모 12 mAh</span></div>
+        <h5>배터리 2</h5><div class="ln"><span class="pill off">사용 안 함 · 켜기</span></div>
+        <h5>ESC 보정</h5><div class="note">AP: ESC_CALIBRATION=3 설정 뒤 재부팅 / PX4: USB 전원만, 배터리 뺀 상태 — 프로펠러 제거 확인 뒤 버튼</div>
+        <div class="ln"><span class="btn2 off">ESC 보정 (프로펠러 제거 확인 필요)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 안전·페일세이프 -->
+  <div class="card" id="p-safety">
+    <div class="ph"><span>안전 · 페일세이프 <small>S-62~S-64</small></span><span class="x">✕</span></div>
+    <div class="pb g31">
+      <div class="bx"><h5>원인 → 동작</h5>
+        <table class="tbl"><tr><th>원인</th><th>기준</th><th>동작</th><th>지금</th></tr>
+          <tr><td>배터리 낮음</td><td>3.6 V/셀 · 20 %</td><td>RTL ▾</td><td>정상</td></tr>
+          <tr><td>배터리 위험</td><td>3.4 V/셀 · 10 %</td><td>착륙 ▾</td><td>정상</td></tr>
+          <tr><td>RC 끊김</td><td>1.0 s</td><td>RTL ▾</td><td>정상</td></tr>
+          <tr><td>GCS 링크 끊김</td><td>5 s</td><td>RTL ▾</td><td>정상</td></tr>
+          <tr><td>지오펜스</td><td>반지름 300 m · 고도 120 m</td><td>RTL ▾</td><td>꺼짐</td></tr>
+          <tr><td>EKF 이상</td><td>0.8</td><td>착륙 ▾</td><td>정상</td></tr></table>
+        <div class="note">값은 펌웨어 파라미터로 바로 이어짐(PX4 NAV_RCL_ACT 등 / AP FS_*). "경고만"으로 바꾸면 강조 표시(R-D5 ⑦과 같은 취지)</div>
+      </div>
+      <div class="bx"><h5>복귀(RTL)</h5><div class="ln">고도 <span class="pill">30 m</span> · 도착 뒤 <span class="pill">착륙 ▾</span> · 선회 <span class="pill">0 s</span></div>
+        <h5>시동 검사</h5><div class="ln"><span class="pill on">전부 ▾</span></div><div class="note">개별 끄기는 "위험 행"으로 강조하고 확인</div>
+        <h5>착륙</h5><div class="ln">하강 속도 <span class="pill">0.5 m/s</span> · 착륙 뒤 자동 해제 <span class="pill">2 s</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 모터 시험 -->
+  <div class="card" id="p-motors">
+    <div class="ph"><span>모터 시험 <small>S-58 DO_MOTOR_TEST / S-59 PX4 Actuators · R-D35</small></span><span class="x">✕</span></div>
+    <div class="pb g31">
+      <div class="canvas">
+        <svg class="silh" viewBox="0 0 420 220"><g fill="none" stroke="#9ca3af" stroke-width="2"><path d="M80 40 L340 180 M340 40 L80 180"/><circle cx="210" cy="110" r="30"/></g></svg>
+        <div class="mk" style="left:20%;top:20%">1 ↻</div><div class="mk" style="left:80%;top:20%">2 ↺</div><div class="mk" style="left:20%;top:80%">3 ↺</div><div class="mk on" style="left:80%;top:80%">4 ↻</div>
+        <div class="note" style="position:absolute;left:8px;bottom:6px">구성도의 모터 표식이 버튼. 기체 현재 파라미터 기준(표식과 다르면 잠금). AP 시험 순서 A·B·C → 모터 번호로 바꿔 표시</div>
+      </div>
+      <div class="bx"><h5>안전</h5>
+        <div class="ln"><label><input type="checkbox"> 프로펠러를 제거했습니다</label></div>
+        <div class="note">체크 전엔 모든 버튼 잠금 · 시동 중 잠금 · PX4는 안전 스위치 필요</div>
+        <h5>출력</h5><div class="ln">스로틀 <span class="pill">8 %</span> <span class="bar2" style="width:120px; display:inline-block"><i style="width:8%"></i></span></div>
+        <div class="note">누르면 3초 뒤 자동 정지(R-N9). 1초 미만 주기로 재송신</div>
+        <div class="ln"><span class="btn2 off">모터 4 시험</span><span class="btn2 off">순서대로 전부</span><span class="btn2 danger">전부 정지</span></div>
+        <div class="note">PX4 Actuators 보드: 서보 슬라이더·"전체 모터"·회전 방향 바꾸기(DShot)도 여기</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 튜닝 -->
+  <div class="card" id="p-tuning">
+    <div class="ph"><span>튜닝 <small>S-65~S-68 · 시동 중 허용(경고 + 길게 눌러 확인)</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><h5>축</h5><div class="ln"><span class="pill on">롤</span><span class="pill">피치</span><span class="pill">요</span></div>
+        <div class="ln"><span class="pill">각속도</span><span class="pill on">자세</span><span class="pill">속도</span><span class="pill">위치</span></div>
+        <h5>슬라이더</h5>
+        <div class="ln">P <span class="bar2" style="width:120px;display:inline-block"><i style="width:45%"></i></span> 0.15</div>
+        <div class="ln">I <span class="bar2" style="width:120px;display:inline-block"><i style="width:30%"></i></span> 0.20</div>
+        <div class="ln">D <span class="bar2" style="width:120px;display:inline-block"><i style="width:20%"></i></span> 0.003</div>
+        <div class="ln"><span class="btn2">저장</span><span class="btn2">되돌리기</span></div>
+        <h5>오토튠</h5><div class="ln"><span class="btn2">PX4 오토튠 시작</span></div><div class="note">AP는 RC 스위치로 오토튠(여기선 AUTOTUNE_AXES만)</div>
+      </div>
+      <div class="chart">실시간 차트 — 목표(setpoint) vs 응답(response), 선택한 축 · 50 Hz · 드래그로 확대</div>
+    </div>
+  </div>
+
+  <!-- 10 로그 분석 -->
+  <div class="card" id="p-logs">
+    <div class="ph"><span>로그 분석 <small>E1 온보드 로그 · E2 뷰어(.ulg/.bin/.tlog)</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><h5>기체 로그</h5>
+        <table class="tbl"><tr><th>☐</th><th>번호</th><th>시각</th><th>크기</th></tr><tr><td>☑</td><td>23</td><td>10-24 11:52</td><td>48 MB</td></tr><tr><td>☐</td><td>22</td><td>10-24 11:20</td><td>31 MB</td></tr><tr><td>☐</td><td>21</td><td>10-23 17:05</td><td>55 MB</td></tr></table>
+        <div class="ln"><span class="btn2">새로고침</span><span class="btn2 main">내려받기</span><span class="btn2 danger">전부 지우기</span></div>
+        <div class="bar2"><i style="width:60%"></i></div><div class="note">FTP 되면 FTP, 아니면 LOG_REQUEST_DATA</div>
+        <h5>PC 로그</h5><div class="ln"><span class="pill">log_23.ulg</span><span class="pill">2026-10-24 11-20.tlog</span><span class="pill">열기…</span></div>
+      </div>
+      <div class="bx"><div class="ln"><span class="pill on">차트</span><span class="pill">지도</span><span class="pill">파라미터</span><span class="pill">메시지</span></div>
+        <div class="pb g13" style="padding:0"><div class="bx" style="background:#fff"><h5>항목 검색</h5><div class="note">ATT.Roll ☑<br>ATT.DesRoll ☑<br>BAT.Volt<br>GPS.NSats<br>VIBE.VibeX</div></div>
+          <div class="chart">시간축 차트 · 커서에 값·비행 모드 · 항목마다 자기 Y축</div></div>
+        <div class="note">tlog를 열면 재생 막대(▶ ❚❚ 속도 1x) + 위 메인 화면이 그 시점 상태로</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 ESC 설정 -->
+  <div class="card" id="p-esc">
+    <div class="ph"><span>ESC 설정 <small>5.2절 R-D9~R-D15 · AM32 · Bluejay</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><h5>연결 경로</h5>
+        <div class="ln"><span class="pill on">ArduPilot 패스스루(USB)</span></div><div class="ln"><span class="pill">PX4 SERIAL_CONTROL</span></div><div class="ln"><span class="pill">직접 단선(USB-UART)</span></div>
+        <div class="note">AP: SERVO_BLH_* 점검 → 필요하면 설정·재부팅 안내 → 링크 4초 침묵(포트 임대) · PX4: PASSTHRU_EN + 재부팅 · 직접: 전원 순서 체크리스트</div>
+        <h5>안전</h5><div class="ln"><label><input type="checkbox"> 프로펠러 제거</label></div><div class="note">시동 중 잠금. 끝낼 때 AP는 0x34, PX4는 재부팅 + PASSTHRU_EN 0 확인까지 시동 잠금</div>
+        <div class="ln"><span class="btn2 main">ESC 읽기</span></div>
+      </div>
+      <div class="bx"><h5>ESC 4개 (구성도 번호)</h5>
+        <div class="pb" style="grid-template-columns:repeat(4,1fr); padding:0">
+          <div class="bx" style="background:#fff"><b>1</b> AM32 v2.21<br><span class="note">F051 · 부트로더 v19</span></div>
+          <div class="bx" style="background:#fff"><b>2</b> AM32 v2.21</div>
+          <div class="bx" style="background:#fff"><b>3</b> AM32 v2.21</div>
+          <div class="bx" style="background:#fff; border-width:2px"><b>4</b> BLHeli_S 16.7 <span class="note">BB21 · Bluejay로 올릴 수 있음</span></div>
+        </div>
+        <div class="ln"><span class="pill on">설정</span><span class="pill">펌웨어</span><span class="pill">텔레메트리</span></div>
+        <table class="tbl"><tr><th>항목</th><th>1</th><th>2</th><th>3</th><th>4</th></tr>
+          <tr><td>모터 방향</td><td>정</td><td>역</td><td>역</td><td>정</td></tr><tr><td>시작 전력</td><td>중</td><td>중</td><td>중</td><td>중</td></tr><tr><td>브레이크(정지 시)</td><td>켜짐</td><td>켜짐</td><td>켜짐</td><td>켜짐</td></tr><tr><td>양방향 DShot</td><td>켜짐</td><td>켜짐</td><td>켜짐</td><td>—</td></tr></table>
+        <div class="ln"><span class="btn2 main">설정 쓰기(192바이트 전체, 읽어 비교)</span><span class="btn2">기본값</span></div>
+        <div class="note">펌웨어 탭: 릴리스에서 내려받기(캐시) → MCU·태그 일치 확인 → 굽기 순서 R-D11a/b(검증 통과해야 부트 플래그) → 진행률·예상 시간(PX4 경로 1~3분)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 ELRS 설정 -->
+  <div class="card" id="p-elrs">
+    <div class="ph"><span>ELRS 설정 <small>5.3절 R-D16~R-D22 · 4.x ESP 계열</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><h5>장치</h5><div class="ln"><span class="pill on">수신기</span><span class="pill">송신 모듈</span></div>
+        <h5>연결 경로</h5><div class="ln"><span class="pill on">WiFi (가장 안전)</span></div><div class="ln"><span class="pill">UART</span></div><div class="ln"><span class="pill">Betaflight 패스스루</span></div><div class="ln"><span class="pill">EdgeTX 패스스루</span></div><div class="ln"><span class="pill off">FC 패스스루(시험 기능)</span></div>
+        <div class="note">WiFi: mDNS로 찾음 · UART·EdgeTX: 칩 계열 확인 + 타깃명 재입력 · BF: bl 응답 타깃명(대소문자 무시, prior 허용), 못 읽으면 기본 거부 · 자동 force 없음</div>
+      </div>
+      <div class="bx"><div class="ln"><span class="pill on">펌웨어 굽기</span><span class="pill off">런타임 설정(시험 기능)</span></div>
+        <div class="ln">버전 <span class="pill on">4.1.0 ▾</span> (index.json) · 타깃 <span class="pill">RadioMaster RP3 2.4GHz ▾</span> <span class="note">stm32·min_version 걸러냄</span></div>
+        <div class="ln">바인드 문구 <span class="pill">●●●●●●●●</span> (키 저장소) · 규제 도메인 <span class="pill warn">반드시 선택 ▾</span> · 2.4GHz <span class="pill warn">FCC / LBT 선택</span></div>
+        <div class="ln">WiFi SSID <span class="pill">—</span> 비번 <span class="pill">—</span> <span class="note">옵션 JSON 512바이트 넘으면 거부(비ASCII 주의)</span></div>
+        <div class="ln">장치 버전 <span class="pill">3.5.3</span> → 주 버전 다름 <span class="pill warn">경고</span></div>
+        <div class="ln"><span class="btn2 main">굽기 (길게 눌러 확인)</span></div>
+        <div class="bar2"><i style="width:20%"></i></div>
+        <div class="log">firmware.zip 받음 · SHA-256 대조 ✓<br>옵션 블록 덧붙임(128+16+512+2048)<br>POST /update … 장치 응답 ok → 재부팅 뒤 버전 확인</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 13 안테나 트래커 -->
+  <div class="card" id="p-tracker">
+    <div class="ph"><span>안테나 트래커 <small>5.4절 R-D23~R-D30</small></span><span class="x">✕</span></div>
+    <div class="pb g3">
+      <div class="bx"><h5>상태</h5>
+        <div class="ln"><span class="pill on">연결 · 식별 OK · 프로토콜 v1</span></div>
+        <div class="ln">모드 <span class="pill on">자동</span><span class="pill">수동</span><span class="pill">보정</span><span class="pill">대기</span></div>
+        <div class="ln">헤딩(자력계) <span class="pill">118°</span> · 팬 <span class="pill">+12°</span> · 틸트 <span class="pill">7°</span></div>
+        <div class="ln">GPS <span class="pill">3D · 위성 11</span> · 서보 전원 <span class="pill">5.9 V</span> · 리셋 원인 <span class="pill">전원 켬</span></div>
+        <h5>위치 출처 (하나 고름)</h5>
+        <div class="ln"><span class="pill on">트래커 GPS</span><span class="pill">GCS GPS</span><span class="pill">고정 입력</span><span class="pill">기체 홈+높이</span></div>
+        <div class="note">추적 대상: 기체 1 · 위치 오래되면 마지막 각 유지 + 표시</div>
+      </div>
+      <div class="bx"><h5>수동 조작 (시험용)</h5>
+        <div class="ln">팬 <span class="bar2" style="width:140px;display:inline-block"><i style="width:55%"></i></span></div>
+        <div class="ln">틸트 <span class="bar2" style="width:140px;display:inline-block"><i style="width:10%"></i></span></div>
+        <div class="note">손 끼임 주의 · 모든 이동은 ESP32 슬루</div>
+        <h5>정렬 · 보정</h5>
+        <div class="ln"><span class="btn2">여기가 기체 방향 (수동 정렬)</span></div><div class="note">기체가 너무 가까우면 잠금</div>
+        <div class="ln"><span class="btn2">자력계 보정 마법사</span></div><div class="note">서보 끔 → 기준 자세 → 트래커 전체를 손으로 한 바퀴 → NVS 저장</div>
+      </div>
+      <div class="bx"><h5>설정</h5>
+        <div class="ln">서보 범위 <span class="pill">1000~2000</span> · 반전 <span class="pill">팬 아니오</span></div>
+        <div class="ln">중립 <span class="pill">1500</span> · 슬루 <span class="pill">60°/s</span></div>
+        <div class="ln">히스테리시스 <span class="pill">5°</span> · 편각 <span class="pill">-8.2° (위치 계산)</span></div>
+        <div class="ln">생존 시간 초과 <span class="pill">3 s</span> · 끊기면 <span class="pill">유지 ▾</span></div>
+        <h5>펌웨어</h5><div class="ln">스케치 <span class="pill">v0.3.1 (설치본 동봉)</span> <span class="btn2 off">굽기 — 시동 중 잠금</span></div>
+        <div class="note">식별 응답 오는 포트만. 빈 보드 첫 굽기는 포트 직접 선택 + 길게 눌러 확인</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 14 수동 기체 설정 -->
+  <div class="card" id="p-params">
+    <div class="ph"><span>수동 기체 설정 <small>R-D1~R-D2 계열별 묶음 · S-10~S-14 편집기</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><div class="ln"><span class="pill on">계열별</span><span class="pill">작업 단위</span><span class="pill">전체 보기(ABC)</span></div>
+        <div class="ln"><span class="pill">🔍 검색</span></div>
+        <div class="note" style="line-height:1.7">▸ 배터리 (BATT)<br>▾ <b>나침반 (COMPASS)</b> 32<br>▸ 조종기 (RC)<br>▸ 비행 모드 (FLTMODE)<br>▸ 페일세이프 (FS)<br>▸ EKF (EK3)<br>▸ 모터 (MOT)<br>▸ 서보 출력 (SERVO)<br>▸ Lua 스크립트 (기체에 있을 때만)<br>…</div>
+        <div class="note">내려받은 파라미터만 · SIM_*은 SITL에서만 · 묶음 이름은 사람 말</div>
+      </div>
+      <div class="bx">
+        <table class="tbl"><tr><th>이름</th><th>값</th><th>단위</th><th>범위</th><th>설명</th></tr>
+          <tr><td>COMPASS_USE</td><td>1</td><td></td><td>0/1</td><td>나침반 1 사용</td></tr>
+          <tr style="font-weight:600"><td>COMPASS_ORIENT2</td><td>0 (None)</td><td></td><td>열거</td><td>외장 나침반 장착 방향 — 구성도에서도 바뀜</td></tr>
+          <tr><td>COMPASS_DEC</td><td>-0.143</td><td>rad</td><td>-3.14~3.14</td><td>편각</td></tr>
+          <tr><td>COMPASS_CAL_FIT</td><td>16</td><td></td><td>4~32</td><td>보정 허용치</td></tr></table>
+        <div class="ln"><span class="btn2">새로고침</span><span class="btn2">파일로 저장</span><span class="btn2">파일에서 불러와 비교…</span><span class="btn2">기본값으로 초기화</span><span class="btn2">재부팅</span></div>
+        <div class="note">값을 누르면 편집 창: 현재·기본·범위·열거/비트마스크 체크, "재부팅 필요", 비행 중 경고. 시동 중 단건 편집은 경고 + 길게 눌러 확인(R-N10)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 앱 설정 -->
+  <div class="card" id="p-settings">
+    <div class="ph"><span>앱 설정 <small>R-N17 JSON 메타데이터 · 검색</small></span><span class="x">✕</span></div>
+    <div class="pb g13">
+      <div class="bx"><div class="ln"><span class="pill">🔍 설정 검색</span></div>
+        <div class="note" style="line-height:1.9"><b>일반</b> · 언어 · 단위<br>연결 링크(추가·편집·자동 연결)<br>지도 (제공자·오프라인 타일·지형)<br>영상 (소스·지연·녹화)<br>AI (제공자·모델·키·동의)<br>텔레메트리 로그 (tlog·CSV·저장 위치)<br>조이스틱<br>안전 (길게 누르기 시간·유도 거리·고도 한계·강제 시동 보이기)<br>정보 (버전·라이선스·고지·소스)</div>
+      </div>
+      <div class="bx"><h5>언어 (R-N16)</h5><div class="ln"><span class="pill on">한국어</span><span class="pill">English</span><span class="pill">시스템 따라감</span></div><div class="note">바꾸면 바로 적용(안 되는 화면은 재시작 안내)</div>
+        <h5>단위</h5><div class="ln">거리 <span class="pill">m</span> 속도 <span class="pill">m/s</span> 고도 <span class="pill">m</span> 좌표 <span class="pill">도(소수) ▾</span></div>
+        <h5>AI (D10)</h5><div class="ln">제공자 <span class="pill">Anthropic ▾</span> 모델 <span class="pill">claude-sonnet-5-5 ▾</span> 키 <span class="pill">●●●● (키 저장소)</span></div><div class="note">첫 사용 시 전송 항목 동의 · 상한 토큰 설정값</div>
+        <h5>연결 링크</h5><table class="tbl"><tr><th>이름</th><th>종류</th><th>자동</th></tr><tr><td>USB Pixhawk</td><td>시리얼 115200</td><td>☑</td></tr><tr><td>SITL</td><td>UDP 14550</td><td>☐</td></tr><tr><td>라디오</td><td>시리얼 57600</td><td>☐</td></tr></table>
+      </div>
+    </div>
+  </div>
+</section>
+
 <script>
   document.getElementById('leftToggle').onclick = e => {
     const f = document.getElementById('frame'); f.classList.toggle('left-collapsed');

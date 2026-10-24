@@ -50,6 +50,15 @@
   .info .msgs { font-size: 11px; color: var(--dim); line-height: 1.4; max-height: 54px; overflow: hidden; }
   .right .fill { flex: 1; }
 
+  /* 우 사이드바: 탭 (Mission Planner식) */
+  .tabs { display: flex; border: 1px solid var(--line); background: #fff; }
+  .tabs button { flex: 1; border: 0; border-right: 1px solid var(--line); background: #fff; padding: 6px 0; font-size: 11px; color: var(--dim); cursor: pointer; }
+  .tabs button:last-child { border-right: 0; }
+  .tabs button.on { background: var(--accent); color: #fff; font-weight: 600; }
+  .pane { display: none; flex-direction: column; gap: 8px; flex: 1; }
+  .pane.on { display: flex; }
+  .placeholder { flex: 1; border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; color: var(--dim); padding: 12px; line-height: 1.5; }
+
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) { --bg:#111827; --box:#1f2937; --line:#4b5563; --ink:#e5e7eb; --dim:#9ca3af; --accent:#d1d5db;
       --map: repeating-linear-gradient(45deg,#1f2937 0 12px,#243042 12px 24px); }
@@ -77,6 +86,16 @@
       <small>계기 화면 — 자세(인공 수평선) · 나침반/헤딩</small>
     </div>
 
+    <div class="tabs" id="rtabs">
+      <button class="on" data-pane="overview">개요</button>
+      <button data-pane="detail">상세</button>
+      <button data-pane="actions">동작</button>
+      <button data-pane="messages">메시지</button>
+      <button data-pane="logs">로그</button>
+      <button data-pane="preflight">점검</button>
+    </div>
+
+    <div class="pane on" id="pane-overview">
     <div class="info">
       <h4>상태</h4>
       <div class="status"><span><b>Ready To Fly</b></span><span>Position</span><span>시동 꺼짐</span></div>
@@ -110,12 +129,27 @@
     </div>
 
     <div class="info">
-      <h4>기체 메시지</h4>
+      <h4>기체 메시지 (최근)</h4>
       <div class="msgs">[12:03:11] EKF3 IMU0 is using GPS<br>[12:03:04] PreArm: Compass not calibrated<br>[12:02:58] GPS 1: detected as u-blox</div>
     </div>
     <div class="fill"></div>
+    </div>
+
+    <div class="pane" id="pane-detail"><div class="placeholder">상세<br>모든 텔레메트리 값 목록(그룹별, 검색)<br>— 내용은 다음 지시로</div></div>
+    <div class="pane" id="pane-actions"><div class="placeholder">동작<br>시동·이륙·착륙·RTL·모드 변경 등<br>— 내용은 다음 지시로</div></div>
+    <div class="pane" id="pane-messages"><div class="placeholder">메시지<br>기체 메시지 전체 목록, 심각도 필터<br>— 내용은 다음 지시로</div></div>
+    <div class="pane" id="pane-logs"><div class="placeholder">로그<br>tlog · 온보드 로그 내려받기<br>— 내용은 다음 지시로</div></div>
+    <div class="pane" id="pane-preflight"><div class="placeholder">점검<br>비행 전 점검표<br>— 내용은 다음 지시로</div></div>
   </div>
   <div class="region bottom">하단바</div>
 </div>
+<script>
+  document.querySelectorAll('#rtabs button').forEach(b => b.onclick = () => {
+    document.querySelectorAll('#rtabs button').forEach(x => x.classList.remove('on'));
+    document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+    b.classList.add('on');
+    document.getElementById('pane-' + b.dataset.pane).classList.add('on');
+  });
+</script>
 </body>
 </html>

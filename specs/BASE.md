@@ -318,9 +318,9 @@ features/esc/
 
 각 기능의 동작(기능 스펙), 화면의 모양(`specs/ui/`), 바이트 명세(규격 문서), 테스트 내용, 알림 승격 기준(B4 스펙), 트래커 빌드 도구(트래커 스펙), 성능 수치.
 
-## 17. 승인 사항 (사용자가 정할 것)
+## 17. 승인 사항 — **2026-10-24 사용자가 8개 모두 PM 제안값으로 확정**
 
-| # | 물음 | PM 제안 | 대안 |
+| # | 물음 | 확정 | 대안(채택 안 함) |
 |---|---|---|---|
 | 1 | C++ 표준과 Result 형 | **C++23 + `std::expected`** | C++20 + `tl::expected`(CPM) |
 | 2 | MAVLink 방언 | **ardupilotmega**(common 포함) | `all` |
@@ -336,5 +336,6 @@ features/esc/
 | 날짜 | 누가 | 무엇 |
 |---|---|---|
 | 2026-10-24 | reviewer-1 | 설계 검토 1: fail, 지적 20개(`.pm/base/reviewer-1.md`) → 초안 2에 반영(모듈러 모놀리스 재편 포함) |
-| | reviewer-2 | (대기) |
+| 2026-10-24 | 사용자 | §17 승인 사항 8개 모두 PM 제안값으로 확정(C++23·std::expected, ardupilotmega, tests/ 분리, QtKeychain, QSettings, 한국어 원문, Python+lizard, 폴더·네임스페이스·400/60/300) |
+| | reviewer-2 | (진행 중) |
 | | 사용자 | (대기) |

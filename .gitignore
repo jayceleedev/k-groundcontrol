@@ -1,0 +1,6 @@
+# PM working files (instructions, reports, research) stay out of the repository
+.pm/
+
+# build
+build/
+*.user

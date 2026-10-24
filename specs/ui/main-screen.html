@@ -98,7 +98,13 @@
     <div class="pane on" id="pane-overview">
     <div class="info">
       <h4>상태</h4>
-      <div class="status"><span><b>Ready To Fly</b></span><span>Position</span><span>시동 꺼짐</span></div>
+      <div class="status"><span style="border-width:2px"><b>DISARMED</b></span><span>모드: <b>Position</b></span></div>
+      <div class="msgs" style="margin-top:4px; max-height:none">
+        <b style="color:var(--ink)">시동 불가 사유 (2)</b><br>
+        ✕ 나침반 보정 안 됨 — PreArm: Compass not calibrated<br>
+        ✕ GPS 3D fix 대기 — 위성 5 · HDOP 2.4
+      </div>
+      <small style="color:var(--dim); display:block; margin-top:4px">ARMED이면 사유 대신 "비행 중 06:42 · 착륙 상태" 표시. 시동·정지 버튼은 동작 탭에.</small>
     </div>
 
     <div class="info">

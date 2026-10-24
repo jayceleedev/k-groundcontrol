@@ -83,7 +83,7 @@ Written in Korean, ≤100 lines.
 - Qt 6.12 LTS. Allowed Qt modules per layer: `app` Core·Network·Sql·Positioning·TextToSpeech / `comm` + SerialPort / `vehicle` nothing more / `platform/ui` + Quick·Qml·QuickControls / features + Location·Multimedia·Graphs·Quick3D as needed.
 - Dependencies: Qt via aqtinstall (pinned patch version) in CI; everything else via CPM with pinned tag **and** hash. Never vendor files by hand. No vcpkg.
 - MAVLink: `mavlink/c_library_v2`, dialect **ardupilotmega**. Include only through `<kgc/comm/mavlink/Mavlink.h>`; allowed in `comm`, `vehicle`, feature `internal/`; never in `app`, `platform/ui`, any `ui/`.
-- QML modules: `Kgc.Ui` (platform/ui) and `Kgc.<Id>` per feature, built with `qt_add_qml_module(... STATIC)`. `src/main` links them with `Q_IMPORT_QML_PLUGIN`, and `Composition` calls each feature's `registerUi(registry)` **explicitly** — do not rely on static initialisers (the linker drops them).
+- QML modules: `Kgc.Ui` (platform/ui) and `Kgc.<Id>` per feature, built with `qt_add_qml_module(... STATIC)`. `src/main` links them with `Q_IMPORT_QML_PLUGIN`, and `Composition` calls each feature's `registerUi(uiRegistry, service)` **explicitly** — do not rely on static initialisers (the linker drops them).
 - Version lives only in `project(KGroundControl VERSION x.y.z)`; the about window, logs and artifact names read it.
 - CI workflows: `check.yml` (structure checks only, no Qt; `tests/` runs as ctest inside `linux.yml`/`windows.yml`), `linux.yml` (AppImage), `windows.yml` (zip), `tracker.yml` (ESP32 images). Artifacts carry `LICENSE`, `THIRD_PARTY_NOTICES.md` (generated from the CPM list + `cmake/notices/extra.json`), and the source URL.
 

@@ -13,7 +13,7 @@
   header.doc h1 { margin: 0 0 4px; font-size: 18px; }
   header.doc p { margin: 2px 0; color: var(--dim); font-size: 13px; }
 
-  .frame { margin: 0 24px 24px; border: 2px solid var(--accent); background: #fff; width: 1920px; height: 900px;
+  .frame { margin: 0 24px 24px; border: 2px solid var(--accent); background: #fff; width: 1392px; max-width: calc(100vw - 48px); height: 820px;
     display: grid; grid-template-rows: 48px 1fr 32px; grid-template-columns: 200px 1fr 280px;
     grid-template-areas: "top top top" "left center right" "bottom bottom bottom"; }
   .region { border: 1px dashed var(--line); background: var(--box); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--dim); }
@@ -70,7 +70,7 @@
 <header class="doc">
   <h1>K-GroundControl 메인 화면 — 와이어프레임</h1>
   <p>2026-10-24 · PM · 상태: <b>초안(승인 전)</b> · 사용자 지시대로 한 칸씩 채움</p>
-  <p>틀: 상단바 48px / 좌 사이드바 200px / 가운데 지도 / 우 사이드바 280px / 하단바 32px · 그림은 창 최소 크기 1920×900 기준(요구 R-N24)</p>
+  <p>틀: 상단바 48px / 좌 사이드바 200px / 가운데 지도 / 우 사이드바 280px / 하단바 32px · 그림은 보기 좋은 크기로 축소해 그림(실제 창 최소 크기는 R-N24: 1920×900)</p>
 </header>
 
 <div class="frame">

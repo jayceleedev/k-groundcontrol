@@ -18,7 +18,7 @@
 
 **경계는 두 겹으로 지킨다.**
 - **컴파일러**: 모듈마다 CMake 정적 라이브러리 타깃 하나. `target_include_directories`에 **`api/`만 PUBLIC**, `internal/`·`ui/`는 PRIVATE. include 형식은 **`<kgc/<모듈 경로>/X.h>`**(`api/kgc/<모듈 경로>/`에 둔다). 바탕 하위 영역은 부모 경로를 잇는다: `<kgc/vehicle/firmware/FirmwarePlugin.h>`, `<kgc/comm/mavlink/Mavlink.h>`. 다른 모듈의 `internal/`은 꺾쇠 include로는 닿지 않는다.
-- **검사(§14)**: 컴파일러가 못 보는 것 — `..`가 든 상대 경로 include(금지), `api/` 헤더가 `internal/`을 include하는 것(금지: api는 pimpl 또는 인터페이스+팩토리), **모듈 그래프의 순환**(CMake는 정적 라이브러리 순환을 허용하므로 `cmake --graphviz` 출력으로 순위표와 대조), QML `import` 방향.
+- **검사(§14)**: 컴파일러가 못 보는 것 — `..`가 든 상대 경로 include(금지), `api/` 헤더가 `internal/`을 include하는 것(금지: api는 pimpl 또는 인터페이스+팩토리), **모듈 그래프의 순환**(CMake는 정적 라이브러리 순환을 허용하므로 각 `CMakeLists.txt`의 `target_link_libraries` 텍스트로 순위표와 대조), QML `import` 방향.
 
 ### 1.1 첫째 원칙 — 부분만 보고 고칠 수 있다 (R-N1~N7)
 
@@ -70,12 +70,12 @@ k-groundcontrol/
 ├─ firmware/tracker/<변종>/   CI가 넣는 트래커 이미지
 ├─ i18n/  resources/(qrc icons silhouettes data/<이름>/)  tools/check/(+hooks/ requirements.txt)  tests/  docs/  specs/
 ├─ cmake/gen/SettingsGen.cmake   설정 접근자 생성기(CMake 스크립트, 빌드 의존에 Python 없음)
-├─ .github/workflows/  AGENTS.md  LICENSE  THIRD_PARTY_NOTICES.md  README.md
+├─ .github/workflows/  AGENTS.md  LICENSE  README.md   (THIRD_PARTY_NOTICES.md는 빌드가 만들어 산출물에 넣음 §15)
 └─ .pm/   (gitignore)
 ```
 
 - 바탕 모듈의 하위 영역(`comm/mavlink`, `vehicle/firmware` 등)은 **각각 타깃 하나·`api/` 하나·`MODULE.md` 하나·네임스페이스 하나**. 같은 바탕 안의 순서는 그 바탕 모듈 `MODULE.md`가 적는다.
-- 모듈 폴더 안: `api/kgc/<id>/`(공개 헤더 — `<Id>Service.h`, `<Id>States.h`, `Errors.h`, `ModuleId.h`, 생성 `Settings.h`), `internal/`(로직, `Constants.h`, `Events.h`, `settings/<id>.settings.json`, `paths/`), `ui/`(`<Id>Panel.qml`, `<Id>Controller.{h,cpp}`, `register.cpp`), `CMakeLists.txt`, `MODULE.md`. 바탕 모듈과 화면 없는 기능은 `ui/`가 없다.
+- 모듈 폴더 안: `api/kgc/<id>/`(공개 헤더 — `<Id>Service.h`, `<Id>States.h`, `Errors.h`, `ModuleId.h`; 생성 `Settings.h`는 빌드 폴더 §4), `internal/`(로직, `Constants.h`, `Events.h`, `settings/<id>.settings.json`, `paths/`), `ui/`(`<Id>Panel.qml`, `<Id>Controller.{h,cpp}`, `register.cpp`), `CMakeLists.txt`, `MODULE.md`. 바탕 모듈과 화면 없는 기능은 `ui/`가 없다.
 
 ### 3.1 기능 모듈 표 — id · 수명 · 보이는 곳
 
@@ -133,21 +133,21 @@ k-groundcontrol/
 - 예: `layout`(4)이 `motors`(5)의 api를 불러 **그림 모터 시험**을 한다(주인은 layout, OperationKind `MotorTest`). R-D35의 "표식≠기체값이면 시험 잠금" 판정은 `motors`가 할 수 없으므로(위의 `LayoutStates`를 읽을 수 없다) **`layout`이 판정해 그 결과를 `motors` api 호출의 인자로 넘긴다**.
 - `esc`·`elrs`·`tracker`(5)가 파라미터(`SERVO_BLH_*`, `PASSTHRU_EN`)를 읽고 쓰는 것은 `params`(8)가 아래라서 허용.
 - `map`(6)은 레이어 슬롯의 그릇이고 `video`·`terrain`(7)·`tracker`·`mission`·`fly`·`extras`(ADS-B)는 `platform/ui`의 `MapLayerSlot`에 등록한다(§9.8). `map`은 그들을 모른다.
-- 순환은 `tools/check`가 `cmake --graphviz` 출력을 이 표와 대조해 잡는다.
+- 순환은 `tools/check`가 각 모듈 `CMakeLists.txt`의 `target_link_libraries` 텍스트를 이 표와 대조해 잡는다(configure·Qt 불필요).
 
 ## 4. 설정 — 세 가지를 섞지 않는다 (§17-5 확정)
 
 | 종류 | 뜻 | 자리 | 바꾸는 사람 | 저장 |
 |---|---|---|---|---|
 | **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
-| **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings **IniFormat**(조직·앱 이름 모두 `K-GroundControl`; Linux `~/.config/K-GroundControl/K-GroundControl.ini`, Windows `%APPDATA%\K-GroundControl\K-GroundControl.ini`; 레지스트리 안 씀) |
+| **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings **IniFormat** — `QSettings(IniFormat, UserScope, "K-GroundControl", "K-GroundControl")`로 명시 생성(`QCoreApplication`의 organizationName은 **비워 둠**, applicationName만 `K-GroundControl`); Linux `~/.config/K-GroundControl/K-GroundControl.ini`, Windows `%APPDATA%\K-GroundControl\K-GroundControl.ini`; 레지스트리 안 씀 |
 | **고정값** | 바꾸면 안 되는 수 | 모듈 `internal/Constants.h`; 여러 모듈이 쓰는 값만 `platform/app/constants/`(§6) | 코드 | 코드 |
 
 - 운영 설정은 **메타데이터 먼저**(R-N17). 항목: `id`(`<모듈>.<이름>`), `type`(`bool|int|double|string|enum|list<object>`), `default`, `min/max`, `enum`, `labelKey`(번역 키), `category`(모듈 id). 빌드 때 생성기 `cmake/gen/SettingsGen.cmake`(CMake `string(JSON)`, Python 불필요)가 **모듈마다** 빌드 폴더 `${CMAKE_BINARY_DIR}/gen/kgc/<id>/Settings.h`에 형이 있는 접근자를 만들고 그 모듈 타깃의 PUBLIC include 경로에 더한다(소스 트리에 커밋하지 않음; include는 `<kgc/<id>/Settings.h>` 그대로). 없는 키는 컴파일 오류. 코드에 설정 키 문자열을 쓰지 않는다. 바탕 `app/settings`는 모듈을 모르고 등록·저장·검색만 한다.
 - **다른 모듈의 설정을 읽을 때**는 그 모듈 `api/`의 접근자를 순위표 방향으로만. 여러 기능이 함께 쓰는 안전 설정은 바탕에 둔다: 길게 누르기 시간 → `platform/ui`, 유도 거리·고도 한계·강제 시동 보이기 → `platform/vehicle/safety`.
 - 설정 기본값은 JSON에만(코드 상수와 두 곳 금지).
 - **비밀값**(API 키·서명 키·바인드 문구·WiFi 비밀번호): `platform/app/secrets/SecretStore`(QtKeychain, §17-4). 값은 `Secret` 형으로만: `QString` 암시 변환 없음, `QDebug <<` 없음, `reveal()`은 허용 파일에서만(검사). 설정 JSON에는 "있음/없음"만.
-- **파일 자리**(`platform/app/paths/Paths`, 데이터 폴더 아래 — 데이터 폴더 기본값은 `QStandardPaths::AppLocalDataLocation`(Linux `~/.local/share/K-GroundControl`, Windows `%LOCALAPPDATA%\K-GroundControl`), 부팅 설정 `--data-dir`/`[paths] dataDir`로 바꿀 수 있음): `logs/app`, `logs/tlog`, `logs/onboard`, `missions`, `layouts`, `params/backups`(쓰기 전 전체 백업), `params/cache`(PX4 해시 캐시), `ai/changes`(AI·구성도 변경 사유), `video`, `cache/firmware`(해시 기록), `cache/tiles`, `cache/metadata`, `cache/terrain`.
+- **파일 자리**(`platform/app/paths/Paths`, 데이터 폴더 아래 — 데이터 폴더 기본값은 `QStandardPaths::AppLocalDataLocation`(organizationName이 비어 있으므로 Linux `~/.local/share/K-GroundControl`, Windows `%LOCALAPPDATA%\K-GroundControl`), 부팅 설정 `--data-dir`/`[paths] dataDir`로 바꿀 수 있음; `kgc.ini`는 `QStandardPaths::AppConfigLocation`(Linux `~/.config/K-GroundControl/kgc.ini`, Windows `%LOCALAPPDATA%\K-GroundControl\kgc.ini`)): `logs/app`, `logs/tlog`, `logs/onboard`, `missions`, `layouts`, `params/backups`(쓰기 전 전체 백업), `params/cache`(PX4 해시 캐시), `ai/changes`(AI·구성도 변경 사유), `video`, `cache/firmware`(해시 기록), `cache/tiles`, `cache/metadata`, `cache/terrain`.
 
 ## 5. 상태(states) — 묶음마다 주인 하나
 
@@ -220,7 +220,7 @@ k-groundcontrol/
 ## 9. 조립·수명·송신·공통 틀
 
 ### 9.1 조립과 수명
-- `src/main/Composition`이 모든 `api/`를 include해 조립한다(로직 없음). `main.cpp`: BootOptions → Composition → Shell 창.
+- `src/main/Composition`이 모든 `api/`를 include해 조립한다(로직 없음). `main.cpp`: BootOptions → Paths → LogSink(여기서부터 로그) → Settings → Translator → Composition → Shell 창.
 - `comm/links/LinkManager`(링크), `vehicle/registry/VehicleRegistry`(기체, sysid 키; compid 1이 자동조종기, 다른 compid는 그 기체의 `Component`). **활성 기체** `VehicleRegistry::active` 하나 — 상단바 기체 표시, 트래커 기본 대상, 구성도 편집 대상이 본다.
 - 수명은 §3.1 규칙. 기체 삭제: `vehicleRemoved` → `deleteLater`. 참조는 `QPointer`/활성 기체 프로퍼티.
 - **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다.
@@ -295,7 +295,7 @@ k-groundcontrol/
 - **로그**: 호출은 `KGC_LOG(kCategory, EscEvent::FlashFailed, "메시지", 값…)` 매크로 **하나**로만(`qDebug`·`qInfo`·`qWarning` 직접 호출과 QML `console.log` 금지 — 검사). 카테고리는 모듈 경로(`kgc.comm.serial`, `kgc.esc`). 메시지는 **한국어 명사형 전보체**(값은 콜론 뒤, 절은 쉼표, 문장 어미 없음). 사건은 모듈 `Events.h`의 열거(§6). `platform/app/log/LogSink`가 Qt 메시지 핸들러로 파일 회전(부팅 설정)과 비밀값 마스킹을 한다. tlog·포워딩에는 `comm/mavlink/signing`의 필터가 SETUP_SIGNING을 뺀다(R-N12·R-N23).
 - **오류**: §6의 `ErrorCode`. 사용자 문구는 `tr()`.
 - **알림**: `platform/app/notify/Notify`(저장·수준 `Info/Warning/Critical`·출처(기체·트래커·GCS·앱)·시각·읽음) — 상단 벨·토스트·TTS(`Speech`)가 읽는 한 입구. 기체 메시지 중 무엇을 알림으로 올릴지는 **기능 스펙(B4)이 정한다**.
-- **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator.retranslate()`로 재시작 없는 전환(R-N16). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`KGC_LOG(` 밖에 있으면, QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
+- **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator.retranslate()`로 재시작 없는 전환(R-N16). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖에 있으면, QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
 
 ## 11. 트래커 스케치 `tracker/` (R-D27)
 
@@ -351,7 +351,7 @@ k-groundcontrol/
 
 ## 14. 자동 검사 `tools/check/` (R-N21; §17-7 확정)
 
-커밋 훅(`core.hooksPath=tools/check/hooks`)과 CI(`before..after` 범위의 커밋마다, `fetch-depth: 0`)가 같은 Python 3 스크립트를 돈다. 함수 길이는 lizard(`tools/check/requirements.txt`로 버전 고정; 훅은 `tools/check/venv`가 없으면 만들라고 안내). 검사 스크립트는 **Qt·configure 없이** 돈다. 제3자·생성 코드 제외.
+커밋 훅(`core.hooksPath=tools/check/hooks`)과 CI(`before..after` 범위의 커밋마다, `fetch-depth: 0`)가 같은 Python 3 스크립트를 돈다. 함수 길이는 lizard(`tools/check/requirements.txt`로 버전 고정; 훅은 PATH의 `python3`에 lizard가 없으면 `pip install -r tools/check/requirements.txt`를 안내하고 실패). 검사 스크립트는 **Qt·configure 없이** 돈다. 제3자·생성 코드 제외.
 
 | 검사 | 규칙 | 도입 |
 |---|---|---|
@@ -368,7 +368,7 @@ k-groundcontrol/
 | 고정값 | §6 범위 | 0.1.x |
 | 설정 키 | 설정 키 문자열 리터럴(생성 접근자 밖) | 0.1.x |
 | 로그·오류 | `qDebug` 계열 직접 호출; 등록부(모든 모듈 `Events.h`·`Errors.h`·`ModuleId.h`) 밖·중복; `KGC_LOG` 메시지에 문장 어미(…다/…요) | 0.1.x |
-| 문자열(C++) | 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`KGC_LOG(` 밖 | 0.1.x |
+| 문자열(C++) | 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖 | 0.1.x |
 | 비밀값 | `Secret::reveal()`이 허용 파일 밖 | 비밀값이 처음 쓰일 때 |
 | 이름 중복 | 자유 함수 이름이 두 모듈에 | 0.1.x |
 
@@ -411,4 +411,5 @@ k-groundcontrol/
 | 2026-10-24 | reviewer-6 | 설계 검토 6: **pass**, 사소 3건(`.pm/base/reviewer-6.md`) → 초안 7(임대 중 큐 처리·기체 단위 suspended, ByteStream/RawPort 경계) |
 | 2026-10-24 | 사용자 | **이 문서 전체 승인** |
 | 2026-10-24 | PM | 사실 고치기(알림만): §9.5 `register`→`registerTask`(C++ 예약어, AGENTS.md 검토 지적) |
+| 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 2 지적): graphviz 문구 2곳 제거, 생성 Settings.h 위치, 트리의 NOTICES, 문자열 검사에 `QT_TRANSLATE_NOOP(`, QSettings 명시 생성·organizationName 비움·kgc.ini 경로, 훅 안내, main 순서 |
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 지적): 설정 생성기 `cmake/gen/SettingsGen.cmake`(빌드 폴더 생성), QSettings IniFormat·조직/앱 이름, 데이터 폴더 기본값·`--data-dir`, PanelRegistry 항목(order·group·titleKey·icon)·자리 표시 등록·메뉴 제목 번역 방식, 순환 검사는 CMakeLists 텍스트(configure 불필요), 훅 requirements.txt·fetch-depth, 고지 목록·HOMEPAGE_URL |

@@ -46,6 +46,18 @@
   .bottom .st.off { color: var(--dim); border-style: dotted; }
   .bottom .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); margin-right: 4px; vertical-align: middle; }
   .bottom .off .dot { background: transparent; border: 1px solid var(--line); }
+  .bottom { position: relative; }
+  .bottom .st.link { cursor: pointer; }
+  .conn { position: absolute; left: 8px; bottom: 34px; width: 360px; border: 2px solid var(--accent); background: #fff; color: var(--ink); z-index: 5;
+    display: none; flex-direction: column; font-size: 12px; text-align: left; }
+  .conn.on { display: flex; }
+  .conn header { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; border-bottom: 1px solid var(--line); font-weight: 600; }
+  .conn header button { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 1px 6px; cursor: pointer; }
+  .conn .row { display: flex; gap: 8px; align-items: center; padding: 6px 10px; border-bottom: 1px dashed var(--line); }
+  .conn .row:last-child { border-bottom: 0; }
+  .conn select, .conn .btn { border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 3px 8px; font-size: 12px; }
+  .conn .btn.main { border-width: 2px; font-weight: 600; }
+  .conn small { color: var(--dim); }
   .center { grid-area: center; position: relative; background: var(--map); border: 1px dashed var(--line); }
   .center-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 14px; color: var(--dim); text-align: center; }
 
@@ -127,7 +139,6 @@
       <button data-panel="tracker"><span class="ico">◎</span><span class="txt">안테나 트래커</span></button>
       <div class="spacer"></div>
       <div class="sep"></div>
-      <button data-panel="links"><span class="ico">⌁</span><span class="txt">연결</span></button>
       <button data-panel="settings"><span class="ico">⚒</span><span class="txt">앱 설정</span></button>
     </div>
   </div>
@@ -207,7 +218,15 @@
   </div>
   <div class="region bottom">
     <div class="grp">
-      <span class="st on"><span class="dot"></span>기체 · USB 115200 · 손실 0 % · HB 1 Hz</span>
+      <span class="st on link" id="connChip" title="눌러서 연결 설정"><span class="dot"></span>기체 · USB 115200 · 손실 0 % · HB 1 Hz ▴</span>
+      <div class="conn" id="conn">
+        <header><span>연결</span><button id="connClose">✕</button></header>
+        <div class="row"><span>종류</span><select><option>시리얼(USB)</option><option>UDP</option><option>TCP</option></select>
+          <select><option>COM7 · Pixhawk 6X</option><option>COM3 · SiK Radio</option></select>
+          <select><option>115200</option><option>57600</option><option>921600</option></select></div>
+        <div class="row"><span class="btn main">연결</span><span class="btn">끊기</span><label><input type="checkbox" checked> 시작할 때 자동 연결</label></div>
+        <div class="row"><small>저장된 링크: USB Pixhawk · SITL UDP 14550 · 라디오 57600 &nbsp;|&nbsp; 링크 추가·편집은 앱 설정 → 연결</small></div>
+      </div>
       <span class="st">GPS 3D · 위성 14 · HDOP 0.8</span>
       <span class="st">나침반 ✓</span>
       <span class="st">IMU ✓</span>
@@ -230,6 +249,9 @@
   const aiPanel = document.getElementById('aiPanel'), aiBtn = document.getElementById('aiBtn');
   aiBtn.onclick = () => { aiPanel.classList.toggle('on'); aiBtn.classList.toggle('on', aiPanel.classList.contains('on')); };
   document.getElementById('aiClose').onclick = () => { aiPanel.classList.remove('on'); aiBtn.classList.remove('on'); };
+  const conn = document.getElementById('conn');
+  document.getElementById('connChip').onclick = () => conn.classList.toggle('on');
+  document.getElementById('connClose').onclick = () => conn.classList.remove('on');
   const titles = {firmware:'펌웨어 세팅', plan:'미션 계획', setup:'기체 설정', params:'파라미터', analyze:'분석 · 로그', esc:'ESC', elrs:'ELRS', tracker:'안테나 트래커', ai:'AI 세팅', links:'연결', settings:'앱 설정'};
   const panel = document.getElementById('panel');
   document.querySelectorAll('#menu button').forEach(b => b.onclick = () => {
@@ -244,6 +266,9 @@
     const aiPanel = document.getElementById('aiPanel'), aiBtn = document.getElementById('aiBtn');
   aiBtn.onclick = () => { aiPanel.classList.toggle('on'); aiBtn.classList.toggle('on', aiPanel.classList.contains('on')); };
   document.getElementById('aiClose').onclick = () => { aiPanel.classList.remove('on'); aiBtn.classList.remove('on'); };
+  const conn = document.getElementById('conn');
+  document.getElementById('connChip').onclick = () => conn.classList.toggle('on');
+  document.getElementById('connClose').onclick = () => conn.classList.remove('on');
   const titles = {firmware:'펌웨어 세팅', plan:'미션 계획', setup:'기체 설정', params:'파라미터', analyze:'분석 · 로그', esc:'ESC', elrs:'ELRS', tracker:'안테나 트래커', ai:'AI 세팅', links:'연결', settings:'앱 설정'};
   const panel = document.getElementById('panel');
   document.querySelectorAll('#menu button').forEach(b => b.onclick = () => {

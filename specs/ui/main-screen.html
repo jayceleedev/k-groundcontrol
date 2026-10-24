@@ -18,7 +18,11 @@
     grid-template-areas: "top top top" "left center right" "bottom bottom bottom"; }
   .region { border: 1px dashed var(--line); background: var(--box); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--dim); }
   .top { grid-area: top; }
-  .left { grid-area: left; }
+  .left { grid-area: left; flex-direction: column; justify-content: flex-start; padding: 8px; gap: 8px; }
+  .frame.left-collapsed { grid-template-columns: 56px 1fr 280px; }
+  .collapse { align-self: flex-end; font-size: 11px; border: 1px solid var(--line); background: #fff; color: var(--ink); padding: 2px 6px; cursor: pointer; }
+  .left .rest { flex: 1; display: flex; align-items: center; justify-content: center; text-align: center; }
+  .frame.left-collapsed .left .rest { display: none; }
   .right { grid-area: right; }
   .bottom { grid-area: bottom; }
   .center { grid-area: center; position: relative; background: var(--map); border: 1px dashed var(--line); }
@@ -70,15 +74,18 @@
 <header class="doc">
   <h1>K-GroundControl 메인 화면 — 와이어프레임</h1>
   <p>2026-10-24 · PM · 상태: <b>초안(승인 전)</b> · 사용자 지시대로 한 칸씩 채움</p>
-  <p>틀: 상단바 48px / 좌 사이드바 200px / 가운데 지도 / 우 사이드바 280px / 하단바 32px · 그림은 보기 좋은 크기로 축소해 그림(실제 창 최소 크기는 R-N24: 1920×900)</p>
+  <p>틀: 상단바 48px / 좌 사이드바 200px / 가운데 지도 / 우 사이드바 280px / 하단바 32px · 그림은 보기 좋은 크기로 축소해 그림(실제 창 최소 크기는 R-N24: 1920×900) · 좌 사이드바는 접을 수 있음(◀ 버튼), 우 사이드바는 접지 않음</p>
 </header>
 
-<div class="frame">
+<div class="frame" id="frame">
   <div class="region top">
     <div class="app-icon">K-GC</div>
     <div class="rest">상단바 (나머지 비어 있음)</div>
   </div>
-  <div class="region left">좌 사이드바</div>
+  <div class="region left">
+    <button class="collapse" id="leftToggle" title="접기/펼치기">◀</button>
+    <div class="rest">좌 사이드바<br><small>접을 수 있음 (접으면 56px, 아이콘만)</small></div>
+  </div>
   <div class="center"><div class="center-label">지도</div></div>
   <div class="region right">
     <div class="instrument">
@@ -150,6 +157,10 @@
   <div class="region bottom">하단바</div>
 </div>
 <script>
+  document.getElementById('leftToggle').onclick = e => {
+    const f = document.getElementById('frame'); f.classList.toggle('left-collapsed');
+    e.target.textContent = f.classList.contains('left-collapsed') ? '▶' : '◀';
+  };
   document.querySelectorAll('#rtabs button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#rtabs button').forEach(x => x.classList.remove('on'));
     document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));

@@ -5,181 +5,45 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>K-GroundControl 메인 화면 와이어프레임</title>
 <style>
-  :root {
-    --bg: #f3f4f6; --box: #e5e7eb; --line: #9ca3af; --ink: #111827; --dim: #6b7280;
-    --accent: #374151; --map: repeating-linear-gradient(45deg,#e5e7eb 0 12px,#eceef1 12px 24px);
-  }
+  :root { --bg: #f3f4f6; --box: #e5e7eb; --line: #9ca3af; --ink: #111827; --dim: #6b7280; --accent: #374151;
+          --map: repeating-linear-gradient(45deg,#e5e7eb 0 12px,#eceef1 12px 24px); }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
-  header.doc { padding: 16px 24px 8px; }
+  header.doc { padding: 16px 24px 12px; }
   header.doc h1 { margin: 0 0 4px; font-size: 18px; }
   header.doc p { margin: 2px 0; color: var(--dim); font-size: 13px; }
-  .controls { padding: 0 24px 12px; display: flex; gap: 12px; flex-wrap: wrap; font-size: 13px; }
-  .controls label { display: inline-flex; gap: 6px; align-items: center; background: #fff; border: 1px solid var(--line); padding: 4px 8px; border-radius: 4px; }
 
-  /* ---- 앱 프레임 ---- */
   .frame { margin: 0 24px 24px; border: 2px solid var(--accent); background: #fff; width: 1392px; max-width: calc(100vw - 48px); height: 820px;
-    display: grid; grid-template-rows: 48px 1fr 32px; grid-template-columns: var(--left, 200px) 1fr var(--right, 280px);
+    display: grid; grid-template-rows: 48px 1fr 32px; grid-template-columns: 200px 1fr 280px;
     grid-template-areas: "top top top" "left center right" "bottom bottom bottom"; }
-  .frame.left-collapsed { --left: 56px; }
-  .frame.right-collapsed { --right: 40px; }
-  .frame.video-main .center { background: #d1d5db; }
-  .bar, .side { border: 1px dashed var(--line); background: var(--box); display: flex; align-items: center; gap: 8px; padding: 0 8px; font-size: 12px; }
-  .top { grid-area: top; justify-content: space-between; }
-  .bottom { grid-area: bottom; justify-content: space-between; font-size: 11px; }
-  .side { flex-direction: column; align-items: stretch; padding: 8px; gap: 8px; overflow: hidden; }
+  .region { border: 1px dashed var(--line); background: var(--box); display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--dim); }
+  .top { grid-area: top; }
   .left { grid-area: left; }
   .right { grid-area: right; }
+  .bottom { grid-area: bottom; }
   .center { grid-area: center; position: relative; background: var(--map); border: 1px dashed var(--line); }
-  .chip { border: 1px solid var(--line); background: #fff; border-radius: 12px; padding: 2px 8px; white-space: nowrap; }
-  .chip.warn { border-style: double; }
-  .group { display: flex; gap: 6px; align-items: center; }
-  .tab { padding: 4px 10px; border: 1px solid var(--line); background: #fff; }
-  .tab.on { background: var(--accent); color: #fff; }
-  .box { border: 1px solid var(--line); background: #fff; padding: 6px; font-size: 12px; }
-  .box h4 { margin: 0 0 4px; font-size: 12px; font-weight: 600; }
-  .box small { color: var(--dim); }
-  .tool { border: 1px solid var(--line); background: #fff; padding: 8px 6px; text-align: center; }
-  .tool.danger { border-width: 2px; }
-  .left-collapsed .left .label, .right-collapsed .right .box, .right-collapsed .right .label { display: none; }
-  .right-collapsed .right { padding: 8px 4px; align-items: center; }
-  .collapse { align-self: flex-end; font-size: 11px; border: 1px solid var(--line); background: #fff; padding: 2px 6px; cursor: pointer; }
-  .overlay { position: absolute; border: 1px solid var(--line); background: rgba(255,255,255,.9); font-size: 11px; padding: 4px 6px; }
-  .pip { right: 12px; bottom: 12px; width: 260px; height: 146px; display: flex; align-items: center; justify-content: center; background: rgba(209,213,219,.95); }
-  .zoom { left: 12px; top: 12px; width: 28px; height: 60px; display: flex; flex-direction: column; justify-content: space-around; align-items: center; }
-  .scale { left: 12px; bottom: 12px; }
   .center-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 14px; color: var(--dim); text-align: center; }
-  .req { color: var(--dim); font-size: 10px; }
 
-  /* ---- 설명 ---- */
-  .notes { margin: 0 24px 32px; max-width: 1392px; font-size: 13px; }
-  .notes table { border-collapse: collapse; width: 100%; }
-  .notes th, .notes td { border: 1px solid var(--line); padding: 6px 8px; vertical-align: top; text-align: left; }
-  .notes th { background: var(--box); }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) { --bg:#111827; --box:#1f2937; --line:#4b5563; --ink:#e5e7eb; --dim:#9ca3af; --accent:#d1d5db;
       --map: repeating-linear-gradient(45deg,#1f2937 0 12px,#243042 12px 24px); }
-    :root:not([data-theme="light"]) .frame, :root:not([data-theme="light"]) .chip, :root:not([data-theme="light"]) .tab,
-    :root:not([data-theme="light"]) .box, :root:not([data-theme="light"]) .tool, :root:not([data-theme="light"]) .collapse,
-    :root:not([data-theme="light"]) .controls label { background:#0b1220; color: var(--ink); }
-    :root:not([data-theme="light"]) .tab.on { background:#e5e7eb; color:#111827; }
-    :root:not([data-theme="light"]) .overlay { background: rgba(17,24,39,.9); }
-    :root:not([data-theme="light"]) .frame.video-main .center { background:#374151; }
+    :root:not([data-theme="light"]) .frame { background:#0b1220; }
   }
 </style>
 </head>
 <body>
 <header class="doc">
-  <h1>K-GroundControl 메인 화면 — 와이어프레임 초안 1</h1>
-  <p>2026-10-24 · PM · 상태: <b>초안(승인 전)</b> · 근거: specs/REQUIREMENTS.md R-Q4~R-Q6, R-D29, R-N16 · 배치만 정하는 그림이라 색·글꼴·아이콘은 뒤에 정함</p>
-  <p>구조: 상단바 / 좌 사이드바 / 가운데(지도 또는 영상) / 우 사이드바 / 하단바. 아래 토글로 접힌 상태와 영상 전환 상태를 볼 수 있음.</p>
+  <h1>K-GroundControl 메인 화면 — 와이어프레임</h1>
+  <p>2026-10-24 · PM · 상태: <b>초안(승인 전)</b> · 사용자 지시대로 한 칸씩 채움</p>
+  <p>틀: 상단바 48px / 좌 사이드바 200px / 가운데 지도 / 우 사이드바 280px / 하단바 32px</p>
 </header>
 
-<div class="controls">
-  <label><input type="checkbox" id="tL"> 좌 사이드바 접기(아이콘만)</label>
-  <label><input type="checkbox" id="tR"> 우 사이드바 접기</label>
-  <label><input type="checkbox" id="tV"> 가운데를 영상으로(지도는 PiP)</label>
+<div class="frame">
+  <div class="region top">상단바</div>
+  <div class="region left">좌 사이드바</div>
+  <div class="center"><div class="center-label">지도</div></div>
+  <div class="region right">우 사이드바</div>
+  <div class="region bottom">하단바</div>
 </div>
-
-<div class="frame" id="frame">
-  <!-- 상단바 -->
-  <div class="bar top">
-    <div class="group">
-      <span class="chip"><b>K-GC</b></span>
-      <span class="tab on">비행</span><span class="tab">계획</span><span class="tab">기체 설정</span><span class="tab">분석</span>
-      <span class="tab">장비 <span class="req">ESC·ELRS·트래커</span></span>
-    </div>
-    <div class="group">
-      <span class="chip">기체 1 ▾ <span class="req">R-Q3 다중</span></span>
-      <span class="chip">USB 115200 · 손실 0% <span class="req">R-Q1</span></span>
-      <span class="chip warn">Ready To Fly ▾ <span class="req">F-5</span></span>
-      <span class="chip">Position ▾ <span class="req">F-10</span></span>
-      <span class="chip">🔋 87% 16.1V</span>
-      <span class="chip">GPS 14 · 0.8</span>
-      <span class="chip">RC ▮▮▮▯ · TLM ▮▮▯▯</span>
-      <span class="chip">메시지 3 <span class="req">F-9</span></span>
-    </div>
-    <div class="group">
-      <span class="chip">트래커 ● 추적 중 <span class="req">R-D29</span></span>
-      <span class="chip">🎮</span>
-      <span class="chip">🔒</span>
-      <span class="chip">한국어 ▾ <span class="req">R-N16</span></span>
-      <span class="chip">⚙</span>
-    </div>
-  </div>
-
-  <!-- 좌 사이드바: 현재 화면의 도구 -->
-  <div class="side left">
-    <span class="collapse">◀</span>
-    <div class="tool">▲<div class="label">이륙</div></div>
-    <div class="tool">▼<div class="label">착륙</div></div>
-    <div class="tool">⌂<div class="label">RTL</div></div>
-    <div class="tool">❚❚<div class="label">일시정지</div></div>
-    <div class="tool">⋯<div class="label">동작…</div></div>
-    <div class="tool danger">■<div class="label">비상 정지</div></div>
-    <div style="flex:1"></div>
-    <div class="tool">✓<div class="label">비행 전 점검 <span class="req">F-46</span></div></div>
-    <div class="tool">⇆<div class="label">지도/영상 전환</div></div>
-    <div class="label req" style="text-align:center">도구는 화면마다 바뀜<br>(계획: 이륙·패턴·웨이포인트·ROI·착륙)</div>
-  </div>
-
-  <!-- 가운데: 지도 (또는 영상) -->
-  <div class="center">
-    <div class="center-label">지도 (MapLibre/Qt Location)<br><span class="req">기체 아이콘·궤적·미션·펜스·랠리·ADS-B·트래커 위치와 팬 부채꼴 — R-Q6, R-D29</span></div>
-    <div class="overlay zoom"><span>+</span><span>−</span></div>
-    <div class="overlay scale">100 m ─── · 37.123456, 127.123456 <span class="req">마우스 좌표</span></div>
-    <div class="overlay" style="right:12px; top:12px">지도 제공자 ▾ · 레이어 ▾ · 기체 따라가기 ☑</div>
-    <div class="overlay pip">영상 PiP (RTSP/UDP) · 클릭하면 자리 바꿈 <span class="req">F-1, F-62</span></div>
-  </div>
-
-  <!-- 우 사이드바: 정보 패널 -->
-  <div class="side right">
-    <span class="collapse">▶</span>
-    <div class="box"><h4>자세 · 나침반 <span class="req">F-2</span></h4><div style="height:110px; border:1px dashed var(--line); display:flex; align-items:center; justify-content:center"><small>인공 수평선 / 헤딩 123°</small></div></div>
-    <div class="box"><h4>텔레메트리 값 <span class="req">F-3, 사용자 편집</span></h4>
-      <table style="width:100%; font-size:11px"><tr><td>고도(상대)</td><td>52.3 m</td></tr><tr><td>수평 속도</td><td>8.1 m/s</td></tr><tr><td>수직 속도</td><td>+0.4 m/s</td></tr><tr><td>거리(GCS)</td><td>412 m</td></tr><tr><td>비행 시간</td><td>06:42</td></tr></table></div>
-    <div class="box"><h4>카메라 · 짐벌 <span class="req">F-66~F-73</span></h4><small>사진 ● 영상 ○ · 줌 ▮▮▯ · 짐벌 −35°</small></div>
-    <div class="box"><h4>기체 메시지 <span class="req">F-9</span></h4><small>[12:03:11] EKF3 IMU0 is using GPS<br>[12:03:04] PreArm: Compass not calibrated</small></div>
-    <div class="label req" style="text-align:center">계획 화면에서는 미션 항목 목록 / 기체 설정에서는 페이지 목록</div>
-  </div>
-
-  <!-- 하단바 -->
-  <div class="bar bottom">
-    <div class="group"><span class="chip">● 연결됨 · 하트비트 1 Hz</span><span class="chip">최근: EKF3 IMU0 is using GPS</span></div>
-    <div class="group"><span class="chip">홈까지 412 m</span><span class="chip">● REC 00:04:12 <span class="req">F-63</span></span><span class="chip">tlog 기록 중</span></div>
-    <div class="group"><span class="chip">트래커 방위 118° 고각 7°</span><span class="chip">12:03:15</span></div>
-  </div>
-</div>
-
-<section class="notes">
-  <h2 style="font-size:15px">각 칸에 들어가는 것 (초안)</h2>
-  <table>
-    <tr><th style="width:120px">영역</th><th>들어가는 것</th><th style="width:200px">근거</th><th style="width:220px">정할 것</th></tr>
-    <tr><td><b>상단바</b> 48px</td><td>왼쪽: 로고, 화면 전환 탭(비행·계획·기체 설정·분석·장비). 가운데: 기체 선택, 링크 상태, 준비 상태 칩(Ready/Not Ready/Armed/Flying — 눌러서 시동·정지·사유 보기), 비행 모드, 배터리, GPS, RSSI, 메시지 수. 오른쪽: 트래커 상태, 조이스틱, 서명, 언어, 앱 설정</td><td>F-5~F-14, R-D29, R-N16</td><td>"장비" 탭을 둘지, ESC·ELRS·트래커를 기체 설정 안 페이지로 넣을지</td></tr>
-    <tr><td><b>좌 사이드바</b> 200px / 접으면 56px</td><td>현재 화면의 <b>도구</b>. 비행: 이륙·착륙·RTL·일시정지·동작·비상정지(길게 눌러 확인), 비행 전 점검, 지도/영상 전환. 계획: 이륙·패턴·웨이포인트·ROI·착륙. 기체 설정·분석: 페이지 목록</td><td>F-18~F-45, P-5, S-1</td><td>비상 정지를 사이드바에 둘지 상단 준비 칩 안에 둘지(QGC는 칩 안)</td></tr>
-    <tr><td><b>가운데</b></td><td>지도 전체. 겹치기: 확대/축소, 축척·마우스 좌표, 지도 제공자·레이어·따라가기, 영상 PiP(클릭하면 지도와 자리 바꿈). 지도 클릭 → 이동/선회/ROI/헤딩/홈 팝업(F-41)</td><td>F-1, F-41, F-48~F-58, F-62</td><td>PiP 기본 크기·위치, 3D 전환 버튼 자리</td></tr>
-    <tr><td><b>우 사이드바</b> 280px / 접으면 40px</td><td>정보 패널. 비행: 자세·나침반, 텔레메트리 값(사용자 편집), 카메라·짐벌, 기체 메시지. 계획: 미션 항목 목록·통계. 기체 설정: 요약/현재 페이지 내용은 가운데로</td><td>F-2~F-4, F-9, F-66~F-73, P-6</td><td>텔레메트리 값 패널의 기본 항목 5개</td></tr>
-    <tr><td><b>하단바</b> 32px</td><td>상태줄. 연결·하트비트, 최근 기체 메시지 한 줄, 홈 거리, 녹화·tlog 상태, 트래커 방위·고각, 시각</td><td>C-11, C-23, F-9, F-63, R-D29</td><td>하단바를 숨길 수 있게 할지</td></tr>
-  </table>
-  <h2 style="font-size:15px">다음 그림</h2>
-  <p>이 배치가 정해지면 같은 틀로 계획·기체 설정·분석·장비(ESC·ELRS·트래커)·앱 설정 화면을 한 장씩 그린다. 접힌 상태·영상 전환 상태는 위 토글로 확인.</p>
-</section>
-
-<script>
-  const f = document.getElementById('frame');
-  document.getElementById('tL').onchange = e => f.classList.toggle('left-collapsed', e.target.checked);
-  document.getElementById('tR').onchange = e => f.classList.toggle('right-collapsed', e.target.checked);
-  document.getElementById('tV').onchange = e => {
-    f.classList.toggle('video-main', e.target.checked);
-    document.querySelector('.center-label').innerHTML = e.target.checked
-      ? '영상 (RTSP/UDP H.264·H.265)<br><span class="req">짐벌 클릭 조작·추적 상자·장애물 겹치기 — F-62, F-70, F-73</span>'
-      : '지도 (MapLibre/Qt Location)<br><span class="req">기체 아이콘·궤적·미션·펜스·랠리·ADS-B·트래커 위치와 팬 부채꼴 — R-Q6, R-D29</span>';
-    document.querySelector('.pip').innerHTML = e.target.checked ? '지도 PiP · 클릭하면 자리 바꿈' : '영상 PiP (RTSP/UDP) · 클릭하면 자리 바꿈 <span class="req">F-1, F-62</span>';
-  };
-  document.querySelectorAll('.collapse').forEach(b => b.onclick = () => {
-    const isLeft = b.parentElement.classList.contains('left');
-    const cb = document.getElementById(isLeft ? 'tL' : 'tR'); cb.checked = !cb.checked; cb.onchange({target: cb});
-  });
-</script>
 </body>
 </html>

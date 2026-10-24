@@ -1,20 +1,22 @@
 # 규격: 앱 로그 (BASE §10)
 
-- 상태: 초안 1 — 2026-10-24, 0.0.1 스펙과 함께
+- 상태: 초안 2 — 2026-10-24, 0.0.1 스펙과 함께(검토 3 반영: 수준 매크로, Qt 메시지, 예시 줄)
 - 자리: `Paths::logsApp()/kgc.log`(현재), `kgc.1.log` … `kgc.N.log`(회전). 쓰는 코드는 `platform/app/log/LogSink`뿐.
 
 ## 한 줄
 
 ```
-2026-10-24T18:03:15.123+09:00 INFO  kgc.app.boot    boot.Started           앱 시작: 0.0.1, 언어: ko, 데이터 폴더: /home/u/.local/share/K-GroundControl
+2026-10-24T18:03:15.123+09:00 INFO  kgc.shell       shell.AppStarted       앱 시작: 0.0.1, 언어: ko, 데이터 폴더: /home/u/.local/share/K-GroundControl
+2026-10-24T18:03:15.400+09:00 DEBUG kgc.shell       shell.MenuCollapsed    좌 메뉴 접힘: false
+2026-10-24T18:03:16.002+09:00 WARN  kgc.qt          qt.Message             QML Connections: Implicitly defined onFoo properties in Connections are deprecated
 ```
 
 | 칸 | 내용 |
 |---|---|
 | 시각 | ISO 8601, 밀리초, 지역 오프셋 |
-| 수준 | `DEBUG` `INFO` `WARN` `ERROR` `FATAL` (고정 폭 5) |
+| 수준 | `DEBUG` `INFO` `WARN` `ERROR` (고정 폭 5) — 호출 매크로 `KGC_LOG_DEBUG/INFO/WARN/ERROR`가 정함 |
 | 카테고리 | 모듈 경로 `kgc.<모듈>`(고정 폭 16, 넘치면 그대로) |
-| 사건 | `<module>.<EventName>` — 모듈 `Events.h` 열거의 이름(영어) |
+| 사건 | `<module>.<EventName>` — 모듈 `Events.h` 열거의 이름(영어). Qt 자체 메시지(`qInstallMessageHandler`로 들어오는 QML 경고 등)는 카테고리 `kgc.qt`, 사건 `qt.Message`, 수준은 QtMsgType대로(Debug→DEBUG, Info→INFO, Warning→WARN, Critical·Fatal→ERROR), 메시지는 원문 그대로 |
 | 메시지 | 한국어 명사형 전보체. 값은 콜론 뒤, 절은 쉼표. 문장 어미 없음 |
 
 - 칸 사이는 공백 하나 이상. 메시지 안의 줄바꿈은 `\n`으로 이스케이프.

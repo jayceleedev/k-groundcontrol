@@ -49,7 +49,7 @@
 - Qt 6.12 LTS. 층별로 쓸 수 있는 Qt 모듈: `app` Core·Network·Sql·Positioning·TextToSpeech / `comm` + SerialPort / `vehicle` 추가 없음 / `platform/ui` + Quick·Qml·QuickControls / 기능 모듈 + Location·Multimedia·Graphs·Quick3D(필요한 기능만). GPL-3.0이라 모듈 제한 없음.
 - 빌드 CMake ≥ 3.28 + Ninja, `CMakePresets.json`(linux-debug·linux-release·windows-release). Qt는 aqtinstall 패치 버전 고정, C/C++ 의존은 CPM(태그·체크섬 고정), vcpkg 안 씀. 제3자 코드는 CPM 캐시에 두고 모든 검사에서 제외.
 - MAVLink: `mavlink/c_library_v2` CPM 커밋 고정, 방언 **ardupilotmega**(common 포함). include는 `<kgc/comm/mavlink/Mavlink.h>` **한 곳**을 통해서만(설정 매크로 뒤 include). 허용: `comm`·`vehicle`·기능 `internal/`. 금지: `app`, `platform/ui`, 모든 `ui/`. PX4 이벤트 해석은 libevents(CPM).
-- QML 모듈: 바탕 `Kgc.Ui`, 기능마다 `Kgc.<Id>`(`qt_add_qml_module`, STATIC). `src/main`이 `Q_IMPORT_QML_PLUGIN`으로 전부 링크하고 `Composition`이 기능마다 `registerUi(registry)`를 **직접 호출**한다(정적 초기화 객체에 기대지 않는다 — 링커가 버린다).
+- QML 모듈: 바탕 `Kgc.Ui`, 기능마다 `Kgc.<Id>`(`qt_add_qml_module`, STATIC). `src/main`이 `Q_IMPORT_QML_PLUGIN`으로 전부 링크하고 `Composition`이 기능마다 `registerUi(uiRegistry, <그 모듈의 전역 서비스>)`(선언은 그 모듈 `api/kgc/<id>/Ui.h`; `kgc::ui::UiRegistry`는 PanelRegistry·슬롯 넷·Navigator·QQmlEngine을 묶은 참조 묶음)를 **직접 호출**한다(정적 초기화 객체에 기대지 않는다 — 링커가 버린다).
 - 네임스페이스는 모듈 경로를 따른다: `kgc::app`, `kgc::comm::mavlink`, `kgc::vehicle::firmware`, `kgc::esc`, `kgc::tracker`.
 - 버전은 `CMakeLists.txt`의 `project(VERSION)` 한 곳. 정보 창·로그·산출물 이름이 읽는다. `0.0.1`부터.
 
@@ -74,7 +74,7 @@ k-groundcontrol/
 └─ .pm/   (gitignore)
 ```
 
-- 바탕 모듈의 하위 영역(`comm/mavlink`, `vehicle/firmware` 등)은 **각각 타깃 하나·`api/` 하나·`MODULE.md` 하나·네임스페이스 하나**. 같은 바탕 안의 순서는 그 바탕 모듈 `MODULE.md`가 적는다.
+- 바탕 모듈의 하위 영역(`comm/mavlink`, `vehicle/firmware` 등)은 **각각 타깃 하나·`api/` 하나·`MODULE.md` 하나·네임스페이스 하나**. CMake 타깃 이름은 경로를 `_`로 이은 `kgc_<경로>`(`kgc_app_log`, `kgc_comm_mavlink`, `kgc_ui`, 기능은 `kgc_<id>`), 조립은 `kgc_composition`, 실행 파일은 `KGroundControl`. 헤더만 있는 모듈은 INTERFACE 타깃. `ModuleId` 형은 `app/errors`의 `ErrorCode.h`에 있으므로 모든 모듈은 `kgc_app_errors`에 기댄다. 같은 바탕 안의 순서는 그 바탕 모듈 `MODULE.md`가 적는다.
 - 모듈 폴더 안: `api/kgc/<id>/`(공개 헤더 — `<Id>Service.h`, `<Id>States.h`, `Errors.h`, `ModuleId.h`; 생성 `Settings.h`는 빌드 폴더 §4), `internal/`(로직, `Constants.h`, `Events.h`, `settings/<id>.settings.json`, `paths/`), `ui/`(`<Id>Panel.qml`, `<Id>Controller.{h,cpp}`, `register.cpp`), `CMakeLists.txt`, `MODULE.md`. 바탕 모듈과 화면 없는 기능은 `ui/`가 없다.
 
 ### 3.1 기능 모듈 표 — id · 수명 · 보이는 곳
@@ -270,7 +270,7 @@ k-groundcontrol/
 
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
 - `Theme.qml`(크기·색·글꼴 토큰), `components/`(HoldToConfirm, JobView, Pill, Chip, TimerBox), `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 모듈의 메뉴 자리를 `Composition`이 등록), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`), `Navigator`(`open(panelId, arg)`).
-- 기능 모듈의 `ui/register.cpp`가 `registerUi(registry)`에서 패널·슬롯 기여·레이어를 등록한다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
+- 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만들어 QML 컨텍스트 프로퍼티(`<id>Controller`)로 둔다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
 - QML `import` 허용: `QtQuick*`·`QtQml*`, §2의 Qt 모듈(Location·Positioning·Multimedia·Graphs·Quick3D), `Kgc.Ui`, 자기 `Kgc.<Id>`, **순위표에서 아래인** `Kgc.<Id>`. 그 밖은 검사가 잡는다.
 
@@ -292,7 +292,7 @@ k-groundcontrol/
 
 ## 10. 로그·오류·알림·번역 (§17-6 확정)
 
-- **로그**: 호출은 `KGC_LOG(kCategory, EscEvent::FlashFailed, "메시지", 값…)` 매크로 **하나**로만(`qDebug`·`qInfo`·`qWarning` 직접 호출과 QML `console.log` 금지 — 검사). 카테고리는 모듈 경로(`kgc.comm.serial`, `kgc.esc`). 메시지는 **한국어 명사형 전보체**(값은 콜론 뒤, 절은 쉼표, 문장 어미 없음). 사건은 모듈 `Events.h`의 열거(§6). `platform/app/log/LogSink`가 Qt 메시지 핸들러로 파일 회전(부팅 설정)과 비밀값 마스킹을 한다. tlog·포워딩에는 `comm/mavlink/signing`의 필터가 SETUP_SIGNING을 뺀다(R-N12·R-N23).
+- **로그**: 호출은 `KGC_LOG_DEBUG / KGC_LOG_INFO / KGC_LOG_WARN / KGC_LOG_ERROR(kCategory, EscEvent::FlashFailed, "메시지", 값…)` **네 수준 매크로**(같은 모양; 이 문서에서 `KGC_LOG`라 하면 이 넷)로만(`qDebug`·`qInfo`·`qWarning` 직접 호출과 QML `console.log` 금지 — 검사). 카테고리는 모듈 경로(`kgc.comm.serial`, `kgc.esc`). 메시지는 **한국어 명사형 전보체**(값은 콜론 뒤, 절은 쉼표, 문장 어미 없음). 사건은 모듈 `Events.h`의 열거(§6). `platform/app/log/LogSink`가 Qt 메시지 핸들러로 파일 회전(부팅 설정)과 비밀값 마스킹을 한다. tlog·포워딩에는 `comm/mavlink/signing`의 필터가 SETUP_SIGNING을 뺀다(R-N12·R-N23).
 - **오류**: §6의 `ErrorCode`. 사용자 문구는 `tr()`.
 - **알림**: `platform/app/notify/Notify`(저장·수준 `Info/Warning/Critical`·출처(기체·트래커·GCS·앱)·시각·읽음) — 상단 벨·토스트·TTS(`Speech`)가 읽는 한 입구. 기체 메시지 중 무엇을 알림으로 올릴지는 **기능 스펙(B4)이 정한다**.
 - **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator.retranslate()`로 재시작 없는 전환(R-N16). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖에 있으면, QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
@@ -374,7 +374,7 @@ k-groundcontrol/
 
 ## 15. 빌드·CI·배포 (R-N18~R-N22)
 
-- `.github/workflows/`: `check.yml`(구조 검사·`tests/`), `linux.yml`(Ubuntu 24.04 → AppImage), `windows.yml`(MSVC 2022, Qt 6.12.x aqtinstall → zip), `tracker.yml`(트래커 이미지). 태그에서 Release.
+- `.github/workflows/`: `check.yml`(구조 검사만, Qt 없음; `tests/`는 `linux.yml`·`windows.yml`의 ctest에서), `linux.yml`(Ubuntu 24.04 → AppImage), `windows.yml`(MSVC 2022, Qt 6.12.x aqtinstall → zip), `tracker.yml`(트래커 이미지). 태그에서 Release.
 - 산출물에 `LICENSE`, `THIRD_PARTY_NOTICES.md`(CPM 목록 + `cmake/notices/extra.json`의 CPM 밖 의존 — Qt(LGPL-3.0)·GStreamer·MSVC 재배포 런타임·linuxdeploy·트래커 라이브러리 — 를 CI가 합쳐 생성; 소스 URL은 `project(HOMEPAGE_URL)`에서), 소스 위치. 정보 창(`appSettings`)이 이것을 읽어 보여 준다. SBOM은 0.1.x부터.
 - 0.0.1 산출물: Windows zip(windeployqt·MSVC 런타임) + AppImage. GStreamer·NSIS는 영상 기능이 들어오는 버전부터.
 
@@ -411,5 +411,7 @@ k-groundcontrol/
 | 2026-10-24 | reviewer-6 | 설계 검토 6: **pass**, 사소 3건(`.pm/base/reviewer-6.md`) → 초안 7(임대 중 큐 처리·기체 단위 suspended, ByteStream/RawPort 경계) |
 | 2026-10-24 | 사용자 | **이 문서 전체 승인** |
 | 2026-10-24 | PM | 사실 고치기(알림만): §9.5 `register`→`registerTask`(C++ 예약어, AGENTS.md 검토 지적) |
+| 2026-10-24 | PM | 사용자 결정 반영(알림만): §3.1 shell 행 R-N24 (b)(최소 = 기준과 화면 가용 영역 중 작은 쪽, 축소 배치) |
+| 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 3 지적): §3 CMake 타깃 이름 규칙·INTERFACE·errors 의존, §2·§9.7 `registerUi(uiRegistry, service)`·`UiRegistry`·컨트롤러 컨텍스트 프로퍼티, §10 KGC_LOG 수준 매크로 넷, §15 check.yml은 구조 검사만 |
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 2 지적): graphviz 문구 2곳 제거, 생성 Settings.h 위치, 트리의 NOTICES, 문자열 검사에 `QT_TRANSLATE_NOOP(`, QSettings 명시 생성·organizationName 비움·kgc.ini 경로, 훅 안내, main 순서 |
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 지적): 설정 생성기 `cmake/gen/SettingsGen.cmake`(빌드 폴더 생성), QSettings IniFormat·조직/앱 이름, 데이터 폴더 기본값·`--data-dir`, PanelRegistry 항목(order·group·titleKey·icon)·자리 표시 등록·메뉴 제목 번역 방식, 순환 검사는 CMakeLists 텍스트(configure 불필요), 훅 requirements.txt·fetch-depth, 고지 목록·HOMEPAGE_URL |

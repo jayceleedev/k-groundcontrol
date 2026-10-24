@@ -61,7 +61,8 @@ namespace kgc::shell::settings {
   void setLeftMenuCollapsed(bool);          // 쓰기(저장 + Settings::changed(id) 시그널)
 }
 ```
-- `enum`은 `enum class Language { System, Ko, En }`과 `toString`/`fromString`이 함께 생긴다.
+- `enum`은 `enum class Language { System, Ko, En }`과 `toString(Language)`/`fromString(QStringView)`이 함께 생긴다.
+- 설정마다 변경 구독 함수가 생긴다: `QMetaObject::Connection onLanguageChanged(QObject* receiver, std::function<void(Language)>)` — 안에서 `Settings::changed(id)`를 받아 키를 견준다(키 문자열은 생성 코드 안에만).
 - 키 문자열은 생성 코드 안에만 있다. 손으로 쓴 코드에 설정 키 문자열을 쓰지 않는다(검사 §14 "설정 키").
 - 생성기는 configure 때 모든 `*.settings.json`을 `platform/app/settings`의 등록 테이블(`${CMAKE_BINARY_DIR}/gen/kgc/app/settings/Registry.cpp`)에도 모아 넣는다. 그래서 `app/settings`는 모듈을 모르면서 전체 목록(기본값·형·라벨)을 안다.
 

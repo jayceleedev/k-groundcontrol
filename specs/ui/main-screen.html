@@ -24,6 +24,19 @@
   .center { grid-area: center; position: relative; background: var(--map); border: 1px dashed var(--line); }
   .center-label { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); font-size: 14px; color: var(--dim); text-align: center; }
 
+  /* 상단바: 왼쪽 끝 아이콘 */
+  .top { justify-content: flex-start; gap: 8px; padding: 0 8px; }
+  .app-icon { width: 32px; height: 32px; border: 1px solid var(--line); background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--ink); }
+  .top .rest { flex: 1; text-align: center; }
+
+  /* 우 사이드바: 맨 위 계기 화면 */
+  .right { flex-direction: column; align-items: stretch; justify-content: flex-start; padding: 8px; gap: 8px; }
+  .instrument { height: 240px; border: 1px solid var(--line); background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--ink); }
+  .instrument .horizon { width: 160px; height: 160px; border-radius: 50%; border: 2px solid var(--line); background: linear-gradient(#dbeafe 50%, #d6d3d1 50%); position: relative; }
+  .instrument .horizon::after { content: ""; position: absolute; left: 50%; top: 50%; width: 60px; height: 2px; background: var(--accent); transform: translate(-50%,-50%); }
+  .instrument small { color: var(--dim); }
+  .right .rest { flex: 1; display: flex; align-items: center; justify-content: center; }
+
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) { --bg:#111827; --box:#1f2937; --line:#4b5563; --ink:#e5e7eb; --dim:#9ca3af; --accent:#d1d5db;
       --map: repeating-linear-gradient(45deg,#1f2937 0 12px,#243042 12px 24px); }
@@ -39,10 +52,19 @@
 </header>
 
 <div class="frame">
-  <div class="region top">상단바</div>
+  <div class="region top">
+    <div class="app-icon">K-GC</div>
+    <div class="rest">상단바 (나머지 비어 있음)</div>
+  </div>
   <div class="region left">좌 사이드바</div>
   <div class="center"><div class="center-label">지도</div></div>
-  <div class="region right">우 사이드바</div>
+  <div class="region right">
+    <div class="instrument">
+      <div class="horizon"></div>
+      <small>계기 화면 — 자세(인공 수평선) · 나침반/헤딩</small>
+    </div>
+    <div class="rest">(아래 비어 있음)</div>
+  </div>
   <div class="region bottom">하단바</div>
 </div>
 </body>

@@ -80,14 +80,14 @@ PX4와 ArduPilot 기체를 위한 지상국(GCS). QGroundControl이 하는 일�
 
 | # | 요구 | 근거 |
 |---|---|---|
-| R-D9 | 지원 펌웨어: **AM32**(32비트), **Bluejay**(8비트). BLHeli_S ESC는 MCU 시그니처가 **E8B2(BB21)·E8B5(BB51)**일 때만 Bluejay로 올리는 경로를 제공하고, E8B1(BB1)은 "지원 안 함"으로 표시한다. BLHeli_32·JESC는 지원하지 않는다. BLHeli_S 레이아웃→Bluejay hex 대응과 Bluejay 설정 바이트 배치는 미확인(10절) | esc E-1~E-6, E-23, D8 |
+| R-D9 | 지원 펌웨어: **AM32**(32비트), **Bluejay**(8비트). BLHeli_S ESC는 MCU 시그니처가 **E8B2(BB21)·E8B5(BB51)**일 때만 Bluejay로 올리는 경로를 제공하고, E8B1(BB1)은 "지원 안 함"으로 표시한다. BLHeli_32·JESC는 지원하지 않는다. Bluejay hex는 ESC EEPROM+0x40의 레이아웃 태그(예 `#S_H_50#`)로 고른다(`S_H_50_<24|48|96>_v<버전>.hex`, 릴리스 자산에 있는 것만). BB51이 AP 패스스루로 닿는지는 미확인(10절) | esc E-1~E-6, E-23, D8; code/esc-configurator.md |
 | R-D10 | 설정 읽기·쓰기: AM32 EEPROM(192바이트, `eeprom_version` 4 — 다르면 읽기 전용), Bluejay 설정 페이지. 모터 방향·시작 전력·브레이크·텔레메트리 등 사람 말 이름으로 | esc E-12, E-23 |
 | R-D11 | 펌웨어 굽기 공통: 릴리스 hex는 GitHub Releases에서 실행 시 내려받고(설치본에 넣지 않음) 캐시한다. 검증 실패 시 복구를 안내한다. 순서는 펌웨어별로 다르다(R-D11a, R-D11b) | esc 4절 |
-| R-D11a | **AM32(ARM) 굽기 순서**: 설정 읽어 두기 → 실패 표식 쓰기와 **부트 플래그(EEPROM 바이트 0) 0** → 쓰기 → 전 페이지 읽기 검증 → 검증이 통과할 때만 부트 플래그 1 → 리셋 → 다시 연결 → 새 펌웨어가 쓴 `eeprom_version`을 읽어 비교 → **같을 때만** 설정 복원; 다르면 기본값을 두고 사용자 확인을 받는다(R-D10과 일치. 플래그와 복원을 한 번에 쓰는 esc-configurator 방식은 따르지 않는다). 실패 시 부트 플래그를 세우지 않는다. MCU·신호 핀·파일명 태그가 모두 맞아야 굽는다 | esc E-12, E-16, E-40, E-52, E-53 |
+| R-D11a | **AM32(ARM) 굽기 순서**: 설정 읽어 두기(192바이트 전체) → **부트 플래그(EEPROM 바이트 0) 0**을 192바이트 전체 이미지로 쓰기(별도 "실패 표식"은 두지 않는다: 부트로더는 바이트 0≠01이면 머물며, 글자 표식은 v4 설정을 덮어쓴다) → 쓰기 → 전 페이지 읽기 검증 → 검증이 통과할 때만 부트 플래그 1 → 리셋 → 다시 연결 → 새 펌웨어가 쓴 `eeprom_version`을 읽어 비교 → **같을 때만** 설정 복원; 다르면 기본값을 두고 사용자 확인을 받는다(R-D10과 일치. 플래그와 복원을 한 번에 쓰는 esc-configurator·AM32 설정기 방식은 따르지 않는다). 실패 시 부트 플래그를 세우지 않는다. 읽어 비교할 때 바이트 2(부트로더가 덮어쓰는 버전)는 마스크한다. 설정 쓰기는 항상 192바이트 전체 이미지(페이지 경계 쓰기는 페이지를 지움). 펌웨어 hex는 MCU·파일명 태그가 맞아야 굽고, 신호 핀 검사는 부트로더 교체 때만 가능하다 | esc E-12, E-16, E-40, E-52, E-53; code/am32-and-passthrough.md |
 | R-D11b | **Bluejay(EFM8) 굽기 순서**(부트 플래그 없음): 설정 페이지를 지우고 `FLASH*FAILED` 표식 쓰기 → 첫 페이지에 `LJMP bootloader` 안전장치 쓰기 → 중간 페이지 쓰고 검증 → **마지막에** 리셋 벡터 페이지 쓰고 검증 → 설정 복원. 페이지 범위는 **MCU별**(BB21: 512B 페이지, 부트로더 0x1C00, 중간 0x02~0x0D·리셋 0x00~0x02; BB51: 2048B 페이지, 부트로더 0xF000, 범위는 그에 맞게). 레이아웃→hex 대응이 확인될 때까지 **시험 기능**(10절). BLHeli_S→Bluejay 전환에서는 설정 배치가 달라 복원하지 않고 기본값으로 두고 사용자 확인을 받는다 | esc E-23, E-52 |
-| R-D12 | 전송 경로 셋을 한 추상화 뒤에 둔다: ① **ArduPilot 패스스루**(`SERVO_BLH_*`, 4초 침묵 뒤 raw MSP/4-way, **시리얼 링크에서만**) ② **PX4 SERIAL_CONTROL**(ESC 채널 20~27, 비트뱅 UART 19200, D11 판정; 70바이트 전송과 AM32 260µs 간격의 궁합 미확인, 10절) ③ **직접 단선 연결**(USB-UART 19200). 경로마다 R-D14의 전제와 복귀 절차를 따른다 | esc E-20~E-24, E-30, E-31 |
-| R-D13 | 프로토콜: 4-way 인터페이스(CRC16-XMODEM), MSP 진입(245), BLHeli/AM32 부트로더(19200 반이중, CRC 0xA001). 두 CRC를 섞지 않도록 자동 테스트(시험 벡터)로 지킨다 | esc 4절 |
-| R-D14 | 안전, 경로별: **공통** — 프로펠러 제거 확인 없이는 모터·굽기 화면이 열리지 않는다, 시동 중 거부. **AP** — 진입 전 `SERVO_BLH_*`·DShot 출력·안전 스위치(또는 `BRD_SAFETY_DEFLT`=0)·배터리 연결을 점검하고 필요하면 설정과 재부팅을 안내한다, 끝낼 때 0x34를 보내 출력을 되돌린다. **PX4** — `PASSTHRU_EN` 켜고 재부팅해 진입, 끝나면 **반드시 재부팅**하고 하트비트와 출력 드라이버가 돌아온 것을 확인할 때까지 시동 명령을 잠근다. **직접 연결** — FC 확인이 없으므로 프로펠러 제거와 전원 순서(신호선 high 유지)를 체크리스트로 확인받는다. 굽기 실패 시 복구 안내(SWD·C2는 범위 밖, 안내만) | esc 3절, E-25, E-28, E-30, E-31 |
+| R-D12 | 전송 경로 셋을 한 추상화 뒤에 둔다: ① **ArduPilot 패스스루**(`SERVO_BLH_*`, 4초 침묵 뒤 raw MSP/4-way, **시리얼 링크에서만**) ② **PX4 SERIAL_CONTROL**(ESC 채널 20~27, 비트뱅 UART 19200, D11 판정. **부트로더 프레임 하나가 메시지 하나(70바이트)에 들어가야 하고 ACK 뒤에 다음 프레임**; 굽기 청크 64바이트; MCXA153의 128바이트 청크는 PX4 경로 불가; 27KB 이미지 약 1~3분이므로 진행률·예상 시간 표시) ③ **직접 단선 연결**(USB-UART 19200). 경로마다 R-D14의 전제와 복귀 절차를 따른다 | esc E-20~E-24, E-30, E-31 |
+| R-D13 | 프로토콜: 4-way 인터페이스(CRC16-XMODEM), MSP 진입(245), BLHeli/AM32 부트로더(19200 반이중, CRC 0xA001). 두 CRC를 섞지 않도록 자동 테스트(시험 벡터)로 지킨다. **AP 4-way의 ACK_OK는 믿지 않는다**(ESC가 거부해도 OK가 올 수 있고, 읽기가 OK+쓰레기 1바이트일 수 있음): 쓰기는 읽어 비교, 읽기는 길이 검사 | esc 4절; code/am32-and-passthrough.md |
+| R-D14 | 안전, 경로별: **공통** — 프로펠러 제거 확인 없이는 모터·굽기 화면이 열리지 않는다, 시동 중 거부. **AP** — 진입 전 `SERVO_BLH_*`·DShot 출력·안전 스위치(또는 `BRD_SAFETY_DEFLT`=0)·배터리 연결을 점검하고 필요하면 설정과 재부팅을 안내한다, 끝낼 때 0x34를 보내 출력을 되돌린다. **PX4** — `PASSTHRU_EN` 켜고 재부팅해 진입, 끝나면 `PASSTHRU_EN` 끄고 **반드시 재부팅**하고, 하트비트가 돌아오고 `PASSTHRU_EN`을 다시 읽어 0임을 확인할 때까지 시동 명령을 잠근다(PX4는 출력 드라이버 복귀를 직접 알려 주지 않는다). **직접 연결** — FC 확인이 없으므로 프로펠러 제거와 전원 순서(신호선 high 유지)를 체크리스트로 확인받는다. 굽기 실패 시 복구 안내(SWD·C2는 범위 밖, 안내만) | esc 3절, E-25, E-28, E-30, E-31 |
 | R-D14a | 모터 슬라이더(MSP_SET_MOTOR): **AP 패스스루 경로에서만** 제공하고 PX4·직접 연결 경로에서는 숨긴다(R-Q12). 누르고 있는 동안만 돌고 손을 떼면 즉시 0, 길어도 R-N9의 3초에 자동 정지. 화면을 떠나거나 포커스를 잃으면 즉시 0. 1초 미만 주기로 재송신(AP는 1초 침묵이면 모터 정지) | esc E-21, E-30, E-50 |
 | R-D15 | ESC 텔레메트리 표시: MAVLink ESC_INFO/ESC_STATUS, AP ESC_TELEMETRY_x, eRPM→RPM(폴 수) | esc E-26, E-29 |
 
@@ -96,11 +96,11 @@ PX4와 ArduPilot 기체를 위한 지상국(GCS). QGroundControl이 하는 일�
 | # | 요구 | 근거 |
 |---|---|---|
 | R-D16 | ELRS **4.x(ESP 계열)** 수신기·송신 모듈의 펌웨어 굽기. **백팩은 나중 순서**(저장소·버전·경로가 따로). 3.x STM32(ST-Link·XMODEM)는 지원하지 않는다 | elrs 2.1, P-7, F-11 |
-| R-D17 | 펌웨어 출처: 버전 목록과 sha는 `artifactory.expresslrs.org/ExpressLRS/index.json`(4.0 이상만), 펌웨어는 `…/ExpressLRS/<sha>/firmware.zip`, 타깃 목록은 그 zip 안 `hardware/targets.json`에서 **`platform`이 stm32가 아니고 `min_version`이 고른 버전 이하인 것만** 보인다. HTTPS만. 실행 시 내려받고 캐시하며, 캐시한 zip의 SHA-256을 기록해 다시 쓸 때 대조한다. 굽은 뒤 검증은 경로별: UART는 ESP 플래시 MD5(압축 전송 `-z` 경로는 미확인, 10절), WiFi는 장치 응답 `ok`와 재부팅 뒤 버전 확인, 패스스루는 미확인(10절). artifactory·targets.json 운영 보증과 라이선스는 미확인(10절) | elrs S-1, S-2, S-4, P-2, P-8, F-5, F-7, X-8 |
-| R-D18 | 옵션 주입을 **직접 구현**: ESP 이미지 뒤에 제품·장치명·옵션 JSON(바인드 문구 → MD5 → UID, 규제 도메인, WiFi)·레이아웃 JSON 덧붙이기. ESP32 SHA-256 꼬리(+32), 8285 gzip 등 플랫폼 차이 처리. **규제 도메인과 FCC/LBT는 사용자가 반드시 직접 고른다(기본값 없음). 높은 출력 해제(UNLOCK_HIGHER_POWER)는 제공하지 않는다.** 연결된 TX(또는 RX)의 버전을 알 수 있을 때 주 버전이 다르면 굽기 전에 경고하고, 모르면 "확인 못 함"을 표시한다 | elrs 2.3, 3.2, X-6, X-9 |
-| R-D19 | 전송 경로: ① UART(ESP 시리얼 부트로더, 115200 시작) ② **WiFi HTTP POST /update**(mDNS 탐색) ③ Betaflight 패스스루(420000, `#` CLI) ④ EdgeTX 패스스루(230400 또는 460800, 미확인 10절) ⑤ FC 패스스루(AP `SERIAL_PASS*`(R-Q1a (가)형), AP·PX4 SERIAL_CONTROL(R-Q1a (나)형) — **미확인(10절), 실기 확인 전까지 시험 기능**; 그동안 RC 입력 끊김 경고) | elrs 2.3, 2.4 |
-| R-D20 | 잘못된 타깃 보호, 경로별 고정: **WiFi** — 장치 쪽 검사에 맡기고, mismatch 응답에 `forceupdate` 확인을 자동으로 보내지 않는다(사용자가 길게 눌러 확인해야만). **BF 패스스루** — `bl` 응답의 타깃명을 비교하고(`prior_target_name`이 일치해도 통과), 못 읽거나 다르면 **기본 거부**; 강제는 고급 설정에서 켠 뒤 타깃명을 직접 입력해야만. **UART·EdgeTX** — 칩 계열을 반드시 확인하고 사용자가 고른 타깃명을 다시 입력하게 한 뒤 굽는다. 어느 경로든 자동 force는 없다 | elrs X-2, X-3, 3.2 |
-| R-D21 | 런타임 설정: CRSF 파라미터 프로토콜(CRC8 0xD5)로 TX 모듈(USB)·수신기 설정, 장치 웹 UI 열기. **실기 확인 전까지 시험 기능**(미확인, 10절) | elrs 2.4, R-2 |
+| R-D17 | 펌웨어 출처: 버전 목록과 sha는 `artifactory.expresslrs.org/ExpressLRS/index.json`(4.0 이상만), 펌웨어는 `…/ExpressLRS/<sha>/firmware.zip`, 타깃 목록은 그 zip 안 `hardware/targets.json`에서 **`platform`이 stm32가 아니고 `min_version`이 고른 버전 이하인 것만** 보인다. HTTPS만. 실행 시 내려받고 캐시하며, 캐시한 zip의 SHA-256을 기록해 다시 쓸 때 대조한다. 굽은 뒤 검증은 경로별: UART는 ESP 플래시 MD5(압축 전송 포함), WiFi는 장치 응답 `ok`와 재부팅 뒤 버전 확인, 패스스루는 미확인(10절). artifactory·targets.json 운영 보증과 라이선스는 미확인(10절) | elrs S-1, S-2, S-4, P-2, P-8, F-5, F-7, X-8 |
+| R-D18 | 옵션 주입을 **직접 구현**: ESP 이미지 뒤에 제품·장치명·옵션 JSON(바인드 문구 → MD5 → UID, 규제 도메인, WiFi)·레이아웃 JSON 덧붙이기. ESP32 SHA-256 꼬리(+32, 재계산 안 함), 8285 gzip, 부트로더 헤더 고치기(Python 참조 구현을 따름) 등 플랫폼 차이 처리. 옵션 JSON이 512바이트를 넘으면(비ASCII SSID·비번) **자르지 않고 거부**한다. **규제 도메인(서브GHz, 이미지 기본값은 AU915라 반드시 사용자가 고름)과 2.4GHz의 FCC/LBT(firmware.zip 폴더 선택)는 사용자가 반드시 직접 고른다(기본값 없음). 높은 출력 해제(UNLOCK_HIGHER_POWER)는 제공하지 않는다.** 연결된 TX(또는 RX)의 버전을 알 수 있을 때 주 버전이 다르면 굽기 전에 경고하고, 모르면 "확인 못 함"을 표시한다 | elrs 2.3, 3.2, X-6, X-9 |
+| R-D19 | 전송 경로: ① UART(ESP 시리얼 부트로더, 115200 시작) ② **WiFi HTTP POST /update**(mDNS 탐색) ③ Betaflight 패스스루(420000, `#` CLI) ④ EdgeTX 패스스루(460800; 230400은 어느 코드도 쓰지 않음) ⑤ FC 패스스루(AP `SERIAL_PASS*`(R-Q1a (가)형), AP·PX4 SERIAL_CONTROL(R-Q1a (나)형) — **미확인(10절), 실기 확인 전까지 시험 기능**; 그동안 RC 입력 끊김 경고) | elrs 2.3, 2.4 |
+| R-D20 | 잘못된 타깃 보호, 경로별 고정: **WiFi** — 장치 쪽 검사는 펌웨어 계열 이름만 비교하고 ESP8285 gzip 업로드에서는 건너뛰므로, **GCS 쪽에서도 타깃명을 비교**한 뒤 올린다; mismatch 응답에 `forceupdate` 확인을 자동으로 보내지 않는다(사용자가 길게 눌러 확인해야만). **BF 패스스루** — `bl` 응답의 타깃명을 **대소문자 무시로** 비교하고(`prior_target_name`이 일치해도 통과), 못 읽거나 다르면 **기본 거부**; 강제는 고급 설정에서 켠 뒤 타깃명을 직접 입력해야만. **UART·EdgeTX** — 칩 계열을 반드시 확인하고 사용자가 고른 타깃명을 다시 입력하게 한 뒤 굽는다. 어느 경로든 자동 force는 없다 | elrs X-2, X-3, 3.2 |
+| R-D21 | 런타임 설정: CRSF 파라미터 프로토콜(CRC8 0xD5)로 TX 모듈(USB)·수신기 설정, 장치 웹 UI 열기. **실기 확인 전까지 시험 기능**(미확인, 10절). `elrs.lua`는 GPLv2 전용이라 **clean-room**으로 짠다(Python `crsf.py`의 ping/read/bind는 GPL-3, 참고 가능) | elrs 2.4, R-2; code/elrs-configurator.md |
 | R-D22 | `#`·CLI 시퀀스는 **사용자가 직접 고른 포트**이고, 그 포트에 MAVLink 기체 링크가 열려 있지 않으며, MSP_FC_VARIANT 응답이 `BTFL`일 때만 보낸다. `BTFL` 확인은 조사 근거가 아니라 **우리 결정**(안전 쪽). 따라서 INAV 등 다른 FC 패스스루는 지원하지 않는다 | elrs 3.2; 우리 결정 |
 
 ## 6. 비기능 요구 (R-N)
@@ -178,9 +178,11 @@ PX4와 ArduPilot 기체를 위한 지상국(GCS). QGroundControl이 하는 일�
 | 항목 | 걸린 요구 |
 |---|---|
 | PX4 강제 시동 2989가 실제로 건너뛰는 검사 | R-N9 |
-| PX4 1.18 SERIAL_CONTROL 비트뱅을 켠 보드 목록; 70바이트 전송과 AM32 260µs 간격 궁합 | D11, R-D12 |
+| PX4 1.18 SERIAL_CONTROL 비트뱅을 켠 보드 목록 | D11, R-D12 |
+| **BB51(0xE8B5)이 ArduPilot 4.5~4.7 AP_BLHeli 패스스루에서 인식되는지**(대조한 소스에는 시그니처 없음) | R-D9, R-D12① |
+| AP `SERIAL_PASS*`(AP_SerialManager) 동작 — 코드 안 읽음 | R-D19⑤ |
+| esptool-js 하드 리셋이 RTS를 올리지 않는 것으로 보임(참고 구현 선택에 영향) | R-D19① |
 | FC 뒤의 ELRS RX를 패스스루로 만지는 것; TX USB CRSF 설정이 실기에서 끝까지 되는지 | R-D19⑤, R-D21 |
-| BLHeli_S 레이아웃→Bluejay hex 대응, Bluejay 설정 바이트 배치 | R-D9, R-D10 |
 | PX4 param.pck(FTP 파라미터)가 들어간 릴리스 | R-Q9 |
 | AP PARAM_SET 타입 처리(mavlink.io와 ardupilot.org 불일치) | R-Q9 |
 | PX4 펌웨어 S3 주소와 옛 저장소명 `PX4/Firmware` 유효성 | R-Q10 |
@@ -195,13 +197,10 @@ PX4와 ArduPilot 기체를 위한 지상국(GCS). QGroundControl이 하는 일�
 | ArduPilot 파라미터 메타데이터 저장소(ParameterRepository) 라이선스 | R-D1 |
 | 비공개 저장소 아티팩트 보존 기간·러너 분 한도 | 9절 |
 | 오픈소스 Qt 6.12 LTS 패치가 언제까지 공개되는지; aqtinstall이 비공식 도구라는 점 | R-N18 |
-| EdgeTX 패스스루 속도(230400/460800) | R-D19④ |
 | ELRS 패스스루 경로의 굽기 후 검증 수단 | R-D17 |
-| Bluejay/EFM8 굽기 절차의 레이아웃→hex 대응 | R-D11b |
 | GCS 간 제어 넘기기(MAV_CMD_REQUEST_OPERATOR_CONTROL)의 펌웨어 지원 | R-Q1 |
 | "QGC master 전용" 판정(태그 비교 전 추정) | 7절 |
 | PX4 안정판 SITL 소스 빌드 시간·용량; `px4_sitl_sih` 대상이 1.15~1.17 태그에 있는지 | 9절, D17 |
-| ELRS UART 압축 전송(`-z`) 경로의 MD5 검증 | R-D17 |
 
 전부 소스·문서 읽기 결과이며 QGC·ELRS·AM32 어느 것도 실제로 돌려 보지 않았다. Windows에서는 아무것도 확인하지 않았다.
 
@@ -214,3 +213,4 @@ PX4와 ArduPilot 기체를 위한 지상국(GCS). QGroundControl이 하는 일�
 | 2026-10-24 | reviewer-3 | 설계 검토 3(좁힘): fail, 이전 9 해결·1 부분, 새 모순 5개(`.pm/requirements/reviewer-3.md`) → 초안 4에 반영 |
 | 2026-10-24 | reviewer-4 | 설계 검토 4(모순 5건 확인): **pass**, 사소 3건(`.pm/requirements/reviewer-4.md`) → 초안 5에 반영 |
 | 2026-10-24 | 사용자 | **이 문서 전체 승인.** D17은 제안값으로 확정 |
+| 2026-10-24 | PM | 사실 고치기(승인 뒤, 알림만): ESC·ELRS 설정기 소스 분석(`.pm/research/code/`) 반영 — 10절 4건 해소(`-z` MD5, EdgeTX 460800, Bluejay 태그→hex, PX4 70바이트 규칙), 3건 추가(BB51·AP, SERIAL_PASS*, esptool-js RTS), R-D9·11a·12②·13·14·17·18·19④·20·21 세부 보강 |

@@ -177,7 +177,7 @@
     <button class="collapse" id="leftToggle" title="접기/펼치기">◀</button>
     <div class="menu" id="menu">
       <button data-panel="firmware"><span class="ico">⬇</span><span class="txt">펌웨어 세팅</span></button>
-      <button data-panel="frame"><span class="ico">✈</span><span class="txt">기체 종류</span></button>
+      <button data-panel="frame"><span class="ico">✈</span><span class="txt">기체 구성도</span></button>
       <button data-panel="sensors"><span class="ico">◈</span><span class="txt">센서 보정</span></button>
       <button data-panel="radio"><span class="ico">🎮</span><span class="txt">조종기</span></button>
       <button data-panel="modes"><span class="ico">⇶</span><span class="txt">비행 모드</span></button>
@@ -310,7 +310,7 @@
   document.getElementById('connChip').onclick = () => conn.classList.toggle('on');
   document.getElementById('connClose').onclick = () => conn.classList.remove('on');
 
-  const titles = {firmware:'펌웨어 세팅', frame:'기체 종류', sensors:'센서 보정', radio:'조종기', modes:'비행 모드', power:'배터리 · 전원', safety:'안전 · 페일세이프', motors:'모터 시험', tuning:'튜닝', logs:'로그 분석', esc:'ESC 설정', elrs:'ELRS 설정', tracker:'안테나 트래커', params:'수동 기체 설정 (전체 파라미터)', settings:'앱 설정'};
+  const titles = {firmware:'펌웨어 세팅', frame:'기체 구성도', sensors:'센서 보정', radio:'조종기', modes:'비행 모드', power:'배터리 · 전원', safety:'안전 · 페일세이프', motors:'모터 시험', tuning:'튜닝', logs:'로그 분석', esc:'ESC 설정', elrs:'ELRS 설정', tracker:'안테나 트래커', params:'수동 기체 설정 (전체 파라미터)', settings:'앱 설정'};
   const panel = document.getElementById('panel');
   document.querySelectorAll('#menu button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#menu button').forEach(x => x.classList.remove('on'));

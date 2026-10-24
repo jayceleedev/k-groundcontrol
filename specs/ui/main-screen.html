@@ -139,6 +139,7 @@
       <button data-panel="tracker"><span class="ico">◎</span><span class="txt">안테나 트래커</span></button>
       <div class="spacer"></div>
       <div class="sep"></div>
+      <button data-panel="params"><span class="ico">≡</span><span class="txt">수동 기체 설정</span></button>
       <button data-panel="settings"><span class="ico">⚒</span><span class="txt">앱 설정</span></button>
     </div>
   </div>
@@ -252,7 +253,7 @@
   const conn = document.getElementById('conn');
   document.getElementById('connChip').onclick = () => conn.classList.toggle('on');
   document.getElementById('connClose').onclick = () => conn.classList.remove('on');
-  const titles = {firmware:'펌웨어 세팅', plan:'미션 계획', setup:'기체 설정', params:'파라미터', analyze:'분석 · 로그', esc:'ESC', elrs:'ELRS', tracker:'안테나 트래커', ai:'AI 세팅', links:'연결', settings:'앱 설정'};
+  const titles = {firmware:'펌웨어 세팅', plan:'미션 계획', setup:'기체 설정', params:'수동 기체 설정 (전체 파라미터)', analyze:'분석 · 로그', esc:'ESC', elrs:'ELRS', tracker:'안테나 트래커', ai:'AI 세팅', links:'연결', settings:'앱 설정'};
   const panel = document.getElementById('panel');
   document.querySelectorAll('#menu button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#menu button').forEach(x => x.classList.remove('on'));
@@ -269,7 +270,7 @@
   const conn = document.getElementById('conn');
   document.getElementById('connChip').onclick = () => conn.classList.toggle('on');
   document.getElementById('connClose').onclick = () => conn.classList.remove('on');
-  const titles = {firmware:'펌웨어 세팅', plan:'미션 계획', setup:'기체 설정', params:'파라미터', analyze:'분석 · 로그', esc:'ESC', elrs:'ELRS', tracker:'안테나 트래커', ai:'AI 세팅', links:'연결', settings:'앱 설정'};
+  const titles = {firmware:'펌웨어 세팅', plan:'미션 계획', setup:'기체 설정', params:'수동 기체 설정 (전체 파라미터)', analyze:'분석 · 로그', esc:'ESC', elrs:'ELRS', tracker:'안테나 트래커', ai:'AI 세팅', links:'연결', settings:'앱 설정'};
   const panel = document.getElementById('panel');
   document.querySelectorAll('#menu button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#menu button').forEach(x => x.classList.remove('on'));

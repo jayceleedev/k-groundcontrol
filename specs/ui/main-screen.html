@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>K-GroundControl 메인 화면 와이어프레임</title>
 <style>
-  :root { --bg: #f3f4f6; --box: #e5e7eb; --line: #9ca3af; --ink: #111827; --dim: #6b7280; --accent: #374151;
+  :root { color-scheme: light; --bg: #f3f4f6; --box: #e5e7eb; --line: #9ca3af; --ink: #111827; --dim: #6b7280; --accent: #374151;
           --map: repeating-linear-gradient(45deg,#e5e7eb 0 12px,#eceef1 12px 24px); }
   * { box-sizing: border-box; }
   body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--ink); background: var(--bg); }
@@ -129,11 +129,7 @@
   .pane.on { display: flex; }
   .placeholder { flex: 1; border: 1px dashed var(--line); display: flex; align-items: center; justify-content: center; text-align: center; font-size: 12px; color: var(--dim); padding: 12px; line-height: 1.5; }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { --bg:#111827; --box:#1f2937; --line:#4b5563; --ink:#e5e7eb; --dim:#9ca3af; --accent:#d1d5db;
-      --map: repeating-linear-gradient(45deg,#1f2937 0 12px,#243042 12px 24px); }
-    :root:not([data-theme="light"]) .frame { background:#0b1220; }
-  }
+  
 
   /* ---- 아래: 메뉴별 패널 그림 ---- */
   .panels { margin: 0 24px 40px; width: 1392px; max-width: calc(100vw - 48px); }
@@ -173,11 +169,7 @@
   .log { background: #fff; border: 1px solid var(--line); font-family: ui-monospace, monospace; font-size: 10px; color: var(--dim); padding: 6px; min-height: 60px; }
   .note { color: var(--dim); font-size: 11px; }
   .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: 1fr 1fr 1fr; } .g31 { grid-template-columns: 3fr 1fr; } .g13 { grid-template-columns: 1fr 3fr; } .g121 { grid-template-columns: 1fr 2fr 1fr; }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) .card, :root:not([data-theme="light"]) .canvas, :root:not([data-theme="light"]) .mini, :root:not([data-theme="light"]) .tbl, :root:not([data-theme="light"]) .chart, :root:not([data-theme="light"]) .log,
-    :root:not([data-theme="light"]) .bx .ln span, :root:not([data-theme="light"]) .pill, :root:not([data-theme="light"]) .btn2, :root:not([data-theme="light"]) .steps span, :root:not([data-theme="light"]) .mk, :root:not([data-theme="light"]) .bar2, :root:not([data-theme="light"]) .card .ph .x { background: #0b1220; color: var(--ink); }
-    :root:not([data-theme="light"]) .chart { background: repeating-linear-gradient(0deg,#0b1220 0 24px,#111a2b 24px 25px), #0b1220; }
-  }
+  
 </style>
 </head>
 <body>

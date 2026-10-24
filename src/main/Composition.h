@@ -1,0 +1,34 @@
+// [0.0.1 T1–T10] specs/features/0.0.1-shell.md
+#pragma once
+#include <QObject>
+#include <kgc/appSettings/AppInfo.h>
+class QQmlEngine;
+class QQuickWindow;
+namespace kgc::app::i18n { class Translator; }
+namespace kgc {
+/** 엔진 수명에 맞춰 전역 모듈을 조립해요.
+ * 입력: 엔진과 배포 정보와 번역기.
+ * 출력: 없음.
+ * 실패: 없음.
+ */
+class Composition : public QObject {
+public:
+/** 등록부와 서비스를 만들어 화면에 연결해요.
+ * 입력: 엔진과 배포 정보와 번역기.
+ * 출력: 없음.
+ * 실패: 없음.
+ */
+    Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator);
+/** 조립된 화면의 창을 만들고 표시해요.
+ * 입력: 없음.
+ * 출력: 창 포인터.
+ * 실패: 화면을 만들 수 없으면 nullptr.
+ * 흐름:
+ * 1. QQmlComponent::create — 등록된 문맥으로 창을 만들어요.
+ * 2. QQuickWindow::show — 창을 표시해요.
+ */
+    QQuickWindow* loadShell();
+private:
+    QQmlEngine& engine_;
+};
+}

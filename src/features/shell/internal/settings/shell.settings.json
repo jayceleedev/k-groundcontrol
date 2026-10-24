@@ -1,0 +1,12 @@
+{
+  "module": "shell",
+  "settings": [
+    {
+      "id": "shell.leftMenuCollapsed",
+      "type": "bool",
+      "default": false,
+      "labelKey": "좌 메뉴 접힘",
+      "category": "shell"
+    }
+  ]
+}

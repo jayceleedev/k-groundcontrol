@@ -68,7 +68,8 @@ k-groundcontrol/
 │  └─ main/            main.cpp Composition.cpp
 ├─ tracker/            ESP32 스케치 + protocol/ 공용 헤더 (§11)
 ├─ firmware/tracker/<변종>/   CI가 넣는 트래커 이미지
-├─ i18n/  resources/(qrc icons silhouettes data/<이름>/)  tools/check/(+hooks/)  tests/  docs/  specs/
+├─ i18n/  resources/(qrc icons silhouettes data/<이름>/)  tools/check/(+hooks/ requirements.txt)  tests/  docs/  specs/
+├─ cmake/gen/SettingsGen.cmake   설정 접근자 생성기(CMake 스크립트, 빌드 의존에 Python 없음)
 ├─ .github/workflows/  AGENTS.md  LICENSE  THIRD_PARTY_NOTICES.md  README.md
 └─ .pm/   (gitignore)
 ```
@@ -139,14 +140,14 @@ k-groundcontrol/
 | 종류 | 뜻 | 자리 | 바꾸는 사람 | 저장 |
 |---|---|---|---|---|
 | **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
-| **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings(플랫폼 기본 위치, 데이터 폴더와 무관) |
+| **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings **IniFormat**(조직·앱 이름 모두 `K-GroundControl`; Linux `~/.config/K-GroundControl/K-GroundControl.ini`, Windows `%APPDATA%\K-GroundControl\K-GroundControl.ini`; 레지스트리 안 씀) |
 | **고정값** | 바꾸면 안 되는 수 | 모듈 `internal/Constants.h`; 여러 모듈이 쓰는 값만 `platform/app/constants/`(§6) | 코드 | 코드 |
 
-- 운영 설정은 **메타데이터 먼저**(R-N17). 항목: `id`(`<모듈>.<이름>`), `type`(`bool|int|double|string|enum|list<object>`), `default`, `min/max`, `enum`, `labelKey`(번역 키), `category`(모듈 id). 빌드 때 생성기가 **모듈마다** `api/kgc/<id>/Settings.h`에 형이 있는 접근자를 만든다(`kgc::esc::settings::flashChunk()`). 없는 키는 컴파일 오류. 코드에 설정 키 문자열을 쓰지 않는다. 바탕 `app/settings`는 모듈을 모르고 등록·저장·검색만 한다.
+- 운영 설정은 **메타데이터 먼저**(R-N17). 항목: `id`(`<모듈>.<이름>`), `type`(`bool|int|double|string|enum|list<object>`), `default`, `min/max`, `enum`, `labelKey`(번역 키), `category`(모듈 id). 빌드 때 생성기 `cmake/gen/SettingsGen.cmake`(CMake `string(JSON)`, Python 불필요)가 **모듈마다** 빌드 폴더 `${CMAKE_BINARY_DIR}/gen/kgc/<id>/Settings.h`에 형이 있는 접근자를 만들고 그 모듈 타깃의 PUBLIC include 경로에 더한다(소스 트리에 커밋하지 않음; include는 `<kgc/<id>/Settings.h>` 그대로). 없는 키는 컴파일 오류. 코드에 설정 키 문자열을 쓰지 않는다. 바탕 `app/settings`는 모듈을 모르고 등록·저장·검색만 한다.
 - **다른 모듈의 설정을 읽을 때**는 그 모듈 `api/`의 접근자를 순위표 방향으로만. 여러 기능이 함께 쓰는 안전 설정은 바탕에 둔다: 길게 누르기 시간 → `platform/ui`, 유도 거리·고도 한계·강제 시동 보이기 → `platform/vehicle/safety`.
 - 설정 기본값은 JSON에만(코드 상수와 두 곳 금지).
 - **비밀값**(API 키·서명 키·바인드 문구·WiFi 비밀번호): `platform/app/secrets/SecretStore`(QtKeychain, §17-4). 값은 `Secret` 형으로만: `QString` 암시 변환 없음, `QDebug <<` 없음, `reveal()`은 허용 파일에서만(검사). 설정 JSON에는 "있음/없음"만.
-- **파일 자리**(`platform/app/paths/Paths`, 데이터 폴더 아래): `logs/app`, `logs/tlog`, `logs/onboard`, `missions`, `layouts`, `params/backups`(쓰기 전 전체 백업), `params/cache`(PX4 해시 캐시), `ai/changes`(AI·구성도 변경 사유), `video`, `cache/firmware`(해시 기록), `cache/tiles`, `cache/metadata`, `cache/terrain`.
+- **파일 자리**(`platform/app/paths/Paths`, 데이터 폴더 아래 — 데이터 폴더 기본값은 `QStandardPaths::AppLocalDataLocation`(Linux `~/.local/share/K-GroundControl`, Windows `%LOCALAPPDATA%\K-GroundControl`), 부팅 설정 `--data-dir`/`[paths] dataDir`로 바꿀 수 있음): `logs/app`, `logs/tlog`, `logs/onboard`, `missions`, `layouts`, `params/backups`(쓰기 전 전체 백업), `params/cache`(PX4 해시 캐시), `ai/changes`(AI·구성도 변경 사유), `video`, `cache/firmware`(해시 기록), `cache/tiles`, `cache/metadata`, `cache/terrain`.
 
 ## 5. 상태(states) — 묶음마다 주인 하나
 
@@ -268,7 +269,7 @@ k-groundcontrol/
 `platform/app/geo/Altitude`(AMSL·상대·지형·타원체고↔MSL, frame 인자) **한 묶음**, `Geodesy`(방위·고각·거리 — R-D23의 한 함수), `app/units`(표시 단위), `app/crc`(CRC16-XMODEM, CRC-0xA001, CRC8-0xD5 — 시험 벡터는 `tests/`), `app/util`. 네임스페이스 범위의 자유 함수가 두 모듈에 같은 이름이면 검사가 잡는다.
 
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
-- `Theme.qml`(크기·색·글꼴 토큰), `components/`(HoldToConfirm, JobView, Pill, Chip, TimerBox), `PanelRegistry`(좌 메뉴 패널: id·순서·QML 컴포넌트), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`), `Navigator`(`open(panelId, arg)`).
+- `Theme.qml`(크기·색·글꼴 토큰), `components/`(HoldToConfirm, JobView, Pill, Chip, TimerBox), `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 모듈의 메뉴 자리를 `Composition`이 등록), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`), `Navigator`(`open(panelId, arg)`).
 - 기능 모듈의 `ui/register.cpp`가 `registerUi(registry)`에서 패널·슬롯 기여·레이어를 등록한다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
 - QML `import` 허용: `QtQuick*`·`QtQml*`, §2의 Qt 모듈(Location·Positioning·Multimedia·Graphs·Quick3D), `Kgc.Ui`, 자기 `Kgc.<Id>`, **순위표에서 아래인** `Kgc.<Id>`. 그 밖은 검사가 잡는다.
@@ -325,7 +326,7 @@ k-groundcontrol/
 | 바탕 모듈 / 기능 모듈 / 조립 | `platform` / `feature` / `main` | §1 |
 | 공개 인터페이스 / 내부 / 화면 | `api` / `internal` / `ui` | 모듈 폴더 |
 | 화면 바탕 | `platform/ui` | 테마·부품·등록부·슬롯 |
-| 기여 지점 / 이름으로 열기 | `Slot` / `Navigator` | §9.7·9.8 |
+| 기여 지점 / 이름으로 열기 / 자리 표시 | `Slot` / `Navigator` / `Placeholder` | §9.7·9.8 |
 | 기체 / 활성 기체 / 컴포넌트 | `Vehicle` / `ActiveVehicle` / `Component` | |
 | 링크 / 주 링크 / 원시 포트 / 포트 임대 / 포트 등록부 | `Link` / `PrimaryLink` / `RawPort` / `PortLease` / `PortRegistry` | §9.1 |
 | 상태 묶음 / 주인 / 목록 상태 | `Bundle` / `Owner` / `ListModel` | §5 |
@@ -350,11 +351,11 @@ k-groundcontrol/
 
 ## 14. 자동 검사 `tools/check/` (R-N21; §17-7 확정)
 
-커밋 훅(`core.hooksPath=tools/check/hooks`)과 CI(`before..after` 범위의 커밋마다)가 같은 Python 3 스크립트를 돈다. 함수 길이는 lizard(버전 고정). 제3자·생성 코드 제외.
+커밋 훅(`core.hooksPath=tools/check/hooks`)과 CI(`before..after` 범위의 커밋마다, `fetch-depth: 0`)가 같은 Python 3 스크립트를 돈다. 함수 길이는 lizard(`tools/check/requirements.txt`로 버전 고정; 훅은 `tools/check/venv`가 없으면 만들라고 안내). 검사 스크립트는 **Qt·configure 없이** 돈다. 제3자·생성 코드 제외.
 
 | 검사 | 규칙 | 도입 |
 |---|---|---|
-| 경계 | (컴파일러) 남의 `internal/`·`ui/` include 불가. (스크립트) 바탕 층 순서 app<comm<vehicle<ui, 바탕→기능 include 금지, 기능 안 ui→internal→api 방향, `..` include 금지, api→internal include 금지, **모듈 그래프 순환**(graphviz와 §3.2 대조) | 0.0.1 |
+| 경계 | (컴파일러) 남의 `internal/`·`ui/` include 불가. (스크립트) 바탕 층 순서 app<comm<vehicle<ui, 바탕→기능 include 금지, 기능 안 ui→internal→api 방향, `..` include 금지, api→internal include 금지, **모듈 그래프 순환과 순위 위반**(각 모듈 `CMakeLists.txt`의 `target_link_libraries`를 텍스트로 읽어 §3.2와 대조 — configure·Qt 없이 돈다) | 0.0.1 |
 | 크기 | 파일 400 / 함수 60 / QML 300 | 0.0.1 |
 | MODULE.md | 모듈마다 있고 100줄 이하; api·의존 변경 커밋에 함께 | 0.0.1 |
 | QML import | §9.7 허용 목록 밖 import | 0.0.1 |
@@ -374,7 +375,7 @@ k-groundcontrol/
 ## 15. 빌드·CI·배포 (R-N18~R-N22)
 
 - `.github/workflows/`: `check.yml`(구조 검사·`tests/`), `linux.yml`(Ubuntu 24.04 → AppImage), `windows.yml`(MSVC 2022, Qt 6.12.x aqtinstall → zip), `tracker.yml`(트래커 이미지). 태그에서 Release.
-- 산출물에 `LICENSE`, `THIRD_PARTY_NOTICES.md`(CPM 목록 + `cmake/notices/extra.json`의 CPM 밖 의존 — Qt·GStreamer·MSVC 런타임·트래커 라이브러리 — 를 CI가 합쳐 생성), 소스 위치. 정보 창(`appSettings`)이 이것을 읽어 보여 준다. SBOM은 0.1.x부터.
+- 산출물에 `LICENSE`, `THIRD_PARTY_NOTICES.md`(CPM 목록 + `cmake/notices/extra.json`의 CPM 밖 의존 — Qt(LGPL-3.0)·GStreamer·MSVC 재배포 런타임·linuxdeploy·트래커 라이브러리 — 를 CI가 합쳐 생성; 소스 URL은 `project(HOMEPAGE_URL)`에서), 소스 위치. 정보 창(`appSettings`)이 이것을 읽어 보여 준다. SBOM은 0.1.x부터.
 - 0.0.1 산출물: Windows zip(windeployqt·MSVC 런타임) + AppImage. GStreamer·NSIS는 영상 기능이 들어오는 버전부터.
 
 ## 16. 이 문서가 정하지 않는 것
@@ -410,3 +411,4 @@ k-groundcontrol/
 | 2026-10-24 | reviewer-6 | 설계 검토 6: **pass**, 사소 3건(`.pm/base/reviewer-6.md`) → 초안 7(임대 중 큐 처리·기체 단위 suspended, ByteStream/RawPort 경계) |
 | 2026-10-24 | 사용자 | **이 문서 전체 승인** |
 | 2026-10-24 | PM | 사실 고치기(알림만): §9.5 `register`→`registerTask`(C++ 예약어, AGENTS.md 검토 지적) |
+| 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 지적): 설정 생성기 `cmake/gen/SettingsGen.cmake`(빌드 폴더 생성), QSettings IniFormat·조직/앱 이름, 데이터 폴더 기본값·`--data-dir`, PanelRegistry 항목(order·group·titleKey·icon)·자리 표시 등록·메뉴 제목 번역 방식, 순환 검사는 CMakeLists 텍스트(configure 불필요), 훅 requirements.txt·fetch-depth, 고지 목록·HOMEPAGE_URL |

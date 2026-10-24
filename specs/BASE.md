@@ -1,6 +1,6 @@
 # K-GroundControl 기반 문서 (BASE)
 
-- 상태: **초안 7 (검토 1~6 반영, 검토 6 pass, 승인 대기)** — 2026-10-24, PM 작성
+- 상태: **승인됨 (2026-10-24, 사용자)** — 초안 7, 설계 검토 6회(마지막 pass). 이후 변경은 사실 고치기만 하고 알리며, 구조 결정을 바꾸는 것은 다시 승인
 - 이 문서가 정하는 것: **무엇을 어떻게 구분해서 어디에 두는가.** 모듈의 모양과 경계, 설정·상태·고정값·공통 함수·저장소·주기 작업·서비스·입출력의 자리, 로그·오류·알림의 규칙, 그것을 지키는 자동 검사. 기능이 무엇을 하는지는 `specs/REQUIREMENTS.md`와 `specs/features/`가 정한다.
 - 이 문서가 승인되기 전에는 기능 스펙을 쓰지 않는다. 기능 스펙의 "기반" 절은 이 문서의 이름을 그대로 쓴다. 구현 중에 여기 없는 자리가 필요해지면 만들지 않고 이 문서로 돌아온다.
 - **문서의 권위**: BASE가 원본이고, 저장소 루트 `AGENTS.md`(구현자 GPT용, 영어)는 그 번역이다. 어긋나면 BASE를 따른다. 구현 주체가 GPT(D12)이므로 이 문서만 읽고도 같은 구조를 세울 수 있게 **다른 판이나 문서를 참조하지 않고** 쓴다.
@@ -408,4 +408,4 @@ k-groundcontrol/
 | 2026-10-24 | reviewer-4 | 설계 검토 4: fail, 이전 7 해결·1 부분, 새 6개(`.pm/base/reviewer-4.md`) → 초안 5(comm/espflash, map 레이어 정리, OperationKind 0층·JobArmWatch, scope Any 통일·② Other 통과, 문장·순위·부등호, ModuleId, PortLease 동작, 센서 칩·링크 편집 주인) |
 | 2026-10-24 | reviewer-5 | 설계 검토 5: fail, 이전 6 해결·2 부분, 새 4개(`.pm/base/reviewer-5.md`) → 초안 6(Link.suspended·끊김 검사 예외·LinkSuspended 오류, acquire(quietFor), RawPort/ByteStream 손잡이, Job Releaser·OperationKind 예외 명시, 사소 5건) |
 | 2026-10-24 | reviewer-6 | 설계 검토 6: **pass**, 사소 3건(`.pm/base/reviewer-6.md`) → 초안 7(임대 중 큐 처리·기체 단위 suspended, ByteStream/RawPort 경계) |
-| | 사용자 | 전체 승인 (대기) |
+| 2026-10-24 | 사용자 | **이 문서 전체 승인** |

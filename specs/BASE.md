@@ -260,7 +260,7 @@ k-groundcontrol/
 - `Result<T> = std::expected<T, ErrorCode>`. 함수는 예외 대신 Result. 예외·`Q_ASSERT`·`qFatal`은 프로그램 버그에만. 워커 스레드의 오류는 `ErrorCode`를 큐드 시그널로 소유 객체에 올리고, 알림은 소유 객체만 낸다.
 
 ### 9.5 주기 작업·타임아웃·스레드
-- `platform/app/scheduler/Scheduler`에 **이름 있는 반복 작업만** `register(name, period, owner, context)`(context 스레드에서 돈다): GCS 하트비트 1Hz(링크 스레드), 끊김 검사 1Hz, 시리얼 포트 목록 1Hz, tlog 플러시. 트래커 각도 송신은 반복이 아니라 **위치 수신에 따라**(최대 5Hz 제한은 `Timeout`).
+- `platform/app/scheduler/Scheduler`에 **이름 있는 반복 작업만** `registerTask(name, period, owner, context)`(`register`는 C++ 예약어)(context 스레드에서 돈다): GCS 하트비트 1Hz(링크 스레드), 끊김 검사 1Hz, 시리얼 포트 목록 1Hz, tlog 플러시. 트래커 각도 송신은 반복이 아니라 **위치 수신에 따라**(최대 5Hz 제한은 `Timeout`).
 - 일회성 타임아웃은 이름 붙은 `app/scheduler/Timeout`. QML `Timer`는 `platform/ui/components/TimerBox`만. 검사 대상 `QTimer`·`singleShot`·`startTimer(`·`QBasicTimer`·QML `Timer {`.
 - 스레드: 링크 I/O·MAVLink 파싱은 링크마다 워커, **영상 디코드·타일 로드·지형 조회도 워커**(R-N15). 상태 갱신·기능 로직·화면은 GUI 스레드.
 
@@ -409,3 +409,4 @@ k-groundcontrol/
 | 2026-10-24 | reviewer-5 | 설계 검토 5: fail, 이전 6 해결·2 부분, 새 4개(`.pm/base/reviewer-5.md`) → 초안 6(Link.suspended·끊김 검사 예외·LinkSuspended 오류, acquire(quietFor), RawPort/ByteStream 손잡이, Job Releaser·OperationKind 예외 명시, 사소 5건) |
 | 2026-10-24 | reviewer-6 | 설계 검토 6: **pass**, 사소 3건(`.pm/base/reviewer-6.md`) → 초안 7(임대 중 큐 처리·기체 단위 suspended, ByteStream/RawPort 경계) |
 | 2026-10-24 | 사용자 | **이 문서 전체 승인** |
+| 2026-10-24 | PM | 사실 고치기(알림만): §9.5 `register`→`registerTask`(C++ 예약어, AGENTS.md 검토 지적) |

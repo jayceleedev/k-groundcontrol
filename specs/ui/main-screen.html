@@ -215,13 +215,13 @@
   <div class="region left">
     <button class="collapse" id="leftToggle" title="접기/펼치기">◀</button>
     <div class="menu" id="menu">
-      <button data-panel="firmware"><span class="ico">⬇</span><span class="txt">펌웨어 세팅</span></button>
-      <button data-panel="frame"><span class="ico">✈</span><span class="txt">기체 구성도</span></button>
+      <button data-panel="fcFlash"><span class="ico">⬇</span><span class="txt">펌웨어 세팅</span></button>
+      <button data-panel="layout"><span class="ico">✈</span><span class="txt">기체 구성도</span></button>
       <button data-panel="sensors"><span class="ico">◈</span><span class="txt">센서 보정</span></button>
       <button data-panel="radio"><span class="ico">🎮</span><span class="txt">조종기</span></button>
-      <button data-panel="modes"><span class="ico">⇶</span><span class="txt">비행 모드</span></button>
+      <button data-panel="flightModes"><span class="ico">⇶</span><span class="txt">비행 모드</span></button>
       <button data-panel="power"><span class="ico">🔋</span><span class="txt">배터리 · 전원</span></button>
-      <button data-panel="safety"><span class="ico">⚠</span><span class="txt">안전 · 페일세이프</span></button>
+      <button data-panel="failsafe"><span class="ico">⚠</span><span class="txt">안전 · 페일세이프</span></button>
       <button data-panel="motors"><span class="ico">⟲</span><span class="txt">모터 시험</span></button>
       <button data-panel="tuning"><span class="ico">∿</span><span class="txt">튜닝</span></button>
       <button data-panel="logs"><span class="ico">▤</span><span class="txt">로그 분석</span></button>
@@ -231,7 +231,7 @@
       <button data-panel="tracker"><span class="ico">◎</span><span class="txt">안테나 트래커</span></button>
       <div class="sep"></div>
       <button data-panel="params"><span class="ico">≡</span><span class="txt">수동 기체 설정</span></button>
-      <button data-panel="settings"><span class="ico">⚒</span><span class="txt">앱 설정</span></button>
+      <button data-panel="appSettings"><span class="ico">⚒</span><span class="txt">앱 설정</span></button>
     </div>
   </div>
   <div class="center">
@@ -338,7 +338,7 @@
   
 
   <!-- 1 펌웨어 세팅 -->
-  <div class="card" id="p-firmware">
+  <div class="card" id="p-fcFlash">
     <div class="ph"><span>펌웨어 세팅 <small>R-Q10 · S-22~S-33</small></span><span class="x">✕</span></div>
     <div class="pb g13">
       <div class="bx"><h5>1. 보드 연결</h5>
@@ -360,7 +360,7 @@
   </div>
 
   <!-- 2 기체 구성도 -->
-  <div class="card" id="p-frame">
+  <div class="card" id="p-layout">
     <div class="ph"><span>기체 구성도 <small>5.5절 R-D31~R-D37 · Xpadder식</small></span><span class="x">✕</span></div>
     <div class="pb g121">
       <div class="bx"><h5>부품 팔레트 (끌어다 놓기)</h5>
@@ -443,7 +443,7 @@
   </div>
 
   <!-- 5 비행 모드 -->
-  <div class="card" id="p-modes">
+  <div class="card" id="p-flightModes">
     <div class="ph"><span>비행 모드 <small>S-53 PX4 / S-54 AP</small></span><span class="x">✕</span></div>
     <div class="pb g2">
       <div class="bx"><h5>모드 채널</h5>
@@ -482,7 +482,7 @@
   </div>
 
   <!-- 7 안전·페일세이프 -->
-  <div class="card" id="p-safety">
+  <div class="card" id="p-failsafe">
     <div class="ph"><span>안전 · 페일세이프 <small>S-62~S-64</small></span><span class="x">✕</span></div>
     <div class="pb g31">
       <div class="bx"><h5>원인 → 동작</h5>
@@ -657,7 +657,7 @@
   </div>
 
   <!-- 15 앱 설정 -->
-  <div class="card" id="p-settings">
+  <div class="card" id="p-appSettings">
     <div class="ph"><span>앱 설정 <small>R-N17 JSON 메타데이터 · 검색</small></span><span class="x">✕</span></div>
     <div class="pb g13">
       <div class="bx"><div class="ln"><span class="pill">🔍 설정 검색</span></div>
@@ -689,7 +689,7 @@
   document.getElementById('connChip').onclick = () => conn.classList.toggle('on');
   document.getElementById('connClose').onclick = () => conn.classList.remove('on');
 
-  const titles = {firmware:'펌웨어 세팅', frame:'기체 구성도', sensors:'센서 보정', radio:'조종기', modes:'비행 모드', power:'배터리 · 전원', safety:'안전 · 페일세이프', motors:'모터 시험', tuning:'튜닝', logs:'로그 분석', esc:'ESC 설정', elrs:'ELRS 설정', tracker:'안테나 트래커', params:'수동 기체 설정 (전체 파라미터)', settings:'앱 설정'};
+  const titles = {fcFlash:'펌웨어 세팅', layout:'기체 구성도', sensors:'센서 보정', radio:'조종기', flightModes:'비행 모드', power:'배터리 · 전원', failsafe:'안전 · 페일세이프', motors:'모터 시험', tuning:'튜닝', logs:'로그 분석', esc:'ESC 설정', elrs:'ELRS 설정', tracker:'안테나 트래커', params:'수동 기체 설정 (전체 파라미터)', appSettings:'앱 설정'};
   const panel = document.getElementById('panel');
   document.querySelectorAll('#menu button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#menu button').forEach(x => x.classList.remove('on'));

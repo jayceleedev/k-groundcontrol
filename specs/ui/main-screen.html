@@ -51,10 +51,10 @@
 
   /* 상단바: 왼쪽 끝 아이콘 */
   .top { justify-content: flex-start; gap: 8px; padding: 0 8px; }
-  .app-icon { width: 40px; height: 40px; font-size: 20px; border: 1px solid var(--line); background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--ink); }
+  .app-icon { width: 40px; height: 40px; font-size: 12px; border: 1px solid var(--line); background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: var(--ink); }
   .top .rest { flex: 1; text-align: center; }
   .top { position: relative; }
-  .ai-btn { cursor: pointer; }
+  .ai-btn { cursor: pointer; font-size: 20px; }
   .ai-btn.on { background: var(--accent); color: #fff; }
   .ai-panel { position: absolute; right: 8px; top: 46px; width: 440px; height: 520px; border: 2px solid var(--accent); background: #fff; z-index: 5;
     display: none; flex-direction: column; color: var(--ink); font-size: 12px; }
@@ -109,7 +109,8 @@
 
 <div class="frame" id="frame">
   <div class="region top">
-    <div class="rest">상단바 (나머지 비어 있음)</div>
+    <div class="app-icon" title="앱 아이콘">K-GC</div>
+    <div class="rest">상단바 (가운데 비어 있음)</div>
     <div class="app-icon ai-btn" id="aiBtn" title="AI">✦</div>
     <div class="ai-panel" id="aiPanel">
       <header><span>AI</span><button id="aiClose">✕</button></header>

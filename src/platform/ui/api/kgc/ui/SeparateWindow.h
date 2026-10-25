@@ -16,13 +16,13 @@ class SeparateWindow : public QObject {
     Q_OBJECT
 public:
     /** 기능의 설정 접근자를 받아 창 종료까지 자리 저장을 맡아요.
-     * 입력: 엔진, 창 주소, 기본 크기, 저장값 읽기·쓰기 함수와 부모 컨트롤러.
+     * 컨트롤러의 값 멤버로 두는 것을 전제로 해서 QObject 부모를 따로 받지 않아요(소유자는 컨트롤러 하나).
+     * 입력: 엔진, 창 주소, 기본 크기, 저장값 읽기·쓰기 함수.
      * 출력: 없음.
      * 실패: 없음.
      */
     SeparateWindow(QQmlEngine& engine, QUrl source, QSize defaultSize,
-        std::function<QString()> readPlacement, std::function<void(const QString&)> writePlacement,
-        QObject* parent);
+        std::function<QString()> readPlacement, std::function<void(const QString&)> writePlacement);
     /** 이미 만들어진 창을 알려줘요.
      * 입력: 없음.
      * 출력: 창 포인터, 열기 전에는 nullptr.

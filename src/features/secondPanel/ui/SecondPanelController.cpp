@@ -8,7 +8,7 @@ SecondPanelController::SecondPanelController(SecondPanelService& service, QQmlEn
     : QObject(&service), service_(service),
       window_(engine, QUrl("qrc:/qt/qml/Kgc/SecondPanel/SecondPanelWindow.qml"), kDefaultSize,
           [] { return settings::windowPlacement(); },
-          [](const QString& value) { settings::setWindowPlacement(value); }, this)
+          [](const QString& value) { settings::setWindowPlacement(value); })
 {
     connect(&service_, &SecondPanelService::arrangementChanged, this, &SecondPanelController::arrangementChanged);
     connect(&window_, &kgc::ui::SeparateWindow::windowChanged, this, &SecondPanelController::windowChanged);

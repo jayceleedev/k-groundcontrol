@@ -104,4 +104,9 @@ QQuickWindow* Composition::loadShell()
     window->show();
     return window;
 }
+// 기능 api를 아는 곳은 조립 하나라서, main은 이 함수로만 경고 출처를 받아요.
+QStringList Composition::logGuardPrefixes()
+{
+    return analyze::AppLogService::loopGuardPrefixes();
+}
 }

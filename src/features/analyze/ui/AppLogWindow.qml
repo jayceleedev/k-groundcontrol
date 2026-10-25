@@ -41,6 +41,7 @@ Window {
         anchors.margins: Theme.inset
         model: appLogController.model
         followTail: root.following
+        onUserScrollStarted: root.following = false
         onUserScrolled: atEnd => root.following = atEnd
     }
 }

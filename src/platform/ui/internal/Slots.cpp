@@ -49,7 +49,7 @@ kgc::app::errors::Result<void> BottomActionSlot::registerAction(const QString& i
     if (actions_.contains(id)) return std::unexpected(make(UiError::DuplicateId));
     const auto signature = QMetaObject::normalizedSignature((QByteArray(method) + "()").constData());
     if (!receiver || !method || receiver->metaObject()->indexOfMethod(signature.constData()) < 0)
-        qFatal("%s", QT_TRANSLATE_NOOP("Ui", "단추 등록 실패: 수신 객체 또는 메서드 없음"));
+        qFatal("registerAction: receiver or method missing");
     const auto result = add({id, order, {{"icon", icon}, {"hintKey", hintKey}}});
     if (result) actions_.insert(id, {receiver, signature.chopped(2)});
     return result;

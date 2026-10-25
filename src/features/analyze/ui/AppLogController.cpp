@@ -11,7 +11,7 @@ AppLogController::AppLogController(AppLogService& service, QQmlEngine& engine)
     : QObject(&service), service_(service),
       window_(engine, QUrl("qrc:/qt/qml/Kgc/Analyze/AppLogWindow.qml"), kDefaultSize,
           [] { return settings::logWindowPlacement(); },
-          [](const QString& value) { settings::setLogWindowPlacement(value); }, this)
+          [](const QString& value) { settings::setLogWindowPlacement(value); })
 {
     connect(&window_, &kgc::ui::SeparateWindow::windowChanged, this, &AppLogController::windowChanged);
 }

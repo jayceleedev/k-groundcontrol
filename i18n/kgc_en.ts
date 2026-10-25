@@ -850,42 +850,42 @@
         <translation>Second Panel — K-GroundControl</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="30"/>
         <source>1칸</source>
         <translation>1</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="30"/>
         <source>2칸 좌우</source>
         <translation>2 side by side</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="30"/>
         <source>2칸 위아래</source>
         <translation>2 stacked</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="30"/>
         <source>3칸(큰 칸 + 둘)</source>
         <translation>3 (1 large + 2)</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="30"/>
         <source>4칸</source>
         <translation>4</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="30"/>
         <source>6칸 가로</source>
         <translation>6 (3×2)</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="30"/>
         <source>6칸 세로</source>
         <translation>6 (2×3)</translation>
     </message>
     <message>
-        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="56"/>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="57"/>
         <source>칸 %1</source>
         <translation>Cell %1</translation>
     </message>
@@ -932,13 +932,9 @@
 <context>
     <name>Ui</name>
     <message>
-        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="21"/>
+        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="22"/>
         <source>같은 항목이 이미 등록되어 있어요.</source>
         <translation>An item with the same ID is already registered.</translation>
-    </message>
-    <message>
-        <source>단추 등록 실패: 수신 객체 또는 메서드 없음</source>
-        <translation>Button registration failed: missing receiver or method</translation>
     </message>
 </context>
 </TS>

@@ -2,6 +2,7 @@
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #pragma once
 #include <QObject>
+#include <QStringList>
 #include <kgc/appSettings/AppInfo.h>
 class QQmlEngine;
 class QQuickWindow;
@@ -32,6 +33,12 @@ public:
  * 3. QQuickWindow::show — 창을 표시해요.
  */
     QQuickWindow* loadShell();
+/** 로그 통로가 다시 내보내지 않을 경고 출처 접두를 모아요.
+ * 입력: 없음.
+ * 출력: 기능 모듈이 낸 QML 경로 접두 목록.
+ * 실패: 없음.
+ */
+    static QStringList logGuardPrefixes();
 private:
     QQmlEngine& engine_;
 };

@@ -9,9 +9,8 @@
 
 namespace kgc::ui {
 SeparateWindow::SeparateWindow(QQmlEngine& engine, QUrl source, QSize defaultSize,
-    std::function<QString()> readPlacement, std::function<void(const QString&)> writePlacement,
-    QObject* parent)
-    : QObject(parent), engine_(engine), source_(std::move(source)), defaultSize_(defaultSize),
+    std::function<QString()> readPlacement, std::function<void(const QString&)> writePlacement)
+    : QObject(), engine_(engine), source_(std::move(source)), defaultSize_(defaultSize),
       readPlacement_(std::move(readPlacement)), writePlacement_(std::move(writePlacement))
 {
     connect(qApp, &QCoreApplication::aboutToQuit, this, [this] {

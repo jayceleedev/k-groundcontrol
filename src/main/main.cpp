@@ -19,7 +19,8 @@
  * 3. LogSink::install — 로그를 열어요.
  * 4. Settings::instance — 운영 설정을 준비해요.
  * 5. Translator::setLanguage — 저장된 언어를 적용해요.
- * 6. Composition::loadShell — 조립한 창을 표시해요.
+ * 6. new Composition — 서비스와 등록부를 조립해요.
+ * 7. Composition::loadShell — 조립한 창을 표시해요.
  */
 int main(int argc, char* argv[])
 {

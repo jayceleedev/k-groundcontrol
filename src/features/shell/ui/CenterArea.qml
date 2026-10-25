@@ -17,6 +17,7 @@ Rectangle {
         return null
     }
     property string panelTitle: {
+        // 동적 메뉴 제목도 언어 변경 시 다시 번역되도록 이 속성을 바인딩 의존성으로 읽어요.
         const language = translator.language
         return selectedPanel ? qsTranslate("Menu", selectedPanel.titleKey) : ""
     }

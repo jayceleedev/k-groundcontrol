@@ -38,6 +38,7 @@ Rectangle {
                     required property var model
                     property string panelId: model.id
                     property string menuTitle: {
+                        // 동적 메뉴 제목도 언어 변경 시 다시 번역되도록 이 속성을 바인딩 의존성으로 읽어요.
                         const language = translator.language
                         return qsTranslate("Menu", model.titleKey)
                     }
@@ -76,6 +77,7 @@ Rectangle {
                         }
                     }
                     Rectangle {
+                        // 메뉴 표의 묶음이 1·2·3 순서여서 끝나는 묶음 번호가 구분선 순번과 같아요.
                         objectName: entry.model.separatorAfter ? "menuSeparator_" + entry.model.group : ""
                         visible: entry.model.separatorAfter
                         width: parent.width

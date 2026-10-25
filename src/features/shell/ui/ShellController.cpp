@@ -4,6 +4,8 @@
 #include <kgc/shell/Settings.h>
 #include <kgc/ui/Navigator.h>
 #include <QGuiApplication>
+#include <QQuickWindow>
+#include <QScreen>
 namespace kgc::shell {
 ShellController::ShellController(ShellService& service, kgc::ui::Navigator& navigator)
     : QObject(&service), service_(service)
@@ -27,7 +29,6 @@ void ShellController::setLeftMenuCollapsed(bool collapsed) { settings::setLeftMe
 void ShellController::attachWindow(QQuickWindow* window)
 {
     disconnect(screenConnection_);
-    window_ = window;
     bindScreen(window ? window->screen() : QGuiApplication::primaryScreen());
     if (window) screenConnection_ = connect(window, &QWindow::screenChanged, this, &ShellController::bindScreen);
 }

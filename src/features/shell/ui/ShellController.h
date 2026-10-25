@@ -2,9 +2,10 @@
 #pragma once
 #include <QObject>
 #include <QSize>
-#include <QPointer>
-#include <QQuickWindow>
-#include <QScreen>
+class QQuickWindow;
+class QScreen;
+// 메타 객체의 호출 인자에는 완전한 형이 필요하므로 생성 코드에서만 헤더를 읽어요.
+Q_MOC_INCLUDE("QQuickWindow")
 namespace kgc::ui { class Navigator; }
 namespace kgc::shell {
 class ShellService;
@@ -117,7 +118,6 @@ private:
     QString activePanelId_;
     QString panelArg_;
     QSize availableScreenSize_;
-    QPointer<QQuickWindow> window_;
     QMetaObject::Connection screenConnection_;
     QMetaObject::Connection geometryConnection_;
 };

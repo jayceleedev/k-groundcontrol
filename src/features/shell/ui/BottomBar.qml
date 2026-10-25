@@ -17,6 +17,8 @@ GlassSurface {
             delegate: IconButton {
                 required property var model
                 objectName: "bottomAction_" + model.id
+                width: Theme.bottomBarHeight - Theme.inset
+                height: Theme.bottomBarHeight - Theme.inset
                 name: model.icon
                 hint: { translator.language; return qsTranslate("BottomAction", model.hintKey) }
                 onClicked: bottomActionSlot.trigger(model.id)

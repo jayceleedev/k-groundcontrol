@@ -25,6 +25,10 @@ Basic.ScrollView {
     background: Rectangle { color: Theme.surfaceAlt; border.color: Theme.line; radius: Theme.radiusSmall }
     Basic.ScrollBar.vertical: Basic.ScrollBar {
         id: bar
+        parent: control
+        x: control.width - width
+        y: control.topPadding
+        height: control.availableHeight
         onPressedChanged: if (!pressed) control.userScrolled(view.atYEnd)
         onPositionChanged: if (pressed) control.userScrolled(view.atYEnd)
     }
@@ -35,10 +39,10 @@ Basic.ScrollView {
     contentItem: ListView {
         id: view
         model: control.model
-        onCountChanged: control.followInserted()
-        onMovementStarted: control.userScrolled(atYEnd)
+        // 휠 애니메이션이 출발하기 전부터 따라가기를 멈춰 새 줄이 사용자 이동을 덮지 않게 해요.
+        onMovementStarted: control.userScrolled(false)
         onMovementEnded: control.userScrolled(atYEnd)
-        onContentYChanged: if (moving || bar.pressed) control.userScrolled(atYEnd)
+        Component.onCompleted: if (control.followTail) control.positionAtEnd()
         delegate: Text {
             required property var model
             readonly property var record: model.modelData !== undefined ? model.modelData : model

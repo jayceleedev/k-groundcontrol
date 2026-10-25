@@ -39,24 +39,24 @@
         <translation>Photo</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="59"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="104"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="62"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="107"/>
         <source>배경 사진</source>
         <translation>Background image</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="71"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="74"/>
         <source>길게 눌러 확인 시간</source>
         <translation>Hold-to-confirm time</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="77"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="80"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="12"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="84"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="87"/>
         <source>정보</source>
         <translation>About</translation>
     </message>
@@ -74,40 +74,40 @@
     </message>
     <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="11"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="70"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="73"/>
         <source>조작</source>
         <translation>Controls</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="87"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="90"/>
         <source>버전</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="90"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="120"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="93"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="123"/>
         <source>라이선스 보기</source>
         <translation>View license</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="91"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="144"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="94"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="147"/>
         <source>고지 보기</source>
         <translation>View notices</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="92"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="95"/>
         <source>소스</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="105"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="108"/>
         <source>사진 (*.png *.jpg *.jpeg)</source>
         <translation>Images (*.png *.jpg *.jpeg)</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="121"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="145"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="124"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="148"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>

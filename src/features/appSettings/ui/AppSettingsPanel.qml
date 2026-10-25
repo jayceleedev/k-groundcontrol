@@ -53,7 +53,10 @@ SettingsPage {
         PillGroup {
             objectName: "backgroundKindPicker"
             model: [qsTr("민무늬"), qsTr("체크무늬"), qsTr("사진")]
-            currentIndex: uiSettingValues.backgroundKinds.indexOf(uiSettingValues.backgroundKind)
+            // 단추의 내부 선택 쓰기 뒤에도 파일 선택으로 바뀐 종류를 다시 반영해요.
+            Binding on currentIndex {
+                value: uiSettingValues.backgroundKinds.indexOf(uiSettingValues.backgroundKind)
+            }
             onActivated: index => { uiSettingValues.backgroundKind = uiSettingValues.backgroundKinds[index] }
         }
         Label { text: qsTr("배경 사진"); color: Theme.inkMuted }

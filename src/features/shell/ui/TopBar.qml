@@ -15,7 +15,7 @@ GlassSurface {
         height: Theme.appIconSize
         padding: Theme.appIconPadding
         hint: qsTr("정보")
-        contentItem: Image { source: "qrc:/kgc/icons/app.svg"; fillMode: Image.PreserveAspectFit }
+        contentItem: IconGlyph { name: "app"; color: Theme.accent }
         onClicked: navigator.open("appSettings", "about")
     }
     Repeater { model: topbarSlot; delegate: Item {} }

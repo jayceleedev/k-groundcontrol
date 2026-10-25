@@ -18,7 +18,8 @@ Window {
     onYChanged: saveTimer.restart()
     onWidthChanged: saveTimer.restart()
     onHeightChanged: saveTimer.restart()
-    onClosing: close => { appLogController.savePlacement(); close.accepted = false; root.hide() }
+    // 닫기 이벤트를 받아도 객체는 컨트롤러가 보관하므로 종료 요청을 거부하지 않아요.
+    onClosing: appLogController.savePlacement()
     TimerBox { id: saveTimer; interval: appLogController.saveDelayMs; onTriggered: appLogController.savePlacement() }
     Toggle {
         id: followToggle

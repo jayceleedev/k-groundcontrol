@@ -23,3 +23,5 @@ search outline/search
 check outline/check
 minus outline/minus
 bell outline/bell
+layout-dashboard outline/layout-dashboard
+logs outline/logs

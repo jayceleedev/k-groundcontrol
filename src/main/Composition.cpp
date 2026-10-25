@@ -1,3 +1,4 @@
+// [0.0.3 T1 T13] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #include "Composition.h"
 #include <kgc/ui/UiRegistry.h>
@@ -10,6 +11,11 @@
 #include <kgc/uiGallery/UiGalleryService.h>
 #include <kgc/uiGallery/Ui.h>
 #include <kgc/app/i18n/Translator.h>
+#include <kgc/analyze/AppLogService.h>
+#include <kgc/analyze/Ui.h>
+#include <kgc/secondPanel/SecondPanelService.h>
+#include <kgc/secondPanel/Ui.h>
+#include <QCoreApplication>
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQuickWindow>
@@ -19,12 +25,39 @@ Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ShellPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_AppSettingsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiGalleryPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_AnalyzePlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_SecondPanelPlugin)
 
 // 정적 라이브러리의 자원을 링커가 버리지 않도록 전역에서 참조해요.
 static void initKgcResources() { Q_INIT_RESOURCE(kgc); Q_INIT_RESOURCE(tabler_icons); }
 
 namespace kgc {
-Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator)
+namespace {
+void registerPlaceholders(ui::PanelRegistry* panels)
+{
+    const auto registerPlaceholder = [panels](const char* id, int order, int group,
+                                               const char* titleKey, const QUrl& icon) {
+        const auto result = panels->registerPlaceholder(id, order, group, titleKey, icon);
+        Q_ASSERT(result.has_value());
+    };
+    registerPlaceholder("fcFlash", 1, 1, QT_TRANSLATE_NOOP("Menu", "펌웨어 세팅"), QUrl("qrc:/kgc/icons/menu/fcFlash.svg"));
+    registerPlaceholder("layout", 2, 1, QT_TRANSLATE_NOOP("Menu", "기체 구성도"), QUrl("qrc:/kgc/icons/menu/layout.svg"));
+    registerPlaceholder("sensors", 3, 1, QT_TRANSLATE_NOOP("Menu", "센서 보정"), QUrl("qrc:/kgc/icons/menu/sensors.svg"));
+    registerPlaceholder("radio", 4, 1, QT_TRANSLATE_NOOP("Menu", "조종기"), QUrl("qrc:/kgc/icons/menu/radio.svg"));
+    registerPlaceholder("flightModes", 5, 1, QT_TRANSLATE_NOOP("Menu", "비행 모드"), QUrl("qrc:/kgc/icons/menu/flightModes.svg"));
+    registerPlaceholder("power", 6, 1, QT_TRANSLATE_NOOP("Menu", "배터리 · 전원"), QUrl("qrc:/kgc/icons/menu/power.svg"));
+    registerPlaceholder("failsafe", 7, 1, QT_TRANSLATE_NOOP("Menu", "안전 · 페일세이프"), QUrl("qrc:/kgc/icons/menu/failsafe.svg"));
+    registerPlaceholder("motors", 8, 1, QT_TRANSLATE_NOOP("Menu", "모터 시험"), QUrl("qrc:/kgc/icons/menu/motors.svg"));
+    registerPlaceholder("tuning", 9, 1, QT_TRANSLATE_NOOP("Menu", "튜닝"), QUrl("qrc:/kgc/icons/menu/tuning.svg"));
+    registerPlaceholder("logs", 10, 1, QT_TRANSLATE_NOOP("Menu", "로그 분석"), QUrl("qrc:/kgc/icons/menu/logs.svg"));
+    registerPlaceholder("esc", 11, 2, QT_TRANSLATE_NOOP("Menu", "ESC 설정"), QUrl("qrc:/kgc/icons/menu/esc.svg"));
+    registerPlaceholder("elrs", 12, 2, QT_TRANSLATE_NOOP("Menu", "ELRS 설정"), QUrl("qrc:/kgc/icons/menu/elrs.svg"));
+    registerPlaceholder("tracker", 13, 2, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
+    registerPlaceholder("params", 14, 3, QT_TRANSLATE_NOOP("Menu", "수동 기체 설정"), QUrl("qrc:/kgc/icons/menu/params.svg"));
+}
+}
+Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
+                         app::log::LogFeed& feed)
     : QObject(&engine), engine_(engine)
 {
     initKgcResources();
@@ -53,25 +86,11 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     appSettings::registerUi(registry, *appSettingsService);
     auto* galleryService = new uiGallery::UiGalleryService(this);
     uiGallery::registerUi(registry, *galleryService);
-    const auto registerPlaceholder = [panels](const char* id, int order, int group,
-                                               const char* titleKey, const QUrl& icon) {
-        const auto result = panels->registerPlaceholder(id, order, group, titleKey, icon);
-        Q_ASSERT(result.has_value());
-    };
-    registerPlaceholder("fcFlash", 1, 1, QT_TRANSLATE_NOOP("Menu", "펌웨어 세팅"), QUrl("qrc:/kgc/icons/menu/fcFlash.svg"));
-    registerPlaceholder("layout", 2, 1, QT_TRANSLATE_NOOP("Menu", "기체 구성도"), QUrl("qrc:/kgc/icons/menu/layout.svg"));
-    registerPlaceholder("sensors", 3, 1, QT_TRANSLATE_NOOP("Menu", "센서 보정"), QUrl("qrc:/kgc/icons/menu/sensors.svg"));
-    registerPlaceholder("radio", 4, 1, QT_TRANSLATE_NOOP("Menu", "조종기"), QUrl("qrc:/kgc/icons/menu/radio.svg"));
-    registerPlaceholder("flightModes", 5, 1, QT_TRANSLATE_NOOP("Menu", "비행 모드"), QUrl("qrc:/kgc/icons/menu/flightModes.svg"));
-    registerPlaceholder("power", 6, 1, QT_TRANSLATE_NOOP("Menu", "배터리 · 전원"), QUrl("qrc:/kgc/icons/menu/power.svg"));
-    registerPlaceholder("failsafe", 7, 1, QT_TRANSLATE_NOOP("Menu", "안전 · 페일세이프"), QUrl("qrc:/kgc/icons/menu/failsafe.svg"));
-    registerPlaceholder("motors", 8, 1, QT_TRANSLATE_NOOP("Menu", "모터 시험"), QUrl("qrc:/kgc/icons/menu/motors.svg"));
-    registerPlaceholder("tuning", 9, 1, QT_TRANSLATE_NOOP("Menu", "튜닝"), QUrl("qrc:/kgc/icons/menu/tuning.svg"));
-    registerPlaceholder("logs", 10, 1, QT_TRANSLATE_NOOP("Menu", "로그 분석"), QUrl("qrc:/kgc/icons/menu/logs.svg"));
-    registerPlaceholder("esc", 11, 2, QT_TRANSLATE_NOOP("Menu", "ESC 설정"), QUrl("qrc:/kgc/icons/menu/esc.svg"));
-    registerPlaceholder("elrs", 12, 2, QT_TRANSLATE_NOOP("Menu", "ELRS 설정"), QUrl("qrc:/kgc/icons/menu/elrs.svg"));
-    registerPlaceholder("tracker", 13, 2, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
-    registerPlaceholder("params", 14, 3, QT_TRANSLATE_NOOP("Menu", "수동 기체 설정"), QUrl("qrc:/kgc/icons/menu/params.svg"));
+    auto* appLogService = new analyze::AppLogService(feed, this);
+    analyze::registerUi(registry, *appLogService);
+    auto* secondPanelService = new secondPanel::SecondPanelService(this);
+    secondPanel::registerUi(registry, *secondPanelService);
+    registerPlaceholders(panels);
     connect(&translator, &app::i18n::Translator::languageChanged, &engine, &QQmlEngine::retranslate);
 }
 QQuickWindow* Composition::loadShell()
@@ -81,6 +100,7 @@ QQuickWindow* Composition::loadShell()
     auto* window = qobject_cast<QQuickWindow*>(object);
     if (!window) { delete object; return nullptr; }
     window->QObject::setParent(&engine_);
+    connect(window, &QQuickWindow::closing, qApp, &QCoreApplication::quit);
     window->show();
     return window;
 }

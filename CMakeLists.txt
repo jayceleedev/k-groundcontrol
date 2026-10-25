@@ -1,6 +1,7 @@
+# [0.0.3 T1 T14] specs/features/0.0.3-windows.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 cmake_minimum_required(VERSION 3.28)
-project(KGroundControl VERSION 0.0.2 LANGUAGES CXX
+project(KGroundControl VERSION 0.0.3 LANGUAGES CXX
     HOMEPAGE_URL "https://github.com/jayceleedev/k-groundcontrol")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

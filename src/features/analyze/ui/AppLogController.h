@@ -50,6 +50,7 @@ public:
      * 2. restorePlacement — 저장값과 화면 목록으로 자리를 정해요.
      * 3. QQuickWindow::setScreen·setGeometry·show — 복원한 창을 보여줘요.
      * 4. QQuickWindow::showNormal·raise·requestActivate — 기존 창도 앞으로 가져와요.
+     * 5. KGC_LOG_INFO — 창을 열었다는 사건을 기록해요.
      */
     Q_INVOKABLE void open();
     /** 보통 상태인 창의 화면 기준 자리를 저장해요.

@@ -2,112 +2,121 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en" sourcelanguage="ko">
 <context>
+    <name>AppLogWindow</name>
+    <message>
+        <location filename="../src/features/analyze/ui/AppLogWindow.qml" line="14"/>
+        <source>앱 로그 — K-GroundControl</source>
+        <translation>App Log — K-GroundControl</translation>
+    </message>
+    <message>
+        <location filename="../src/features/analyze/ui/AppLogWindow.qml" line="30"/>
+        <source>따라가기</source>
+        <translation>Follow</translation>
+    </message>
+</context>
+<context>
     <name>AppSettingsPanel</name>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="31"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="30"/>
         <source>언어</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="32"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="31"/>
         <source>시스템 따라감</source>
         <translation>Follow system</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="44"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="42"/>
         <source>테마</source>
         <translation>Theme</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="52"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="50"/>
         <source>배경</source>
         <translation>Background</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="55"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="53"/>
         <source>민무늬</source>
         <translation>Plain</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="55"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="53"/>
         <source>체크무늬</source>
         <translation>Checker</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="55"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="53"/>
         <source>사진</source>
         <translation>Photo</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="62"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="107"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="60"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="103"/>
         <source>배경 사진</source>
         <translation>Background image</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="74"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="71"/>
         <source>길게 눌러 확인 시간</source>
         <translation>Hold-to-confirm time</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="80"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="77"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="12"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="87"/>
         <source>정보</source>
         <translation>About</translation>
     </message>
     <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="9"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="27"/>
         <source>일반</source>
         <translation>General</translation>
     </message>
     <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="10"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="40"/>
         <source>화면</source>
         <translation>Display</translation>
     </message>
     <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="11"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="73"/>
         <source>조작</source>
         <translation>Controls</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="90"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="86"/>
         <source>버전</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="93"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="123"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="89"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="116"/>
         <source>라이선스 보기</source>
         <translation>View license</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="94"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="147"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="90"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="140"/>
         <source>고지 보기</source>
         <translation>View notices</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="95"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="91"/>
         <source>소스</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="108"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="104"/>
         <source>사진 (*.png *.jpg *.jpeg)</source>
         <translation>Images (*.png *.jpg *.jpeg)</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="124"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="148"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="117"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="141"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
@@ -139,19 +148,32 @@
     </message>
 </context>
 <context>
+    <name>BottomAction</name>
+    <message>
+        <location filename="../src/features/analyze/ui/register.cpp" line="13"/>
+        <source>앱 로그</source>
+        <translation>App Log</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/register.cpp" line="13"/>
+        <source>세컨드 패널</source>
+        <translation>Second Panel</translation>
+    </message>
+</context>
+<context>
     <name>CenterArea</name>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="97"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="89"/>
         <source>지도</source>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="128"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="120"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="136"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="128"/>
         <source>준비 중</source>
         <translation>Coming soon</translation>
     </message>
@@ -397,14 +419,17 @@
 <context>
     <name>GalleryContainers</name>
     <message>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="26"/>
         <source>표시</source>
         <translation>Indicators</translation>
     </message>
     <message>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="16"/>
         <source>화면</source>
         <translation>Display</translation>
     </message>
     <message>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="15"/>
         <source>일반</source>
         <translation>General</translation>
     </message>
@@ -419,82 +444,83 @@
         <translation>Sensors</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="9"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="29"/>
         <source>계기</source>
         <translation>Instruments</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="9"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="29"/>
         <source>개요</source>
         <translation>Overview</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="9"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="29"/>
         <source>메시지</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="13"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="33"/>
         <source>이름</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="13"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="33"/>
         <source>값</source>
         <translation>Value</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="13"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="33"/>
         <source>단위</source>
         <translation>Unit</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="34"/>
         <source>배터리 전압</source>
         <translation>Battery voltage</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="34"/>
         <source>V</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="34"/>
         <source>셀 수</source>
         <translation>Cell count</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="34"/>
         <source>최대 속도</source>
         <translation>Maximum speed</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="34"/>
         <source>m/s</source>
         <translation>m/s</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="23"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="43"/>
         <source>포트 열기 시도</source>
         <translation>Attempting to open port</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="23"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="43"/>
         <source>연결 완료</source>
         <translation>Connected</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="24"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="44"/>
         <source>위성 수 부족</source>
         <translation>Too few satellites</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="24"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="44"/>
         <source>보정 실패: 흔들림</source>
         <translation>Calibration failed: movement</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="32"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="52"/>
         <source>에어로에서는 뒤가 흐리게 비쳐요</source>
         <translation>Aero blurs the background</translation>
     </message>
@@ -715,72 +741,72 @@
         <translation>App Settings</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="59"/>
+        <location filename="../src/main/Composition.cpp" line="43"/>
         <source>펌웨어 세팅</source>
         <translation>Firmware Setup</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="60"/>
+        <location filename="../src/main/Composition.cpp" line="44"/>
         <source>기체 구성도</source>
         <translation>Vehicle Layout</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="61"/>
+        <location filename="../src/main/Composition.cpp" line="45"/>
         <source>센서 보정</source>
         <translation>Sensor Calibration</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="62"/>
+        <location filename="../src/main/Composition.cpp" line="46"/>
         <source>조종기</source>
         <translation>Radio</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="63"/>
+        <location filename="../src/main/Composition.cpp" line="47"/>
         <source>비행 모드</source>
         <translation>Flight Modes</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="64"/>
+        <location filename="../src/main/Composition.cpp" line="48"/>
         <source>배터리 · 전원</source>
         <translation>Battery &amp; Power</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="65"/>
+        <location filename="../src/main/Composition.cpp" line="49"/>
         <source>안전 · 페일세이프</source>
         <translation>Safety &amp; Failsafe</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="66"/>
+        <location filename="../src/main/Composition.cpp" line="50"/>
         <source>모터 시험</source>
         <translation>Motor Test</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="67"/>
+        <location filename="../src/main/Composition.cpp" line="51"/>
         <source>튜닝</source>
         <translation>Tuning</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="68"/>
+        <location filename="../src/main/Composition.cpp" line="52"/>
         <source>로그 분석</source>
         <translation>Log Analysis</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="69"/>
+        <location filename="../src/main/Composition.cpp" line="53"/>
         <source>ESC 설정</source>
         <translation>ESC Setup</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="70"/>
+        <location filename="../src/main/Composition.cpp" line="54"/>
         <source>ELRS 설정</source>
         <translation>ELRS Setup</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="71"/>
+        <location filename="../src/main/Composition.cpp" line="55"/>
         <source>안테나 트래커</source>
         <translation>Antenna Tracker</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="72"/>
+        <location filename="../src/main/Composition.cpp" line="56"/>
         <source>수동 기체 설정</source>
         <translation>Manual Vehicle Setup</translation>
     </message>
@@ -814,6 +840,54 @@
         <location filename="../src/platform/ui/components/SearchBox.qml" line="15"/>
         <source>검색어 지우기</source>
         <translation>Clear search</translation>
+    </message>
+</context>
+<context>
+    <name>SecondPanelWindow</name>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="14"/>
+        <source>세컨드 패널 — K-GroundControl</source>
+        <translation>Second Panel — K-GroundControl</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <source>1칸</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <source>2칸 좌우</source>
+        <translation>2 side by side</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <source>2칸 위아래</source>
+        <translation>2 stacked</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <source>3칸(큰 칸 + 둘)</source>
+        <translation>3 (1 large + 2)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <source>4칸</source>
+        <translation>4</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <source>6칸 가로</source>
+        <translation>6 (3×2)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="29"/>
+        <source>6칸 세로</source>
+        <translation>6 (2×3)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/secondPanel/ui/SecondPanelWindow.qml" line="56"/>
+        <source>칸 %1</source>
+        <translation>Cell %1</translation>
     </message>
 </context>
 <context>

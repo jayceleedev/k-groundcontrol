@@ -32,7 +32,7 @@ Basic.ScrollView {
         target: control.model && control.model.rowsInserted !== undefined ? control.model : null
         function onRowsInserted() { control.followInserted() }
     }
-    ListView {
+    contentItem: ListView {
         id: view
         model: control.model
         onCountChanged: control.followInserted()

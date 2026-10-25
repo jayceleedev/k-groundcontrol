@@ -42,6 +42,7 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     context->setContextProperty("rightTabSlot", rightTabs);
     context->setContextProperty("mapLayerSlot", mapLayers);
     context->setContextProperty("navigator", navigator);
+    context->setContextProperty("bottomActionSlot", bottomActions);
     context->setContextProperty("translator", &translator);
     context->setContextProperty("themeSwitcher", new ui::ThemeSwitcher(engine));
     context->setContextProperty("uiSettingValues", new ui::UiSettingValues(this));

@@ -15,5 +15,5 @@ Rectangle {
     implicitHeight: Theme.iconSize
     radius: height / 2
     color: Theme.danger
-    Text { id: label; anchors.centerIn: parent; text: badge.value; color: Theme.onDanger; font.pixelSize: Theme.fontSize }
+    Text { id: label; anchors.centerIn: parent; text: badge.value; color: Theme.dangerInk; font.pixelSize: Theme.fontSize }
 }

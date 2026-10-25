@@ -37,7 +37,7 @@ QtObject {
     readonly property color series6: current.series6
     readonly property color chartGrid: current.chartGrid
     readonly property color chartAxis: current.chartAxis
-    readonly property color onDanger: current.onDanger
+    readonly property color dangerInk: current.dangerInk
     readonly property color window: current.window
     readonly property color region: current.region
     readonly property color surface: current.surface
@@ -53,7 +53,7 @@ QtObject {
     readonly property color accent: current.accent
     readonly property color accentHover: current.accentHover
     readonly property color accentPressed: current.accentPressed
-    readonly property color onAccent: current.onAccent
+    readonly property color accentInk: current.accentInk
     readonly property color ok: current.ok
     readonly property color warn: current.warn
     readonly property color danger: current.danger

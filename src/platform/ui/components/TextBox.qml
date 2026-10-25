@@ -20,7 +20,7 @@ Basic.TextField {
     color: enabled ? Theme.ink : Theme.inkDisabled
     placeholderTextColor: Theme.inkMuted
     selectionColor: Theme.accent
-    selectedTextColor: Theme.onAccent
+    selectedTextColor: Theme.accentInk
     font.family: Theme.fontFamily
     font.pixelSize: Theme.fontSize
     selectByMouse: true

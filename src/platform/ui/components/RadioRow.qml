@@ -28,7 +28,7 @@ Basic.RadioButton {
         color: !control.enabled ? Theme.line : control.checked ? Theme.accent : control.down ? Theme.line : control.hovered ? Theme.surfaceAlt : Theme.surface
         border.color: control.activeFocus ? Theme.focus : Theme.lineStrong
         border.width: control.activeFocus ? Theme.lineWidth * 2 : Theme.lineWidth
-        Rectangle { anchors.centerIn: parent; width: Theme.inset; height: width; radius: height / 2; color: control.checked ? Theme.onAccent : "transparent" }
+        Rectangle { anchors.centerIn: parent; width: Theme.inset; height: width; radius: height / 2; color: control.checked ? Theme.accentInk : "transparent" }
     }
     contentItem: Text { text: control.text; font: control.font; color: control.enabled ? Theme.ink : Theme.inkDisabled; verticalAlignment: Text.AlignVCenter }
 }

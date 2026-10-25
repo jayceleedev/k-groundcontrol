@@ -12,8 +12,8 @@ import Kgc.Ui
 Basic.Button {
     id: control
     property string kind: "primary"
-    property color textColor: !enabled ? Theme.inkDisabled : kind === "primary" ? Theme.onAccent
-        : kind === "danger" ? Theme.onDanger : kind === "ghost" ? Theme.accent : Theme.ink
+    property color textColor: !enabled ? Theme.inkDisabled : kind === "primary" ? Theme.accentInk
+        : kind === "danger" ? Theme.dangerInk : kind === "ghost" ? Theme.accent : Theme.ink
     property real radius: Theme.radiusSmall
     property color outlineColor: activeFocus ? Theme.focus : kind === "ghost" ? "transparent" : Theme.line
     property real outlineWidth: activeFocus ? Theme.lineWidth * 2 : Theme.lineWidth

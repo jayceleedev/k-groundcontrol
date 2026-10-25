@@ -16,7 +16,7 @@ ApplicationWindow {
     palette.button: Theme.surface
     palette.buttonText: Theme.ink
     palette.highlight: Theme.accent
-    palette.highlightedText: Theme.onAccent
+    palette.highlightedText: Theme.accentInk
     palette.placeholderText: Theme.inkMuted
     font.family: Theme.fontFamily
     font.pixelSize: Theme.fontSize

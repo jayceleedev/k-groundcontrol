@@ -9,7 +9,7 @@ QtObject {
     required property color series6
     required property color chartGrid
     required property color chartAxis
-    required property color onDanger
+    required property color dangerInk
     required property color window
     required property color region
     required property color surface
@@ -25,7 +25,7 @@ QtObject {
     required property color accent
     required property color accentHover
     required property color accentPressed
-    required property color onAccent
+    required property color accentInk
     required property color ok
     required property color warn
     required property color danger

@@ -17,5 +17,5 @@ Item {
     implicitWidth: Theme.iconSize
     implicitHeight: Theme.iconSize
     Image { id: image; anchors.fill: parent; source: glyph.source; fillMode: Image.PreserveAspectFit; visible: false }
-    MultiEffect { anchors.fill: image; source: image; colorization: 1; colorizationColor: glyph.color }
+    MultiEffect { anchors.fill: image; source: image; brightness: 1.0; colorization: 1.0; colorizationColor: glyph.color }
 }

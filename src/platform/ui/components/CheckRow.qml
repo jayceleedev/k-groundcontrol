@@ -29,7 +29,7 @@ Basic.CheckBox {
         color: !control.enabled ? Theme.line : control.checked || control.checkState === Qt.PartiallyChecked ? Theme.accent : control.down ? Theme.line : control.hovered ? Theme.surfaceAlt : Theme.surface
         border.color: control.activeFocus ? Theme.focus : Theme.lineStrong
         border.width: control.activeFocus ? Theme.lineWidth * 2 : Theme.lineWidth
-        Text { anchors.centerIn: parent; text: control.checkState === Qt.PartiallyChecked ? qsTr("−") : control.checked ? qsTr("✓") : ""; color: Theme.onAccent }
+        Text { anchors.centerIn: parent; text: control.checkState === Qt.PartiallyChecked ? qsTr("−") : control.checked ? qsTr("✓") : ""; color: Theme.accentInk }
     }
     contentItem: Text { text: control.text; font: control.font; color: control.enabled ? Theme.ink : Theme.inkDisabled; verticalAlignment: Text.AlignVCenter }
 }

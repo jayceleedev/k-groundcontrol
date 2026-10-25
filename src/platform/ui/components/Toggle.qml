@@ -31,7 +31,7 @@ Basic.Switch {
         Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             x: control.checked ? parent.width - width - Theme.menuGap : Theme.menuGap
-            width: Theme.iconSize; height: width; radius: height / 2; color: Theme.onAccent
+            width: Theme.iconSize; height: width; radius: height / 2; color: Theme.accentInk
         }
     }
     contentItem: Text { text: control.text; font: control.font; color: control.enabled ? Theme.ink : Theme.inkDisabled; verticalAlignment: Text.AlignVCenter }

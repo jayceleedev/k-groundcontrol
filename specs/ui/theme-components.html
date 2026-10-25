@@ -12,25 +12,25 @@
  --accent:#2563eb;--accentHover:#1d4ed8;--accentPressed:#1e40af;--onAccent:#ffffff;
  --ok:#15803d;--warn:#b45309;--danger:#dc2626;--info:#0369a1;--idle:#6b7280;--okSoft:#dcfce7;--warnSoft:#fef3c7;--dangerSoft:#fee2e2;--infoSoft:#e0f2fe;
  --glassTint:var(--surface);--glassBlur:0px;--glassEdge:transparent;--glassShine:0;--r1:4px;--r2:8px;--r3:12px;--shadow:0 1px 3px rgba(0,0,0,.12);
- --map1:#cbd5e1;--map2:#e2e8f0}
+ --mapPatternA:#cbd5e1;--mapPatternB:#e2e8f0}
 [data-theme=dark]{--onDanger:#111827;--window:#0f1115;--region:#171a21;--surface:#1f232b;--surfaceAlt:#262b34;--overlay:rgba(15,17,21,.92);
  --ink:#e5e7eb;--inkMuted:#9ca3af;--inkInverse:#111827;--inkDisabled:#4b5563;--line:#2f3541;--lineStrong:#4b5563;--focus:#60a5fa;
  --accent:#2563eb;--accentHover:#3b82f6;--accentPressed:#1d4ed8;--onAccent:#ffffff;
  --ok:#22c55e;--warn:#f59e0b;--danger:#f87171;--info:#38bdf8;--idle:#6b7280;--okSoft:#14301f;--warnSoft:#3a2a0b;--dangerSoft:#3b1717;--infoSoft:#0c2a3a;
  --glassTint:var(--surface);--glassBlur:0px;--glassEdge:transparent;--glassShine:0;--r1:4px;--r2:8px;--r3:12px;--shadow:0 1px 3px rgba(0,0,0,.5);
- --map1:#1e293b;--map2:#334155}
+ --mapPatternA:#1e293b;--mapPatternB:#334155}
 [data-theme=aeroLight]{--onDanger:#ffffff;--window:#dfe9f5;--region:rgba(255,255,255,.35);--surface:rgba(255,255,255,.78);--surfaceAlt:rgba(255,255,255,.6);--overlay:rgba(255,255,255,.55);
  --ink:#0b1726;--inkMuted:#3b4a5e;--inkInverse:#ffffff;--inkDisabled:#8a99ad;--line:rgba(30,60,100,.18);--lineStrong:rgba(30,60,100,.35);--focus:#0a5bd3;
  --accent:#1d64c8;--accentHover:#1857b0;--accentPressed:#134894;--onAccent:#ffffff;
  --ok:#157a3a;--warn:#a8550a;--danger:#c81e1e;--info:#0b6aa6;--idle:#5f6b7a;--okSoft:rgba(34,197,94,.18);--warnSoft:rgba(245,158,11,.2);--dangerSoft:rgba(239,68,68,.18);--infoSoft:rgba(14,165,233,.18);
  --glassTint:rgba(255,255,255,.55);--glassBlur:18px;--glassEdge:rgba(255,255,255,.85);--glassShine:.55;--r1:6px;--r2:10px;--r3:14px;--shadow:0 6px 24px rgba(20,50,90,.18);
- --map1:#7fb3e6;--map2:#c7e0f7}
+ --mapPatternA:#7fb3e6;--mapPatternB:#c7e0f7}
 [data-theme=aeroDark]{--onDanger:#111827;--window:#0a1220;--region:rgba(10,18,32,.35);--surface:rgba(22,32,48,.78);--surfaceAlt:rgba(30,42,62,.6);--overlay:rgba(12,20,34,.6);
  --ink:#eef3fa;--inkMuted:#a9b6c8;--inkInverse:#0b1726;--inkDisabled:#56657a;--line:rgba(255,255,255,.12);--lineStrong:rgba(255,255,255,.25);--focus:#7cb3ff;
  --accent:#2563eb;--accentHover:#3474f0;--accentPressed:#1d4ed8;--onAccent:#ffffff;
  --ok:#34d399;--warn:#fbbf24;--danger:#f87171;--info:#60a5fa;--idle:#7c8799;--okSoft:rgba(52,211,153,.16);--warnSoft:rgba(251,191,36,.16);--dangerSoft:rgba(248,113,113,.16);--infoSoft:rgba(96,165,250,.16);
  --glassTint:rgba(18,28,44,.55);--glassBlur:18px;--glassEdge:rgba(255,255,255,.22);--glassShine:.25;--r1:6px;--r2:10px;--r3:14px;--shadow:0 6px 24px rgba(0,0,0,.45);
- --map1:#16365e;--map2:#24507f}
+ --mapPatternA:#16365e;--mapPatternB:#24507f}
 *{box-sizing:border-box}
 body{margin:0;font:13px/1.45 "Segoe UI","Noto Sans KR",system-ui,sans-serif;background:#eceff3;color:#111827}
 header.page{padding:16px;max-width:1280px;margin:0 auto}
@@ -49,10 +49,10 @@ h2.sec{font-size:15px;margin:28px 0 8px;color:#111827}
 /* 틀 그림 */
 .frame{position:relative;height:230px;background:var(--window);color:var(--ink);overflow:hidden;font-size:11px}
 .map{position:absolute;inset:0;background:
-  repeating-linear-gradient(0deg,transparent 0 22px,var(--map1) 22px 24px),
-  repeating-linear-gradient(90deg,transparent 0 22px,var(--map1) 22px 24px),
-  radial-gradient(circle at 60% 55%,var(--map1) 0 18%,transparent 19%),
-  linear-gradient(135deg,var(--map2),var(--map1));}
+  repeating-linear-gradient(0deg,transparent 0 22px,var(--mapPatternA) 22px 24px),
+  repeating-linear-gradient(90deg,transparent 0 22px,var(--mapPatternA) 22px 24px),
+  radial-gradient(circle at 60% 55%,var(--mapPatternA) 0 18%,transparent 19%),
+  linear-gradient(135deg,var(--mapPatternB),var(--mapPatternA));}
 .map span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--inkMuted);font-size:12px}
 .bar{position:absolute;background:var(--surface);border-color:var(--line);border-style:solid;border-width:0}
 .glass .bar{background:var(--glassTint);backdrop-filter:blur(var(--glassBlur)) saturate(1.3);-webkit-backdrop-filter:blur(var(--glassBlur)) saturate(1.3);
@@ -66,7 +66,7 @@ h2.sec{font-size:15px;margin:28px 0 8px;color:#111827}
 .mi{height:14px;margin-bottom:4px;border-radius:var(--r1);background:var(--surfaceAlt);border:1px solid var(--line)}
 .mi.on{background:var(--accent);border-color:var(--accent)}
 .inst{height:70px;border-radius:var(--r1);border:1px solid var(--line);background:var(--surfaceAlt);margin-bottom:6px}
-.glass .mi,.glass .inst{background:rgba(255,255,255,.12)}
+.glass .mi,.glass .inst{background:var(--surfaceAlt)}
 .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
 .logo{width:16px;height:16px;border-radius:4px;background:var(--accent)}
 /* 부품 판 */
@@ -98,7 +98,7 @@ h2.sec{font-size:15px;margin:28px 0 8px;color:#111827}
 .pg{display:inline-flex;border:1px solid var(--lineStrong);border-radius:999px;overflow:hidden}
 .pg span{padding:4px 12px;color:var(--ink)}.pg span.on{background:var(--accent);color:var(--onAccent)}
 .tg{width:34px;height:18px;border-radius:9px;background:var(--lineStrong);position:relative;display:inline-block}
-.tg::after{content:"";position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff}
+.tg::after{content:"";position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:var(--onAccent)}
 .tg.on{background:var(--accent)}.tg.on::after{left:18px}
 .box{width:15px;height:15px;border:1.5px solid var(--lineStrong);border-radius:3px;display:inline-grid;place-items:center;font-size:10px;color:var(--onAccent)}
 .box.on{background:var(--accent);border-color:var(--accent)}.box.mid{background:var(--accent);border-color:var(--accent)}
@@ -151,7 +151,7 @@ code{font:12px ui-monospace,Consolas,monospace}
 <body>
 <header class="page">
   <h1>0.0.2 테마와 UI 부품 — 설계 그림</h1>
-  <p>스펙 <code>specs/features/0.0.2-theme.md</code>의 그림이에요. 색 값은 제안이고, 이름은 스펙 §3.3 토큰과 같아요. 실제 화면은 Qt(QML)로 그려요.</p>
+  <p>스펙 <code>specs/features/0.0.2-theme.md</code>(초안 2)의 그림이에요. 색 값은 제안이고, CSS 변수 이름은 스펙 §3.3 토큰과 같아요(지도 자리 무늬 = mapPatternA·B). 실제 화면은 Qt(QML)로 그려요.</p>
 </header>
 <main>
   <h2 class="sec">1. 네 테마 — 틀(상단바·좌 메뉴·가운데·우 사이드바·하단바)</h2>
@@ -193,25 +193,25 @@ code{font:12px ui-monospace,Consolas,monospace}
         </section>
         <section class="card"><h3>표시</h3>
           <div class="row"><span class="lbl">Chip</span><span class="chip ok"><span class="dot"></span>GPS</span><span class="chip warn"><span class="dot"></span>배터리</span><span class="chip danger"><span class="dot"></span>링크</span><span class="chip info"><span class="dot"></span>정보</span><span class="chip idle"><span class="dot"></span>없음</span></div>
-          <div class="row"><span class="lbl">Badge · Dot</span><span class="badge">3</span><span class="dot" style="background:var(--ok)"></span><span class="dot" style="background:var(--warn)"></span><span class="dot" style="background:var(--danger)"></span></div>
+          <div class="row"><span class="lbl">Badge · StatusDot</span><span class="badge">3</span><span class="dot" style="background:var(--ok)"></span><span class="dot" style="background:var(--warn)"></span><span class="dot" style="background:var(--danger)"></span></div>
           <div class="row"><span class="lbl">ValueTile</span><span class="tile"><b>15.8</b><small>V · 배터리</small></span><span class="tile"><b>42</b><small>m · 고도</small></span></div>
           <div class="row"><span class="lbl">KeyValueRow</span><div style="flex:1"><div class="kv"><span>펌웨어</span><span>PX4 1.17.0</span></div><div class="kv"><span>보드</span><span>H743</span></div></div></div>
           <div class="row"><span class="lbl">LevelBar</span><span class="lvl"><b></b></span> CH3 +56</div>
           <div class="row"><span class="lbl">ProgressLine</span><span class="prog"><b></b></span> 45 % <span class="spin" aria-label="BusySpinner"></span></div>
           <div class="row"><span class="lbl">StepList</span><div class="steps"><div class="d">✓ 수평</div><div class="n">● 왼쪽 옆</div><div class="t">○ 오른쪽 옆</div><div class="f">✕ 뒤집기 실패</div></div></div>
         </section>
-        <section class="card"><h3>묶음</h3>
-          <div class="row"><span class="sect">Section 머리글</span></div>
-          <div class="row"><div class="tabs"><span class="on">계기</span><span>개요</span><span>메시지</span></div></div>
-          <div class="row"><table><thead><tr><th>이름</th><th>값</th><th>단위 ▾</th></tr></thead><tbody><tr><td>BAT_V_CHARGED</td><td>4.20</td><td>V</td></tr><tr class="sel"><td>BAT_N_CELLS</td><td>4</td><td></td></tr><tr><td>MPC_XY_VEL_MAX</td><td>12.0</td><td>m/s</td></tr></tbody></table></div>
-          <div class="row"><div class="log"><div class="i">08:12:01 연결: COM7 57600</div><div>08:12:02 하트비트 수신</div><div class="w">08:12:05 GPS 위성 6개</div><div class="e">08:12:09 보정 실패: 흔들림</div></div></div>
-          <div class="row"><div class="gls">GlassSurface — 뒤가 흐리게 비침(에어로)</div></div>
+        <section class="card"><h3>묶음 <span class="tag">(이 상자 자체가 Card)</span></h3>
+          <div class="row"><span class="lbl">Section</span><span class="sect" style="flex:1">센서</span></div>
+          <div class="row"><span class="lbl">TabStrip</span><div class="tabs" style="flex:1"><span class="on">계기</span><span>개요</span><span>메시지</span></div></div>
+          <div class="row"><span class="lbl">DataTable</span><table style="flex:1"><thead><tr><th>이름</th><th>값</th><th>단위 ▾</th></tr></thead><tbody><tr><td>BAT_V_CHARGED</td><td>4.20</td><td>V</td></tr><tr class="sel"><td>BAT_N_CELLS</td><td>4</td><td></td></tr><tr><td>MPC_XY_VEL_MAX</td><td>12.0</td><td>m/s</td></tr></tbody></table></div>
+          <div class="row"><span class="lbl">LogView</span><div class="log" style="flex:1"><div class="i">08:12:01 연결: COM7 57600</div><div>08:12:02 하트비트 수신</div><div class="w">08:12:05 GPS 위성 6개</div><div class="e">08:12:09 보정 실패: 흔들림</div></div></div>
+          <div class="row"><span class="lbl">GlassSurface</span><div class="gls" style="flex:1">뒤가 흐리게 비침(에어로)</div></div>
         </section>
         <section class="card"><h3>알림</h3>
-          <div class="row"><div class="banner warn">⚠ 시동 중에는 펌웨어를 굽지 않아요.<span style="margin-left:auto">✕</span></div></div>
-          <div class="row"><div class="banner info">ℹ 새 펌웨어가 있어요.</div></div>
-          <div class="row"><span class="toast">파라미터 저장했어요</span><span class="tip">설정 열기</span></div>
-          <div class="row"><div class="dlg"><h4>파라미터를 초기화할까요?</h4><p>기체의 모든 값이 기본값으로 돌아가요.</p><button class="btn danger">초기화</button> <button class="btn secondary">취소</button></div></div>
+          <div class="row"><span class="lbl">Banner</span><div class="banner warn" style="flex:1">⚠ 시동 중에는 펌웨어를 굽지 않아요.<span style="margin-left:auto">✕</span></div></div>
+          <div class="row"><span class="lbl"></span><div class="banner info" style="flex:1">ℹ 새 펌웨어가 있어요.</div></div>
+          <div class="row"><span class="lbl">Toast · HintTip</span><span class="toast">파라미터 저장했어요</span><span class="tip">설정 열기</span></div>
+          <div class="row"><span class="lbl">ConfirmDialog</span><div class="dlg" style="flex:1"><h4>파라미터를 초기화할까요?</h4><p>기체의 모든 값이 기본값으로 돌아가요.</p><button class="btn danger">초기화</button> <button class="btn secondary">취소</button></div></div>
         </section>
       </div>
     </div>

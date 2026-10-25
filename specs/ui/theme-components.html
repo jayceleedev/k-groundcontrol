@@ -7,25 +7,25 @@
 <!-- 0.0.2 설계 그림(코드 아님). 색 값은 제안이고 스펙 §3.3 토큰 이름을 그대로 씀. -->
 <style>
 :root{--gap:16px;--fontFamily:"Segoe UI","Noto Sans KR",system-ui,sans-serif;--monoFamily:ui-monospace,Consolas,monospace}
-[data-theme=light]{--onDanger:#ffffff;--window:#f3f4f6;--region:#e5e7eb;--surface:#ffffff;--surfaceAlt:#f9fafb;--overlay:rgba(243,244,246,.92);
+[data-theme=light]{--series1:#2563eb;--series2:#ea580c;--series3:#16a34a;--series4:#9333ea;--series5:#0891b2;--series6:#ca8a04;--chartGrid:#e5e7eb;--chartAxis:#9ca3af;--onDanger:#ffffff;--window:#f3f4f6;--region:#e5e7eb;--surface:#ffffff;--surfaceAlt:#f9fafb;--overlay:rgba(243,244,246,.92);
  --ink:#111827;--inkMuted:#4b5563;--inkInverse:#ffffff;--inkDisabled:#9ca3af;--line:#d1d5db;--lineStrong:#9ca3af;--focus:#2563eb;
  --accent:#2563eb;--accentHover:#1d4ed8;--accentPressed:#1e40af;--onAccent:#ffffff;
  --ok:#15803d;--warn:#b45309;--danger:#dc2626;--info:#0369a1;--idle:#6b7280;--okSoft:#dcfce7;--warnSoft:#fef3c7;--dangerSoft:#fee2e2;--infoSoft:#e0f2fe;
  --glassTint:var(--surface);--glassBlur:0;--glassBlurMax:32;--glassEdge:transparent;--glassShine:0;--radiusSmall:4px;--radiusMedium:8px;--radiusLarge:12px;--shadowColor:rgba(0,0,0,.12);
  --mapPatternA:#cbd5e1;--mapPatternB:#e2e8f0}
-[data-theme=dark]{--onDanger:#111827;--window:#0f1115;--region:#171a21;--surface:#1f232b;--surfaceAlt:#262b34;--overlay:rgba(15,17,21,.92);
+[data-theme=dark]{--series1:#60a5fa;--series2:#fb923c;--series3:#4ade80;--series4:#c084fc;--series5:#22d3ee;--series6:#facc15;--chartGrid:#2f3541;--chartAxis:#6b7280;--onDanger:#111827;--window:#0f1115;--region:#171a21;--surface:#1f232b;--surfaceAlt:#262b34;--overlay:rgba(15,17,21,.92);
  --ink:#e5e7eb;--inkMuted:#9ca3af;--inkInverse:#111827;--inkDisabled:#4b5563;--line:#2f3541;--lineStrong:#4b5563;--focus:#60a5fa;
  --accent:#2563eb;--accentHover:#3b82f6;--accentPressed:#1d4ed8;--onAccent:#ffffff;
  --ok:#22c55e;--warn:#f59e0b;--danger:#f87171;--info:#38bdf8;--idle:#6b7280;--okSoft:#14301f;--warnSoft:#3a2a0b;--dangerSoft:#3b1717;--infoSoft:#0c2a3a;
  --glassTint:var(--surface);--glassBlur:0;--glassBlurMax:32;--glassEdge:transparent;--glassShine:0;--radiusSmall:4px;--radiusMedium:8px;--radiusLarge:12px;--shadowColor:rgba(0,0,0,.5);
  --mapPatternA:#1e293b;--mapPatternB:#334155}
-[data-theme=aeroLight]{--onDanger:#ffffff;--window:#dfe9f5;--region:rgba(255,255,255,.35);--surface:rgba(255,255,255,.78);--surfaceAlt:rgba(255,255,255,.6);--overlay:rgba(255,255,255,.55);
+[data-theme=aeroLight]{--series1:#1d64c8;--series2:#d9480f;--series3:#2f9e44;--series4:#7048e8;--series5:#0c8599;--series6:#e67700;--chartGrid:rgba(30,60,100,.15);--chartAxis:rgba(30,60,100,.4);--onDanger:#ffffff;--window:#dfe9f5;--region:rgba(255,255,255,.35);--surface:rgba(255,255,255,.78);--surfaceAlt:rgba(255,255,255,.6);--overlay:rgba(255,255,255,.55);
  --ink:#0b1726;--inkMuted:#3b4a5e;--inkInverse:#ffffff;--inkDisabled:#8a99ad;--line:rgba(30,60,100,.18);--lineStrong:rgba(30,60,100,.35);--focus:#0a5bd3;
  --accent:#1d64c8;--accentHover:#1857b0;--accentPressed:#134894;--onAccent:#ffffff;
  --ok:#157a3a;--warn:#a8550a;--danger:#c81e1e;--info:#0b6aa6;--idle:#5f6b7a;--okSoft:rgba(34,197,94,.18);--warnSoft:rgba(245,158,11,.2);--dangerSoft:rgba(239,68,68,.18);--infoSoft:rgba(14,165,233,.18);
  --glassTint:rgba(255,255,255,.55);--glassBlur:0.6;--glassBlurMax:32;--glassEdge:rgba(255,255,255,.85);--glassShine:.55;--radiusSmall:6px;--radiusMedium:10px;--radiusLarge:14px;--shadowColor:rgba(20,50,90,.18);
  --mapPatternA:#7fb3e6;--mapPatternB:#c7e0f7}
-[data-theme=aeroDark]{--onDanger:#111827;--window:#0a1220;--region:rgba(10,18,32,.35);--surface:rgba(22,32,48,.78);--surfaceAlt:rgba(30,42,62,.6);--overlay:rgba(12,20,34,.6);
+[data-theme=aeroDark]{--series1:#7cb3ff;--series2:#ffa94d;--series3:#69db7c;--series4:#b197fc;--series5:#66d9e8;--series6:#ffd43b;--chartGrid:rgba(255,255,255,.12);--chartAxis:rgba(255,255,255,.35);--onDanger:#111827;--window:#0a1220;--region:rgba(10,18,32,.35);--surface:rgba(22,32,48,.78);--surfaceAlt:rgba(30,42,62,.6);--overlay:rgba(12,20,34,.6);
  --ink:#eef3fa;--inkMuted:#a9b6c8;--inkInverse:#0b1726;--inkDisabled:#56657a;--line:rgba(255,255,255,.12);--lineStrong:rgba(255,255,255,.25);--focus:#7cb3ff;
  --accent:#2563eb;--accentHover:#3474f0;--accentPressed:#1d4ed8;--onAccent:#ffffff;
  --ok:#34d399;--warn:#fbbf24;--danger:#f87171;--info:#60a5fa;--idle:#7c8799;--okSoft:rgba(52,211,153,.16);--warnSoft:rgba(251,191,36,.16);--dangerSoft:rgba(248,113,113,.16);--infoSoft:rgba(96,165,250,.16);
@@ -151,7 +151,7 @@ code{font:12px ui-monospace,Consolas,monospace}
 <body>
 <header class="page">
   <h1>0.0.2 테마와 UI 부품 — 설계 그림</h1>
-  <p>스펙 <code>specs/features/0.0.2-theme.md</code>(초안 3)의 그림이에요. 색 값은 제안이고, CSS 변수 이름은 스펙 §3.3 토큰과 같아요(지도 자리 무늬 = mapPatternA·B). 실제 화면은 Qt(QML)로 그려요.</p>
+  <p>스펙 <code>specs/features/0.0.2-theme.md</code>(초안 4)의 그림이에요. 색 값은 제안이고, CSS 변수 이름은 스펙 §3.3 토큰과 같아요(지도 자리 무늬 = mapPatternA·B). 실제 화면은 Qt(QML)로 그려요.</p>
 </header>
 <main>
   <h2 class="sec">1. 네 테마 — 틀(상단바·좌 메뉴·가운데·우 사이드바·하단바)</h2>
@@ -212,6 +212,16 @@ code{font:12px ui-monospace,Consolas,monospace}
           <div class="row"><span class="lbl"></span><div class="banner info" style="flex:1">ℹ 새 펌웨어가 있어요.</div></div>
           <div class="row"><span class="lbl">Toast · HintTip</span><span class="toast">파라미터 저장했어요</span><span class="tip">설정 열기</span></div>
           <div class="row"><span class="lbl">ConfirmDialog</span><div class="dlg" style="flex:1"><h4>파라미터를 초기화할까요?</h4><p>기체의 모든 값이 기본값으로 돌아가요.</p><button class="btn danger">초기화</button> <button class="btn secondary">취소</button></div></div>
+        </section>
+        <section class="card" style="grid-column:1/-1"><h3>차트</h3>
+          <div class="row" style="gap:18px;align-items:flex-start">
+            <div><div class="lbl">LineChart</div><svg width="260" height="120" viewBox="0 0 260 120"><g stroke="var(--chartGrid)" stroke-width="1"><line x1="30" y1="10" x2="250" y2="10"/><line x1="30" y1="45" x2="250" y2="45"/><line x1="30" y1="80" x2="250" y2="80"/></g><line x1="30" y1="100" x2="250" y2="100" stroke="var(--chartAxis)"/><polyline fill="none" stroke="var(--series1)" stroke-width="2.5" points="30,90 70,60 110,70 150,30 190,45 230,25 250,35"/><polyline fill="none" stroke="var(--series2)" stroke-width="2.5" points="30,95 70,80 110,50 150,55 190,40 230,50 250,30"/><text x="30" y="116" fill="var(--inkMuted)" font-size="10">0 s</text><text x="225" y="116" fill="var(--inkMuted)" font-size="10">10 s</text></svg><div class="tag"><span style="color:var(--series1)">━</span> 목표 <span style="color:var(--series2)">━</span> 실제</div></div>
+            <div><div class="lbl">BarChart</div><svg width="180" height="120" viewBox="0 0 180 120"><line x1="10" y1="100" x2="170" y2="100" stroke="var(--chartAxis)"/><rect x="20" y="40" width="26" height="60" fill="var(--series1)" rx="3"/><rect x="58" y="25" width="26" height="75" fill="var(--series1)" rx="3"/><rect x="96" y="55" width="26" height="45" fill="var(--series1)" rx="3"/><rect x="134" y="35" width="26" height="65" fill="var(--series1)" rx="3"/><text x="20" y="114" fill="var(--inkMuted)" font-size="10">M1   M2   M3   M4</text></svg></div>
+            <div><div class="lbl">PieChart (donut)</div><svg width="120" height="120" viewBox="0 0 42 42"><circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--series2)" stroke-width="6"/><circle cx="21" cy="21" r="15.9" fill="none" stroke="var(--series1)" stroke-width="6" stroke-dasharray="70 30" stroke-dashoffset="25"/><text x="21" y="23.5" text-anchor="middle" fill="var(--ink)" font-size="7">70%</text></svg></div>
+            <div><div class="lbl">RingGauge</div><svg width="110" height="110" viewBox="0 0 42 42"><circle cx="21" cy="21" r="16" fill="none" stroke="var(--line)" stroke-width="4"/><circle cx="21" cy="21" r="16" fill="none" stroke="var(--ok)" stroke-width="4" stroke-linecap="round" stroke-dasharray="82 100" transform="rotate(-90 21 21)"/><text x="21" y="22" text-anchor="middle" fill="var(--ink)" font-size="8">82</text><text x="21" y="29" text-anchor="middle" fill="var(--inkMuted)" font-size="4">% 배터리</text></svg></div>
+            <div><div class="lbl">ArcGauge</div><svg width="150" height="100" viewBox="0 0 120 80"><path d="M15 70 A45 45 0 0 1 75 27" fill="none" stroke="var(--line)" stroke-width="8"/><path d="M75 27 A45 45 0 0 1 95 45" fill="none" stroke="var(--warn)" stroke-width="8"/><path d="M95 45 A45 45 0 0 1 105 70" fill="none" stroke="var(--danger)" stroke-width="8"/><line x1="60" y1="70" x2="40" y2="35" stroke="var(--ink)" stroke-width="3" stroke-linecap="round"/><text x="60" y="78" text-anchor="middle" fill="var(--ink)" font-size="10">38 A</text></svg></div>
+            <div><div class="lbl">Sparkline</div><svg width="120" height="34" viewBox="0 0 120 34"><polyline fill="none" stroke="var(--series1)" stroke-width="2" points="0,25 15,22 30,24 45,15 60,18 75,10 90,14 105,8 120,12"/></svg><div class="lbl" style="margin-top:12px">Heatmap</div><div style="display:grid;grid-template-columns:repeat(12,12px);gap:1px"><span style="height:12px;background:var(--series1);opacity:.15"></span><span style="height:12px;background:var(--series1);opacity:.3"></span><span style="height:12px;background:var(--series1);opacity:.6"></span><span style="height:12px;background:var(--series1);opacity:.9"></span><span style="height:12px;background:var(--warn);opacity:.8"></span><span style="height:12px;background:var(--danger)"></span><span style="height:12px;background:var(--warn);opacity:.6"></span><span style="height:12px;background:var(--series1);opacity:.7"></span><span style="height:12px;background:var(--series1);opacity:.4"></span><span style="height:12px;background:var(--series1);opacity:.2"></span><span style="height:12px;background:var(--series1);opacity:.1"></span><span style="height:12px;background:var(--series1);opacity:.05"></span></div></div>
+          </div>
         </section>
       </div>
     </div>

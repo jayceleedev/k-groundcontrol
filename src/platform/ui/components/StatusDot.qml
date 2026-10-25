@@ -9,10 +9,15 @@ import Kgc.Ui
 
 Rectangle {
     property string level: "idle"
-    readonly property var levelColors: ({
-        ok: [Theme.ok, Theme.okSoft], warn: [Theme.warn, Theme.warnSoft],
-        danger: [Theme.danger, Theme.dangerSoft], info: [Theme.info, Theme.infoSoft]
-    })[level] || [Theme.idle, Theme.surfaceAlt]
+    readonly property var levelColors: {
+        switch (level) {
+        case "ok": return [Theme.ok, Theme.okSoft]
+        case "warn": return [Theme.warn, Theme.warnSoft]
+        case "danger": return [Theme.danger, Theme.dangerSoft]
+        case "info": return [Theme.info, Theme.infoSoft]
+        default: return [Theme.idle, Theme.surfaceAlt]
+        }
+    }
     readonly property color softColor: levelColors[1]
     implicitWidth: Theme.inset
     implicitHeight: Theme.inset

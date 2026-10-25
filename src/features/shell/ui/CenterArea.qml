@@ -112,10 +112,9 @@ Item {
                 }
                 IconButton {
                     objectName: "panelClose"
+                    flat: true
                     anchors.right: parent.right
                     anchors.verticalCenter: parent.verticalCenter
-                    width: Theme.panelCloseSize
-                    height: Theme.panelCloseSize
                     name: "x"
                     hint: qsTr("닫기")
                     onClicked: shellController.togglePanel(shellController.activePanelId)

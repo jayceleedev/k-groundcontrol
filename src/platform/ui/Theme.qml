@@ -16,13 +16,14 @@ QtObject {
     readonly property int inset: Math.round(8 * uiScale)
     readonly property int panelInset: Math.round(16 * uiScale)
     readonly property int menuGap: Math.round(3 * uiScale)
+    // 좌 메뉴 묶음 사이 구분선이 차지하는 세로 공간이에요(선은 그 가운데).
+    readonly property int menuSeparatorSpace: Math.round(17 * uiScale)
     readonly property int menuHeight: Math.round(36 * uiScale)
     readonly property int iconSize: Math.round(20 * uiScale)
     readonly property int appIconSize: Math.round(40 * uiScale)
     readonly property int appIconPadding: 0
     readonly property int rightTabHeight: Math.round(32 * uiScale)
     readonly property int panelHeaderHeight: Math.round(48 * uiScale)
-    readonly property int panelCloseSize: Math.round(40 * uiScale)
     readonly property real lineWidth: 1 * uiScale
     readonly property int fontSize: Math.round(13 * uiScale)
     readonly property int titleSize: Math.round(14 * uiScale)
@@ -31,6 +32,9 @@ QtObject {
     readonly property int languageWidth: Math.round(240 * uiScale)
     // 단추·선택·입력 부품의 기본 높이를 맞춰요.
     readonly property int controlHeight: Math.round(36 * uiScale)
+    // 다른 부품 안에 들어가는 테두리 없는 아이콘 단추(닫기·지우기)의 누르는 영역과 아이콘 크기예요.
+    readonly property int flatIconButtonSize: Math.round(24 * uiScale)
+    readonly property int flatIconSize: Math.round(16 * uiScale)
     // 텍스트·숫자·목록 입력란의 기본 너비예요.
     readonly property int inputWidth: Math.round(240 * uiScale)
     // 입력란의 이름표와 오류 글에 한 줄을 확보해요.

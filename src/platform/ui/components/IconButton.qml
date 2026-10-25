@@ -1,6 +1,7 @@
 // [0.0.2 T12 T14 T23] specs/features/0.0.2-theme.md
 /** 설명 풍선을 갖는 아이콘 단추예요.
- * 입력: name, hint, icon.source, clicked를 사용해요.
+ * 입력: name, hint, icon.source, clicked를 사용해요. Button의 flat이 참이면 테두리·바탕 없이 아이콘만 그리고
+ *       마우스를 올렸을 때만 옅은 바탕을 보여요(알림 줄·패널 머리·입력칸 안의 닫기·지우기용).
  * 출력: 이름에 맞는 아이콘과 설명 풍선을 그리고 clicked를 내요.
  * 실패: 빈 hint에는 풍선을 띄우지 않고, 없는 아이콘은 그리지 못해요.
  */
@@ -11,10 +12,14 @@ ActionButton {
     id: control
     property string name: ""
     property string hint: ""
-    kind: "secondary"
+    kind: flat ? "ghost" : "secondary"
     icon.source: name ? "qrc:/kgc/icons/" + name + ".svg" : ""
     icon.color: enabled ? Theme.ink : Theme.inkDisabled
-    implicitWidth: Theme.controlHeight
+    icon.width: flat ? Theme.flatIconSize : Theme.iconSize
+    icon.height: flat ? Theme.flatIconSize : Theme.iconSize
+    padding: flat ? 0 : Theme.inset
+    implicitWidth: flat ? Theme.flatIconButtonSize : Theme.controlHeight
+    implicitHeight: flat ? Theme.flatIconButtonSize : Theme.controlHeight
     Accessible.name: hint
     HintTip { text: control.hint; visible: control.hovered && text.length > 0 }
 }

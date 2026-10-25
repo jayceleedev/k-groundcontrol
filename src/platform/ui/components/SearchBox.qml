@@ -12,5 +12,5 @@ TextBox {
     leftPadding: Theme.controlHeight
     rightPadding: Theme.controlHeight
     IconGlyph { name: "search"; x: Theme.inset; anchors.verticalCenter: parent.verticalCenter }
-    IconButton { name: "x"; hint: qsTr("검색어 지우기"); anchors.right: parent.right; visible: control.text.length > 0; onClicked: { control.clear(); control.forceActiveFocus() } }
+    IconButton { flat: true; name: "x"; hint: qsTr("검색어 지우기"); anchors.right: parent.right; anchors.rightMargin: Theme.inset; anchors.verticalCenter: parent.verticalCenter; visible: control.text.length > 0; onClicked: { control.clear(); control.forceActiveFocus() } }
 }

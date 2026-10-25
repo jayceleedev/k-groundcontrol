@@ -57,13 +57,18 @@ GlassSurface {
                         HintTip { text: entry.menuTitle; visible: menuButton.hovered && shellController.leftMenuCollapsed }
                         onClicked: shellController.togglePanel(entry.panelId)
                     }
-                    Rectangle {
-                        // 메뉴 표의 묶음이 1·2·3 순서여서 끝나는 묶음 번호가 구분선 순번과 같아요.
+                    Item {
+                        // 메뉴 표의 묶음이 1부터 차례라서 끝나는 묶음 번호가 구분선 순번과 같아요.
                         objectName: entry.model.separatorAfter ? "menuSeparator_" + entry.model.group : ""
                         visible: entry.model.separatorAfter
                         width: parent.width
-                        height: Theme.lineWidth
-                        color: Theme.line
+                        height: Theme.menuSeparatorSpace
+                        Rectangle {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width
+                            height: Theme.lineWidth
+                            color: Theme.lineStrong
+                        }
                     }
                 }
             }

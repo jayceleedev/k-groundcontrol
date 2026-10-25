@@ -17,8 +17,8 @@ private slots:
     void test_T15_sort_by_order()
     {
         const std::vector<PanelEntry> entries{
-            {"appSettings", 15, 3, {}, {}, {}}, {"fcFlash", 1, 1, {}, {}, {}},
-            {"esc", 11, 2, {}, {}, {}}, {"logs", 10, 1, {}, {}, {}}};
+            {"appSettings", 15, 4, {}, {}, {}}, {"fcFlash", 1, 1, {}, {}, {}},
+            {"esc", 11, 3, {}, {}, {}}, {"logs", 10, 2, {}, {}, {}}};
         const auto sorted = sortByOrder(entries);
         QStringList ids;
         for (const auto& entry : sorted) ids.append(entry.id);
@@ -27,19 +27,19 @@ private slots:
         QVERIFY(sortByOrder({}).empty());
     }
 
-    /** T15: 구분선은 로그 뒤와 트래커 뒤에만 생겨요. */
+    /** T15: 구분선은 펌웨어 세팅 뒤, 로그 뒤, 트래커 뒤에만 생겨요. */
     void test_T15_group_separators()
     {
         const std::vector<PanelEntry> entries{
-            {"fcFlash", 1, 1, {}, {}, {}}, {"layout", 2, 1, {}, {}, {}},
-            {"sensors", 3, 1, {}, {}, {}}, {"radio", 4, 1, {}, {}, {}},
-            {"flightModes", 5, 1, {}, {}, {}}, {"power", 6, 1, {}, {}, {}},
-            {"failsafe", 7, 1, {}, {}, {}}, {"motors", 8, 1, {}, {}, {}},
-            {"tuning", 9, 1, {}, {}, {}}, {"logs", 10, 1, {}, {}, {}},
-            {"esc", 11, 2, {}, {}, {}}, {"elrs", 12, 2, {}, {}, {}},
-            {"tracker", 13, 2, {}, {}, {}}, {"params", 14, 3, {}, {}, {}},
-            {"appSettings", 15, 3, {}, {}, {}}};
-        const std::vector<bool> expected{false, false, false, false, false,
+            {"fcFlash", 1, 1, {}, {}, {}}, {"layout", 2, 2, {}, {}, {}},
+            {"sensors", 3, 2, {}, {}, {}}, {"radio", 4, 2, {}, {}, {}},
+            {"flightModes", 5, 2, {}, {}, {}}, {"power", 6, 2, {}, {}, {}},
+            {"failsafe", 7, 2, {}, {}, {}}, {"motors", 8, 2, {}, {}, {}},
+            {"tuning", 9, 2, {}, {}, {}}, {"logs", 10, 2, {}, {}, {}},
+            {"esc", 11, 3, {}, {}, {}}, {"elrs", 12, 3, {}, {}, {}},
+            {"tracker", 13, 3, {}, {}, {}}, {"params", 14, 4, {}, {}, {}},
+            {"appSettings", 15, 4, {}, {}, {}}};
+        const std::vector<bool> expected{true, false, false, false, false,
             false, false, false, false, true, false, false, true, false, false};
         QVERIFY(separatorAfter(entries) == expected);
         QVERIFY(separatorAfter({}).empty());

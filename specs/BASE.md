@@ -102,7 +102,7 @@ k-groundcontrol/
 | `failsafe` | 안전·페일세이프 | 기체별 | 좌 메뉴 7 | S-62~64 |
 | `motors` | 모터 시험 | 기체별 | 좌 메뉴 8 | S-58·59 |
 | `tuning` | 튜닝 | 기체별 | 좌 메뉴 9 | S-65~68 |
-| `fcFlash` | 펌웨어 세팅 | 전역 | 좌 메뉴 1 | R-Q10 |
+| `fcFlash` | 펌웨어 세팅 | 전역 | 좌 메뉴 1(뒤에 구분선) | R-Q10 |
 | `esc` | ESC 설정 | 전역 | 좌 메뉴 11 | 5.2절 |
 | `elrs` | ELRS 설정 | 전역 | 좌 메뉴 12 | 5.3절 |
 | `tracker` | 안테나 트래커 | 전역 | 좌 메뉴 13, 하단 칩, 지도 부채꼴 레이어 | 5.4절 |
@@ -435,3 +435,4 @@ k-groundcontrol/
 | 2026-10-25 | 사용자 | 0.0.3 스펙 초안 3과 함께 승인: §3 트리(LogFeed·BottomAction·WindowPlacement), §3.1 `secondPanel`·`analyze` 보이는 곳, §3.2 순위 2 `secondPanel`, §9.7 BottomActionSlot·SlotModel 등록·별도 창 규칙·기여 표, §10 LogFeed, §13 용어 |
 | 2026-10-25 | PM | 사실 고치기(알림만, 0.0.3 구조 검수 1): §9.7 `SeparateWindow`, §10 되돌이 막기 경로는 조립이 넘김, §13 용어 |
 | 2026-10-25 | PM | 사실 고치기(알림만): §9.7 별도 창 부모 = SeparateWindow |
+| 2026-10-26 | 사용자 | 좌 메뉴 구분선: fcFlash 뒤에도(묶음 fcFlash / layout~logs / esc~tracker / params·appSettings / uiGallery) |

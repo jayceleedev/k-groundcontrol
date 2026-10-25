@@ -10,8 +10,8 @@ import Kgc.Ui
 Chip {
     id: control
     signal closed()
-    implicitWidth: contentItem.implicitWidth + padding * 2 + Theme.controlHeight
-    rightPadding: Theme.controlHeight + Theme.inset
+    implicitWidth: contentItem.implicitWidth + padding * 2 + Theme.flatIconButtonSize + Theme.inset
+    rightPadding: Theme.flatIconButtonSize + Theme.inset * 2
     radius: Theme.radiusMedium
-    IconButton { anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; name: "x"; hint: qsTr("닫기"); onClicked: { control.visible = false; control.closed() } }
+    IconButton { flat: true; icon.color: control.textColor; anchors.right: parent.right; anchors.rightMargin: Theme.inset; anchors.verticalCenter: parent.verticalCenter; name: "x"; hint: qsTr("닫기"); onClicked: { control.visible = false; control.closed() } }
 }

@@ -10,16 +10,13 @@ namespace kgc::app::log {
  * 실패: 없음.
  */
 struct LogEvent { kgc::app::errors::ModuleId module; std::uint16_t code; };
-/** 사건 이름과 인자들을 로그 메시지에 붙여요.
- * 입력: 수준과 카테고리와 사건과 메시지와 값.
- * 출력: 없음.
- * 실패: 없음.
- */
+namespace detail {
+// 파일 형식은 숫자 LogEvent 대신 사건 이름을 써요. 쓰지 않는 번호를 인자로 넘기지 않아요.
+// 매크로가 #event로 만든 열거 표기에서 마지막 이름을 얻고, 카테고리의 kgc.를 떼어 모듈 이름을 붙여요.
 template<class... Values>
-void writeLog(QtMsgType level, const char* category, LogEvent event,
-              const char* eventName, const char* message, const Values&... values)
+void writeLog(LogLevel level, const char* category, const char* eventName,
+              const char* message, const Values&... values)
 {
-    Q_UNUSED(event);
     QString text = QString::fromUtf8(message);
     ((text = text.arg(values)), ...);
     const auto module = QString::fromUtf8(category).mid(4);
@@ -27,15 +24,16 @@ void writeLog(QtMsgType level, const char* category, LogEvent event,
     LogSink::write(level, QString::fromUtf8(category), module + '.' + name, text);
 }
 }
+}
 #define KGC_LOG_DEBUG(category, event, message, ...) \
-    ::kgc::app::log::writeLog(QtDebugMsg, category, \
-        {kModuleId, static_cast<std::uint16_t>(event)}, #event, message __VA_OPT__(,) __VA_ARGS__)
+    ::kgc::app::log::detail::writeLog(::kgc::app::log::LogLevel::Debug, category, \
+        #event, message __VA_OPT__(,) __VA_ARGS__)
 #define KGC_LOG_INFO(category, event, message, ...) \
-    ::kgc::app::log::writeLog(QtInfoMsg, category, \
-        {kModuleId, static_cast<std::uint16_t>(event)}, #event, message __VA_OPT__(,) __VA_ARGS__)
+    ::kgc::app::log::detail::writeLog(::kgc::app::log::LogLevel::Info, category, \
+        #event, message __VA_OPT__(,) __VA_ARGS__)
 #define KGC_LOG_WARN(category, event, message, ...) \
-    ::kgc::app::log::writeLog(QtWarningMsg, category, \
-        {kModuleId, static_cast<std::uint16_t>(event)}, #event, message __VA_OPT__(,) __VA_ARGS__)
+    ::kgc::app::log::detail::writeLog(::kgc::app::log::LogLevel::Warn, category, \
+        #event, message __VA_OPT__(,) __VA_ARGS__)
 #define KGC_LOG_ERROR(category, event, message, ...) \
-    ::kgc::app::log::writeLog(QtCriticalMsg, category, \
-        {kModuleId, static_cast<std::uint16_t>(event)}, #event, message __VA_OPT__(,) __VA_ARGS__)
+    ::kgc::app::log::detail::writeLog(::kgc::app::log::LogLevel::Error, category, \
+        #event, message __VA_OPT__(,) __VA_ARGS__)

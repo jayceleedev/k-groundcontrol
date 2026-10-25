@@ -15,8 +15,13 @@ BootOptions BootOptions::parse(const QStringList& args)
     parser.addOption({"data-dir", "데이터 폴더", "path"});
     parser.process(args);
     BootOptions options;
-    options.logLevel = parser.isSet("log-level") ? parser.value("log-level")
+    const auto levelName = parser.isSet("log-level") ? parser.value("log-level")
         : ini.value("log/level", "info").toString();
+    const auto level = kgc::app::log::parseLogLevel(levelName);
+    if (!level)
+        QCommandLineParser::showMessageAndExit(QCommandLineParser::MessageType::Error,
+            QString("지원하지 않는 로그 수준: %1").arg(levelName), 1);
+    options.logLevel = *level;
     options.maxFileMB = qMax(1, ini.value("log/maxFileMB", 5).toInt());
     options.maxFiles = qMax(1, ini.value("log/maxFiles", 5).toInt());
     options.dataDir = parser.isSet("data-dir") ? parser.value("data-dir")

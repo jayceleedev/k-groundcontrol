@@ -1,5 +1,6 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #pragma once
+#include <kgc/app/log/LogLevel.h>
 #include <QStringList>
 
 namespace kgc::app::boot {
@@ -9,14 +10,14 @@ namespace kgc::app::boot {
  * 실패: 없음.
  */
 struct BootOptions {
-    QString logLevel;
+    kgc::app::log::LogLevel logLevel;
     int maxFileMB;
     int maxFiles;
     QString dataDir;
 /** 명령줄을 부팅 파일보다 우선해서 읽어요.
  * 입력: 프로그램 이름을 첫 항목으로 둔 인자 목록.
  * 출력: 부팅 값 묶음.
- * 실패: 잘못된 명령줄은 사용법을 출력하고 종료.
+ * 실패: 잘못된 명령줄이나 로그 수준은 오류를 출력하고 종료.
  */
     static BootOptions parse(const QStringList& args);
 };

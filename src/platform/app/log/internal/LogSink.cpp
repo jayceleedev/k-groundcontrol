@@ -10,7 +10,7 @@ struct Sink {
     QFile file;
     QMutex mutex;
     QString directory;
-    int threshold = 1;
+    LogLevel threshold = LogLevel::Info;
     qint64 maxBytes = 0;
     int maxFiles = 0;
     QtMessageHandler previous = nullptr;
@@ -18,10 +18,6 @@ struct Sink {
     ~Sink() { if (installed) qInstallMessageHandler(previous); }
 };
 Sink& sink() { static Sink value; return value; }
-int severity(QtMsgType level)
-{
-    return level == QtDebugMsg ? 0 : level == QtInfoMsg ? 1 : level == QtWarningMsg ? 2 : 3;
-}
 bool rotate(Sink& state)
 {
     state.file.close();
@@ -34,7 +30,7 @@ bool rotate(Sink& state)
     return state.file.open(QIODevice::WriteOnly | QIODevice::Append);
 }
 }
-bool LogSink::install(const QString& dir, const QString& level, int maxFileMB, int maxFiles)
+bool LogSink::install(const QString& dir, LogLevel level, int maxFileMB, int maxFiles)
 {
     auto& state = sink();
     QMutexLocker lock(&state.mutex);
@@ -44,21 +40,21 @@ bool LogSink::install(const QString& dir, const QString& level, int maxFileMB, i
     state.file.setFileName(QDir(dir).filePath("kgc.log"));
     state.maxBytes = qint64(maxFileMB) * (1 << 20);
     state.maxFiles = maxFiles;
-    state.threshold = level == "debug" ? 0 : level == "warn" ? 2 : level == "error" ? 3 : 1;
+    state.threshold = level;
     if (!state.file.open(QIODevice::WriteOnly | QIODevice::Append)) return false;
     if (!state.installed) {
         state.previous = qInstallMessageHandler([](QtMsgType type, const QMessageLogContext&, const QString& text) {
-            LogSink::write(type, "kgc.qt", "qt.Message", text);
+            LogSink::write(fromQtLevel(type), "kgc.qt", "qt.Message", text);
         });
         state.installed = true;
     }
     return true;
 }
-void LogSink::write(QtMsgType level, const QString& category, const QString& event, const QString& message)
+void LogSink::write(LogLevel level, const QString& category, const QString& event, const QString& message)
 {
     auto& state = sink();
     QMutexLocker lock(&state.mutex);
-    if (severity(level) < state.threshold || !state.file.isOpen()) return;
+    if (level < state.threshold || !state.file.isOpen()) return;
     if (state.file.size() > state.maxBytes && !rotate(state)) return;
     state.file.write(format(level, category, event, message).toUtf8());
     state.file.flush();

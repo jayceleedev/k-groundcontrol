@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>테마와 UI 부품</title>
+<!-- 0.0.2 설계 그림(코드 아님). 색 값은 제안이고 스펙 §3.3 토큰 이름을 그대로 씀. -->
+<style>
+:root{--gap:16px}
+[data-theme=light]{--onDanger:#ffffff;--window:#f3f4f6;--region:#e5e7eb;--surface:#ffffff;--surfaceAlt:#f9fafb;--overlay:rgba(243,244,246,.92);
+ --ink:#111827;--inkMuted:#4b5563;--inkInverse:#ffffff;--inkDisabled:#9ca3af;--line:#d1d5db;--lineStrong:#9ca3af;--focus:#2563eb;
+ --accent:#2563eb;--accentHover:#1d4ed8;--accentPressed:#1e40af;--onAccent:#ffffff;
+ --ok:#15803d;--warn:#b45309;--danger:#dc2626;--info:#0369a1;--idle:#6b7280;--okSoft:#dcfce7;--warnSoft:#fef3c7;--dangerSoft:#fee2e2;--infoSoft:#e0f2fe;
+ --glassTint:var(--surface);--glassBlur:0px;--glassEdge:transparent;--glassShine:0;--r1:4px;--r2:8px;--r3:12px;--shadow:0 1px 3px rgba(0,0,0,.12);
+ --map1:#cbd5e1;--map2:#e2e8f0}
+[data-theme=dark]{--onDanger:#111827;--window:#0f1115;--region:#171a21;--surface:#1f232b;--surfaceAlt:#262b34;--overlay:rgba(15,17,21,.92);
+ --ink:#e5e7eb;--inkMuted:#9ca3af;--inkInverse:#111827;--inkDisabled:#4b5563;--line:#2f3541;--lineStrong:#4b5563;--focus:#60a5fa;
+ --accent:#2563eb;--accentHover:#3b82f6;--accentPressed:#1d4ed8;--onAccent:#ffffff;
+ --ok:#22c55e;--warn:#f59e0b;--danger:#f87171;--info:#38bdf8;--idle:#6b7280;--okSoft:#14301f;--warnSoft:#3a2a0b;--dangerSoft:#3b1717;--infoSoft:#0c2a3a;
+ --glassTint:var(--surface);--glassBlur:0px;--glassEdge:transparent;--glassShine:0;--r1:4px;--r2:8px;--r3:12px;--shadow:0 1px 3px rgba(0,0,0,.5);
+ --map1:#1e293b;--map2:#334155}
+[data-theme=aeroLight]{--onDanger:#ffffff;--window:#dfe9f5;--region:rgba(255,255,255,.35);--surface:rgba(255,255,255,.78);--surfaceAlt:rgba(255,255,255,.6);--overlay:rgba(255,255,255,.55);
+ --ink:#0b1726;--inkMuted:#3b4a5e;--inkInverse:#ffffff;--inkDisabled:#8a99ad;--line:rgba(30,60,100,.18);--lineStrong:rgba(30,60,100,.35);--focus:#0a5bd3;
+ --accent:#1d64c8;--accentHover:#1857b0;--accentPressed:#134894;--onAccent:#ffffff;
+ --ok:#157a3a;--warn:#a8550a;--danger:#c81e1e;--info:#0b6aa6;--idle:#5f6b7a;--okSoft:rgba(34,197,94,.18);--warnSoft:rgba(245,158,11,.2);--dangerSoft:rgba(239,68,68,.18);--infoSoft:rgba(14,165,233,.18);
+ --glassTint:rgba(255,255,255,.55);--glassBlur:18px;--glassEdge:rgba(255,255,255,.85);--glassShine:.55;--r1:6px;--r2:10px;--r3:14px;--shadow:0 6px 24px rgba(20,50,90,.18);
+ --map1:#7fb3e6;--map2:#c7e0f7}
+[data-theme=aeroDark]{--onDanger:#111827;--window:#0a1220;--region:rgba(10,18,32,.35);--surface:rgba(22,32,48,.78);--surfaceAlt:rgba(30,42,62,.6);--overlay:rgba(12,20,34,.6);
+ --ink:#eef3fa;--inkMuted:#a9b6c8;--inkInverse:#0b1726;--inkDisabled:#56657a;--line:rgba(255,255,255,.12);--lineStrong:rgba(255,255,255,.25);--focus:#7cb3ff;
+ --accent:#2563eb;--accentHover:#3474f0;--accentPressed:#1d4ed8;--onAccent:#ffffff;
+ --ok:#34d399;--warn:#fbbf24;--danger:#f87171;--info:#60a5fa;--idle:#7c8799;--okSoft:rgba(52,211,153,.16);--warnSoft:rgba(251,191,36,.16);--dangerSoft:rgba(248,113,113,.16);--infoSoft:rgba(96,165,250,.16);
+ --glassTint:rgba(18,28,44,.55);--glassBlur:18px;--glassEdge:rgba(255,255,255,.22);--glassShine:.25;--r1:6px;--r2:10px;--r3:14px;--shadow:0 6px 24px rgba(0,0,0,.45);
+ --map1:#16365e;--map2:#24507f}
+*{box-sizing:border-box}
+body{margin:0;font:13px/1.45 "Segoe UI","Noto Sans KR",system-ui,sans-serif;background:#eceff3;color:#111827}
+header.page{padding:16px;max-width:1280px;margin:0 auto}
+header.page h1{font-size:20px;margin:0 0 4px}
+header.page p{margin:0;color:#4b5563}
+.switch{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.switch button{font:inherit;padding:6px 14px;border-radius:999px;border:1px solid #9ca3af;background:#fff;cursor:pointer}
+.switch button[aria-pressed=true]{background:#111827;color:#fff;border-color:#111827}
+main{max-width:1280px;margin:0 auto;padding:0 16px 48px}
+h2.sec{font-size:15px;margin:28px 0 8px;color:#111827}
+.note{color:#4b5563;margin:0 0 10px}
+/* 네 테마 나란히 */
+.quad{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--gap)}
+.mini{border-radius:10px;overflow:hidden;border:1px solid #c5cad3;background:#fff}
+.mini .cap{padding:6px 10px;font-weight:600;background:#fff;border-bottom:1px solid #e5e7eb;color:#111827}
+/* 틀 그림 */
+.frame{position:relative;height:230px;background:var(--window);color:var(--ink);overflow:hidden;font-size:11px}
+.map{position:absolute;inset:0;background:
+  repeating-linear-gradient(0deg,transparent 0 22px,var(--map1) 22px 24px),
+  repeating-linear-gradient(90deg,transparent 0 22px,var(--map1) 22px 24px),
+  radial-gradient(circle at 60% 55%,var(--map1) 0 18%,transparent 19%),
+  linear-gradient(135deg,var(--map2),var(--map1));}
+.map span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--inkMuted);font-size:12px}
+.bar{position:absolute;background:var(--surface);border-color:var(--line);border-style:solid;border-width:0}
+.glass .bar{background:var(--glassTint);backdrop-filter:blur(var(--glassBlur)) saturate(1.3);-webkit-backdrop-filter:blur(var(--glassBlur)) saturate(1.3);
+  box-shadow:inset 0 1px 0 var(--glassEdge)}
+.glass .bar::before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,255,255,calc(var(--glassShine)*.6)),transparent 55%)}
+.top{left:0;right:0;top:0;height:26px;border-bottom-width:1px;display:flex;align-items:center;padding:0 8px;gap:6px}
+.left{left:0;top:26px;bottom:18px;width:92px;border-right-width:1px;padding:6px}
+.right{right:0;top:26px;bottom:18px;width:120px;border-left-width:1px;padding:6px}
+.bottom{left:0;right:0;bottom:0;height:18px;border-top-width:1px;display:flex;align-items:center;padding:0 6px;gap:6px}
+.solid .map{left:92px;right:120px;top:26px;bottom:18px}
+.mi{height:14px;margin-bottom:4px;border-radius:var(--r1);background:var(--surfaceAlt);border:1px solid var(--line)}
+.mi.on{background:var(--accent);border-color:var(--accent)}
+.inst{height:70px;border-radius:var(--r1);border:1px solid var(--line);background:var(--surfaceAlt);margin-bottom:6px}
+.glass .mi,.glass .inst{background:rgba(255,255,255,.12)}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.logo{width:16px;height:16px;border-radius:4px;background:var(--accent)}
+/* 부품 판 */
+.board{border-radius:12px;overflow:hidden;border:1px solid #c5cad3;margin-top:8px}
+.stage{position:relative;padding:20px;background:var(--window);color:var(--ink)}
+.stage .map{position:absolute;inset:0;opacity:1}
+.glassmode .stage .map{display:block}
+.solidmode .stage .map{display:none}
+.groups{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:var(--gap)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r3);padding:14px;box-shadow:var(--shadow);position:relative}
+.glassmode .card{background:var(--glassTint);backdrop-filter:blur(var(--glassBlur)) saturate(1.3);-webkit-backdrop-filter:blur(var(--glassBlur)) saturate(1.3);box-shadow:var(--shadow),inset 0 1px 0 var(--glassEdge)}
+.card h3{margin:0 0 10px;font-size:13px;color:var(--ink)}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:10px}
+.lbl{color:var(--inkMuted);font-size:11px;min-width:86px}
+.tag{font:11px ui-monospace,Consolas,monospace;color:var(--inkMuted)}
+.btn{font:inherit;border-radius:var(--r2);padding:6px 14px;border:1px solid transparent;cursor:pointer}
+.btn.primary{background:var(--accent);color:var(--onAccent)}
+.btn.primary:hover{background:var(--accentHover)}
+.btn.secondary{background:var(--surfaceAlt);color:var(--ink);border-color:var(--lineStrong)}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.danger{background:var(--danger);color:var(--onDanger)}
+.btn[disabled]{background:var(--surfaceAlt);color:var(--inkDisabled);border-color:var(--line);cursor:not-allowed}
+.btn.focus{outline:2px solid var(--focus);outline-offset:2px}
+.ibtn{width:30px;height:30px;border-radius:var(--r2);display:inline-grid;place-items:center;border:1px solid var(--line);background:var(--surfaceAlt);color:var(--ink)}
+.hold{position:relative;overflow:hidden;width:180px;text-align:center;border-radius:var(--r2);padding:7px;background:var(--dangerSoft);color:var(--danger);border:1px solid var(--danger);font-weight:600}
+.hold i{position:absolute;left:0;top:0;bottom:0;width:58%;background:var(--danger);opacity:.25}
+.pill{border-radius:999px;padding:4px 12px;border:1px solid var(--lineStrong);color:var(--ink);background:transparent}
+.pill.on{background:var(--accent);border-color:var(--accent);color:var(--onAccent)}
+.pg{display:inline-flex;border:1px solid var(--lineStrong);border-radius:999px;overflow:hidden}
+.pg span{padding:4px 12px;color:var(--ink)}.pg span.on{background:var(--accent);color:var(--onAccent)}
+.tg{width:34px;height:18px;border-radius:9px;background:var(--lineStrong);position:relative;display:inline-block}
+.tg::after{content:"";position:absolute;left:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff}
+.tg.on{background:var(--accent)}.tg.on::after{left:18px}
+.box{width:15px;height:15px;border:1.5px solid var(--lineStrong);border-radius:3px;display:inline-grid;place-items:center;font-size:10px;color:var(--onAccent)}
+.box.on{background:var(--accent);border-color:var(--accent)}.box.mid{background:var(--accent);border-color:var(--accent)}
+.rad{width:15px;height:15px;border:1.5px solid var(--lineStrong);border-radius:50%;display:inline-block;position:relative}
+.rad.on{border-color:var(--accent)}.rad.on::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--accent)}
+.field{display:inline-flex;align-items:center;gap:6px;min-width:170px;padding:5px 8px;border-radius:var(--r1);border:1px solid var(--lineStrong);background:var(--surfaceAlt);color:var(--ink)}
+.field.err{border-color:var(--danger);background:var(--dangerSoft)}
+.field .u{color:var(--inkMuted)}
+.err-t{color:var(--danger);font-size:11px}
+.slider{width:160px;height:4px;background:var(--line);border-radius:2px;position:relative}
+.slider b{position:absolute;left:0;top:0;bottom:0;width:62%;background:var(--accent);border-radius:2px}
+.slider i{position:absolute;left:62%;top:50%;width:14px;height:14px;margin:-7px;border-radius:50%;background:var(--surface);border:2px solid var(--accent)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px}
+.chip.ok{background:var(--okSoft);color:var(--ok)}.chip.warn{background:var(--warnSoft);color:var(--warn)}
+.chip.danger{background:var(--dangerSoft);color:var(--danger)}.chip.info{background:var(--infoSoft);color:var(--info)}
+.chip.idle{background:var(--surfaceAlt);color:var(--idle);border:1px solid var(--line)}
+.chip .dot{background:currentColor}
+.badge{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--danger);color:var(--onDanger);font-size:11px;display:inline-grid;place-items:center}
+.tile{display:inline-block;min-width:96px;padding:8px 10px;border-radius:var(--r2);background:var(--surfaceAlt);border:1px solid var(--line)}
+.tile b{display:block;font-size:22px;line-height:1.1}.tile small{color:var(--inkMuted)}
+.kv{display:flex;justify-content:space-between;width:100%;border-bottom:1px solid var(--line);padding:3px 0}.kv span:first-child{color:var(--inkMuted)}
+.lvl{width:200px;height:12px;border-radius:3px;background:var(--surfaceAlt);border:1px solid var(--line);position:relative}
+.lvl::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--lineStrong)}
+.lvl b{position:absolute;left:50%;top:1px;bottom:1px;width:28%;background:var(--accent);border-radius:2px}
+.prog{width:200px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}.prog b{display:block;height:100%;width:45%;background:var(--accent)}
+.spin{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--accent);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+.steps{display:flex;flex-direction:column;gap:4px}.steps div{display:flex;gap:6px;align-items:center}
+.steps .d{color:var(--ok)}.steps .n{color:var(--accent);font-weight:600}.steps .t{color:var(--inkDisabled)}.steps .f{color:var(--danger)}
+.tabs{display:flex;border-bottom:1px solid var(--line);width:100%}.tabs span{padding:6px 12px;color:var(--inkMuted)}
+.tabs span.on{color:var(--ink);box-shadow:inset 0 -2px 0 var(--accent)}
+table{border-collapse:collapse;width:100%;font-size:12px}th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+th{color:var(--inkMuted);font-weight:600}tr:nth-child(even) td{background:var(--surfaceAlt)}tr.sel td{background:var(--infoSoft)}
+.log{font:11px/1.5 ui-monospace,Consolas,monospace;background:var(--surfaceAlt);border:1px solid var(--line);border-radius:var(--r1);padding:6px;width:100%}
+.log .w{color:var(--warn)}.log .e{color:var(--danger)}.log .i{color:var(--inkMuted)}
+.banner{display:flex;gap:8px;align-items:center;width:100%;padding:7px 10px;border-radius:var(--r2);border:1px solid}
+.banner.warn{background:var(--warnSoft);color:var(--warn);border-color:var(--warn)}
+.banner.info{background:var(--infoSoft);color:var(--info);border-color:var(--info)}
+.toast{padding:8px 12px;border-radius:var(--r2);background:var(--ink);color:var(--inkInverse);box-shadow:var(--shadow)}
+.tip{padding:4px 8px;border-radius:var(--r1);background:var(--ink);color:var(--inkInverse);font-size:11px}
+.dlg{border:1px solid var(--line);border-radius:var(--r3);background:var(--surface);padding:12px;width:100%;box-shadow:var(--shadow)}
+.dlg h4{margin:0 0 6px;font-size:13px}.dlg p{margin:0 0 10px;color:var(--inkMuted)}
+.sect{width:100%;font-weight:600;border-bottom:1px solid var(--lineStrong);padding-bottom:3px}
+.gls{width:100%;height:56px;border-radius:var(--r2);position:relative;overflow:hidden;background:var(--glassTint);backdrop-filter:blur(var(--glassBlur));-webkit-backdrop-filter:blur(var(--glassBlur));box-shadow:inset 0 1px 0 var(--glassEdge);border:1px solid var(--line);display:grid;place-items:center;color:var(--inkMuted)}
+.legend{font-size:12px;color:#4b5563;margin-top:6px}
+code{font:12px ui-monospace,Consolas,monospace}
+</style>
+</head>
+<body>
+<header class="page">
+  <h1>0.0.2 테마와 UI 부품 — 설계 그림</h1>
+  <p>스펙 <code>specs/features/0.0.2-theme.md</code>의 그림이에요. 색 값은 제안이고, 이름은 스펙 §3.3 토큰과 같아요. 실제 화면은 Qt(QML)로 그려요.</p>
+</header>
+<main>
+  <h2 class="sec">1. 네 테마 — 틀(상단바·좌 메뉴·가운데·우 사이드바·하단바)</h2>
+  <p class="note">라이트·다크는 0.0.1처럼 나란히 놓여요. 에어로 두 개는 가운데(지도 자리)가 창 전체에 깔리고 바가 그 위에 반투명 유리로 겹쳐, 뒤의 지도 무늬가 흐리게 비쳐요.</p>
+  <div class="quad" id="quad"></div>
+
+  <h2 class="sec">2. UI 부품 목록 패널(갤러리)</h2>
+  <p class="note">좌 메뉴 맨 아래 "UI 부품 목록"을 누르면 나오는 패널의 내용이에요. 위 단추로 테마를 바꿔 보세요. 에어로에서는 카드 바탕이 유리가 돼요.</p>
+  <div class="switch" role="group" aria-label="테마">
+    <button data-t="light" aria-pressed="true">라이트</button>
+    <button data-t="dark" aria-pressed="false">다크</button>
+    <button data-t="aeroLight" aria-pressed="false">에어로 라이트</button>
+    <button data-t="aeroDark" aria-pressed="false">에어로 다크</button>
+  </div>
+  <div class="board solidmode" id="board" data-theme="light">
+    <div class="stage">
+      <div class="map"></div>
+      <div class="groups">
+        <section class="card"><h3>버튼</h3>
+          <div class="row"><span class="lbl">ActionButton</span><button class="btn primary">연결</button><button class="btn secondary">취소</button><button class="btn ghost">자세히</button><button class="btn danger">초기화</button></div>
+          <div class="row"><span class="lbl">상태</span><button class="btn primary" disabled>비활성</button><button class="btn primary focus">초점</button></div>
+          <div class="row"><span class="lbl">IconButton</span><span class="ibtn">⚙</span><span class="ibtn">✕</span><span class="ibtn">🔔</span></div>
+          <div class="row"><span class="lbl">HoldToConfirm</span><span class="hold"><i></i>길게 눌러 시동</span><span class="tag">ui.holdToConfirmMs</span></div>
+        </section>
+        <section class="card"><h3>고르기</h3>
+          <div class="row"><span class="lbl">Pill</span><span class="pill on">PX4</span><span class="pill">ArduPilot</span></div>
+          <div class="row"><span class="lbl">PillGroup</span><span class="pg"><span>X</span><span class="on">Y</span><span>Z</span></span></div>
+          <div class="row"><span class="lbl">Toggle</span><span class="tg on"></span> 켬 <span class="tg"></span> 끔</div>
+          <div class="row"><span class="lbl">CheckRow</span><span class="box on">✓</span> 고름 <span class="box mid">–</span> 일부 <span class="box"></span> 안 고름</div>
+          <div class="row"><span class="lbl">RadioRow</span><span class="rad on"></span> 57600 <span class="rad"></span> 115200</div>
+          <div class="row"><span class="lbl">ComboField</span><span class="field">COM7 <span class="u">▾</span></span></div>
+        </section>
+        <section class="card"><h3>입력</h3>
+          <div class="row"><span class="lbl">TextBox</span><span class="field">기체 1</span></div>
+          <div class="row"><span class="lbl">NumberBox</span><span class="field">12.5 <span class="u">m/s ▴▾</span></span><span class="field err">250 <span class="u">m</span></span><span class="err-t">0~120 사이</span></div>
+          <div class="row"><span class="lbl">SearchBox</span><span class="field">⌕ BATT_ <span class="u">✕</span></span></div>
+          <div class="row"><span class="lbl">SliderField</span><span class="slider"><b></b><i></i></span> 62 %</div>
+          <div class="row"><span class="lbl">FileField</span><span class="field">bluejay_0.21.hex</span><button class="btn secondary">찾아보기</button></div>
+        </section>
+        <section class="card"><h3>표시</h3>
+          <div class="row"><span class="lbl">Chip</span><span class="chip ok"><span class="dot"></span>GPS</span><span class="chip warn"><span class="dot"></span>배터리</span><span class="chip danger"><span class="dot"></span>링크</span><span class="chip info"><span class="dot"></span>정보</span><span class="chip idle"><span class="dot"></span>없음</span></div>
+          <div class="row"><span class="lbl">Badge · Dot</span><span class="badge">3</span><span class="dot" style="background:var(--ok)"></span><span class="dot" style="background:var(--warn)"></span><span class="dot" style="background:var(--danger)"></span></div>
+          <div class="row"><span class="lbl">ValueTile</span><span class="tile"><b>15.8</b><small>V · 배터리</small></span><span class="tile"><b>42</b><small>m · 고도</small></span></div>
+          <div class="row"><span class="lbl">KeyValueRow</span><div style="flex:1"><div class="kv"><span>펌웨어</span><span>PX4 1.17.0</span></div><div class="kv"><span>보드</span><span>H743</span></div></div></div>
+          <div class="row"><span class="lbl">LevelBar</span><span class="lvl"><b></b></span> CH3 +56</div>
+          <div class="row"><span class="lbl">ProgressLine</span><span class="prog"><b></b></span> 45 % <span class="spin" aria-label="BusySpinner"></span></div>
+          <div class="row"><span class="lbl">StepList</span><div class="steps"><div class="d">✓ 수평</div><div class="n">● 왼쪽 옆</div><div class="t">○ 오른쪽 옆</div><div class="f">✕ 뒤집기 실패</div></div></div>
+        </section>
+        <section class="card"><h3>묶음</h3>
+          <div class="row"><span class="sect">Section 머리글</span></div>
+          <div class="row"><div class="tabs"><span class="on">계기</span><span>개요</span><span>메시지</span></div></div>
+          <div class="row"><table><thead><tr><th>이름</th><th>값</th><th>단위 ▾</th></tr></thead><tbody><tr><td>BAT_V_CHARGED</td><td>4.20</td><td>V</td></tr><tr class="sel"><td>BAT_N_CELLS</td><td>4</td><td></td></tr><tr><td>MPC_XY_VEL_MAX</td><td>12.0</td><td>m/s</td></tr></tbody></table></div>
+          <div class="row"><div class="log"><div class="i">08:12:01 연결: COM7 57600</div><div>08:12:02 하트비트 수신</div><div class="w">08:12:05 GPS 위성 6개</div><div class="e">08:12:09 보정 실패: 흔들림</div></div></div>
+          <div class="row"><div class="gls">GlassSurface — 뒤가 흐리게 비침(에어로)</div></div>
+        </section>
+        <section class="card"><h3>알림</h3>
+          <div class="row"><div class="banner warn">⚠ 시동 중에는 펌웨어를 굽지 않아요.<span style="margin-left:auto">✕</span></div></div>
+          <div class="row"><div class="banner info">ℹ 새 펌웨어가 있어요.</div></div>
+          <div class="row"><span class="toast">파라미터 저장했어요</span><span class="tip">설정 열기</span></div>
+          <div class="row"><div class="dlg"><h4>파라미터를 초기화할까요?</h4><p>기체의 모든 값이 기본값으로 돌아가요.</p><button class="btn danger">초기화</button> <button class="btn secondary">취소</button></div></div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <p class="legend">부품 이름은 스펙 §3.5 표와 같아요. TimerBox는 보이지 않는 부품이라 그림에 없어요. JobView는 펌웨어 굽기 버전에서 만들어요.</p>
+</main>
+<script>
+const names={light:"라이트",dark:"다크",aeroLight:"에어로 라이트",aeroDark:"에어로 다크"};
+const quad=document.getElementById("quad");
+for(const t of Object.keys(names)){
+  const glass=t.startsWith("aero");
+  const el=document.createElement("div");el.className="mini";
+  el.innerHTML=`<div class="cap">${names[t]} <span style="font-weight:400;color:#6b7280">(${t})</span></div>
+  <div class="frame ${glass?"glass":"solid"}" data-theme="${t}">
+    <div class="map"><span>지도</span></div>
+    <div class="bar top"><span class="logo"></span><span style="margin-left:auto;color:var(--inkMuted)">상단바</span></div>
+    <div class="bar left"><div class="mi on"></div><div class="mi"></div><div class="mi"></div><div class="mi"></div><div class="mi"></div><div class="mi"></div></div>
+    <div class="bar right"><div class="inst"></div><div class="mi"></div><div class="mi"></div></div>
+    <div class="bar bottom"><span class="dot" style="background:var(--ok)"></span><span class="dot" style="background:var(--warn)"></span><span style="color:var(--inkMuted)">하단바</span></div>
+  </div>`;
+  quad.appendChild(el);
+}
+const board=document.getElementById("board");
+document.querySelectorAll(".switch button").forEach(b=>b.addEventListener("click",()=>{
+  const t=b.dataset.t;board.dataset.theme=t;
+  board.className="board "+(t.startsWith("aero")?"glassmode":"solidmode");
+  document.querySelectorAll(".switch button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+}));
+const start=new URLSearchParams(location.search).get("t");
+if(start&&names[start])document.querySelector(`.switch button[data-t="${start}"]`).click();
+</script>
+</body>
+</html>

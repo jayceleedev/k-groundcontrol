@@ -11,6 +11,7 @@ qt_add_qml_module(kgc_shell STATIC URI Kgc.Shell
     QML_FILES ui/Shell.qml ui/TopBar.qml ui/LeftMenu.qml ui/CenterArea.qml ui/RightBar.qml ui/BottomBar.qml
     SOURCES ${headers} internal/ShellService.cpp internal/Events.h
         ui/ShellController.h ui/ShellController.cpp ui/register.cpp)
-target_include_directories(kgc_shell PUBLIC api "${CMAKE_BINARY_DIR}/gen" PRIVATE internal ui)
+target_include_directories(kgc_shell PUBLIC api PRIVATE internal ui)
 target_link_libraries(kgc_shell PUBLIC kgc_app_errors kgc_app_i18n kgc_ui
-    PRIVATE kgc_app_log kgc_app_settings kgc_app_paths)
+    PRIVATE kgc_app_log kgc_app_paths)
+kgc_use_settings(kgc_shell shell)

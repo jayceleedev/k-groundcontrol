@@ -27,10 +27,10 @@ public:
     QVariant value(const QString& id) const;
 /** 설정을 저장하고 변경을 알려요.
  * 입력: 설정 식별자와 값.
- * 출력: 없음.
- * 실패: 미등록 식별자 또는 잘못된 형은 무시.
+ * 출력: 저장을 허용하면 참.
+ * 실패: 미등록 식별자, 잘못된 열거 값, 범위 밖 숫자는 거짓.
  */
-    void setValue(const QString& id, const QVariant& value);
+    bool setValue(const QString& id, const QVariant& value);
 /** 전체 설정 정의를 읽어요.
  * 입력: 없음.
  * 출력: 생성기가 모은 메타데이터.

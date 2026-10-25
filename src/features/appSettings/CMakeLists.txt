@@ -6,6 +6,7 @@ qt_add_qml_module(kgc_appSettings STATIC URI Kgc.AppSettings
     QML_FILES ui/AppSettingsPanel.qml
     SOURCES ${headers} internal/AppSettingsService.cpp internal/Events.h
         ui/AppSettingsController.h ui/AppSettingsController.cpp ui/register.cpp)
-target_include_directories(kgc_appSettings PUBLIC api "${CMAKE_BINARY_DIR}/gen" PRIVATE internal ui)
+target_include_directories(kgc_appSettings PUBLIC api PRIVATE internal ui)
 target_link_libraries(kgc_appSettings PUBLIC kgc_app_errors kgc_app_i18n kgc_ui
-    PRIVATE kgc_app_log kgc_app_settings )
+    PRIVATE kgc_app_log )
+kgc_use_settings(kgc_appSettings appSettings)

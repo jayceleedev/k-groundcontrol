@@ -4,7 +4,6 @@
 #include <kgc/appSettings/Settings.h>
 #include <QFile>
 #include <QLocale>
-#include <QJsonObject>
 namespace kgc::appSettings {
 AppSettingsController::AppSettingsController(AppSettingsService& service) : QObject(&service), service_(service)
 {
@@ -24,13 +23,7 @@ QString AppSettingsController::noticesText() const
 }
 QStringList AppSettingsController::languages() const
 {
-    QStringList result;
-    for (const auto& definition : kgc::app::settings::Settings::instance().definitions()) {
-        const auto entry = definition.toObject();
-        if (entry.value("category").toString() == "appSettings")
-            for (const auto& code : entry.value("enum").toArray()) result.append(code.toString());
-    }
-    return result;
+    return settings::languageValues();
 }
 QString AppSettingsController::language() const { return settings::toString(settings::language()); }
 QString AppSettingsController::languageName(const QString& code) const { return QLocale(code).nativeLanguageName(); }

@@ -1,7 +1,6 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #include <kgc/app/boot/BootOptions.h>
 #include <QCommandLineParser>
-#include <QCoreApplication>
 #include <QDir>
 #include <QSettings>
 #include <QStandardPaths>
@@ -11,10 +10,9 @@ BootOptions BootOptions::parse(const QStringList& args)
     QSettings ini(QDir(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation))
                       .filePath("kgc.ini"), QSettings::IniFormat);
     QCommandLineParser parser;
-    parser.addHelpOption();
-    parser.addVersionOption();
-    parser.addOption({"log-level", QCoreApplication::translate("BootOptions", "로그 수준"), "level"});
-    parser.addOption({"data-dir", QCoreApplication::translate("BootOptions", "데이터 폴더"), "path"});
+    // 터미널용 설명은 화면 번역과 분리해 한국어 원문으로 유지해요.
+    parser.addOption({"log-level", "로그 수준", "level"});
+    parser.addOption({"data-dir", "데이터 폴더", "path"});
     parser.process(args);
     BootOptions options;
     options.logLevel = parser.isSet("log-level") ? parser.value("log-level")

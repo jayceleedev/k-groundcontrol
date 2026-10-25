@@ -1,13 +1,11 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #include <kgc/app/paths/Paths.h>
 #include <QDir>
-#include <QStandardPaths>
 namespace kgc::app::paths {
 namespace { QString root; }
 void Paths::init(const QString& dataDir)
 {
-    root = QDir(dataDir.isEmpty() ? QStandardPaths::writableLocation(
-        QStandardPaths::AppLocalDataLocation) : dataDir).absolutePath();
+    root = QDir(dataDir).absolutePath();
 }
 QString Paths::dataDir() { return root; }
 QString Paths::directory(const QString& relative)

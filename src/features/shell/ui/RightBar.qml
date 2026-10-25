@@ -1,11 +1,10 @@
-// [0.0.1 T4–T9] specs/features/0.0.1-shell.md
+// [0.0.2 T8 T14 T18] specs/features/0.0.2-theme.md
 import QtQuick
 import Kgc.Ui
-Rectangle {
+GlassSurface {
     objectName: "rightBar"
     width: Theme.rightBarWidth
-    color: Theme.region
-    border.color: Theme.line
+    solidColor: Theme.region
     Rectangle {
         id: instrument
         objectName: "instrumentPlaceholder"

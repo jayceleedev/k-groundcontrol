@@ -1,14 +1,13 @@
-// [0.0.1 T4–T9] specs/features/0.0.1-shell.md
+// [0.0.2 T8 T14 T18] specs/features/0.0.2-theme.md
 import QtQuick
 import QtQuick.Controls
 import Kgc.Ui
-Rectangle {
+GlassSurface {
     id: menu
     objectName: "leftMenu"
     width: shellController.leftMenuCollapsed ? Theme.leftMenuCollapsedWidth : Theme.leftMenuWidth
-    color: Theme.region
-    border.color: Theme.line
-    ToolButton {
+    solidColor: Theme.region
+    IconButton {
         id: collapse
         objectName: "leftMenuCollapse"
         anchors.top: parent.top
@@ -16,7 +15,8 @@ Rectangle {
         anchors.margins: Theme.inset
         width: Theme.menuHeight
         height: Theme.menuHeight
-        text: shellController.leftMenuCollapsed ? qsTr("▶") : qsTr("◀")
+        name: shellController.leftMenuCollapsed ? "chevron-right" : "chevron-left"
+        hint: shellController.leftMenuCollapsed ? qsTr("메뉴 펼치기") : qsTr("메뉴 접기")
         onClicked: shellController.leftMenuCollapsed = !shellController.leftMenuCollapsed
     }
     Flickable {
@@ -44,37 +44,18 @@ Rectangle {
                     }
                     width: entries.width
                     spacing: Theme.menuGap
-                    Button {
+                    ActionButton {
+                        id: menuButton
                         objectName: "menuItem_" + entry.panelId
                         width: parent.width
                         height: Theme.menuHeight
-                        padding: Theme.inset
-                        text: entry.menuTitle
+                        text: shellController.leftMenuCollapsed ? "" : entry.menuTitle
+                        kind: shellController.activePanelId === entry.panelId ? "primary" : "secondary"
+                        icon.source: entry.model.icon
+                        icon.color: Theme.ink
                         Accessible.name: entry.menuTitle
-                        ToolTip.text: entry.menuTitle
-                        ToolTip.visible: hovered && shellController.leftMenuCollapsed
+                        HintTip { text: entry.menuTitle; visible: menuButton.hovered && shellController.leftMenuCollapsed }
                         onClicked: shellController.togglePanel(entry.panelId)
-                        background: Rectangle {
-                            color: shellController.activePanelId === entry.panelId ? Theme.accent : Theme.surface
-                            border.color: Theme.line
-                        }
-                        contentItem: Row {
-                            spacing: Theme.inset
-                            Image {
-                                width: Theme.iconSize
-                                height: Theme.iconSize
-                                anchors.verticalCenter: parent.verticalCenter
-                                source: entry.model.icon
-                                fillMode: Image.PreserveAspectFit
-                            }
-                            Text {
-                                visible: !shellController.leftMenuCollapsed
-                                anchors.verticalCenter: parent.verticalCenter
-                                text: entry.menuTitle
-                                font.pixelSize: Theme.fontSize
-                                color: shellController.activePanelId === entry.panelId ? Theme.surface : Theme.ink
-                            }
-                        }
                     }
                     Rectangle {
                         // 메뉴 표의 묶음이 1·2·3 순서여서 끝나는 묶음 번호가 구분선 순번과 같아요.

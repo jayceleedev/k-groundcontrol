@@ -1,13 +1,16 @@
-// [0.0.1 T4–T9] specs/features/0.0.1-shell.md
+// [0.0.2 T8 T14 T18] specs/features/0.0.2-theme.md
 import QtQuick
 import QtQuick.Controls
 import QtQml.Models
 import Kgc.Ui
-Rectangle {
+Item {
     id: center
     objectName: "centerArea"
-    color: Theme.window
-    border.color: Theme.line
+    property alias mapStage: stage
+    property real viewportLeft: 0
+    property real viewportRight: 0
+    property real viewportTop: 0
+    property real viewportBottom: 0
     property var selectedPanel: {
         const panelId = shellController.activePanelId
         for (let i = 0; i < panels.count; ++i) {
@@ -31,73 +34,102 @@ Rectangle {
             property url component: model.component
         }
     }
-    Text {
-        objectName: "mapPlaceholder"
-        anchors.centerIn: parent
-        text: qsTr("지도")
-        color: Theme.inkMuted
-        font.pixelSize: Theme.titleSize
-    }
-    Repeater { model: mapLayerSlot; delegate: Item {} }
-    Rectangle {
-        id: overlay
-        objectName: "panelOverlay"
+    Item {
+        id: stage
+        objectName: "mapStage"
         anchors.fill: parent
-        anchors.margins: Theme.panelInset
-        visible: center.selectedPanel !== null
-        color: Theme.surface
-        border.color: Theme.line
-        Item {
-            id: header
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            height: Theme.panelHeaderHeight
-            Text {
-                objectName: "panelTitle"
+        Canvas {
+            objectName: "mapPlaceholder"
+            anchors.fill: parent
+            property color patternA: Theme.mapPatternA
+            property color patternB: Theme.mapPatternB
+            property real cellSize: Theme.inset * 3
+            onPatternAChanged: requestPaint()
+            onPatternBChanged: requestPaint()
+            onCellSizeChanged: requestPaint()
+            onWidthChanged: requestPaint()
+            onHeightChanged: requestPaint()
+            onPaint: {
+                const ctx = getContext("2d")
+                for (let y = 0; y < height; y += cellSize) {
+                    for (let x = 0; x < width; x += cellSize) {
+                        ctx.fillStyle = ((x / cellSize + y / cellSize) % 2) ? patternA : patternB
+                        ctx.fillRect(x, y, cellSize, cellSize)
+                    }
+                }
+            }
+        }
+        Repeater { model: mapLayerSlot; delegate: Item {} }
+    }
+    Item {
+        objectName: "centerViewport"
+        anchors.fill: parent
+        anchors.leftMargin: center.viewportLeft
+        anchors.rightMargin: center.viewportRight
+        anchors.topMargin: center.viewportTop
+        anchors.bottomMargin: center.viewportBottom
+        Text { anchors.centerIn: parent; text: qsTr("지도"); color: Theme.inkMuted; font.pixelSize: Theme.titleSize }
+        GlassSurface {
+            id: overlay
+            source: stage
+            objectName: "panelOverlay"
+            anchors.fill: parent
+            anchors.margins: Theme.panelInset
+            visible: center.selectedPanel !== null
+            Item {
+                id: header
+                anchors.top: parent.top
                 anchors.left: parent.left
-                anchors.leftMargin: Theme.panelInset
-                anchors.verticalCenter: parent.verticalCenter
-                text: center.panelTitle
-                color: Theme.ink
-                font.pixelSize: Theme.titleSize
-                font.bold: true
-            }
-            ToolButton {
-                objectName: "panelClose"
                 anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                width: Theme.panelCloseSize
-                height: Theme.panelCloseSize
-                text: qsTr("✕")
-                ToolTip.text: qsTr("닫기")
-                Accessible.name: qsTr("닫기")
-                onClicked: shellController.togglePanel(shellController.activePanelId)
+                height: Theme.panelHeaderHeight
+                Text {
+                    objectName: "panelTitle"
+                    anchors.left: parent.left
+                    anchors.leftMargin: Theme.panelInset
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: center.panelTitle
+                    color: Theme.ink
+                    font.pixelSize: Theme.titleSize
+                    font.bold: true
+                }
+                IconButton {
+                    objectName: "panelClose"
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: Theme.panelCloseSize
+                    height: Theme.panelCloseSize
+                    name: "x"
+                    hint: qsTr("닫기")
+                    onClicked: shellController.togglePanel(shellController.activePanelId)
+                }
             }
-        }
-        Text {
-            objectName: "placeholderBody"
-            anchors.centerIn: parent
-            visible: overlay.visible && loader.source.toString() === ""
-            text: center.panelTitle + "\n" + qsTr("준비 중")
-            horizontalAlignment: Text.AlignHCenter
-            color: Theme.inkMuted
-            font.pixelSize: Theme.fontSize
-        }
-        Loader {
-            id: loader
-            anchors.top: header.bottom
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: Theme.inset
-            source: center.selectedPanel ? center.selectedPanel.component : ""
-            onLoaded: item.onArg(shellController.panelArg)
-        }
-        Connections {
-            target: shellController
-            function onPanelArgRequested(id, arg) {
-                if (id === shellController.activePanelId && loader.item) loader.item.onArg(arg)
+            Text {
+                objectName: "placeholderBody"
+                anchors.centerIn: parent
+                visible: overlay.visible && loader.source.toString() === ""
+                text: center.panelTitle + "\n" + qsTr("준비 중")
+                horizontalAlignment: Text.AlignHCenter
+                color: Theme.inkMuted
+                font.pixelSize: Theme.fontSize
+            }
+            Loader {
+                id: loader
+                anchors.top: header.bottom
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.margins: Theme.inset
+                source: center.selectedPanel ? center.selectedPanel.component : ""
+                onLoaded: {
+                    if ("source" in item) item.source = stage
+                    item.onArg(shellController.panelArg)
+                }
+            }
+            Connections {
+                target: shellController
+                function onPanelArgRequested(id, arg) {
+                    if (id === shellController.activePanelId && loader.item) loader.item.onArg(arg)
+                }
             }
         }
     }

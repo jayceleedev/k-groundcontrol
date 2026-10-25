@@ -13,7 +13,13 @@ Rectangle {
     id: surface
     property Item source: null
     property color solidColor: Theme.surface
-    readonly property point sourcePosition: source ? mapToItem(source, 0, 0) : Qt.point(0, 0)
+    readonly property point sourcePosition: {
+        // 스크롤과 조상 배치가 바뀌어도 지도와 같은 위치를 비추도록 좌표를 구독해요.
+        let ancestor = surface
+        let position = Qt.point(0, 0)
+        while (ancestor) { position = Qt.point(position.x + ancestor.x, position.y + ancestor.y); ancestor = ancestor.parent }
+        return source ? mapToItem(source, 0, 0) : position
+    }
     color: Theme.glass ? "transparent" : solidColor
     clip: true
     ShaderEffectSource {

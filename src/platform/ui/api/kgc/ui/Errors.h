@@ -18,7 +18,8 @@ inline kgc::app::errors::ErrorCode make(UiError error) { return {kModuleId, stat
  */
 inline QString errorText(kgc::app::errors::ErrorCode error)
 {
+    const auto message = QT_TRANSLATE_NOOP("Ui", "같은 패널이 이미 등록되어 있어요.");
     return error == make(UiError::DuplicateId)
-        ? QCoreApplication::translate("Ui", QT_TRANSLATE_NOOP("Ui", "같은 패널이 이미 등록되어 있어요.")) : QString{};
+        ? QCoreApplication::translate("Ui", message) : QString{};
 }
 }

@@ -1,6 +1,10 @@
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
+// [0.0.2 T24] specs/features/0.0.2-theme.md
 #pragma once
 #include <QObject>
+#include <QSet>
+#include <QStringList>
+#include <QUrl>
 namespace kgc::ui {
     /** 공유 화면 설정을 화면에 노출해요.
      * 입력: 없음.
@@ -12,6 +16,10 @@ class UiSettingValues : public QObject {
     Q_PROPERTY(int holdToConfirmMs READ holdToConfirmMs WRITE setHoldToConfirmMs NOTIFY holdToConfirmMsChanged)
     Q_PROPERTY(int holdToConfirmMsMin READ holdToConfirmMsMin CONSTANT)
     Q_PROPERTY(int holdToConfirmMsMax READ holdToConfirmMsMax CONSTANT)
+    Q_PROPERTY(QString backgroundKind READ backgroundKind WRITE setBackgroundKind NOTIFY backgroundKindChanged)
+    Q_PROPERTY(QString backgroundImage READ backgroundImage WRITE setBackgroundImage NOTIFY backgroundImageChanged)
+    Q_PROPERTY(QStringList backgroundKinds READ backgroundKinds CONSTANT)
+    Q_PROPERTY(QUrl backgroundImageSource READ backgroundImageSource NOTIFY backgroundImageChanged)
 public:
     /** 설정 변경을 구독해요.
      * 입력: 부모 객체.
@@ -45,6 +53,53 @@ public:
      * 1. settings::setHoldToConfirmMs — 메타데이터 범위를 지켜 시간을 저장해요.
      */
     void setHoldToConfirmMs(int value);
+    /** 저장된 배경 종류를 읽어요.
+     * 입력: 없음.
+     * 출력: 배경 종류 식별자.
+     * 실패: 없음.
+     */
+    QString backgroundKind() const;
+    /** 저장된 사진 경로를 읽어요.
+     * 입력: 없음.
+     * 출력: 사진 파일의 절대 경로.
+     * 실패: 없음.
+     */
+    QString backgroundImage() const;
+    /** 메타데이터의 배경 종류 목록을 읽어요.
+     * 입력: 없음.
+     * 출력: 선택 순서대로 나열한 식별자.
+     * 실패: 없음.
+     */
+    QStringList backgroundKinds() const;
+    /** 특수 문자가 있는 사진 경로도 화면에서 열 수 있게 변환해요.
+     * 입력: 없음.
+     * 출력: 로컬 파일 주소, 경로가 비면 빈 주소.
+     * 실패: 파일 읽기 실패는 그리는 쪽에서 알려요.
+     */
+    QUrl backgroundImageSource() const;
+    /** 선택한 배경 종류를 저장해요.
+     * 입력: 배경 종류 식별자.
+     * 출력: 없음.
+     * 실패: 목록에 없는 값은 무시해요.
+     * 흐름:
+     * 1. settings::setBackgroundKind — 메타데이터에 있는 배경 종류를 저장해요.
+     */
+    void setBackgroundKind(const QString& value);
+    /** 입력하거나 선택한 사진의 로컬 경로를 저장해요.
+     * 입력: 파일 경로 또는 파일 선택 대화 상자의 로컬 주소.
+     * 출력: 없음.
+     * 실패: 원격 주소는 무시해요.
+     * 흐름:
+     * 1. QUrl::toLocalFile — 파일 선택 주소라면 로컬 경로로 바꿔요.
+     * 2. settings::setBackgroundImage — 절대 경로를 저장해요.
+     */
+    void setBackgroundImage(const QString& value);
+    /** 사진을 읽지 못한 경로를 한 번만 기록해요.
+     * 입력: 읽기를 시도한 사진 경로.
+     * 출력: 없음.
+     * 실패: 없음.
+     */
+    Q_INVOKABLE void reportBackgroundImageMissing(const QString& path);
 signals:
     /** 시간 설정의 변경을 알려요.
      * 입력: 없음.
@@ -52,5 +107,19 @@ signals:
      * 실패: 없음.
      */
     void holdToConfirmMsChanged();
+    /** 배경 종류 변경을 알려요.
+     * 입력: 없음.
+     * 출력: 없음.
+     * 실패: 없음.
+     */
+    void backgroundKindChanged();
+    /** 사진 경로와 화면 주소 변경을 알려요.
+     * 입력: 없음.
+     * 출력: 없음.
+     * 실패: 없음.
+     */
+    void backgroundImageChanged();
+private:
+    QSet<QString> warnedImagePaths_;
 };
 }

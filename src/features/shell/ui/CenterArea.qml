@@ -1,4 +1,5 @@
 // [0.0.2 T8 T14 T18] specs/features/0.0.2-theme.md
+// [0.0.2 T24] specs/features/0.0.2-theme.md
 import QtQuick
 import QtQuick.Controls
 import QtQml.Models
@@ -38,24 +39,49 @@ Item {
         id: stage
         objectName: "mapStage"
         anchors.fill: parent
-        Canvas {
-            objectName: "mapPlaceholder"
+        Rectangle {
+            objectName: "backgroundLayer"
             anchors.fill: parent
-            property color patternA: Theme.mapPatternA
-            property color patternB: Theme.mapPatternB
-            property real cellSize: Theme.inset * 3
-            onPatternAChanged: requestPaint()
-            onPatternBChanged: requestPaint()
-            onCellSizeChanged: requestPaint()
-            onWidthChanged: requestPaint()
-            onHeightChanged: requestPaint()
-            onPaint: {
-                const ctx = getContext("2d")
-                for (let y = 0; y < height; y += cellSize) {
-                    for (let x = 0; x < width; x += cellSize) {
-                        ctx.fillStyle = ((x / cellSize + y / cellSize) % 2) ? patternA : patternB
-                        ctx.fillRect(x, y, cellSize, cellSize)
+            color: Theme.window
+            Canvas {
+                objectName: "mapPlaceholder"
+                anchors.fill: parent
+                visible: uiSettingValues.backgroundKind === "checker"
+                property color patternA: Theme.mapPatternA
+                property color patternB: Theme.mapPatternB
+                property real cellSize: Theme.inset * 3
+                onPatternAChanged: requestPaint()
+                onPatternBChanged: requestPaint()
+                onCellSizeChanged: requestPaint()
+                onWidthChanged: requestPaint()
+                onHeightChanged: requestPaint()
+                onPaint: {
+                    const ctx = getContext("2d")
+                    for (let y = 0; y < height; y += cellSize) {
+                        for (let x = 0; x < width; x += cellSize) {
+                            ctx.fillStyle = ((x / cellSize + y / cellSize) % 2) ? patternA : patternB
+                            ctx.fillRect(x, y, cellSize, cellSize)
+                        }
                     }
+                }
+            }
+            Image {
+                id: backgroundImage
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                source: uiSettingValues.backgroundKind === "image" ? uiSettingValues.backgroundImageSource : ""
+                visible: status === Image.Ready
+                // 빈 경로에는 읽기 오류 시그널이 없으므로 별도로 같은 경고 통로를 써요.
+                function reportMissing() {
+                    if (uiSettingValues.backgroundKind === "image"
+                            && (status === Image.Error || uiSettingValues.backgroundImage === ""))
+                        uiSettingValues.reportBackgroundImageMissing(uiSettingValues.backgroundImage)
+                }
+                onStatusChanged: reportMissing()
+                Component.onCompleted: reportMissing()
+                Connections {
+                    target: uiSettingValues
+                    function onBackgroundKindChanged() { backgroundImage.reportMissing() }
                 }
             }
         }

@@ -1,7 +1,7 @@
 # appSettings (기능 순위 2)
-역할: 언어·테마·길게 누르기 설정과 배포 정보를 제공해요.
+역할: 언어·테마·배경·길게 누르기 설정과 배포 정보를 제공해요.
 수명: 전역.
-받는 것: Translator, AppInfo, appSettings.language, ThemeSwitcher(테마 목록과 currentIndex), UiSettingValues.
+받는 것: Translator, AppInfo, appSettings.language, ThemeSwitcher(테마 목록과 currentIndex), UiSettingValues(배경 종류·사진 경로 포함).
 주는 것: AppSettingsService, AppInfo, registerUi.
 기여: 좌 메뉴 15번 앱 설정 패널과 컨트롤러.
 의존: app/errors, app/i18n, app/log, app/settings(생성 접근자의 공개 의존), ui.

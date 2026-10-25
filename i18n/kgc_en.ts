@@ -4,60 +4,91 @@
 <context>
     <name>AppSettingsPanel</name>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="19"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="21"/>
         <source>언어</source>
         <translation>Language</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="20"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="22"/>
         <source>시스템 따라감</source>
         <translation>Follow system</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="27"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="29"/>
         <source>테마</source>
         <translation>Theme</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="35"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="37"/>
+        <source>배경</source>
+        <translation>Background</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="40"/>
+        <source>민무늬</source>
+        <translation>Plain</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="40"/>
+        <source>체크무늬</source>
+        <translation>Checker</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="40"/>
+        <source>사진</source>
+        <translation>Photo</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="44"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="85"/>
+        <source>배경 사진</source>
+        <translation>Background image</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="51"/>
         <source>길게 눌러 확인 시간</source>
         <translation>Hold-to-confirm time</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="41"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="57"/>
         <source>ms</source>
         <translation>ms</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="48"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="64"/>
         <source>정보</source>
         <translation>About</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="51"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="67"/>
         <source>버전</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="54"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="76"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="70"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="101"/>
         <source>라이선스 보기</source>
         <translation>View license</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="55"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="100"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="71"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="125"/>
         <source>고지 보기</source>
         <translation>View notices</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="56"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="72"/>
         <source>소스</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="77"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="101"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="86"/>
+        <source>사진 (*.png *.jpg *.jpeg)</source>
+        <translation>Images (*.png *.jpg *.jpeg)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="102"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="126"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
@@ -91,17 +122,17 @@
 <context>
     <name>CenterArea</name>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="71"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="97"/>
         <source>지도</source>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="102"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="128"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="110"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="136"/>
         <source>준비 중</source>
         <translation>Coming soon</translation>
     </message>
@@ -135,7 +166,7 @@
 <context>
     <name>FileField</name>
     <message>
-        <location filename="../src/platform/ui/components/FileField.qml" line="17"/>
+        <location filename="../src/platform/ui/components/FileField.qml" line="18"/>
         <source>찾아보기</source>
         <translation>Browse</translation>
     </message>
@@ -143,47 +174,47 @@
 <context>
     <name>GalleryButtons</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="6"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="5"/>
         <source>버튼</source>
         <translation>Buttons</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="9"/>
         <source>연결</source>
         <translation>Connect</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="11"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="10"/>
         <source>취소</source>
         <translation>Cancel</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="11"/>
         <source>자세히</source>
         <translation>Details</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="13"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="12"/>
         <source>초기화</source>
         <translation>Reset</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="13"/>
         <source>비활성</source>
         <translation>Disabled</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="14"/>
         <source>설정 열기</source>
         <translation>Open settings</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="16"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="15"/>
         <source>길게 눌러 확인</source>
         <translation>Hold to confirm</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="17"/>
+        <location filename="../src/features/uiGallery/ui/GalleryButtons.qml" line="16"/>
         <source>확인됨</source>
         <translation>Confirmed</translation>
     </message>
@@ -191,67 +222,67 @@
 <context>
     <name>GalleryCharts</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="6"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="5"/>
         <source>차트</source>
         <translation>Charts</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="11"/>
         <source>목표</source>
         <translation>Target</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="11"/>
         <source>실제</source>
         <translation>Actual</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
         <source>앞</source>
         <translation>Front</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
         <source>뒤</source>
         <translation>Rear</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
         <source>왼쪽</source>
         <translation>Left</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
         <source>오른쪽</source>
         <translation>Right</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
         <source>출력</source>
         <translation>Output</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>사용</source>
         <translation>Used</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>남음</source>
         <translation>Remaining</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>70%</source>
         <translation>70%</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>% 배터리</source>
         <translation>% battery</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="24"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
         <source>A</source>
         <translation>A</translation>
     </message>
@@ -259,87 +290,87 @@
 <context>
     <name>GalleryChoices</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="6"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="5"/>
         <source>고르기</source>
         <translation>Choices</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="9"/>
         <source>선택됨</source>
         <translation>Selected</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="11"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="10"/>
         <source>선택 안 됨</source>
         <translation>Not selected</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="11"/>
         <source>가로</source>
         <translation>Horizontal</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="11"/>
         <source>세로</source>
         <translation>Vertical</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="11"/>
         <source>높이</source>
         <translation>Height</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="13"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="12"/>
         <source>켬</source>
         <translation>On</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="13"/>
         <source>끔</source>
         <translation>Off</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="14"/>
         <source>비활성</source>
         <translation>Disabled</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="16"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="15"/>
         <source>고름</source>
         <translation>Checked</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="17"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="16"/>
         <source>일부</source>
         <translation>Partial</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="18"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="17"/>
         <source>안 고름</source>
         <translation>Unchecked</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="19"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="18"/>
         <source>첫째</source>
         <translation>First</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="20"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="19"/>
         <source>둘째</source>
         <translation>Second</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="20"/>
         <source>연결 포트</source>
         <translation>Connection port</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="20"/>
         <source>자동</source>
         <translation>Automatic</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="20"/>
         <source>직접 선택</source>
         <translation>Choose manually</translation>
     </message>
@@ -347,92 +378,92 @@
 <context>
     <name>GalleryContainers</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="8"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="7"/>
         <source>묶음</source>
         <translation>Containers</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="9"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="8"/>
         <source>센서</source>
         <translation>Sensors</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="9"/>
         <source>계기</source>
         <translation>Instruments</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="9"/>
         <source>개요</source>
         <translation>Overview</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="9"/>
         <source>메시지</source>
         <translation>Messages</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="13"/>
         <source>이름</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="13"/>
         <source>값</source>
         <translation>Value</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="13"/>
         <source>단위</source>
         <translation>Unit</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
         <source>배터리 전압</source>
         <translation>Battery voltage</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
         <source>V</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
         <source>셀 수</source>
         <translation>Cell count</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
         <source>최대 속도</source>
         <translation>Maximum speed</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="14"/>
         <source>m/s</source>
         <translation>m/s</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="24"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="23"/>
         <source>포트 열기 시도</source>
         <translation>Attempting to open port</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="24"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="23"/>
         <source>연결 완료</source>
         <translation>Connected</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="25"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="24"/>
         <source>위성 수 부족</source>
         <translation>Too few satellites</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="25"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="24"/>
         <source>보정 실패: 흔들림</source>
         <translation>Calibration failed: movement</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="33"/>
+        <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="32"/>
         <source>에어로에서는 뒤가 흐리게 비쳐요</source>
         <translation>Aero blurs the background</translation>
     </message>
@@ -440,72 +471,72 @@
 <context>
     <name>GalleryIndicators</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="6"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="5"/>
         <source>표시</source>
         <translation>Indicators</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="9"/>
         <source>정상</source>
         <translation>OK</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="11"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="10"/>
         <source>주의</source>
         <translation>Warning</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="11"/>
         <source>위험</source>
         <translation>Danger</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="13"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="12"/>
         <source>정보</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="13"/>
         <source>없음</source>
         <translation>None</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="17"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="16"/>
         <source>V</source>
         <translation>V</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="17"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="16"/>
         <source>배터리</source>
         <translation>Battery</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="18"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="17"/>
         <source>연결 상태</source>
         <translation>Connection status</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="18"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="17"/>
         <source>연결됨</source>
         <translation>Connected</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="25"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="24"/>
         <source>수평</source>
         <translation>Level</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="25"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="24"/>
         <source>왼쪽 옆</source>
         <translation>Left side</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="26"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="25"/>
         <source>오른쪽 옆</source>
         <translation>Right side</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="26"/>
+        <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="25"/>
         <source>뒤집기 실패</source>
         <translation>Inversion failed</translation>
     </message>
@@ -513,68 +544,68 @@
 <context>
     <name>GalleryInputs</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="6"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="5"/>
         <source>입력</source>
         <translation>Inputs</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="9"/>
         <source>기체 이름</source>
         <translation>Vehicle name</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="10"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="9"/>
         <source>기체 1</source>
         <translation>Vehicle 1</translation>
     </message>
     <message>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="10"/>
         <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="11"/>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="12"/>
         <source>이름</source>
         <translation>Name</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="11"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="10"/>
         <source>이름을 입력해 주세요</source>
         <translation>Enter a name</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="11"/>
         <source>이름을 확인해 주세요</source>
         <translation>Check the name</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="13"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="12"/>
         <source>m/s</source>
         <translation>m/s</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="14"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="13"/>
         <source>m</source>
         <translation>m</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="14"/>
         <source>검색</source>
         <translation>Search</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="15"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="14"/>
         <source>배터리</source>
         <translation>Battery</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="16"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="15"/>
         <source>%</source>
         <translation>%</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="17"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="16"/>
         <source>설정 파일</source>
         <translation>Settings file</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="17"/>
+        <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="16"/>
         <source>견본 파일을 선택했어요</source>
         <translation>Sample file selected</translation>
     </message>

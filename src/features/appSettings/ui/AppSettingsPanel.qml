@@ -1,5 +1,7 @@
 // [0.0.2 T4 T14 T15 T20] specs/features/0.0.2-theme.md
 import QtQuick
+// [0.0.2 T24] specs/features/0.0.2-theme.md
+import QtQuick.Dialogs
 import QtQuick.Controls
 import Kgc.Ui
 ScrollView {
@@ -32,6 +34,20 @@ ScrollView {
             currentIndex: themeSwitcher.currentIndex
             onActivated: themeSwitcher.choose(themeSwitcher.themes[currentIndex].id)
         }
+        Label { text: qsTr("배경"); color: Theme.inkMuted }
+        PillGroup {
+            objectName: "backgroundKindPicker"
+            model: [qsTr("민무늬"), qsTr("체크무늬"), qsTr("사진")]
+            currentIndex: uiSettingValues.backgroundKinds.indexOf(uiSettingValues.backgroundKind)
+            onActivated: index => { uiSettingValues.backgroundKind = uiSettingValues.backgroundKinds[index] }
+        }
+        Label { text: qsTr("배경 사진"); color: Theme.inkMuted }
+        FileField {
+            objectName: "backgroundImageField"
+            text: uiSettingValues.backgroundImage
+            onEditingFinished: uiSettingValues.backgroundImage = text
+            onBrowseRequested: backgroundDialog.open()
+        }
         Label { text: qsTr("길게 눌러 확인 시간"); color: Theme.inkMuted }
         NumberBox {
             objectName: "holdTimeField"
@@ -62,6 +78,15 @@ ScrollView {
                 color: Theme.ink
                 selectByMouse: true
             }
+        }
+    }
+    FileDialog {
+        id: backgroundDialog
+        title: qsTr("배경 사진")
+        nameFilters: [qsTr("사진 (*.png *.jpg *.jpeg)")]
+        onAccepted: {
+            uiSettingValues.backgroundImage = selectedFile.toString()
+            uiSettingValues.backgroundKind = "image"
         }
     }
     Dialog {

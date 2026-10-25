@@ -3,5 +3,5 @@
 #include <cstdint>
 namespace kgc::ui {
 inline constexpr auto kCategory = "kgc.ui";
-enum class UiEvent : std::uint16_t { ThemeApplied = 1, ThemeUnknown };
+enum class UiEvent : std::uint16_t { ThemeApplied = 1, ThemeUnknown, BackgroundImageMissing };
 }

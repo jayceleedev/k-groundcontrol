@@ -16,6 +16,25 @@
       "max": 5000,
       "category": "ui",
       "labelKey": "길게 눌러 확인 시간"
+    },
+    {
+      "id": "ui.backgroundKind",
+      "type": "enum",
+      "default": "checker",
+      "enum": [
+        "plain",
+        "checker",
+        "image"
+      ],
+      "category": "ui",
+      "labelKey": "배경"
+    },
+    {
+      "id": "ui.backgroundImage",
+      "type": "string",
+      "default": "",
+      "category": "ui",
+      "labelKey": "배경 사진"
     }
   ]
 }

@@ -26,5 +26,12 @@
     "license": "MIT",
     "url": "https://github.com/linuxdeploy/linuxdeploy-plugin-qt",
     "platform": "Linux"
+  },
+  {
+    "name": "Tabler Icons",
+    "version": "3.49.0",
+    "license": "MIT",
+    "url": "https://github.com/tabler/tabler-icons",
+    "platform": "all"
   }
 ]

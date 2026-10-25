@@ -1,0 +1,35 @@
+# [0.0.2 T23] specs/features/0.0.2-theme.md
+include("${PROJECT_SOURCE_DIR}/cmake/CPM.cmake")
+# 의존성과 내려받기 도구 모두 빌드 폴더 안에서 해시로 확인해요.
+set(CPM_SOURCE_CACHE "${PROJECT_BINARY_DIR}/cpm-cache" CACHE PATH "의존성 원본 캐시")
+set(cpm_script "${PROJECT_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
+if(NOT EXISTS "${cpm_script}")
+    file(DOWNLOAD
+        "https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake"
+        "${cpm_script}" EXPECTED_HASH "SHA256=${CPM_DOWNLOAD_SHA256}" TLS_VERIFY ON)
+endif()
+include("${cpm_script}")
+CPMAddPackage(NAME TablerIcons VERSION 3.49.0 DOWNLOAD_ONLY YES
+    URL "https://registry.npmjs.org/@tabler/icons/-/icons-3.49.0.tgz"
+    URL_HASH SHA256=aa3042907eb0bdb079fd70733e2d75f785683d4726279128a0ca2343099f7074)
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${PROJECT_SOURCE_DIR}/resources/icons/icons.txt")
+file(STRINGS "${PROJECT_SOURCE_DIR}/resources/icons/icons.txt" mappings)
+set(kgc_icon_files "")
+foreach(mapping IN LISTS mappings)
+    if(mapping STREQUAL "" OR mapping MATCHES "^#")
+        continue()
+    endif()
+    string(REGEX MATCH "^([^ ]+) +([^ ]+)$" matched "${mapping}")
+    if(NOT matched)
+        message(FATAL_ERROR "아이콘 대응 형식 오류: ${mapping}")
+    endif()
+    set(alias "${CMAKE_MATCH_1}.svg")
+    set(source "${TablerIcons_SOURCE_DIR}/icons/${CMAKE_MATCH_2}.svg")
+    if(NOT EXISTS "${source}")
+        message(FATAL_ERROR "아이콘 원본 없음: ${source}")
+    endif()
+    set(destination "${PROJECT_BINARY_DIR}/icons/${alias}")
+    configure_file("${source}" "${destination}" COPYONLY)
+    set_source_files_properties("${destination}" PROPERTIES QT_RESOURCE_ALIAS "${alias}")
+    list(APPEND kgc_icon_files "${destination}")
+endforeach()

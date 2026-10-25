@@ -18,7 +18,7 @@ Q_IMPORT_QML_PLUGIN(Kgc_ShellPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_AppSettingsPlugin)
 
 // 정적 라이브러리의 자원을 링커가 버리지 않도록 전역에서 참조해요.
-static void initKgcResources() { Q_INIT_RESOURCE(kgc); }
+static void initKgcResources() { Q_INIT_RESOURCE(kgc); Q_INIT_RESOURCE(tabler_icons); }
 
 namespace kgc {
 Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator)

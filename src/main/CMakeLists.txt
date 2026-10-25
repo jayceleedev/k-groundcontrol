@@ -1,6 +1,7 @@
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 qt_add_resources(kgc_composition_rc "${PROJECT_SOURCE_DIR}/resources/kgc.qrc")
 add_library(kgc_composition STATIC Composition.h Composition.cpp ${kgc_composition_rc})
+qt_add_resources(kgc_composition tabler_icons PREFIX /kgc/icons BASE "${PROJECT_BINARY_DIR}/icons" FILES ${kgc_icon_files})
 target_include_directories(kgc_composition PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_compile_definitions(kgc_composition PUBLIC
     KGC_VERSION="${PROJECT_VERSION}" KGC_HOMEPAGE_URL="${PROJECT_HOMEPAGE_URL}")

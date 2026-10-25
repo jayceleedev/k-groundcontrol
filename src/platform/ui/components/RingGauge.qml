@@ -1,4 +1,5 @@
 // [0.0.2 T12 T22] specs/features/0.0.2-theme.md
+// [0.0.2 T26] specs/features/0.0.2-theme.md
 /** 진행률을 고리와 가운데 값으로 보여줘요.
  * 입력: value, from, to, unit, color를 받아요.
  * 출력: fraction 비율의 고리와 가운데 value·unit 글자를 그려요.
@@ -19,6 +20,7 @@ Item {
     implicitWidth: Theme.ringDiameter
     implicitHeight: implicitWidth
     Shape {
+        preferredRendererType: Shape.CurveRenderer
         anchors.fill: parent
         ShapePath {
             fillColor: "transparent"; strokeColor: Theme.line; strokeWidth: Theme.inset

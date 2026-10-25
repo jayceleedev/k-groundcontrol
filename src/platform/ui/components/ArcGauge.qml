@@ -1,4 +1,5 @@
 // [0.0.2 T12 T22] specs/features/0.0.2-theme.md
+// [0.0.2 T26] specs/features/0.0.2-theme.md
 /** 경고 구간과 위험 구간이 있는 반원 계기예요.
  * 입력: value, from, to, warning, danger, unit을 받아요.
  * 출력: angle(value)로 제한된 바늘 각도를 구하고 경고·위험 구간과 눈금을 그려요.
@@ -21,6 +22,7 @@ Item {
     implicitHeight: Theme.arcGaugeHeight
     function angle(value: real): real { return 180 * Math.max(0, Math.min(1, (value - from) / Math.max(1, to - from))) }
     Shape {
+        preferredRendererType: Shape.CurveRenderer
         anchors.fill: parent
         ShapePath { fillColor: "transparent"; strokeColor: Theme.line; strokeWidth: Theme.inset
             PathAngleArc { centerX: gauge.width / 2; centerY: gauge.radiusValue + Theme.inset; radiusX: gauge.radiusValue; radiusY: gauge.radiusValue; startAngle: 180; sweepAngle: gauge.angle(gauge.warning) }

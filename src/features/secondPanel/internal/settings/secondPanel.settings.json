@@ -1,0 +1,7 @@
+{
+  "module": "secondPanel",
+  "settings": [
+    {"id": "secondPanel.arrangement", "type": "enum", "enum": ["single", "split2h", "split2v", "main3", "grid2x2", "grid3x2", "grid2x3"], "default": "grid2x2", "labelKey": "칸 배치", "category": "secondPanel"},
+    {"id": "secondPanel.windowPlacement", "type": "string", "default": "", "labelKey": "세컨드 패널 창 자리", "category": "secondPanel"}
+  ]
+}

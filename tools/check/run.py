@@ -11,7 +11,7 @@ from pathlib import Path
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 RANKS = {name: rank for rank, names in enumerate([
-    "shell", "notify ai appSettings analyze link uiGallery", "fly mission vehicleInfo preflight logs",
+    "shell", "notify ai appSettings analyze link uiGallery secondPanel", "fly mission vehicleInfo preflight logs",
     "layout", "sensors radio flightModes power failsafe motors tuning fcFlash esc elrs tracker",
     "map", "video terrain gcsposition", "params", "extras"], 1) for name in names.split()}
 

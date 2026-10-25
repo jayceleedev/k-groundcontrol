@@ -6,6 +6,26 @@ Card {
     objectName: "gallery_Card"
     title: qsTr("묶음")
     Section { objectName: "gallery_Section"; width: parent.width; text: qsTr("센서") }
+    SettingsPage {
+        id: settingsSample
+        objectName: "gallery_SettingsPage"
+        width: parent.width
+        height: Theme.controlHeight * 5
+        categories: [
+            {id: "general", title: qsTr("일반")},
+            {id: "display", title: qsTr("화면")}
+        ]
+        Section {
+            width: parent.width
+            category: "general"
+            TextBox { placeholderText: qsTr("이름") }
+        }
+        Section {
+            width: parent.width
+            category: "display"
+            Toggle { text: qsTr("표시"); checked: true }
+        }
+    }
     TabStrip { objectName: "gallery_TabStrip"; model: [qsTr("계기"), qsTr("개요"), qsTr("메시지")] }
     DataTable {
         objectName: "gallery_DataTable"

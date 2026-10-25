@@ -11,7 +11,7 @@ Rectangle {
     id: dot
     property string level: "idle"
     QtObject {
-        id: palette
+        id: levelPalette
         readonly property var colors: {
             switch (dot.level) {
             case "ok": return [Theme.ok, Theme.okSoft]
@@ -22,9 +22,9 @@ Rectangle {
             }
         }
     }
-    readonly property color softColor: palette.colors[1]
+    readonly property color softColor: levelPalette.colors[1]
     implicitWidth: Theme.inset
     implicitHeight: Theme.inset
     radius: height / 2
-    color: palette.colors[0]
+    color: levelPalette.colors[0]
 }

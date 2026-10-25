@@ -23,8 +23,7 @@ SettingsPage {
     }
     Section {
         width: parent.width
-        visible: panel.currentCategory === "general"
-        text: qsTr("일반")
+        category: "general"
         ComboField {
             id: languageCombo
             objectName: "languageCombo"
@@ -36,8 +35,7 @@ SettingsPage {
     }
     Section {
         width: parent.width
-        visible: panel.currentCategory === "display"
-        text: qsTr("화면")
+        category: "display"
         ComboField {
             id: themeCombo
             objectName: "themeCombo"
@@ -69,8 +67,7 @@ SettingsPage {
     }
     Section {
         width: parent.width
-        visible: panel.currentCategory === "input"
-        text: qsTr("조작")
+        category: "input"
         Label { text: qsTr("길게 눌러 확인 시간"); color: Theme.inkMuted }
         NumberBox {
             objectName: "holdTimeField"
@@ -83,8 +80,7 @@ SettingsPage {
     }
     Section {
         width: parent.width
-        visible: panel.currentCategory === "about"
-        text: qsTr("정보")
+        category: "about"
         Row {
             spacing: Theme.inset
             Label { text: qsTr("버전"); color: Theme.inkMuted }

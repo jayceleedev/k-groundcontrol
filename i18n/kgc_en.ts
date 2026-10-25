@@ -397,6 +397,18 @@
 <context>
     <name>GalleryContainers</name>
     <message>
+        <source>표시</source>
+        <translation>Indicators</translation>
+    </message>
+    <message>
+        <source>화면</source>
+        <translation>Display</translation>
+    </message>
+    <message>
+        <source>일반</source>
+        <translation>General</translation>
+    </message>
+    <message>
         <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="7"/>
         <source>묶음</source>
         <translation>Containers</translation>

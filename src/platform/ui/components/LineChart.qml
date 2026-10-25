@@ -50,13 +50,36 @@ Item {
             width: Theme.lineWidth * 2
         }
     }
+    QtObject {
+        id: ticks
+        // 보이는 범위와 글자 자리를 함께 보고 간격을 정해 축소해도 눈금이 겹치지 않게 해요.
+        function interval(span: real, pixels: real, spacing: real): real {
+            if (span <= 0) return 1
+            const step = span / Math.max(1, Math.floor(pixels / spacing))
+            const magnitude = Math.pow(10, Math.floor(Math.log10(step)))
+            return Math.ceil(step / magnitude) * magnitude
+        }
+    }
+    FontMetrics { id: labelMetrics; font.pixelSize: Theme.fontSize }
     GraphsView {
         id: graph
         anchors.fill: parent
         anchors.bottomMargin: Theme.chartLegendHeight
         marginLeft: Theme.inset; marginRight: Theme.inset; marginTop: Theme.inset; marginBottom: Theme.inset
-        axisX: ValueAxis { min: chart.xFrom; max: chart.xTo; labelDecimals: 0 }
-        axisY: ValueAxis { min: chart.yFrom; max: chart.yTo; labelDecimals: 0 }
+        dynamicLabelMargins: true
+        axisX: ValueAxis {
+            min: chart.xFrom; max: chart.xTo
+            tickInterval: ticks.interval(visualMax - visualMin, graph.plotArea.width,
+                Math.max(labelMetrics.advanceWidth(visualMin.toPrecision(6)),
+                         labelMetrics.advanceWidth(visualMax.toPrecision(6))) + Theme.inset * 2)
+            labelDecimals: Math.max(0, -Math.floor(Math.log10(tickInterval)))
+        }
+        axisY: ValueAxis {
+            min: chart.yFrom; max: chart.yTo
+            tickInterval: ticks.interval(visualMax - visualMin, graph.plotArea.height,
+                                         labelMetrics.height + Theme.inset)
+            labelDecimals: Math.max(0, -Math.floor(Math.log10(tickInterval)))
+        }
         panStyle: GraphsView.PanStyle.Drag
         zoomStyle: GraphsView.ZoomStyle.Center
         theme: ChartTheme {}

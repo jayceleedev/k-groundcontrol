@@ -1,7 +1,7 @@
 // [0.0.2 T12 T22] specs/features/0.0.2-theme.md
 /** 범주별 값을 묶은 막대로 비교해요.
  * 입력: categories, seriesNames, values(줄별 값 목록), horizontal, from, to, decimals(기본 0)를 받아요.
- * 출력: values의 행마다 막대 묶음 하나와 decimals 자리의 값 글자를 표시해요.
+ * 출력: values의 행마다 막대 묶음 하나와 막대 밖 끝에 decimals 자리의 값 글자를 표시해요.
  * 실패: 없는 계열 이름은 빈 글자로 표시해요. 숫자와 범주 길이의 유효성은 호출자가 보장해요.
  */
 import QtQuick
@@ -32,7 +32,7 @@ Item {
     onSeriesNamesChanged: Qt.callLater(rebuild)
     Component {
         id: setFactory
-        BarSet { property int colorIndex: 0; color: Theme.seriesColors[colorIndex % Theme.seriesColors.length]; borderColor: color; labelColor: Theme.inkMuted }
+        BarSet { property int colorIndex: 0; color: Theme.seriesColors[colorIndex % Theme.seriesColors.length]; borderColor: color; labelColor: Theme.ink }
     }
     GraphsView {
         anchors.fill: parent
@@ -42,7 +42,13 @@ Item {
         axisX: BarCategoryAxis { categories: chart.categories }
         axisY: ValueAxis { min: chart.from; max: chart.to; labelDecimals: 0 }
         theme: ChartTheme {}
-        BarSeries { id: series; labelsVisible: true; labelsPrecision: chart.decimals }
+        BarSeries {
+            id: series
+            labelsVisible: true
+            labelsPrecision: chart.decimals
+            labelsPosition: BarSeries.LabelsPosition.OutsideEnd
+            labelsMargin: Theme.lineWidth * 2
+        }
     }
     Row {
         anchors.bottom: parent.bottom

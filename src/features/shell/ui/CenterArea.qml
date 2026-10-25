@@ -112,9 +112,15 @@ Item {
                 }
                 IconButton {
                     objectName: "panelClose"
-                    flat: true
+                    // 좌 메뉴 접기 단추와 같은 상자·크기·여백이라 두 틀 단추가 같은 모양으로 보여요.
                     anchors.right: parent.right
+                    anchors.rightMargin: Theme.inset
                     anchors.verticalCenter: parent.verticalCenter
+                    width: Theme.frameButtonSize
+                    height: Theme.frameButtonSize
+                    padding: 0
+                    icon.width: Theme.frameIconSize
+                    icon.height: Theme.frameIconSize
                     name: "x"
                     hint: qsTr("닫기")
                     onClicked: shellController.togglePanel(shellController.activePanelId)

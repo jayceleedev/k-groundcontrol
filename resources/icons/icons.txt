@@ -15,8 +15,8 @@ menu/params outline/list-details
 menu/appSettings outline/settings
 menu/uiGallery outline/components
 x outline/x
-chevron-left outline/chevron-left
-chevron-right outline/chevron-right
+layout-sidebar-left-collapse outline/layout-sidebar-left-collapse
+layout-sidebar-left-expand outline/layout-sidebar-left-expand
 chevron-up outline/chevron-up
 chevron-down outline/chevron-down
 search outline/search

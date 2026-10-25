@@ -13,9 +13,12 @@ GlassSurface {
         anchors.top: parent.top
         anchors.right: parent.right
         anchors.margins: Theme.inset
-        width: Theme.menuHeight
-        height: Theme.menuHeight
-        name: shellController.leftMenuCollapsed ? "chevron-right" : "chevron-left"
+        width: Theme.frameButtonSize
+        height: Theme.frameButtonSize
+        padding: 0
+        icon.width: Theme.frameIconSize
+        icon.height: Theme.frameIconSize
+        name: shellController.leftMenuCollapsed ? "layout-sidebar-left-expand" : "layout-sidebar-left-collapse"
         hint: shellController.leftMenuCollapsed ? qsTr("메뉴 펼치기") : qsTr("메뉴 접기")
         onClicked: shellController.leftMenuCollapsed = !shellController.leftMenuCollapsed
     }

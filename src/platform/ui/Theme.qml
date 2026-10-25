@@ -35,6 +35,9 @@ QtObject {
     // 다른 부품 안에 들어가는 테두리 없는 아이콘 단추(닫기·지우기)의 누르는 영역과 아이콘 크기예요.
     readonly property int flatIconButtonSize: Math.round(24 * uiScale)
     readonly property int flatIconSize: Math.round(16 * uiScale)
+    // 틀을 다루는 상자 단추(좌 메뉴 접기·패널 닫기)의 크기와 그 안 아이콘 크기예요. 두 단추가 같은 값을 써서 모양이 같아요.
+    readonly property int frameButtonSize: Math.round(28 * uiScale)
+    readonly property int frameIconSize: Math.round(18 * uiScale)
     // 텍스트·숫자·목록 입력란의 기본 너비예요.
     readonly property int inputWidth: Math.round(240 * uiScale)
     // 입력란의 이름표와 오류 글에 한 줄을 확보해요.

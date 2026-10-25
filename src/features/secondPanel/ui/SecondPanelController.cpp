@@ -17,6 +17,7 @@ QQuickWindow* SecondPanelController::window() const { return window_.window(); }
 int SecondPanelController::saveDelayMs() const { return kSaveDelayMs; }
 int SecondPanelController::arrangementIndex() const
 {
+    // 창의 배치 이름 목록도 arrangementValues() 순서이므로 같은 위치로 선택을 연결해요.
     return settings::arrangementValues().indexOf(settings::toString(service_.arrangement()));
 }
 QVariantList SecondPanelController::cells() const

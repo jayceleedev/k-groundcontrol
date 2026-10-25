@@ -11,4 +11,5 @@
 2. SeparateWindow::open → restorePlacement → setScreen·setGeometry·show — 저장된 자리에 창을 표시해요.
 3. arrangementPicker → chooseArrangement → SecondPanelService.setArrangement — 선택을 저장해요.
 4. cellRects → cells — 비율 사각형을 내고 화면은 맞닿은 변의 여백을 빼요.
-5. TimerBox·closing·aboutToQuit → SecondPanelController::savePlacement·SeparateWindow::savePlacement — 보통 상태의 자리를 저장해요. 닫기는 숨김이에요.
+5. TimerBox·closing → SecondPanelController::savePlacement·SeparateWindow::savePlacement — 보통 상태의 자리를 저장해요. 닫기는 숨김이에요.
+6. QCoreApplication::aboutToQuit → SeparateWindow::savePlacement·QQuickWindow::close — 종료 전에 자리를 저장하고 창을 닫아요.

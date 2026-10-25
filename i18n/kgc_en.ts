@@ -933,8 +933,12 @@
     <name>Ui</name>
     <message>
         <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="21"/>
-        <source>같은 패널이 이미 등록되어 있어요.</source>
-        <translation>A panel with the same ID is already registered.</translation>
+        <source>같은 항목이 이미 등록되어 있어요.</source>
+        <translation>An item with the same ID is already registered.</translation>
+    </message>
+    <message>
+        <source>단추 등록 실패: 수신 객체 또는 메서드 없음</source>
+        <translation>Button registration failed: missing receiver or method</translation>
     </message>
 </context>
 </TS>

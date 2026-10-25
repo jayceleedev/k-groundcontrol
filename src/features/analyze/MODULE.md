@@ -11,4 +11,5 @@
 2. BottomActionSlot.trigger → AppLogController.open → SeparateWindow::open — 같은 엔진의 루트 문맥에서 처음에만 창을 만들어요.
 3. SeparateWindow::open → restorePlacement → setScreen·setGeometry·show — 자리를 복원하고 앞으로 가져와요.
 4. LogView::userScrolled·Toggle::toggled → following·LogView::positionAtEnd — 따라가기 상태를 정하고 토글을 켜면 끝으로 옮겨요.
-5. TimerBox·closing·aboutToQuit → AppLogController::savePlacement·SeparateWindow::savePlacement — 보통 상태의 창 자리를 저장해요. 닫기는 숨김이에요.
+5. TimerBox·closing → AppLogController::savePlacement·SeparateWindow::savePlacement — 보통 상태의 창 자리를 저장해요. 닫기는 숨김이에요.
+6. QCoreApplication::aboutToQuit → SeparateWindow::savePlacement·QQuickWindow::close — 종료 전에 자리를 저장하고 창을 닫아요.

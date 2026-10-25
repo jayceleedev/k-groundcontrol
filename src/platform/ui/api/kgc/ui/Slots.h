@@ -82,7 +82,7 @@ public:
     /** 단추를 등록하고 호출할 메서드를 고정해요.
      * 입력: 식별자, 순서, 아이콘, 힌트 원문, 수신 객체와 메서드 이름.
      * 출력: 등록 결과.
-     * 실패: 같은 식별자는 DuplicateId.
+     * 실패: 같은 식별자는 DuplicateId, 수신 객체나 인자 없는 메서드가 없으면 프로그래밍 오류로 종료해요.
      */
     kgc::app::errors::Result<void> registerAction(const QString& id, int order,
         const QString& icon, const QString& hintKey, QObject* receiver, const char* method);

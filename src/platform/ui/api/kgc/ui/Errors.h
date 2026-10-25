@@ -1,4 +1,5 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
+// [0.0.3 T2] specs/features/0.0.3-windows.md
 #pragma once
 #include <kgc/ui/ModuleId.h>
 #include <QCoreApplication>
@@ -18,7 +19,7 @@ inline kgc::app::errors::ErrorCode make(UiError error) { return {kModuleId, stat
  */
 inline QString errorText(kgc::app::errors::ErrorCode error)
 {
-    const auto message = QT_TRANSLATE_NOOP("Ui", "같은 패널이 이미 등록되어 있어요.");
+    const auto message = QT_TRANSLATE_NOOP("Ui", "같은 항목이 이미 등록되어 있어요.");
     return error == make(UiError::DuplicateId)
         ? QCoreApplication::translate("Ui", message) : QString{};
 }

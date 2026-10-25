@@ -50,5 +50,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 private:
     QList<SlotEntry> entries_;
+    mutable QHash<int, QByteArray> roles_;
 };
 }

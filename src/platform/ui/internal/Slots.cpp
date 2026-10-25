@@ -30,7 +30,9 @@ QVariant SlotModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= entries_.size()) return {};
     const auto& entry = entries_[index.row()];
-    const auto name = roleNames().value(role);
+    // 파생 슬롯까지 정해진 뒤 처음 읽을 때만 역할 표를 만들어 매 행에서 재생성하지 않아요.
+    if (roles_.isEmpty()) roles_ = roleNames();
+    const auto name = roles_.value(role);
     if (name == "id") return entry.id;
     if (name == "order") return entry.order;
     return entry.values.value(QString::fromLatin1(name));
@@ -43,8 +45,13 @@ BottomActionSlot::BottomActionSlot(QObject* parent) : SlotModel(parent) {}
 kgc::app::errors::Result<void> BottomActionSlot::registerAction(const QString& id, int order,
     const QString& icon, const QString& hintKey, QObject* receiver, const char* method)
 {
+    // 이미 등록된 동작은 대체 요청의 호출 대상과 무관하게 그대로 보존해요.
+    if (actions_.contains(id)) return std::unexpected(make(UiError::DuplicateId));
+    const auto signature = QMetaObject::normalizedSignature((QByteArray(method) + "()").constData());
+    if (!receiver || !method || receiver->metaObject()->indexOfMethod(signature.constData()) < 0)
+        qFatal("%s", QT_TRANSLATE_NOOP("Ui", "단추 등록 실패: 수신 객체 또는 메서드 없음"));
     const auto result = add({id, order, {{"icon", icon}, {"hintKey", hintKey}}});
-    if (result) actions_.insert(id, {receiver, method});
+    if (result) actions_.insert(id, {receiver, signature.chopped(2)});
     return result;
 }
 void BottomActionSlot::trigger(const QString& id)

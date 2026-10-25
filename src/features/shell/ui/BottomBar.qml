@@ -19,6 +19,7 @@ GlassSurface {
                 objectName: "bottomAction_" + model.id
                 width: Theme.bottomBarHeight - Theme.inset
                 height: Theme.bottomBarHeight - Theme.inset
+                padding: (height - Theme.iconSize) / 2
                 name: model.icon
                 hint: { translator.language; return qsTranslate("BottomAction", model.hintKey) }
                 onClicked: bottomActionSlot.trigger(model.id)

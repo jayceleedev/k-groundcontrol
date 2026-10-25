@@ -26,6 +26,7 @@ Window {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.margins: Theme.inset
+        // 설정의 arrangementValues() 순서와 맞춰요: single, split2h, split2v, main3, grid2x2, grid3x2, grid2x3.
         model: [qsTr("1칸"), qsTr("2칸 좌우"), qsTr("2칸 위아래"), qsTr("3칸(큰 칸 + 둘)"), qsTr("4칸"), qsTr("6칸 가로"), qsTr("6칸 세로")]
         currentIndex: secondPanelController.arrangementIndex
         onActivated: index => secondPanelController.chooseArrangement(index)

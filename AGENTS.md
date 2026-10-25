@@ -147,6 +147,8 @@ If the feature spec's "기반" section does not list a value, state, function or
 | Strings shown on screen, `errorText()`, notifications, toasts | Korean source text wrapped in `tr()` / `qsTr()`, polite conversational ("…했어요"); English lives in `i18n/kgc_en.ts`; `Translator` changes the language and `Composition` connects its `languageChanged` to `QQmlEngine::retranslate()`, so the language switches without restart (Translator does not know the QML engine) |
 | Identifiers, enum values, event and error names, commit subjects, this file, your reports | English |
 
+Boot-time terminal output (command-line option descriptions, boot errors) is shown as Korean source text because no translator is installed yet; mark it with `QT_TRANSLATE_NOOP("BootOptions", …)` for the string check. Its English entries in `.ts` are reserved for a later terminal translation and are not shown now.
+
 String checks: a Korean literal in C++ must sit inside `tr(`, `QT_TR_NOOP(`, `QT_TRANSLATE_NOOP(` or a `KGC_LOG_*(` call; in QML, `text:`/`title:`/`placeholderText:`/`ToolTip.text:` literals must be wrapped in `qsTr(`.
 
 Comment rules:

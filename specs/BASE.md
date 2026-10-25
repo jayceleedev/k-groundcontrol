@@ -296,6 +296,7 @@ k-groundcontrol/
 - **오류**: §6의 `ErrorCode`. 사용자 문구는 `tr()`.
 - **알림**: `platform/app/notify/Notify`(저장·수준 `Info/Warning/Critical`·출처(기체·트래커·GCS·앱)·시각·읽음) — 상단 벨·토스트·TTS(`Speech`)가 읽는 한 입구. 기체 메시지 중 무엇을 알림으로 올릴지는 **기능 스펙(B4)이 정한다**.
 - **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator`가 언어를 바꾸고(`languageChanged`), `Composition`이 그 시그널을 `QQmlEngine::retranslate()`에 이어 재시작 없이 전환(R-N16; Translator는 QML 엔진을 모름). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖에 있으면, QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
+- **부팅 단계의 터미널 출력**(명령줄 옵션 설명·부팅 오류)은 번역기가 설치되기 전이라 **한국어 원문**을 그대로 보인다. 문자열 검사를 위해 `QT_TRANSLATE_NOOP("BootOptions", …)`로 표시하고, `.ts`의 영어는 나중에 터미널 출력을 번역할 때 쓸 자리로 둔다(지금은 화면에 나오지 않음).
 
 ## 11. 트래커 스케치 `tracker/` (R-D27)
 
@@ -417,3 +418,4 @@ k-groundcontrol/
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 2 지적): graphviz 문구 2곳 제거, 생성 Settings.h 위치, 트리의 NOTICES, 문자열 검사에 `QT_TRANSLATE_NOOP(`, QSettings 명시 생성·organizationName 비움·kgc.ini 경로, 훅 안내, main 순서 |
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 지적): 설정 생성기 `cmake/gen/SettingsGen.cmake`(빌드 폴더 생성), QSettings IniFormat·조직/앱 이름, 데이터 폴더 기본값·`--data-dir`, PanelRegistry 항목(order·group·titleKey·icon)·자리 표시 등록·메뉴 제목 번역 방식, 순환 검사는 CMakeLists 텍스트(configure 불필요), 훅 requirements.txt·fetch-depth, 고지 목록·HOMEPAGE_URL |
 | 2026-10-25 | PM | 사실 고치기(알림만, 0.0.1 구조 검수 1 지적 15·7): §10 번역 전환 문구(Translator는 엔진을 모르고 Composition이 `engine.retranslate()` 연결), §13 용어 `LogLevel` |
+| 2026-10-25 | PM | 사실 고치기(알림만, 0.0.1 구조 검수 3 지적 r2-2): §10 부팅 단계 터미널 출력 규칙 |

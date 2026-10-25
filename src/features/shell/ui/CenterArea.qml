@@ -121,7 +121,7 @@ Item {
                 anchors.margins: Theme.inset
                 source: center.selectedPanel ? center.selectedPanel.component : ""
                 onLoaded: {
-                    if ("source" in item) item.source = stage
+                    if ("glassSource" in item) item.glassSource = stage
                     item.onArg(shellController.panelArg)
                 }
             }

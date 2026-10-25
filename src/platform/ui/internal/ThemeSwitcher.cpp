@@ -40,13 +40,21 @@ ThemeSwitcher::ThemeSwitcher(QQmlEngine& engine) : QObject(&engine), engine_(eng
 }
 QString ThemeSwitcher::themeId() const { return themeId_; }
 QVariantList ThemeSwitcher::themes() const { return themes_; }
+int ThemeSwitcher::currentIndex() const
+{
+    for (qsizetype index = 0; index < themes_.size(); ++index)
+        if (themes_[index].toMap()["id"].toString() == themeId_) return static_cast<int>(index);
+    return -1;
+}
 QString ThemeSwitcher::selected() const { return settings::theme(); }
 void ThemeSwitcher::choose(const QString& id) { settings::setTheme(id); }
 void ThemeSwitcher::apply()
 {
     const auto choice = resolveTheme(settings::theme(), qGuiApp->styleHints()->colorScheme(), sources_.keys());
-    if (choice.reason == ThemeReason::Unknown)
+    if (choice.reason == ThemeReason::Unknown && !warnedSelections_.contains(settings::theme())) {
+        warnedSelections_.insert(settings::theme());
         KGC_LOG_WARN(kCategory, UiEvent::ThemeUnknown, "테마 없음: %1, 시스템 따라감", settings::theme());
+    }
     if (choice.id == themeId_) return;
     QQmlComponent component(&engine_, sources_.value(choice.id));
     auto* next = component.create();
@@ -61,6 +69,6 @@ void ThemeSwitcher::apply()
     themeId_ = choice.id;
     emit themeIdChanged();
     KGC_LOG_INFO(kCategory, UiEvent::ThemeApplied, "테마 적용: %1, 이유: %2", themeId_,
-        choice.reason == ThemeReason::Setting ? QT_TRANSLATE_NOOP("Theme", "설정") : QT_TRANSLATE_NOOP("Theme", "시스템"));
+        choice.reason == ThemeReason::Setting ? "설정" : "시스템");
 }
 }

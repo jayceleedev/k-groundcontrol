@@ -29,7 +29,7 @@ ScrollView {
                 const language = translator.language
                 return themeSwitcher.themes.map(theme => qsTranslate("Theme", theme.titleKey))
             }
-            currentIndex: themeSwitcher.themes.findIndex(theme => theme.id === themeSwitcher.themeId)
+            currentIndex: themeSwitcher.currentIndex
             onActivated: themeSwitcher.choose(themeSwitcher.themes[currentIndex].id)
         }
         Label { text: qsTr("길게 눌러 확인 시간"); color: Theme.inkMuted }

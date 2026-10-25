@@ -1,7 +1,7 @@
 # uiGallery (기능 순위 2)
 역할: 공용 부품의 변형과 상태를 테마별로 확인하는 목록이에요.
 수명: 전역.
-받는 것: Theme, ThemeSwitcher, UiSettingValues, 지도 바닥.
+받는 것: Theme, ThemeSwitcher(테마 목록과 currentIndex), UiSettingValues, shell이 패널의 glassSource에 넣는 지도 바닥.
 주는 것: UiGalleryService, registerUi.
 기여: 좌 메뉴 16번 UI 부품 목록 패널.
 의존: app/errors, ui(등록부·테마·공용 부품).

@@ -4,7 +4,7 @@ import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 Basic.ScrollView {
     id: panel
-    property Item source: null
+    property Item glassSource: null
     contentWidth: availableWidth
     clip: true
     /** 패널을 열면 첫 조작 위치를 테마 선택에 맞춰요.
@@ -24,15 +24,15 @@ Basic.ScrollView {
                 const language = translator.language
                 return themeSwitcher.themes.map(theme => qsTranslate("Theme", theme.titleKey))
             }
-            currentIndex: themeSwitcher.themes.findIndex(theme => theme.id === themeSwitcher.themeId)
+            currentIndex: themeSwitcher.currentIndex
             onActivated: index => themeSwitcher.choose(themeSwitcher.themes[index].id)
         }
-        GalleryButtons { width: parent.width; source: panel.source }
-        GalleryChoices { width: parent.width; source: panel.source }
-        GalleryInputs { width: parent.width; source: panel.source }
-        GalleryIndicators { width: parent.width; source: panel.source }
-        GalleryContainers { width: parent.width; source: panel.source }
-        GalleryNotices { width: parent.width; source: panel.source }
-        GalleryCharts { width: parent.width; source: panel.source }
+        GalleryButtons { width: parent.width; source: panel.glassSource }
+        GalleryChoices { width: parent.width; source: panel.glassSource }
+        GalleryInputs { width: parent.width; source: panel.glassSource }
+        GalleryIndicators { width: parent.width; source: panel.glassSource }
+        GalleryContainers { width: parent.width; source: panel.glassSource }
+        GalleryNotices { width: parent.width; source: panel.glassSource }
+        GalleryCharts { width: parent.width; source: panel.glassSource }
     }
 }

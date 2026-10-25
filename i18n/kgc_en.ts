@@ -784,16 +784,6 @@
         <source>라이트</source>
         <translation>Light</translation>
     </message>
-    <message>
-        <location filename="../src/platform/ui/internal/ThemeSwitcher.cpp" line="64"/>
-        <source>설정</source>
-        <translation>Setting</translation>
-    </message>
-    <message>
-        <location filename="../src/platform/ui/internal/ThemeSwitcher.cpp" line="64"/>
-        <source>시스템</source>
-        <translation>System</translation>
-    </message>
 </context>
 <context>
     <name>TopBar</name>

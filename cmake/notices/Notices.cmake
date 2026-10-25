@@ -11,7 +11,7 @@ foreach(index RANGE 0 ${last})
         string(APPEND output "## ${name} ${version}\nLicense: ${license}\nSource and license terms: ${url}\n\n")
     endif()
 endforeach()
-# 첫 버전에는 등록된 외부 패키지가 없으므로 추가 고지 목록만 합쳐요.
+# extra.json에 등록한 Tabler Icons와 플랫폼별 외부 의존성의 고지를 합쳐요.
 file(WRITE "${CMAKE_BINARY_DIR}/THIRD_PARTY_NOTICES.md" "${output}")
 add_custom_command(TARGET KGroundControl POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_if_different

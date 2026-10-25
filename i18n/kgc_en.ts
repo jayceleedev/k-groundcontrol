@@ -65,7 +65,7 @@
 <context>
     <name>Banner</name>
     <message>
-        <location filename="../src/platform/ui/components/Banner.qml" line="17"/>
+        <location filename="../src/platform/ui/components/Banner.qml" line="16"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
@@ -135,7 +135,7 @@
 <context>
     <name>FileField</name>
     <message>
-        <location filename="../src/platform/ui/components/FileField.qml" line="18"/>
+        <location filename="../src/platform/ui/components/FileField.qml" line="17"/>
         <source>찾아보기</source>
         <translation>Browse</translation>
     </message>
@@ -731,17 +731,17 @@
 <context>
     <name>NumberBox</name>
     <message>
-        <location filename="../src/platform/ui/components/NumberBox.qml" line="30"/>
+        <location filename="../src/platform/ui/components/NumberBox.qml" line="29"/>
         <source>%1~%2 사이 값을 입력해 주세요</source>
         <translation>Enter a value between %1 and %2</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/components/NumberBox.qml" line="37"/>
+        <location filename="../src/platform/ui/components/NumberBox.qml" line="36"/>
         <source>늘리기</source>
         <translation>Increase</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/components/NumberBox.qml" line="38"/>
+        <location filename="../src/platform/ui/components/NumberBox.qml" line="37"/>
         <source>줄이기</source>
         <translation>Decrease</translation>
     </message>
@@ -749,7 +749,7 @@
 <context>
     <name>SearchBox</name>
     <message>
-        <location filename="../src/platform/ui/components/SearchBox.qml" line="16"/>
+        <location filename="../src/platform/ui/components/SearchBox.qml" line="15"/>
         <source>검색어 지우기</source>
         <translation>Clear search</translation>
     </message>

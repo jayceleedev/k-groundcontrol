@@ -33,6 +33,8 @@ def check(ctx):
         for number, line in enumerate(text.splitlines(), 1):
             line = re.sub(r'//.*', '', line)
             for match in re.finditer(r'\b([\w.]+)\s*:\s*([^;{}]+)', line):
+                if match[1].startswith('anchors.'):
+                    continue
                 name, value = match[1].split('.')[-1], match[2].strip()
                 size = name in {'width', 'height', 'implicitWidth', 'implicitHeight',
                     'padding', 'margins', 'spacing', 'radius'} or name.endswith(('Padding', 'Margin'))

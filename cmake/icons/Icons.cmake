@@ -1,14 +1,4 @@
 # [0.0.2 T23] specs/features/0.0.2-theme.md
-include("${PROJECT_SOURCE_DIR}/cmake/CPM.cmake")
-# 의존성과 내려받기 도구 모두 빌드 폴더 안에서 해시로 확인해요.
-set(CPM_SOURCE_CACHE "${PROJECT_BINARY_DIR}/cpm-cache" CACHE PATH "의존성 원본 캐시")
-set(cpm_script "${PROJECT_BINARY_DIR}/cmake/CPM_${CPM_DOWNLOAD_VERSION}.cmake")
-if(NOT EXISTS "${cpm_script}")
-    file(DOWNLOAD
-        "https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_DOWNLOAD_VERSION}/CPM.cmake"
-        "${cpm_script}" EXPECTED_HASH "SHA256=${CPM_DOWNLOAD_SHA256}" TLS_VERIFY ON)
-endif()
-include("${cpm_script}")
 CPMAddPackage(NAME TablerIcons VERSION 3.49.0 DOWNLOAD_ONLY YES
     URL "https://registry.npmjs.org/@tabler/icons/-/icons-3.49.0.tgz"
     URL_HASH SHA256=aa3042907eb0bdb079fd70733e2d75f785683d4726279128a0ca2343099f7074)

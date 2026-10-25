@@ -16,6 +16,8 @@ def check(ctx):
                 continue
             name = match[1]
             allowed = name.startswith(("QtQuick", "QtQml")) or name == "Kgc.Ui"
+            if root == "src/platform/ui":
+                allowed |= name in {"QtQuick.Effects", "QtGraphs"}
             if root and root.startswith("src/features/"):
                 allowed |= name in {"QtLocation", "QtPositioning", "QtMultimedia", "QtGraphs", "QtQuick3D"}
                 feature = next((f for f in ctx["ranks"] if "Kgc." + f[0].upper() + f[1:] == name), None)

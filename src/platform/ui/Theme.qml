@@ -1,6 +1,7 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 pragma Singleton
 import QtQuick
+import "themes"
 QtObject {
     readonly property int baseWidth: 1920
     readonly property int baseHeight: 900
@@ -27,11 +28,57 @@ QtObject {
     readonly property int dialogWidth: Math.round(720 * uiScale)
     readonly property int dialogHeight: Math.round(560 * uiScale)
     readonly property int languageWidth: Math.round(240 * uiScale)
-    readonly property color background: "#f3f4f6"
-    readonly property color region: "#e5e7eb"
-    readonly property color surface: "#ffffff"
-    readonly property color line: "#9ca3af"
-    readonly property color ink: "#111827"
-    readonly property color dim: "#6b7280"
-    readonly property color accent: "#374151"
+    property ThemeBase current: Light {}
+    readonly property color series1: current.series1
+    readonly property color series2: current.series2
+    readonly property color series3: current.series3
+    readonly property color series4: current.series4
+    readonly property color series5: current.series5
+    readonly property color series6: current.series6
+    readonly property color chartGrid: current.chartGrid
+    readonly property color chartAxis: current.chartAxis
+    readonly property color onDanger: current.onDanger
+    readonly property color window: current.window
+    readonly property color region: current.region
+    readonly property color surface: current.surface
+    readonly property color surfaceAlt: current.surfaceAlt
+    readonly property color overlay: current.overlay
+    readonly property color ink: current.ink
+    readonly property color inkMuted: current.inkMuted
+    readonly property color inkInverse: current.inkInverse
+    readonly property color inkDisabled: current.inkDisabled
+    readonly property color line: current.line
+    readonly property color lineStrong: current.lineStrong
+    readonly property color focus: current.focus
+    readonly property color accent: current.accent
+    readonly property color accentHover: current.accentHover
+    readonly property color accentPressed: current.accentPressed
+    readonly property color onAccent: current.onAccent
+    readonly property color ok: current.ok
+    readonly property color warn: current.warn
+    readonly property color danger: current.danger
+    readonly property color info: current.info
+    readonly property color idle: current.idle
+    readonly property color okSoft: current.okSoft
+    readonly property color warnSoft: current.warnSoft
+    readonly property color dangerSoft: current.dangerSoft
+    readonly property color infoSoft: current.infoSoft
+    readonly property color glassTint: current.glassTint
+    readonly property real glassBlur: current.glassBlur
+    readonly property int glassBlurMax: current.glassBlurMax
+    readonly property color glassEdge: current.glassEdge
+    readonly property real glassShine: current.glassShine
+    readonly property int radiusSmall: current.radiusSmall * uiScale
+    readonly property int radiusMedium: current.radiusMedium * uiScale
+    readonly property int radiusLarge: current.radiusLarge * uiScale
+    readonly property color shadowColor: current.shadowColor
+    readonly property color mapPatternA: current.mapPatternA
+    readonly property color mapPatternB: current.mapPatternB
+    readonly property int order: current.order
+    readonly property bool dark: current.dark
+    readonly property bool glass: current.glass
+    readonly property bool shadow: current.shadow
+    readonly property string titleKey: current.titleKey
+    readonly property string fontFamily: current.fontFamily
+    readonly property string monoFamily: current.monoFamily
 }

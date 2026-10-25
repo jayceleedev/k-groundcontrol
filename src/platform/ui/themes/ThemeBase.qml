@@ -1,0 +1,56 @@
+// [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
+import QtQuick
+QtObject {
+    required property color series1
+    required property color series2
+    required property color series3
+    required property color series4
+    required property color series5
+    required property color series6
+    required property color chartGrid
+    required property color chartAxis
+    required property color onDanger
+    required property color window
+    required property color region
+    required property color surface
+    required property color surfaceAlt
+    required property color overlay
+    required property color ink
+    required property color inkMuted
+    required property color inkInverse
+    required property color inkDisabled
+    required property color line
+    required property color lineStrong
+    required property color focus
+    required property color accent
+    required property color accentHover
+    required property color accentPressed
+    required property color onAccent
+    required property color ok
+    required property color warn
+    required property color danger
+    required property color info
+    required property color idle
+    required property color okSoft
+    required property color warnSoft
+    required property color dangerSoft
+    required property color infoSoft
+    required property color glassTint
+    required property real glassBlur
+    required property int glassBlurMax
+    required property color glassEdge
+    required property real glassShine
+    required property int radiusSmall
+    required property int radiusMedium
+    required property int radiusLarge
+    required property color shadowColor
+    required property color mapPatternA
+    required property color mapPatternB
+    required property int order
+    required property bool dark
+    required property bool glass
+    required property bool shadow
+    required property string titleKey
+    required property string fontFamily
+    required property string monoFamily
+}

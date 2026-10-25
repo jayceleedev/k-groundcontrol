@@ -1,6 +1,8 @@
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #include "Composition.h"
 #include <kgc/ui/UiRegistry.h>
+#include <kgc/ui/ThemeSwitcher.h>
+#include <kgc/ui/UiSettingValues.h>
 #include <kgc/shell/ShellService.h>
 #include <kgc/shell/Ui.h>
 #include <kgc/appSettings/AppSettingsService.h>
@@ -37,6 +39,8 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     context->setContextProperty("mapLayerSlot", mapLayers);
     context->setContextProperty("navigator", navigator);
     context->setContextProperty("translator", &translator);
+    context->setContextProperty("themeSwitcher", new ui::ThemeSwitcher(engine));
+    context->setContextProperty("uiSettingValues", new ui::UiSettingValues(this));
     ui::UiRegistry registry{*panels, *topbar, *statusChips, *rightTabs, *mapLayers, *navigator, engine};
     auto* shellService = new shell::ShellService(translator, this);
     auto* appSettingsService = new appSettings::AppSettingsService(std::move(info), translator, this);

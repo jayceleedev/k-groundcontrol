@@ -13,5 +13,5 @@ qt_add_translations(kgc_composition
     SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_appSettings kgc_composition)
 qt_add_executable(KGroundControl main.cpp)
 set_target_properties(KGroundControl PROPERTIES WIN32_EXECUTABLE TRUE)
-target_link_libraries(KGroundControl PRIVATE kgc_composition)
+target_link_libraries(KGroundControl PRIVATE kgc_composition Qt6::QuickControls2)
 include("${PROJECT_SOURCE_DIR}/cmake/notices/Notices.cmake")

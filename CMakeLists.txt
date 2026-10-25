@@ -1,11 +1,11 @@
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 cmake_minimum_required(VERSION 3.28)
-project(KGroundControl VERSION 0.0.1 LANGUAGES CXX
+project(KGroundControl VERSION 0.0.2 LANGUAGES CXX
     HOMEPAGE_URL "https://github.com/jayceleedev/k-groundcontrol")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-find_package(Qt6 6.12 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 LinguistTools Test QuickTest)
+find_package(Qt6 6.12 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 LinguistTools Test QuickTest QuickEffects Graphs Svg)
 qt_standard_project_setup(REQUIRES 6.5)
 include(CTest)
 set(KGC_EXTRA_TESTS_DIR "" CACHE PATH "외부 시험 폴더")

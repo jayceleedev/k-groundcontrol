@@ -1,0 +1,21 @@
+{
+  "module": "ui",
+  "settings": [
+    {
+      "id": "ui.theme",
+      "type": "string",
+      "default": "system",
+      "category": "ui",
+      "labelKey": "테마"
+    },
+    {
+      "id": "ui.holdToConfirmMs",
+      "type": "int",
+      "default": 1500,
+      "min": 500,
+      "max": 5000,
+      "category": "ui",
+      "labelKey": "길게 눌러 확인 시간"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+// [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
+import QtQuick
+ThemeBase {
+    series1: "#60a5fa"
+    series2: "#fb923c"
+    series3: "#4ade80"
+    series4: "#c084fc"
+    series5: "#22d3ee"
+    series6: "#facc15"
+    chartGrid: "#2f3541"
+    chartAxis: "#6b7280"
+    onDanger: "#111827"
+    window: "#0f1115"
+    region: "#171a21"
+    surface: "#1f232b"
+    surfaceAlt: "#262b34"
+    overlay: "#eb0f1115"
+    ink: "#e5e7eb"
+    inkMuted: "#9ca3af"
+    inkInverse: "#111827"
+    inkDisabled: "#4b5563"
+    line: "#2f3541"
+    lineStrong: "#4b5563"
+    focus: "#60a5fa"
+    accent: "#2563eb"
+    accentHover: "#3b82f6"
+    accentPressed: "#1d4ed8"
+    onAccent: "#ffffff"
+    ok: "#22c55e"
+    warn: "#f59e0b"
+    danger: "#f87171"
+    info: "#38bdf8"
+    idle: "#6b7280"
+    okSoft: "#14301f"
+    warnSoft: "#3a2a0b"
+    dangerSoft: "#3b1717"
+    infoSoft: "#0c2a3a"
+    glassTint: surface
+    glassBlur: 0
+    glassBlurMax: 32
+    glassEdge: "transparent"
+    glassShine: 0
+    radiusSmall: 4
+    radiusMedium: 8
+    radiusLarge: 12
+    shadowColor: "#80000000"
+    mapPatternA: "#1e293b"
+    mapPatternB: "#334155"
+    order: 20
+    dark: true
+    glass: false
+    shadow: true
+    titleKey: QT_TRANSLATE_NOOP("Theme", "다크")
+    fontFamily: "Noto Sans KR"
+    monoFamily: "monospace"
+}

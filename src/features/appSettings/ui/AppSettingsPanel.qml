@@ -37,12 +37,12 @@ ScrollView {
             Label { text: qsTr("정보"); font.bold: true; color: Theme.ink }
             Row {
                 spacing: Theme.inset
-                Label { text: qsTr("버전"); color: Theme.dim }
+                Label { text: qsTr("버전"); color: Theme.inkMuted }
                 Label { objectName: "aboutVersion"; text: appSettingsController.version; color: Theme.ink }
             }
             Button { objectName: "aboutLicenseButton"; text: qsTr("라이선스 보기"); onClicked: licenseDialog.open() }
             Button { objectName: "aboutNoticesButton"; text: qsTr("고지 보기"); onClicked: noticesDialog.open() }
-            Label { text: qsTr("소스"); color: Theme.dim }
+            Label { text: qsTr("소스"); color: Theme.inkMuted }
             TextArea {
                 objectName: "aboutSourceUrl"
                 width: parent.width

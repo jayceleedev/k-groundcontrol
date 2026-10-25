@@ -8,7 +8,7 @@ ApplicationWindow {
     title: qsTr("K-GroundControl %1").arg(Qt.application.version)
     minimumWidth: Math.min(Theme.baseWidth, shellController.availableScreenSize.width)
     minimumHeight: Math.min(Theme.baseHeight, shellController.availableScreenSize.height)
-    color: Theme.background
+    color: Theme.window
     font.pixelSize: Theme.fontSize
     Component.onCompleted: {
         shellController.attachWindow(this)

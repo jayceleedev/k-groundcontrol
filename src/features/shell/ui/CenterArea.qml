@@ -6,7 +6,7 @@ import Kgc.Ui
 Rectangle {
     id: center
     objectName: "centerArea"
-    color: Theme.background
+    color: Theme.window
     border.color: Theme.line
     property var selectedPanel: {
         const panelId = shellController.activePanelId
@@ -35,7 +35,7 @@ Rectangle {
         objectName: "mapPlaceholder"
         anchors.centerIn: parent
         text: qsTr("지도")
-        color: Theme.dim
+        color: Theme.inkMuted
         font.pixelSize: Theme.titleSize
     }
     Repeater { model: mapLayerSlot; delegate: Item {} }
@@ -81,7 +81,7 @@ Rectangle {
             visible: overlay.visible && loader.source.toString() === ""
             text: center.panelTitle + "\n" + qsTr("준비 중")
             horizontalAlignment: Text.AlignHCenter
-            color: Theme.dim
+            color: Theme.inkMuted
             font.pixelSize: Theme.fontSize
         }
         Loader {

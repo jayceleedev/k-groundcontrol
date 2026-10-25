@@ -7,6 +7,7 @@
 #include <kgc/app/i18n/Translator.h>
 #include <kgc/appSettings/Settings.h>
 #include <QGuiApplication>
+#include <QQuickStyle>
 #include <QQmlApplicationEngine>
 
 /** 부팅 순서에 맞춰 앱을 조립해요.
@@ -19,8 +20,9 @@
  * 3. LogSink::install — 로그를 열어요.
  * 4. Settings::instance — 운영 설정을 준비해요.
  * 5. Translator::setLanguage — 저장된 언어를 적용해요.
- * 6. new Composition — 서비스와 등록부를 조립해요.
- * 7. Composition::loadShell — 조립한 창을 표시해요.
+ * 6. QQuickStyle::setStyle — 화면 부품의 바탕 스타일을 정해요.
+ * 7. new Composition — 서비스와 등록부를 조립해요.
+ * 8. Composition::loadShell — 조립한 창을 표시해요.
  */
 int main(int argc, char* argv[])
 {
@@ -34,6 +36,7 @@ int main(int argc, char* argv[])
     kgc::app::settings::Settings::instance();
     kgc::app::i18n::Translator translator(":/kgc/i18n");
     translator.setLanguage(kgc::appSettings::settings::toString(kgc::appSettings::settings::language()));
+    QQuickStyle::setStyle("Basic");
     QQmlApplicationEngine engine;
     auto* composition = new kgc::Composition(engine,
         {KGC_VERSION, KGC_HOMEPAGE_URL, ":/kgc/LICENSE", app.applicationDirPath() + "/THIRD_PARTY_NOTICES.md"}, translator);

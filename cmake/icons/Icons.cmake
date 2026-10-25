@@ -1,4 +1,5 @@
 # [0.0.2 T23] specs/features/0.0.2-theme.md
+include("${CMAKE_CURRENT_LIST_DIR}/../CPM.cmake")
 CPMAddPackage(NAME TablerIcons VERSION 3.49.0 DOWNLOAD_ONLY YES
     URL "https://registry.npmjs.org/@tabler/icons/-/icons-3.49.0.tgz"
     URL_HASH SHA256=aa3042907eb0bdb079fd70733e2d75f785683d4726279128a0ca2343099f7074)

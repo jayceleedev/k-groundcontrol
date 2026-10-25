@@ -1,6 +1,5 @@
 // [0.0.2 T1 T10 T17] specs/features/0.0.2-theme.md
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 Card {
     title: qsTr("버튼")

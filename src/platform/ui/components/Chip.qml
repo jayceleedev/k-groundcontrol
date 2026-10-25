@@ -1,7 +1,7 @@
 // [0.0.2 T12] specs/features/0.0.2-theme.md
 /** 상태 이름과 점을 함께 보여줘요.
- * 입력: text, level, radius를 받고 textColor로 글자 색을 읽어요.
- * 출력: StatusDot에서 얻은 textColor와 옅은 바탕으로 상태 글자를 표시해요.
+ * 입력: text, level, radius를 받아요.
+ * 출력: StatusDot에서 얻은 textColor와 옅은 바탕으로 상태 글자를 표시하고 textColor로 글자 색을 제공해요.
  * 실패: 모르는 level은 StatusDot의 idle 색과 surfaceAlt 바탕으로 표시해요.
  */
 import QtQuick

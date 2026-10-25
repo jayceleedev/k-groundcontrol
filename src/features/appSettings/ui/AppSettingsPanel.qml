@@ -1,20 +1,30 @@
-// [0.0.2 T4 T14 T15 T20] specs/features/0.0.2-theme.md
+// [0.0.2 T4 T14 T15 T20 T24 T25] specs/features/0.0.2-theme.md
 import QtQuick
-// [0.0.2 T24] specs/features/0.0.2-theme.md
 import QtQuick.Dialogs
 import QtQuick.Controls
 import Kgc.Ui
-ScrollView {
+SettingsPage {
     id: panel
-    clip: true
-    contentWidth: availableWidth
+    categories: [
+        {id: "general", title: qsTr("일반")},
+        {id: "display", title: qsTr("화면")},
+        {id: "input", title: qsTr("조작")},
+        {id: "about", title: qsTr("정보")}
+    ]
+    /** 탐색 인자에 맞는 설정 카테고리를 열어요.
+     * 입력: 카테고리 식별자 또는 빈 인자.
+     * 출력: 없음.
+     * 실패: 알 수 없는 인자에는 일반 카테고리를 열어요.
+     * 흐름:
+     * 1. SettingsPage.currentIndex — 탐색한 카테고리를 선택해요.
+     */
     function onArg(arg) {
-        if (arg === "about")
-            contentItem.contentY = Math.max(0, Math.min(about.y, contentHeight - availableHeight))
+        currentIndex = Math.max(0, categories.findIndex(category => category.id === arg))
     }
-    Column {
-        width: panel.availableWidth
-        spacing: Theme.panelInset
+    Section {
+        width: parent.width
+        visible: panel.currentCategory === "general"
+        text: qsTr("일반")
         ComboField {
             id: languageCombo
             objectName: "languageCombo"
@@ -23,6 +33,11 @@ ScrollView {
             currentIndex: appSettingsController.languages.indexOf(appSettingsController.language)
             onActivated: appSettingsController.setLanguage(appSettingsController.languages[currentIndex])
         }
+    }
+    Section {
+        width: parent.width
+        visible: panel.currentCategory === "display"
+        text: qsTr("화면")
         ComboField {
             id: themeCombo
             objectName: "themeCombo"
@@ -48,6 +63,11 @@ ScrollView {
             onEditingFinished: uiSettingValues.backgroundImage = text
             onBrowseRequested: backgroundDialog.open()
         }
+    }
+    Section {
+        width: parent.width
+        visible: panel.currentCategory === "input"
+        text: qsTr("조작")
         Label { text: qsTr("길게 눌러 확인 시간"); color: Theme.inkMuted }
         NumberBox {
             objectName: "holdTimeField"
@@ -57,27 +77,26 @@ ScrollView {
             unit: qsTr("ms")
             onValueModified: value => { uiSettingValues.holdToConfirmMs = value }
         }
-        Column {
-            id: about
-            width: parent.width
+    }
+    Section {
+        width: parent.width
+        visible: panel.currentCategory === "about"
+        text: qsTr("정보")
+        Row {
             spacing: Theme.inset
-            Label { text: qsTr("정보"); font.bold: true; color: Theme.ink }
-            Row {
-                spacing: Theme.inset
-                Label { text: qsTr("버전"); color: Theme.inkMuted }
-                Label { objectName: "aboutVersion"; text: appSettingsController.version; color: Theme.ink }
-            }
-            ActionButton { objectName: "aboutLicenseButton"; text: qsTr("라이선스 보기"); onClicked: licenseDialog.open() }
-            ActionButton { objectName: "aboutNoticesButton"; text: qsTr("고지 보기"); onClicked: noticesDialog.open() }
-            Label { text: qsTr("소스"); color: Theme.inkMuted }
-            TextBox {
-                objectName: "aboutSourceUrl"
-                width: parent.width
-                text: appSettingsController.sourceUrl
-                readOnly: true
-                color: Theme.ink
-                selectByMouse: true
-            }
+            Label { text: qsTr("버전"); color: Theme.inkMuted }
+            Label { objectName: "aboutVersion"; text: appSettingsController.version; color: Theme.ink }
+        }
+        ActionButton { objectName: "aboutLicenseButton"; text: qsTr("라이선스 보기"); onClicked: licenseDialog.open() }
+        ActionButton { objectName: "aboutNoticesButton"; text: qsTr("고지 보기"); onClicked: noticesDialog.open() }
+        Label { text: qsTr("소스"); color: Theme.inkMuted }
+        TextBox {
+            objectName: "aboutSourceUrl"
+            width: parent.width
+            text: appSettingsController.sourceUrl
+            readOnly: true
+            color: Theme.ink
+            selectByMouse: true
         }
     }
     FileDialog {

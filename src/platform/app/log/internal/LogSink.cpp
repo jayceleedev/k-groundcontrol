@@ -6,11 +6,13 @@
 #include <QFile>
 #include <QMutex>
 #include <QMutexLocker>
+#include <algorithm>
 namespace kgc::app::log {
 namespace {
 struct Sink {
     QFile file;
     LogFeed* feed = nullptr;
+    QStringList guardFilePrefixes;
     QMutex mutex;
     QString directory;
     LogLevel threshold = LogLevel::Info;
@@ -53,11 +55,12 @@ bool LogSink::install(const QString& dir, LogLevel level, int maxFileMB, int max
     }
     return true;
 }
-void LogSink::attachFeed(LogFeed* feed)
+void LogSink::attachFeed(LogFeed* feed, QStringList guardFilePrefixes)
 {
     auto& state = sink();
     QMutexLocker lock(&state.mutex);
     state.feed = feed;
+    state.guardFilePrefixes = std::move(guardFilePrefixes);
 }
 void LogSink::write(LogLevel level, const QString& category, const QString& event,
                     const QString& message, const QMessageLogContext& context)
@@ -73,8 +76,8 @@ void LogSink::write(LogLevel level, const QString& category, const QString& even
         state.file.write(text.toUtf8());
         state.file.flush();
         const auto file = QString::fromUtf8(context.file ? context.file : "");
-        const bool fromView = file.startsWith("qrc:/qt/qml/Kgc/Analyze/")
-            || file == "LogView.qml" || file.endsWith("/LogView.qml");
+        const bool fromView = std::ranges::any_of(state.guardFilePrefixes,
+            [&file](const auto& prefix) { return file.startsWith(prefix); });
         if (category != "kgc.qt" || (!LogFeed::delivering_ && !fromView)) {
             feed = state.feed;
             record = {0, level, category, event, message, text.chopped(1)};

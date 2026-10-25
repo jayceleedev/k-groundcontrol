@@ -1,4 +1,5 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
+// [0.0.3 T6] specs/features/0.0.3-windows.md
 #include <kgc/app/log/LogSink.h>
 #include <QDateTime>
 #include <array>
@@ -18,6 +19,12 @@ std::optional<LogLevel> parseLogLevel(QStringView name)
     for (const auto& entry : levels)
         if (name == QString::fromLatin1(entry.label).toLower()) return entry.level;
     return std::nullopt;
+}
+QString logLevelName(LogLevel level)
+{
+    for (const auto& entry : levels)
+        if (entry.level == level) return QString::fromLatin1(entry.label).toLower();
+    return {};
 }
 LogLevel LogSink::fromQtLevel(QtMsgType level)
 {

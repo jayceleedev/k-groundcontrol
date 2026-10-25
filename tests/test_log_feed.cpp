@@ -1,4 +1,4 @@
-// [0.0.3 T5 T7 T8] specs/features/0.0.3-windows.md
+// [0.0.3 T5 T6 T7 T8] specs/features/0.0.3-windows.md
 #include <kgc/app/log/LogFeed.h>
 #include <kgc/app/log/LogSink.h>
 #include <QtTest>
@@ -15,15 +15,15 @@ private slots:
         QTemporaryDir dir;
         QVERIFY(LogSink::install(dir.path(), LogLevel::Debug, 5, 5));
         LogFeed feed;
-        LogSink::attachFeed(&feed);
+        LogSink::attachFeed(&feed, {"qrc:/test/log-window/", "qrc:/test/log-view.qml"});
         connect(&feed, &LogFeed::recordAdded, this, [](const LogRecord&) {
             QMessageLogger("consumer.cpp", 1, "receive").warning("during-delivery");
         });
         QMessageLogger("producer.cpp", 1, "produce").info("original-record");
         QCOMPARE(feed.recent().second, quint64(1));
         QCoreApplication::sendPostedEvents(&feed, QEvent::MetaCall);
-        QMessageLogger("qrc:/qt/qml/Kgc/Analyze/AppLogWindow.qml", 1, "binding").warning("window-warning");
-        QMessageLogger("qrc:/qt/qml/Kgc/Ui/components/LogView.qml", 1, "binding").warning("delegate-warning");
+        QMessageLogger("qrc:/test/log-window/Window.qml", 1, "binding").warning("window-warning");
+        QMessageLogger("qrc:/test/log-view.qml", 1, "binding").warning("delegate-warning");
         QCOMPARE(feed.recent().second, quint64(1));
         LogSink::attachFeed(nullptr);
         QFile file(dir.filePath("kgc.log"));
@@ -35,6 +35,22 @@ private slots:
         const auto record = feed.recent().first.first();
         QVERIFY(!record.text.endsWith('\n'));
         QVERIFY(text.startsWith(record.text.toUtf8() + '\n'));
+        // 새로 붙일 때 접두 목록을 비우면 이전 제외 규칙이 남지 않아야 해요.
+        LogSink::attachFeed(&feed);
+        QMessageLogger("qrc:/test/log-view.qml", 1, "binding").warning("unguarded-warning");
+        QCOMPARE(feed.recent().second, quint64(2));
+        LogSink::attachFeed(nullptr);
+    }
+
+    /** T6: 수준 이름은 소문자이며 이름 해석과 같은 대응을 쓰는지 확인해요. */
+    void test_T6_level_names()
+    {
+        const std::array names{"debug", "info", "warn", "error"};
+        const std::array levels{LogLevel::Debug, LogLevel::Info, LogLevel::Warn, LogLevel::Error};
+        for (std::size_t i = 0; i < levels.size(); ++i) {
+            QCOMPARE(logLevelName(levels[i]), QString::fromLatin1(names[i]));
+            QCOMPARE(parseLogLevel(logLevelName(levels[i])), levels[i]);
+        }
     }
 
     /** T8: 여러 스레드가 동시에 보내도 순서와 받는 스레드가 일정한지 확인해요. */

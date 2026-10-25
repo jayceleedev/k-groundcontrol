@@ -1,5 +1,7 @@
 // [BASE 6] specs/BASE.md
+// [0.0.3 T6] specs/features/0.0.3-windows.md
 #pragma once
+#include <QString>
 #include <QStringView>
 #include <optional>
 
@@ -16,4 +18,10 @@ enum class LogLevel { Debug, Info, Warn, Error };
  * 실패: 지원하지 않는 이름이면 빈 값.
  */
 std::optional<LogLevel> parseLogLevel(QStringView name);
+/** 로그 수준을 설정과 화면이 함께 쓰는 이름으로 바꿔요.
+ * 입력: 로그 수준.
+ * 출력: 소문자 수준 이름.
+ * 실패: 정의되지 않은 수준은 빈 문자열.
+ */
+QString logLevelName(LogLevel level);
 }

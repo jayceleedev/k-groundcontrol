@@ -2,7 +2,7 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #pragma once
 #include <kgc/app/log/LogLevel.h>
-#include <QString>
+#include <QStringList>
 #include <QtLogging>
 
 namespace kgc::app::log {
@@ -28,11 +28,11 @@ public:
  */
     static bool install(const QString& dir, LogLevel level, int maxFileMB, int maxFiles);
     /** 화면으로 로그를 전달할 통로를 붙이거나 떼어요.
-     * 입력: 엔진보다 오래 사는 통로, 떼려면 nullptr.
+     * 입력: 엔진보다 오래 사는 통로와 조립이 넘긴 경고 출처 접두 목록, 떼려면 nullptr.
      * 출력: 없음.
      * 실패: 없음.
      */
-    static void attachFeed(LogFeed* feed);
+    static void attachFeed(LogFeed* feed, QStringList guardFilePrefixes = {});
 private:
     template<class... Values>
     friend void detail::writeLog(LogLevel, const char*, LogEvent, const char*, const char*, const Values&...);

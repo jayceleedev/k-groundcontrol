@@ -21,14 +21,7 @@ QVariant AppLogModel::data(const QModelIndex& index, int role) const
     const auto& record = records_[index.row()];
     switch (role) {
     case Qt::UserRole + 1: return record.text;
-    case Qt::UserRole + 2:
-        switch (record.level) {
-        case kgc::app::log::LogLevel::Debug: return "debug";
-        case kgc::app::log::LogLevel::Info: return "info";
-        case kgc::app::log::LogLevel::Warn: return "warn";
-        case kgc::app::log::LogLevel::Error: return "error";
-        }
-        return {};
+    case Qt::UserRole + 2: return kgc::app::log::logLevelName(record.level);
     case Qt::UserRole + 3: return record.category;
     case Qt::UserRole + 4: return record.event;
     case Qt::UserRole + 5: return record.message;

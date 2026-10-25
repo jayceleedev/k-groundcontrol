@@ -1,4 +1,4 @@
-// [0.0.3 T4 T5] specs/features/0.0.3-windows.md
+// [0.0.3 T4 T5 T7] specs/features/0.0.3-windows.md
 #include <kgc/analyze/AppLogService.h>
 #include <kgc/app/log/LogFeed.h>
 #include "AppLogModel.h"
@@ -16,4 +16,8 @@ AppLogService::AppLogService(kgc::app::log::LogFeed& feed, QObject* parent)
     last_ = last;
 }
 QAbstractListModel* AppLogService::model() const { return model_; }
+QStringList AppLogService::loopGuardPrefixes()
+{
+    return {"qrc:/qt/qml/Kgc/Analyze/", "qrc:/qt/qml/Kgc/Ui/components/LogView.qml"};
+}
 }

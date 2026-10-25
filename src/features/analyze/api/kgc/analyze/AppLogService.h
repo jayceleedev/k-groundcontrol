@@ -1,7 +1,8 @@
-// [0.0.3 T4 T5] specs/features/0.0.3-windows.md
+// [0.0.3 T4 T5 T7] specs/features/0.0.3-windows.md
 #pragma once
 #include <QObject>
 #include <QAbstractListModel>
+#include <QStringList>
 namespace kgc::app::log { class LogFeed; }
 namespace kgc::analyze {
 class AppLogModel;
@@ -25,6 +26,12 @@ public:
      * 실패: 없음.
      */
     QAbstractListModel* model() const;
+    /** 로그 화면 경고의 되돌이를 막을 출처를 조립에 알려줘요.
+     * 입력: 없음.
+     * 출력: 화면 통로에서 제외할 파일 접두 목록.
+     * 실패: 없음.
+     */
+    static QStringList loopGuardPrefixes();
 private:
     AppLogModel* model_;
     quint64 last_ = 0;

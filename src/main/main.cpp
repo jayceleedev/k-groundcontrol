@@ -1,4 +1,4 @@
-// [0.0.3 T13] specs/features/0.0.3-windows.md
+// [0.0.3 T7 T13] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 // [0.0.2 T26 T27] specs/features/0.0.2-theme.md
 #include "Composition.h"
@@ -9,6 +9,7 @@
 #include <kgc/app/settings/Settings.h>
 #include <kgc/app/i18n/Translator.h>
 #include <kgc/appSettings/Settings.h>
+#include <kgc/analyze/AppLogService.h>
 #include <QGuiApplication>
 #include <QIcon>
 #include <kgc/ui/SurfaceFormat.h>
@@ -43,7 +44,7 @@ int main(int argc, char* argv[])
     kgc::app::paths::Paths::init(boot.dataDir);
     if (!kgc::app::log::LogSink::install(kgc::app::paths::Paths::logsApp(), boot.logLevel, boot.maxFileMB, boot.maxFiles))
         return 1;
-    kgc::app::log::LogSink::attachFeed(&feed);
+    kgc::app::log::LogSink::attachFeed(&feed, kgc::analyze::AppLogService::loopGuardPrefixes());
     kgc::app::settings::Settings::instance();
     kgc::app::i18n::Translator translator(":/kgc/i18n");
     translator.setLanguage(kgc::appSettings::settings::toString(kgc::appSettings::settings::language()));

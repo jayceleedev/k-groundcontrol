@@ -17,6 +17,7 @@ struct UiRegistry {
     StatusChipSlot& statusChips;
     RightTabSlot& rightTabs;
     MapLayerSlot& mapLayers;
+    BottomActionSlot& bottomActions;
     Navigator& navigator;
     QQmlEngine& engine;
 };

@@ -33,6 +33,7 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* statusChips = new ui::StatusChipSlot(this);
     auto* rightTabs = new ui::RightTabSlot(this);
     auto* mapLayers = new ui::MapLayerSlot(this);
+    auto* bottomActions = new ui::BottomActionSlot(this);
     auto* navigator = new ui::Navigator(this);
     auto* context = engine.rootContext();
     context->setContextProperty("panelRegistry", panels);
@@ -44,7 +45,7 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     context->setContextProperty("translator", &translator);
     context->setContextProperty("themeSwitcher", new ui::ThemeSwitcher(engine));
     context->setContextProperty("uiSettingValues", new ui::UiSettingValues(this));
-    ui::UiRegistry registry{*panels, *topbar, *statusChips, *rightTabs, *mapLayers, *navigator, engine};
+    ui::UiRegistry registry{*panels, *topbar, *statusChips, *rightTabs, *mapLayers, *bottomActions, *navigator, engine};
     auto* shellService = new shell::ShellService(translator, this);
     auto* appSettingsService = new appSettings::AppSettingsService(std::move(info), translator, this);
     shell::registerUi(registry, *shellService);

@@ -42,20 +42,25 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* appSettingsService = new appSettings::AppSettingsService(std::move(info), translator, this);
     shell::registerUi(registry, *shellService);
     appSettings::registerUi(registry, *appSettingsService);
-    panels->registerPlaceholder("fcFlash", 1, 1, QT_TRANSLATE_NOOP("Menu", "펌웨어 세팅"), QUrl("qrc:/kgc/icons/menu/fcFlash.svg"));
-    panels->registerPlaceholder("layout", 2, 1, QT_TRANSLATE_NOOP("Menu", "기체 구성도"), QUrl("qrc:/kgc/icons/menu/layout.svg"));
-    panels->registerPlaceholder("sensors", 3, 1, QT_TRANSLATE_NOOP("Menu", "센서 보정"), QUrl("qrc:/kgc/icons/menu/sensors.svg"));
-    panels->registerPlaceholder("radio", 4, 1, QT_TRANSLATE_NOOP("Menu", "조종기"), QUrl("qrc:/kgc/icons/menu/radio.svg"));
-    panels->registerPlaceholder("flightModes", 5, 1, QT_TRANSLATE_NOOP("Menu", "비행 모드"), QUrl("qrc:/kgc/icons/menu/flightModes.svg"));
-    panels->registerPlaceholder("power", 6, 1, QT_TRANSLATE_NOOP("Menu", "배터리 · 전원"), QUrl("qrc:/kgc/icons/menu/power.svg"));
-    panels->registerPlaceholder("failsafe", 7, 1, QT_TRANSLATE_NOOP("Menu", "안전 · 페일세이프"), QUrl("qrc:/kgc/icons/menu/failsafe.svg"));
-    panels->registerPlaceholder("motors", 8, 1, QT_TRANSLATE_NOOP("Menu", "모터 시험"), QUrl("qrc:/kgc/icons/menu/motors.svg"));
-    panels->registerPlaceholder("tuning", 9, 1, QT_TRANSLATE_NOOP("Menu", "튜닝"), QUrl("qrc:/kgc/icons/menu/tuning.svg"));
-    panels->registerPlaceholder("logs", 10, 1, QT_TRANSLATE_NOOP("Menu", "로그 분석"), QUrl("qrc:/kgc/icons/menu/logs.svg"));
-    panels->registerPlaceholder("esc", 11, 2, QT_TRANSLATE_NOOP("Menu", "ESC 설정"), QUrl("qrc:/kgc/icons/menu/esc.svg"));
-    panels->registerPlaceholder("elrs", 12, 2, QT_TRANSLATE_NOOP("Menu", "ELRS 설정"), QUrl("qrc:/kgc/icons/menu/elrs.svg"));
-    panels->registerPlaceholder("tracker", 13, 2, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
-    panels->registerPlaceholder("params", 14, 3, QT_TRANSLATE_NOOP("Menu", "수동 기체 설정"), QUrl("qrc:/kgc/icons/menu/params.svg"));
+    const auto registerPlaceholder = [panels](const char* id, int order, int group,
+                                               const char* titleKey, const QUrl& icon) {
+        const auto result = panels->registerPlaceholder(id, order, group, titleKey, icon);
+        Q_ASSERT(result.has_value());
+    };
+    registerPlaceholder("fcFlash", 1, 1, QT_TRANSLATE_NOOP("Menu", "펌웨어 세팅"), QUrl("qrc:/kgc/icons/menu/fcFlash.svg"));
+    registerPlaceholder("layout", 2, 1, QT_TRANSLATE_NOOP("Menu", "기체 구성도"), QUrl("qrc:/kgc/icons/menu/layout.svg"));
+    registerPlaceholder("sensors", 3, 1, QT_TRANSLATE_NOOP("Menu", "센서 보정"), QUrl("qrc:/kgc/icons/menu/sensors.svg"));
+    registerPlaceholder("radio", 4, 1, QT_TRANSLATE_NOOP("Menu", "조종기"), QUrl("qrc:/kgc/icons/menu/radio.svg"));
+    registerPlaceholder("flightModes", 5, 1, QT_TRANSLATE_NOOP("Menu", "비행 모드"), QUrl("qrc:/kgc/icons/menu/flightModes.svg"));
+    registerPlaceholder("power", 6, 1, QT_TRANSLATE_NOOP("Menu", "배터리 · 전원"), QUrl("qrc:/kgc/icons/menu/power.svg"));
+    registerPlaceholder("failsafe", 7, 1, QT_TRANSLATE_NOOP("Menu", "안전 · 페일세이프"), QUrl("qrc:/kgc/icons/menu/failsafe.svg"));
+    registerPlaceholder("motors", 8, 1, QT_TRANSLATE_NOOP("Menu", "모터 시험"), QUrl("qrc:/kgc/icons/menu/motors.svg"));
+    registerPlaceholder("tuning", 9, 1, QT_TRANSLATE_NOOP("Menu", "튜닝"), QUrl("qrc:/kgc/icons/menu/tuning.svg"));
+    registerPlaceholder("logs", 10, 1, QT_TRANSLATE_NOOP("Menu", "로그 분석"), QUrl("qrc:/kgc/icons/menu/logs.svg"));
+    registerPlaceholder("esc", 11, 2, QT_TRANSLATE_NOOP("Menu", "ESC 설정"), QUrl("qrc:/kgc/icons/menu/esc.svg"));
+    registerPlaceholder("elrs", 12, 2, QT_TRANSLATE_NOOP("Menu", "ELRS 설정"), QUrl("qrc:/kgc/icons/menu/elrs.svg"));
+    registerPlaceholder("tracker", 13, 2, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
+    registerPlaceholder("params", 14, 3, QT_TRANSLATE_NOOP("Menu", "수동 기체 설정"), QUrl("qrc:/kgc/icons/menu/params.svg"));
     connect(&translator, &app::i18n::Translator::languageChanged, &engine, &QQmlEngine::retranslate);
 }
 QQuickWindow* Composition::loadShell()

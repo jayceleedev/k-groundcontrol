@@ -71,17 +71,9 @@ Item {
                 fillMode: Image.PreserveAspectCrop
                 source: uiSettingValues.backgroundKind === "image" ? uiSettingValues.backgroundImageSource : ""
                 visible: status === Image.Ready
-                // 빈 경로에는 읽기 오류 시그널이 없으므로 별도로 같은 경고 통로를 써요.
-                function reportMissing() {
-                    if (uiSettingValues.backgroundKind === "image"
-                            && (status === Image.Error || uiSettingValues.backgroundImage === ""))
+                onStatusChanged: {
+                    if (status === Image.Error)
                         uiSettingValues.reportBackgroundImageMissing(uiSettingValues.backgroundImage)
-                }
-                onStatusChanged: reportMissing()
-                Component.onCompleted: reportMissing()
-                Connections {
-                    target: uiSettingValues
-                    function onBackgroundKindChanged() { backgroundImage.reportMissing() }
                 }
             }
         }

@@ -5,13 +5,21 @@
 #include <kgc/ui/ModuleId.h>
 #include <kgc/app/log/Log.h>
 #include <QFileInfo>
+#include <QImageReader>
 #include "Events.h"
 namespace kgc::ui {
 UiSettingValues::UiSettingValues(QObject* parent) : QObject(parent)
 {
-    settings::onBackgroundKindChanged(this, [this](auto) { emit backgroundKindChanged(); });
-    settings::onBackgroundImageChanged(this, [this](const QString&) { emit backgroundImageChanged(); });
+    settings::onBackgroundKindChanged(this, [this](auto) {
+        reportBackgroundImageMissing(backgroundImage());
+        emit backgroundKindChanged();
+    });
+    settings::onBackgroundImageChanged(this, [this](const QString& path) {
+        reportBackgroundImageMissing(path);
+        emit backgroundImageChanged();
+    });
     settings::onHoldToConfirmMsChanged(this, [this](int) { emit holdToConfirmMsChanged(); });
+    reportBackgroundImageMissing(backgroundImage());
 }
 int UiSettingValues::holdToConfirmMs() const { return settings::holdToConfirmMs(); }
 int UiSettingValues::holdToConfirmMsMin() const { return settings::holdToConfirmMsMin(); }
@@ -36,9 +44,17 @@ void UiSettingValues::setBackgroundImage(const QString& value)
     const auto path = url.isLocalFile() ? url.toLocalFile() : value;
     settings::setBackgroundImage(path.isEmpty() ? path : QFileInfo(path).absoluteFilePath());
 }
+void UiSettingValues::chooseBackgroundImage(const QString& path)
+{
+    setBackgroundImage(path);
+    settings::setBackgroundKind(settings::BackgroundKind::Image);
+}
 void UiSettingValues::reportBackgroundImageMissing(const QString& path)
 {
-    if (warnedImagePaths_.contains(path)) return;
+    if (settings::backgroundKind() != settings::BackgroundKind::Image
+        || path != backgroundImage() || warnedImagePaths_.contains(path)) return;
+    // 머리 정보만 멀쩡한 손상 파일도 놓치지 않도록 사진 전체를 읽어요.
+    if (!path.isEmpty() && !QImageReader(path).read().isNull()) return;
     warnedImagePaths_.insert(path);
     KGC_LOG_WARN(kCategory, UiEvent::BackgroundImageMissing, "배경 사진 못 읽음: %1", path);
 }

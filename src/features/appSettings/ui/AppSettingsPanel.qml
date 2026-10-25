@@ -61,7 +61,7 @@ SettingsPage {
         FileField {
             objectName: "backgroundImageField"
             text: uiSettingValues.backgroundImage
-            onEditingFinished: uiSettingValues.backgroundImage = text
+            onEditingFinished: uiSettingValues.chooseBackgroundImage(text)
             onBrowseRequested: backgroundDialog.open()
         }
     }
@@ -102,10 +102,7 @@ SettingsPage {
         id: backgroundDialog
         title: qsTr("배경 사진")
         nameFilters: [qsTr("사진 (*.png *.jpg *.jpeg)")]
-        onAccepted: {
-            uiSettingValues.backgroundImage = selectedFile.toString()
-            uiSettingValues.backgroundKind = "image"
-        }
+        onAccepted: uiSettingValues.chooseBackgroundImage(selectedFile.toString())
     }
     Dialog {
         id: licenseDialog

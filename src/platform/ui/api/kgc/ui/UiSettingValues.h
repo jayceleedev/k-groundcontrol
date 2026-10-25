@@ -94,8 +94,17 @@ public:
      * 2. settings::setBackgroundImage — 절대 경로를 저장해요.
      */
     void setBackgroundImage(const QString& value);
-    /** 사진을 읽지 못한 경로를 한 번만 기록해요.
-     * 입력: 읽기를 시도한 사진 경로.
+    /** 선택한 사진을 배경으로 저장해요.
+     * 입력: 파일 경로 또는 파일 선택 대화 상자의 로컬 주소.
+     * 출력: 없음.
+     * 실패: 원격 주소는 경로 저장에서 무시해요.
+     * 흐름:
+     * 1. setBackgroundImage — 사진 경로를 정규화해서 저장해요.
+     * 2. settings::setBackgroundKind — 사진 배경을 선택해요.
+     */
+    Q_INVOKABLE void chooseBackgroundImage(const QString& path);
+    /** 빈 경로를 포함해 사진을 읽을 수 있는지 판단하고 실패를 한 번만 기록해요.
+     * 입력: 읽기를 시도한 사진 경로. 현재 사진 배경의 경로만 판단해요.
      * 출력: 없음.
      * 실패: 없음.
      */

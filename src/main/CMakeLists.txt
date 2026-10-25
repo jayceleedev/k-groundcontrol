@@ -6,12 +6,12 @@ target_include_directories(kgc_composition PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
 target_compile_definitions(kgc_composition PUBLIC
     KGC_VERSION="${PROJECT_VERSION}" KGC_HOMEPAGE_URL="${PROJECT_HOMEPAGE_URL}")
 target_link_libraries(kgc_composition PUBLIC kgc_app_errors kgc_app_boot kgc_app_paths
-    kgc_app_log kgc_app_settings kgc_app_i18n kgc_ui kgc_shell kgc_appSettings
-    kgc_uiplugin kgc_shellplugin kgc_appSettingsplugin)
+    kgc_app_log kgc_app_settings kgc_app_i18n kgc_ui kgc_shell kgc_appSettings kgc_uiGallery
+    kgc_uiplugin kgc_shellplugin kgc_appSettingsplugin kgc_uiGalleryplugin)
 qt_add_translations(kgc_composition
     TS_FILES "${PROJECT_SOURCE_DIR}/i18n/kgc_en.ts"
     RESOURCE_PREFIX /kgc/i18n
-    SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_appSettings kgc_composition)
+    SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_appSettings kgc_uiGallery kgc_composition)
 qt_add_executable(KGroundControl main.cpp)
 set_target_properties(KGroundControl PROPERTIES WIN32_EXECUTABLE TRUE)
 target_link_libraries(KGroundControl PRIVATE kgc_composition Qt6::QuickControls2)

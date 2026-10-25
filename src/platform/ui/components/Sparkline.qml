@@ -9,7 +9,7 @@ import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 import QtQuick.Shapes
 
-Shape {
+Item {
     id: line
     property var values: []
     property color color: Theme.series1
@@ -17,6 +17,8 @@ Shape {
     implicitHeight: Theme.menuHeight
     readonly property real low: values.length ? Math.min(...values) : 0
     readonly property real high: values.length ? Math.max(...values) : 1
+    Shape {
+        anchors.fill: parent
     ShapePath {
         strokeColor: line.color
         strokeWidth: Theme.lineWidth * 2
@@ -25,5 +27,6 @@ Shape {
             path: line.values.map((value, index) => Qt.point(index * line.width / Math.max(1, line.values.length - 1),
                   line.height - Theme.lineWidth - (value - line.low) / Math.max(1, line.high - line.low) * (line.height - Theme.lineWidth * 2)))
         }
+    }
     }
 }

@@ -7,6 +7,8 @@
 #include <kgc/shell/Ui.h>
 #include <kgc/appSettings/AppSettingsService.h>
 #include <kgc/appSettings/Ui.h>
+#include <kgc/uiGallery/UiGalleryService.h>
+#include <kgc/uiGallery/Ui.h>
 #include <kgc/app/i18n/Translator.h>
 #include <QQmlComponent>
 #include <QQmlContext>
@@ -16,6 +18,7 @@
 Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ShellPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_AppSettingsPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_UiGalleryPlugin)
 
 // 정적 라이브러리의 자원을 링커가 버리지 않도록 전역에서 참조해요.
 static void initKgcResources() { Q_INIT_RESOURCE(kgc); Q_INIT_RESOURCE(tabler_icons); }
@@ -46,6 +49,8 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* appSettingsService = new appSettings::AppSettingsService(std::move(info), translator, this);
     shell::registerUi(registry, *shellService);
     appSettings::registerUi(registry, *appSettingsService);
+    auto* galleryService = new uiGallery::UiGalleryService(this);
+    uiGallery::registerUi(registry, *galleryService);
     const auto registerPlaceholder = [panels](const char* id, int order, int group,
                                                const char* titleKey, const QUrl& icon) {
         const auto result = panels->registerPlaceholder(id, order, group, titleKey, icon);

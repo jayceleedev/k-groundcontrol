@@ -1,0 +1,6 @@
+{
+  "module": "analyze",
+  "settings": [
+    {"id": "analyze.logWindowPlacement", "type": "string", "default": "", "labelKey": "앱 로그 창 자리", "category": "analyze"}
+  ]
+}

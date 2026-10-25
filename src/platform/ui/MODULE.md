@@ -1,11 +1,11 @@
 # ui (바탕 2.5층)
-역할: 테마의 선택·수명·화면 토큰과 공용 부품, 메뉴 등록과 탐색을 제공해요.
+역할: 테마의 선택·수명·화면 토큰과 공용 부품, 메뉴·슬롯 등록과 탐색, WindowPlacement의 자리 변환과 SeparateWindow의 창 수명 관리를 제공해요.
 수명: 전역.
-받는 것: ui.theme, ui.holdToConfirmMs, ui.backgroundKind, ui.backgroundImage, 운영체제 색 모드, PanelEntry와 이름으로 여는 요청.
-주는 것: WindowPlacement의 ScreenInfo·Placement·restorePlacement·savePlacement, applyDefaultSurfaceFormat(창 생성 전 공용 멀티샘플 형식), ThemeChoice와 resolveTheme, ThemeSwitcher(themeId·currentIndex·themes·selected·choose), UiSettingValues(길게 누르기 시간·배경 종류·사진 경로·backgroundImageSource 로컬 주소·chooseBackgroundImage 사진 선택·실패 판정과 경로별 한 번 기록), PanelRegistry, PanelOrder.h에 함께 정의한 PanelEntry와 PanelOrder 순수 함수, SlotModel(add·id·order 정렬·중복 거부)을 공유하는 슬롯 다섯(BottomActionSlot의 registerAction·trigger·icon·hintKey 포함), Navigator, UiRegistry, UiError와 Ui 문맥의 errorText, Theme(계열 색 목록 seriesColors 포함)과 공용 부품 43개(버튼·고르기·입력·표시·묶음·알림·차트·아이콘·시간). 부품 크기는 Theme의 쓰임별 토큰으로 정해요. SettingsPage는 카테고리 목록과 선택 위치를 받아 왼쪽 1 : 오른쪽 3 비율과 키보드 이동을 제공하며 Section.category에 맞춰 보이기·머리글·즉시 배치를 정해요. 차트 셋은 내부 ChartTheme으로 색 규칙을 공유해요. TabStrip은 PillGroup의 선택 동작을, Chip은 StatusDot의 color·softColor를 공유해요.
+받는 것: ui.theme, ui.holdToConfirmMs, ui.backgroundKind, ui.backgroundImage, 운영체제 색 모드, PanelEntry·SlotEntry·BottomActionSlot::registerAction의 호출 대상, 이름으로 여는 요청, WindowPlacement의 화면 정보·저장값, SeparateWindow의 엔진·창 주소·기본 크기·설정 읽기와 쓰기 함수.
+주는 것: SeparateWindow(open·window·savePlacement·windowChanged), WindowPlacement의 ScreenInfo·Placement·restorePlacement·savePlacement, applyDefaultSurfaceFormat(창 생성 전 공용 멀티샘플 형식), ThemeChoice와 resolveTheme, ThemeSwitcher(themeId·currentIndex·themes·selected·choose), UiSettingValues(길게 누르기 시간·배경 종류·사진 경로·backgroundImageSource 로컬 주소·chooseBackgroundImage 사진 선택·실패 판정과 경로별 한 번 기록), PanelRegistry, PanelOrder.h에 함께 정의한 PanelEntry와 PanelOrder 순수 함수, SlotModel(add·id·order 정렬·중복 거부)을 공유하는 슬롯 다섯(BottomActionSlot의 registerAction·trigger·icon·hintKey 포함), Navigator, UiRegistry, UiError와 Ui 문맥의 errorText, Theme(계열 색 목록 seriesColors 포함)과 공용 부품 43개(버튼·고르기·입력·표시·묶음·알림·차트·아이콘·시간). 부품 크기는 Theme의 쓰임별 토큰으로 정해요. SettingsPage는 카테고리 목록과 선택 위치를 받아 왼쪽 1 : 오른쪽 3 비율과 키보드 이동을 제공하며 Section.category에 맞춰 보이기·머리글·즉시 배치를 정해요. 차트 셋은 내부 ChartTheme으로 색 규칙을 공유해요. TabStrip은 PillGroup의 선택 동작을, Chip은 StatusDot의 color·softColor를 공유해요.
 기여: 없음.
 의존: app/errors, app/settings(생성 접근자), app/log, Qt Quick·Qml·QuickControls2·QuickEffects·Graphs·Svg.
-안 하는 것: 기능 내용과 별도 창은 기능 컨트롤러가 맡고 테마를 고르는 화면은 appSettings가 맡아요. 테마 판정은 resolveTheme 한 곳에만 있어요.
+안 하는 것: 기능 내용과 별도 창의 설정·소유는 기능 컨트롤러가 맡고 테마를 고르는 화면은 appSettings가 맡아요. 테마 판정은 resolveTheme 한 곳에만 있어요.
 흐름(테마 선택):
 1. ThemeSwitcher.choose → settings::setTheme — 고른 테마를 저장해요.
 2. settings::onThemeChanged → apply → resolveTheme — 저장값과 운영체제 색 모드로 테마를 정해요.

@@ -1,8 +1,8 @@
-// [0.0.3 T1 T2 T3 T9 T12 T13 T14] specs/features/0.0.3-windows.md
+// [0.0.3 T3 T4 T5 T12 T13] specs/features/0.0.3-windows.md
 #pragma once
 #include <QQuickWindow>
 #include <QAbstractListModel>
-#include <QPointer>
+#include <kgc/ui/SeparateWindow.h>
 class QQmlEngine;
 namespace kgc::analyze {
 class AppLogService;
@@ -46,11 +46,8 @@ public:
      * 출력: 없음.
      * 실패: 화면을 만들지 못하면 창은 없어요.
      * 흐름:
-     * 1. QQmlComponent::create — 처음에만 루트 문맥으로 창을 만들어요.
-     * 2. restorePlacement — 저장값과 화면 목록으로 자리를 정해요.
-     * 3. QQuickWindow::setScreen·setGeometry·show — 복원한 창을 보여줘요.
-     * 4. QQuickWindow::showNormal·raise·requestActivate — 기존 창도 앞으로 가져와요.
-     * 5. KGC_LOG_INFO — 창을 열었다는 사건을 기록해요.
+     * 1. SeparateWindow::open — 처음에 자리를 복원하고 같은 창을 다시 열어요.
+     * 2. KGC_LOG_INFO — 창을 열었다는 사건을 기록해요.
      */
     Q_INVOKABLE void open();
     /** 보통 상태인 창의 화면 기준 자리를 저장해요.
@@ -58,8 +55,7 @@ public:
      * 출력: 없음.
      * 실패: 창이 없거나 최소화·최대화 상태면 무시해요.
      * 흐름:
-     * 1. kgc::ui::savePlacement — 화면 기준 좌표를 문자열로 바꿔요.
-     * 2. settings::setLogWindowPlacement — 운영 설정에 즉시 저장해요.
+     * 1. SeparateWindow::savePlacement — 화면 기준 자리로 바꾸고 기능 설정에 저장해요.
      */
     Q_INVOKABLE void savePlacement();
 signals:
@@ -71,7 +67,6 @@ signals:
     void windowChanged();
 private:
     AppLogService& service_;
-    QQmlEngine& engine_;
-    QPointer<QQuickWindow> window_;
+    kgc::ui::SeparateWindow window_;
 };
 }

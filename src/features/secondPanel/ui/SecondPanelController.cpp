@@ -1,24 +1,19 @@
-// [0.0.3 T1 T2 T3 T9 T12 T13 T14] specs/features/0.0.3-windows.md
+// [0.0.3 T9 T12 T13] specs/features/0.0.3-windows.md
 #include "SecondPanelController.h"
 #include <kgc/secondPanel/SecondPanelService.h>
 #include <kgc/secondPanel/Settings.h>
-#include <kgc/ui/WindowPlacement.h>
 #include "Constants.h"
-#include <QQmlComponent>
-#include <QQmlEngine>
-#include <QGuiApplication>
-#include <QScreen>
 namespace kgc::secondPanel {
 SecondPanelController::SecondPanelController(SecondPanelService& service, QQmlEngine& engine)
-    : QObject(&service), service_(service), engine_(engine)
+    : QObject(&service), service_(service),
+      window_(engine, QUrl("qrc:/qt/qml/Kgc/SecondPanel/SecondPanelWindow.qml"), kDefaultSize,
+          [] { return settings::windowPlacement(); },
+          [](const QString& value) { settings::setWindowPlacement(value); }, this)
 {
     connect(&service_, &SecondPanelService::arrangementChanged, this, &SecondPanelController::arrangementChanged);
-    connect(qApp, &QCoreApplication::aboutToQuit, this, [this] {
-        savePlacement();
-        if (window_) window_->close();
-    });
+    connect(&window_, &kgc::ui::SeparateWindow::windowChanged, this, &SecondPanelController::windowChanged);
 }
-QQuickWindow* SecondPanelController::window() const { return window_; }
+QQuickWindow* SecondPanelController::window() const { return window_.window(); }
 int SecondPanelController::saveDelayMs() const { return kSaveDelayMs; }
 int SecondPanelController::arrangementIndex() const
 {
@@ -37,31 +32,7 @@ void SecondPanelController::chooseArrangement(int index)
 }
 void SecondPanelController::open()
 {
-    if (!window_) {
-        QQmlComponent component(&engine_, QUrl("qrc:/qt/qml/Kgc/SecondPanel/SecondPanelWindow.qml"));
-        auto* object = component.create(engine_.rootContext());
-        window_ = qobject_cast<QQuickWindow*>(object);
-        if (!window_) { delete object; return; }
-        window_->QObject::setParent(this);
-        window_->setTransientParent(nullptr);
-        const auto screens = QGuiApplication::screens();
-        QList<kgc::ui::ScreenInfo> info;
-        for (auto* screen : screens) info.append({screen->name(), screen->availableGeometry()});
-        const auto placement = kgc::ui::restorePlacement(settings::windowPlacement(), info, kDefaultSize);
-        window_->setScreen(screens[placement.screenIndex]);
-        window_->setGeometry(placement.geometry);
-        emit windowChanged();
-    }
-    if (window_->visibility() == QWindow::Minimized) window_->showNormal();
-    else window_->show();
-    window_->raise();
-    window_->requestActivate();
+    window_.open();
 }
-void SecondPanelController::savePlacement()
-{
-    if (!window_ || window_->visibility() != QWindow::Windowed || !window_->screen()) return;
-    const auto* screen = window_->screen();
-    const auto relative = window_->geometry().translated(-screen->availableGeometry().topLeft());
-    settings::setWindowPlacement(kgc::ui::savePlacement(screen->name(), relative));
-}
+void SecondPanelController::savePlacement() { window_.savePlacement(); }
 }

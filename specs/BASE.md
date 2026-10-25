@@ -60,10 +60,10 @@ k-groundcontrol/
 ├─ CMakeLists.txt  CMakePresets.json  cmake/(CPM, deploy, notices/extra.json)
 ├─ src/
 │  ├─ platform/
-│  │  ├─ app/       0   boot settings secrets paths store scheduler job net log errors notify i18n units geo crc util
+│  │  ├─ app/       0   boot settings secrets paths store scheduler job net log(LogSink LogFeed) errors notify i18n units geo crc util
 │  │  ├─ comm/      1   links(serial udp tcp mock) rawport(ByteStream RawPort PortRegistry) lease(PortLease) mavlink(parser channel signing) espflash(ESP 시리얼 부트로더 클라이언트) tlog joystick
 │  │  ├─ vehicle/   2   registry Vehicle states firmware(px4 ardupilot generic) outbound(VehicleSender) safety(ArmGuard WorkLock ArmedPolicy RebootWindow JobArmWatch) command(CommandQueue)
-│  │  └─ ui/        2.5 Theme themes(ThemeBase + 테마 파일) components(§9.7 목록) ThemeSwitcher(resolveTheme) UiSettingValues PanelRegistry SlotModel Slots(Topbar StatusChip RightTab MapLayer) Navigator
+│  │  └─ ui/        2.5 Theme themes(ThemeBase + 테마 파일) components(§9.7 목록) ThemeSwitcher(resolveTheme) UiSettingValues PanelRegistry SlotModel Slots(Topbar StatusChip RightTab MapLayer BottomAction) WindowPlacement Navigator
 │  ├─ features/<id>/   api/kgc/<id>/  internal/  ui/  CMakeLists.txt  MODULE.md
 │  └─ main/            main.cpp Composition.cpp
 ├─ tracker/            ESP32 스케치 + protocol/ 공용 헤더 (§11)
@@ -86,7 +86,8 @@ k-groundcontrol/
 | `ai` | AI 세팅 | 전역 패널 + 기체별 서비스 | 상단 오른쪽 아이콘·패널, 첫 사용 동의 | R-D4~D8, R-N23 |
 | `appSettings` | 앱 설정 | 전역 | 좌 메뉴 15, **정보 창**(버전·라이선스·고지·소스) | R-N16·17·22 |
 | `uiGallery` | UI 부품 목록(개발 단계) | 전역 | 좌 메뉴 16(appSettings 뒤 구분선 다음) | R-N25 |
-| `analyze` | 인스펙터·콘솔·앱 로그 뷰어·진동 | 기체별 + 전역(앱 로그) | 좌 메뉴(나중 순서) | E3, C-55·57 |
+| `secondPanel` | 세컨드 패널 | 전역 | 하단바 오른쪽 단추, 별도 창(칸 배치 최대 6) | R-N26 |
+| `analyze` | 인스펙터·콘솔·앱 로그 뷰어·진동 | 기체별 + 전역(앱 로그) | 좌 메뉴(나중 순서), 하단바 오른쪽 단추(앱 로그 창) | E3, C-55·57 |
 | `link` | 연결 | 전역 | 하단 기체 칩(링크 상태) + 연결 팝업. 저장된 링크 목록의 편집 화면은 `appSettings`가 갖고, 둘 다 바탕 `comm/links/LinkManager` api를 직접 쓴다(같은 순위라 서로 부르지 않음) | R-Q1, C-1~C-8 |
 | `fly` | 비행 조작 | 기체별 | 상단바 조작 띠(슬롯), 유도 명령(지도 클릭 팝업·표식 레이어) | R-Q4·R-Q5 |
 | `mission` | 미션 | **전역 편집기**(`MissionEditor`: .plan 편집·저장, 기체 없이도) + **기체별** `MissionService`(전송·동기·현재 항목) | 지도 패널 편집 레이어, 상단바 미션 선택·시작 슬롯 | R-Q7·R-Q8, R-N13 |
@@ -120,7 +121,7 @@ k-groundcontrol/
 | 순위 | 기능 |
 |---|---|
 | 1 | `shell` |
-| 2 | `notify` `ai` `appSettings` `analyze` `link` `uiGallery` |
+| 2 | `notify` `ai` `appSettings` `analyze` `link` `uiGallery` `secondPanel` |
 | 3 | `fly` `mission` `vehicleInfo` `preflight` `logs` |
 | 4 | `layout` |
 | 5 | `sensors` `radio` `flightModes` `power` `failsafe` `motors` `tuning` `fcFlash` `esc` `elrs` `tracker` |
@@ -270,7 +271,8 @@ k-groundcontrol/
 `platform/app/geo/Altitude`(AMSL·상대·지형·타원체고↔MSL, frame 인자) **한 묶음**, `Geodesy`(방위·고각·거리 — R-D23의 한 함수), `app/units`(표시 단위), `app/crc`(CRC16-XMODEM, CRC-0xA001, CRC8-0xD5 — 시험 벡터는 `tests/`), `app/util`. 네임스페이스 범위의 자유 함수가 두 모듈에 같은 이름이면 검사가 잡는다.
 
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
-- `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 모듈의 메뉴 자리를 `Composition`이 등록), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`; 공통 바탕 `SlotModel`), `Navigator`(`open(panelId, arg)`).
+- `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 모듈의 메뉴 자리를 `Composition`이 등록), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`, 하단바 맨 오른쪽 단추 `BottomActionSlot`; 공통 바탕 `SlotModel` — `add(entry)`·order 정렬·같은 id 거부), `Navigator`(`open(panelId, arg)`).
+- **별도 창**: 기능 컨트롤러가 주인(처음 열 때 같은 엔진의 루트 문맥에서 만들고, 부모는 컨트롤러, transientParent 없음, 닫으면 숨김). 자리는 `WindowPlacement`(화면 기준 좌표, 끌어오기 식)로 복원·저장. `Composition`이 셸 창 닫기를 앱 종료에 잇는다.
 - 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만들어 QML 컨텍스트 프로퍼티(`<id>Controller`)로 둔다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
 - QML `import` 허용: `QtQuick*`·`QtQml*`, §2의 Qt 모듈(Location·Positioning·Multimedia·Graphs·Quick3D), `Kgc.Ui`, 자기 `Kgc.<Id>`, **순위표에서 아래인** `Kgc.<Id>`. 그 밖은 검사가 잡는다.
@@ -286,6 +288,7 @@ k-groundcontrol/
 | 하단 기체 칩·연결 팝업 | `link` | `StatusChipSlot(왼쪽)` |
 | 하단 센서 ✓/✕·배터리·RSSI 칩 | `vehicleInfo` | `StatusChipSlot(왼쪽)` |
 | 하단 트래커·GCS GPS 칩 | `tracker`, `gcsposition` | `StatusChipSlot(오른쪽)` |
+| 하단바 맨 오른쪽 단추(세컨드 패널, 앱 로그) | `secondPanel`, `analyze` | `BottomActionSlot` |
 | 우 사이드바 탭 | `vehicleInfo`(계기·개요·상세·메시지), `logs`(로그), `preflight`(점검) | `RightTabSlot` |
 | 지도 레이어 | `mission`(편집·경로·**펜스·랠리**), `fly`(유도 표식), `tracker`(부채꼴), `terrain`(단면), `video`(PiP), `extras`의 ADS-B 모듈(교통) | `MapLayerSlot` — `map`이 그릇 |
 | 좌 메뉴 패널 | §3.1 좌 메뉴 모듈 | `PanelRegistry` |
@@ -293,6 +296,7 @@ k-groundcontrol/
 
 ## 10. 로그·오류·알림·번역 (§17-6 확정)
 
+- **로그 통로** `platform/app/log/LogFeed`: 파일에 쓴 줄과 같은 기록(`LogRecord`, seq)을 화면에 넘기는 유일한 통로. seq는 `publish`가 잠금 안에서 매기고 늘 queued로 낸다. 로그 화면이 낳은 `kgc.qt` 경고는 통로로 다시 내보내지 않는다(되돌이 막기). 다른 모듈은 로그 파일을 다시 읽지 않는다.
 - **로그**: 호출은 `KGC_LOG_DEBUG / KGC_LOG_INFO / KGC_LOG_WARN / KGC_LOG_ERROR(kCategory, EscEvent::FlashFailed, "메시지", 값…)` **네 수준 매크로**(같은 모양; 이 문서에서 `KGC_LOG`라 하면 이 넷)로만(`qDebug`·`qInfo`·`qWarning` 직접 호출과 QML `console.log` 금지 — 검사). 카테고리는 모듈 경로(`kgc.comm.serial`, `kgc.esc`). 메시지는 **한국어 명사형 전보체**(값은 콜론 뒤, 절은 쉼표, 문장 어미 없음). 사건은 모듈 `Events.h`의 열거(§6). `platform/app/log/LogSink`가 Qt 메시지 핸들러로 파일 회전(부팅 설정)과 비밀값 마스킹을 한다. tlog·포워딩에는 `comm/mavlink/signing`의 필터가 SETUP_SIGNING을 뺀다(R-N12·R-N23).
 - **오류**: §6의 `ErrorCode`. 사용자 문구는 `tr()`.
 - **알림**: `platform/app/notify/Notify`(저장·수준 `Info/Warning/Critical`·출처(기체·트래커·GCS·앱)·시각·읽음) — 상단 벨·토스트·TTS(`Speech`)가 읽는 한 입구. 기체 메시지 중 무엇을 알림으로 올릴지는 **기능 스펙(B4)이 정한다**.
@@ -331,6 +335,7 @@ k-groundcontrol/
 | 기여 지점 / 이름으로 열기 / 자리 표시 | `Slot` / `Navigator` / `Placeholder` | §9.7·9.8 |
 | 테마 / 테마 바탕 / 테마 판정 / 테마 바꾸개 / 유리 바탕 | `Theme` / `ThemeBase` / `resolveTheme`·`ThemeChoice`·`ThemeReason` / `ThemeSwitcher` / `GlassSurface` | §9.7 |
 | 화면 설정값 노출 / 슬롯 바탕 / 지도 바닥 / 가운데 안쪽 / UI 부품 목록 / 아이콘 그림 / 범위 판정 | `UiSettingValues` / `SlotModel` / `mapStage` / `centerViewport` / `uiGallery` / `IconGlyph` / `withinRange` | 부품 이름은 0.0.2 스펙 §3.5 |
+| 세컨드 패널 / 칸 배치 / 하단 단추 슬롯 / 로그 통로 / 로그 기록 / 창 자리 / 화면 정보 | `secondPanel` / `CellArrangement` / `BottomActionSlot` / `LogFeed` / `LogRecord` / `WindowPlacement` / `ScreenInfo` | 0.0.3 |
 | 기체 / 활성 기체 / 컴포넌트 | `Vehicle` / `ActiveVehicle` / `Component` | |
 | 링크 / 주 링크 / 원시 포트 / 포트 임대 / 포트 등록부 | `Link` / `PrimaryLink` / `RawPort` / `PortLease` / `PortRegistry` | §9.1 |
 | 상태 묶음 / 주인 / 목록 상태 | `Bundle` / `Owner` / `ListModel` | §5 |
@@ -427,3 +432,4 @@ k-groundcontrol/
 | 2026-10-25 | 사용자 | 0.0.2 스펙 초안 4와 함께 승인: §2 platform/ui Qt 모듈(QuickEffects·Graphs·Svg)·Tabler 꾸러미, §3 트리·§3.1 `uiGallery`·§3.2 순위 2, §4 생성 헤더 위치·`kgc_use_settings`·Values/Min/Max·범위 지키기·`ui.theme`, §6 QML 리터럴 자리, §9.7 테마·ThemeSwitcher·UiSettingValues·부품·Basic 스타일·SlotModel, §13 용어, §14 `qml_literal`·`theme_tokens` |
 | 2026-10-25 | 사용자 | 0.0.2 검수 중 요청 반영(알림만): §4 배경 설정 자리, §9.7 `SettingsPage`; 화면 전체 MSAA 4는 0.0.2 스펙 §3.11 |
 | 2026-10-25 | PM | 사실 고치기(알림만): §9.7 UiSettingValues 설명에 배경, `applyDefaultSurfaceFormat` |
+| 2026-10-25 | 사용자 | 0.0.3 스펙 초안 3과 함께 승인: §3 트리(LogFeed·BottomAction·WindowPlacement), §3.1 `secondPanel`·`analyze` 보이는 곳, §3.2 순위 2 `secondPanel`, §9.7 BottomActionSlot·SlotModel 등록·별도 창 규칙·기여 표, §10 LogFeed, §13 용어 |

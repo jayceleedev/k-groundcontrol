@@ -17,8 +17,11 @@ QtObject {
     readonly property int menuHeight: Math.round(36 * uiScale)
     readonly property int iconSize: Math.round(20 * uiScale)
     readonly property int appIconSize: Math.round(40 * uiScale)
-    readonly property int lineWidth: 1
-    readonly property int zero: 0
+    readonly property int appIconPadding: 0
+    readonly property int rightTabHeight: Math.round(32 * uiScale)
+    readonly property int panelHeaderHeight: Math.round(48 * uiScale)
+    readonly property int panelCloseSize: Math.round(40 * uiScale)
+    readonly property real lineWidth: 1 * uiScale
     readonly property int fontSize: Math.round(13 * uiScale)
     readonly property int titleSize: Math.round(14 * uiScale)
     readonly property int dialogWidth: Math.round(720 * uiScale)

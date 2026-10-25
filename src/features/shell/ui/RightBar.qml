@@ -23,7 +23,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: Theme.inset
-        height: Theme.bottomBarHeight
+        height: Theme.rightTabHeight
         color: Theme.surface
         border.color: Theme.line
         Repeater { model: rightTabSlot; delegate: Item {} }

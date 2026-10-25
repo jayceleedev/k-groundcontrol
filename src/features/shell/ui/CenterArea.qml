@@ -51,7 +51,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.right: parent.right
-            height: Theme.topBarHeight
+            height: Theme.panelHeaderHeight
             Text {
                 objectName: "panelTitle"
                 anchors.left: parent.left
@@ -66,8 +66,8 @@ Rectangle {
                 objectName: "panelClose"
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
-                width: Theme.appIconSize
-                height: Theme.appIconSize
+                width: Theme.panelCloseSize
+                height: Theme.panelCloseSize
                 text: qsTr("✕")
                 ToolTip.text: qsTr("닫기")
                 Accessible.name: qsTr("닫기")

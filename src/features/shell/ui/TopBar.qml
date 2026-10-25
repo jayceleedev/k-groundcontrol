@@ -14,7 +14,7 @@ Rectangle {
         anchors.verticalCenter: parent.verticalCenter
         width: Theme.appIconSize
         height: Theme.appIconSize
-        padding: Theme.zero
+        padding: Theme.appIconPadding
         Accessible.name: qsTr("정보")
         contentItem: Image { source: "qrc:/kgc/icons/app.svg"; fillMode: Image.PreserveAspectFit }
         onClicked: navigator.open("appSettings", "about")

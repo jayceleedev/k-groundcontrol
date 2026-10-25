@@ -79,7 +79,7 @@ Rectangle {
                         objectName: entry.model.separatorAfter ? "menuSeparator_" + entry.model.group : ""
                         visible: entry.model.separatorAfter
                         width: parent.width
-                        height: visible ? Theme.lineWidth : Theme.zero
+                        height: Theme.lineWidth
                         color: Theme.line
                     }
                 }

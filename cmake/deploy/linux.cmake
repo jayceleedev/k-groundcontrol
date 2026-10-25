@@ -1,4 +1,5 @@
 # [0.0.1 T13] specs/features/0.0.1-shell.md
+# [0.0.2 T27] specs/features/0.0.2-theme.md
 set(tools "${PROJECT_BINARY_DIR}/deploy-tools")
 set(stage "${PROJECT_BINARY_DIR}/AppDir")
 file(MAKE_DIRECTORY "${tools}" "${stage}/usr/bin")
@@ -16,7 +17,7 @@ file(COPY "${PROJECT_SOURCE_DIR}/LICENSE" "${PROJECT_BINARY_DIR}/THIRD_PARTY_NOT
     DESTINATION "${stage}/usr/bin")
 file(WRITE "${tools}/KGroundControl.desktop"
     "[Desktop Entry]\nType=Application\nName=K-GroundControl\nExec=KGroundControl\nIcon=KGroundControl\nCategories=Science;\n")
-file(COPY_FILE "${PROJECT_SOURCE_DIR}/resources/icons/app.svg" "${tools}/KGroundControl.svg")
+file(COPY_FILE "${PROJECT_SOURCE_DIR}/resources/icons/app-tile.svg" "${tools}/KGroundControl.svg")
 # 스크립트 실행에는 컴파일러 초기화가 없으므로 구성 때 얻은 다중 아키텍처 경로를 써요.
 find_library(XCB_CURSOR NAMES xcb-cursor libxcb-cursor.so.0
     PATHS "/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}" "/lib/${CMAKE_LIBRARY_ARCHITECTURE}" REQUIRED)

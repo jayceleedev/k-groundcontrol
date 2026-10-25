@@ -1,5 +1,5 @@
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
-// [0.0.2 T26] specs/features/0.0.2-theme.md
+// [0.0.2 T26 T27] specs/features/0.0.2-theme.md
 #include "Composition.h"
 #include <kgc/app/boot/BootOptions.h>
 #include <kgc/app/paths/Paths.h>
@@ -8,6 +8,7 @@
 #include <kgc/app/i18n/Translator.h>
 #include <kgc/appSettings/Settings.h>
 #include <QGuiApplication>
+#include <QIcon>
 #include <kgc/ui/SurfaceFormat.h>
 #include <QQuickStyle>
 #include <QQmlApplicationEngine>
@@ -25,7 +26,8 @@
  * 6. Translator::setLanguage — 저장된 언어를 적용해요.
  * 7. QQuickStyle::setStyle — 화면 부품의 바탕 스타일을 정해요.
  * 8. new Composition — 서비스와 등록부를 조립해요.
- * 9. Composition::loadShell — 조립한 창을 표시해요.
+ * 9. QGuiApplication::setWindowIcon — 등록된 자원에서 창 아이콘을 정해요.
+ * 10. Composition::loadShell — 조립한 창을 표시해요.
  */
 int main(int argc, char* argv[])
 {
@@ -44,6 +46,7 @@ int main(int argc, char* argv[])
     QQmlApplicationEngine engine;
     auto* composition = new kgc::Composition(engine,
         {KGC_VERSION, KGC_HOMEPAGE_URL, ":/kgc/LICENSE", app.applicationDirPath() + "/THIRD_PARTY_NOTICES.md"}, translator);
+    QGuiApplication::setWindowIcon(QIcon(":/kgc/icons/app-tile.svg"));
     if (!composition->loadShell()) return 1;
     return app.exec();
 }

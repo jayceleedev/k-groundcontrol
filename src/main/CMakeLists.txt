@@ -1,4 +1,5 @@
 # [0.0.1 T1] specs/features/0.0.1-shell.md
+# [0.0.2 T27] specs/features/0.0.2-theme.md
 qt_add_resources(kgc_composition_rc "${PROJECT_SOURCE_DIR}/resources/kgc.qrc")
 add_library(kgc_composition STATIC Composition.h Composition.cpp ${kgc_composition_rc})
 qt_add_resources(kgc_composition tabler_icons PREFIX /kgc/icons BASE "${PROJECT_BINARY_DIR}/icons" FILES ${kgc_icon_files})
@@ -13,6 +14,11 @@ qt_add_translations(kgc_composition
     RESOURCE_PREFIX /kgc/i18n
     SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_appSettings kgc_uiGallery kgc_composition)
 qt_add_executable(KGroundControl main.cpp)
+if(WIN32)
+    enable_language(RC)
+    target_sources(KGroundControl PRIVATE app.rc)
+    target_include_directories(KGroundControl PRIVATE "${PROJECT_SOURCE_DIR}")
+endif()
 set_target_properties(KGroundControl PROPERTIES WIN32_EXECUTABLE TRUE)
 target_link_libraries(KGroundControl PRIVATE kgc_composition Qt6::QuickControls2)
 include("${PROJECT_SOURCE_DIR}/cmake/notices/Notices.cmake")

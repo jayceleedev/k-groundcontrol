@@ -2,5 +2,6 @@
   <qresource prefix="/kgc">
     <file alias="LICENSE">../LICENSE</file>
     <file>icons/app.svg</file>
+    <file>icons/app-tile.svg</file>
   </qresource>
 </RCC>

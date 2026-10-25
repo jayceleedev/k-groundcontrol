@@ -144,7 +144,7 @@ If the feature spec's "기반" section does not list a value, state, function or
 |---|---|
 | Code comments, docstrings, test descriptions | Korean, explanatory and friendly ("…해요." style), so a non-expert can follow; identifiers stay English |
 | Log messages (`KGC_LOG` text), terminal output | Korean, telegraphic noun-ending phrases: values after a colon, clauses separated by commas ("링크 끊김: COM7, 3초 뒤 재접속"); no sentence endings (…다/…요) |
-| Strings shown on screen, `errorText()`, notifications, toasts | Korean source text wrapped in `tr()` / `qsTr()`, polite conversational ("…했어요"); English lives in `i18n/kgc_en.ts`; `Translator.retranslate()` switches language without restart |
+| Strings shown on screen, `errorText()`, notifications, toasts | Korean source text wrapped in `tr()` / `qsTr()`, polite conversational ("…했어요"); English lives in `i18n/kgc_en.ts`; `Translator` changes the language and `Composition` connects its `languageChanged` to `QQmlEngine::retranslate()`, so the language switches without restart (Translator does not know the QML engine) |
 | Identifiers, enum values, event and error names, commit subjects, this file, your reports | English |
 
 String checks: a Korean literal in C++ must sit inside `tr(`, `QT_TR_NOOP(`, `QT_TRANSLATE_NOOP(` or a `KGC_LOG_*(` call; in QML, `text:`/`title:`/`placeholderText:`/`ToolTip.text:` literals must be wrapped in `qsTr(`.

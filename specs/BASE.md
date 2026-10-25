@@ -295,7 +295,7 @@ k-groundcontrol/
 - **로그**: 호출은 `KGC_LOG_DEBUG / KGC_LOG_INFO / KGC_LOG_WARN / KGC_LOG_ERROR(kCategory, EscEvent::FlashFailed, "메시지", 값…)` **네 수준 매크로**(같은 모양; 이 문서에서 `KGC_LOG`라 하면 이 넷)로만(`qDebug`·`qInfo`·`qWarning` 직접 호출과 QML `console.log` 금지 — 검사). 카테고리는 모듈 경로(`kgc.comm.serial`, `kgc.esc`). 메시지는 **한국어 명사형 전보체**(값은 콜론 뒤, 절은 쉼표, 문장 어미 없음). 사건은 모듈 `Events.h`의 열거(§6). `platform/app/log/LogSink`가 Qt 메시지 핸들러로 파일 회전(부팅 설정)과 비밀값 마스킹을 한다. tlog·포워딩에는 `comm/mavlink/signing`의 필터가 SETUP_SIGNING을 뺀다(R-N12·R-N23).
 - **오류**: §6의 `ErrorCode`. 사용자 문구는 `tr()`.
 - **알림**: `platform/app/notify/Notify`(저장·수준 `Info/Warning/Critical`·출처(기체·트래커·GCS·앱)·시각·읽음) — 상단 벨·토스트·TTS(`Speech`)가 읽는 한 입구. 기체 메시지 중 무엇을 알림으로 올릴지는 **기능 스펙(B4)이 정한다**.
-- **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator.retranslate()`로 재시작 없는 전환(R-N16). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖에 있으면, QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
+- **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator`가 언어를 바꾸고(`languageChanged`), `Composition`이 그 시그널을 `QQmlEngine::retranslate()`에 이어 재시작 없이 전환(R-N16; Translator는 QML 엔진을 모름). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖에 있으면, QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
 
 ## 11. 트래커 스케치 `tracker/` (R-D27)
 
@@ -346,6 +346,7 @@ k-groundcontrol/
 | 알림 / 기체 메시지 | `Notification` / `VehicleMessage` | |
 | 앱 로그 / 텔레메트리 로그 / 기체 로그 | `AppLog` / `TelemetryLog` / `OnboardLog` | |
 | 로그 사건 / 기체 이벤트 | `LogEvent` / `VehicleEvent` | 우리 로그 / PX4 events |
+| 로그 수준 | `LogLevel`(Debug·Info·Warn·Error) | `app/log` api의 enum, 부팅 설정이 넘김 |
 | 운영 설정 / 부팅 설정 / 고정값 / 비밀값 / 모듈 id | `Setting` / `BootOption` / `Constant` / `Secret` / `ModuleId` | |
 | 펌웨어 세팅 모듈 / 안전·페일세이프 모듈 / 연결 모듈 | `fcFlash` / `failsafe` / `link` | 기능 id |
 
@@ -415,3 +416,4 @@ k-groundcontrol/
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 3 지적): §3 CMake 타깃 이름 규칙·INTERFACE·errors 의존, §2·§9.7 `registerUi(uiRegistry, service)`·`UiRegistry`·컨트롤러 컨텍스트 프로퍼티, §10 KGC_LOG 수준 매크로 넷, §15 check.yml은 구조 검사만 |
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 2 지적): graphviz 문구 2곳 제거, 생성 Settings.h 위치, 트리의 NOTICES, 문자열 검사에 `QT_TRANSLATE_NOOP(`, QSettings 명시 생성·organizationName 비움·kgc.ini 경로, 훅 안내, main 순서 |
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 지적): 설정 생성기 `cmake/gen/SettingsGen.cmake`(빌드 폴더 생성), QSettings IniFormat·조직/앱 이름, 데이터 폴더 기본값·`--data-dir`, PanelRegistry 항목(order·group·titleKey·icon)·자리 표시 등록·메뉴 제목 번역 방식, 순환 검사는 CMakeLists 텍스트(configure 불필요), 훅 requirements.txt·fetch-depth, 고지 목록·HOMEPAGE_URL |
+| 2026-10-25 | PM | 사실 고치기(알림만, 0.0.1 구조 검수 1 지적 15·7): §10 번역 전환 문구(Translator는 엔진을 모르고 Composition이 `engine.retranslate()` 연결), §13 용어 `LogLevel` |

@@ -35,6 +35,7 @@ QtObject {
     readonly property color series4: current.series4
     readonly property color series5: current.series5
     readonly property color series6: current.series6
+    readonly property list<color> seriesColors: [series1, series2, series3, series4, series5, series6]
     readonly property color chartGrid: current.chartGrid
     readonly property color chartAxis: current.chartAxis
     readonly property color dangerInk: current.dangerInk

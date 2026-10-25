@@ -14,11 +14,14 @@ Item {
     property list<string> categories: []
     property list<string> seriesNames: []
     property var values: []
+    property int decimals: 0
     property bool horizontal: false
     property real from: 0
     property real to: 100
     implicitWidth: Theme.languageWidth * 2
     implicitHeight: Theme.instrumentHeight
+    // 생성 중 들어오는 값과 이름 변경을 모아 계열이 준비된 뒤 한 번만 채워요.
+    Component.onCompleted: Qt.callLater(rebuild)
     function rebuild() {
         series.clear()
         for (let i = 0; i < values.length; ++i) {
@@ -26,11 +29,11 @@ Item {
             series.append(set)
         }
     }
-    onValuesChanged: rebuild()
-    onSeriesNamesChanged: rebuild()
+    onValuesChanged: Qt.callLater(rebuild)
+    onSeriesNamesChanged: Qt.callLater(rebuild)
     Component {
         id: setFactory
-        BarSet { property int colorIndex: 0; color: [Theme.series1, Theme.series2, Theme.series3, Theme.series4, Theme.series5, Theme.series6][colorIndex % 6]; borderColor: color; labelColor: Theme.inkMuted }
+        BarSet { property int colorIndex: 0; color: Theme.seriesColors[colorIndex % Theme.seriesColors.length]; borderColor: color; labelColor: Theme.inkMuted }
     }
     GraphsView {
         anchors.fill: parent
@@ -39,25 +42,8 @@ Item {
         orientation: chart.horizontal ? Qt.Horizontal : Qt.Vertical
         axisX: BarCategoryAxis { categories: chart.categories }
         axisY: ValueAxis { min: chart.from; max: chart.to; labelDecimals: 0 }
-        theme: GraphsTheme {
-            colorScheme: Theme.dark ? GraphsTheme.ColorScheme.Dark : GraphsTheme.ColorScheme.Light
-            backgroundVisible: false
-            plotAreaBackgroundVisible: false
-            seriesColors: [Theme.series1, Theme.series2, Theme.series3, Theme.series4, Theme.series5, Theme.series6]
-            grid.mainColor: Theme.chartGrid
-            grid.subColor: Theme.chartGrid
-            axisX.mainColor: Theme.chartAxis
-            axisY.mainColor: Theme.chartAxis
-            axisX.subColor: Theme.chartAxis
-            axisY.subColor: Theme.chartAxis
-            axisX.labelTextColor: Theme.inkMuted
-            axisY.labelTextColor: Theme.inkMuted
-            labelTextColor: Theme.inkMuted
-            labelFont.pixelSize: Theme.fontSize
-            axisXLabelFont.pixelSize: Theme.fontSize
-            axisYLabelFont.pixelSize: Theme.fontSize
-        }
-        BarSeries { id: series; labelsVisible: true }
+        theme: ChartTheme {}
+        BarSeries { id: series; labelsVisible: true; labelsPrecision: chart.decimals }
     }
     Row {
         anchors.bottom: parent.bottom

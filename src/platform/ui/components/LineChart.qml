@@ -47,7 +47,7 @@ Item {
         id: lineFactory
         LineSeries {
             property int colorIndex: 0
-            color: [Theme.series1, Theme.series2, Theme.series3, Theme.series4, Theme.series5, Theme.series6][colorIndex % 6]
+            color: Theme.seriesColors[colorIndex % Theme.seriesColors.length]
             width: Theme.lineWidth * 2
         }
     }
@@ -60,24 +60,7 @@ Item {
         axisY: ValueAxis { min: chart.yFrom; max: chart.yTo; labelDecimals: 0 }
         panStyle: GraphsView.PanStyle.Drag
         zoomStyle: GraphsView.ZoomStyle.Center
-        theme: GraphsTheme {
-            colorScheme: Theme.dark ? GraphsTheme.ColorScheme.Dark : GraphsTheme.ColorScheme.Light
-            backgroundVisible: false
-            plotAreaBackgroundVisible: false
-            seriesColors: [Theme.series1, Theme.series2, Theme.series3, Theme.series4, Theme.series5, Theme.series6]
-            grid.mainColor: Theme.chartGrid
-            grid.subColor: Theme.chartGrid
-            axisX.mainColor: Theme.chartAxis
-            axisY.mainColor: Theme.chartAxis
-            axisX.subColor: Theme.chartAxis
-            axisY.subColor: Theme.chartAxis
-            axisX.labelTextColor: Theme.inkMuted
-            axisY.labelTextColor: Theme.inkMuted
-            labelTextColor: Theme.inkMuted
-            labelFont.pixelSize: Theme.fontSize
-            axisXLabelFont.pixelSize: Theme.fontSize
-            axisYLabelFont.pixelSize: Theme.fontSize
-        }
+        theme: ChartTheme {}
     }
     Row {
         anchors.bottom: parent.bottom
@@ -89,7 +72,7 @@ Item {
                 required property int index
                 required property string modelData
                 spacing: Theme.inset
-                Rectangle { width: Theme.iconSize; height: Theme.lineWidth * 2; anchors.verticalCenter: parent.verticalCenter; color: [Theme.series1, Theme.series2, Theme.series3, Theme.series4, Theme.series5, Theme.series6][parent.index % 6] }
+                Rectangle { width: Theme.iconSize; height: Theme.lineWidth * 2; anchors.verticalCenter: parent.verticalCenter; color: Theme.seriesColors[parent.index % Theme.seriesColors.length] }
                 Text { text: parent.modelData; color: Theme.ink; font.pixelSize: Theme.fontSize }
             }
         }

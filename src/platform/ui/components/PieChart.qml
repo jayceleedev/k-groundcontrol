@@ -17,37 +17,22 @@ Item {
     property string text
     implicitWidth: Theme.instrumentHeight
     implicitHeight: Theme.instrumentHeight
+    // 생성 중 들어오는 값과 이름 변경을 모아 계열이 준비된 뒤 한 번만 채워요.
+    Component.onCompleted: Qt.callLater(rebuild)
     function rebuild() {
         series.clear()
         for (let i = 0; i < values.length; ++i) {
             const slice = series.append(labels[i] || "", Math.max(0, values[i]))
-            slice.color = Qt.binding(() => [Theme.series1, Theme.series2, Theme.series3, Theme.series4, Theme.series5, Theme.series6][i % 6])
+            slice.color = Qt.binding(() => Theme.seriesColors[i % Theme.seriesColors.length])
             slice.borderColor = Qt.binding(() => slice.color)
         }
     }
-    onValuesChanged: rebuild()
-    onLabelsChanged: rebuild()
+    onValuesChanged: Qt.callLater(rebuild)
+    onLabelsChanged: Qt.callLater(rebuild)
     GraphsView {
         anchors.fill: parent
         marginLeft: 0; marginRight: 0; marginTop: 0; marginBottom: 0
-        theme: GraphsTheme {
-            colorScheme: Theme.dark ? GraphsTheme.ColorScheme.Dark : GraphsTheme.ColorScheme.Light
-            backgroundVisible: false
-            plotAreaBackgroundVisible: false
-            seriesColors: [Theme.series1, Theme.series2, Theme.series3, Theme.series4, Theme.series5, Theme.series6]
-            grid.mainColor: Theme.chartGrid
-            grid.subColor: Theme.chartGrid
-            axisX.mainColor: Theme.chartAxis
-            axisY.mainColor: Theme.chartAxis
-            axisX.subColor: Theme.chartAxis
-            axisY.subColor: Theme.chartAxis
-            axisX.labelTextColor: Theme.inkMuted
-            axisY.labelTextColor: Theme.inkMuted
-            labelTextColor: Theme.inkMuted
-            labelFont.pixelSize: Theme.fontSize
-            axisXLabelFont.pixelSize: Theme.fontSize
-            axisYLabelFont.pixelSize: Theme.fontSize
-        }
+        theme: ChartTheme {}
         PieSeries { id: series; holeSize: chart.donut ? 0.65 : 0 }
     }
     Text { anchors.centerIn: parent; visible: chart.donut; text: chart.text; color: Theme.ink; font.pixelSize: Theme.titleSize }

@@ -1,8 +1,8 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T8 T12] specs/features/0.0.2-theme.md
 /** 제목과 내용을 같은 바탕 위에 묶어요.
  * 입력: title, source와 기본 자식 목록에 내용을 넘겨요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: title과 content 자식들을 GlassSurface 위에 세로로 배치해요.
+ * 실패: source가 없으면 지도 흐림 없이 유리 색과 광택만 남아요.
  */
 import QtQuick
 import QtQuick.Controls.Basic as Basic

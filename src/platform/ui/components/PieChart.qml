@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T22] specs/features/0.0.2-theme.md
 /** 전체에서 차지하는 비율을 원과 고리로 보여줘요.
  * 입력: values, labels, donut, text를 받아요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: 값마다 조각 하나를 그리고 donut이면 가운데를 비워 text를 표시해요.
+ * 실패: 음수 조각 값은 0으로 바꾸고 없는 labels는 빈 글자로 표시해요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 import QtGraphs
 
@@ -15,8 +14,8 @@ Item {
     property list<string> labels: []
     property bool donut: false
     property string text
-    implicitWidth: Theme.instrumentHeight
-    implicitHeight: Theme.instrumentHeight
+    implicitWidth: Theme.pieDiameter
+    implicitHeight: Theme.pieDiameter
     // 생성 중 들어오는 값과 이름 변경을 모아 계열이 준비된 뒤 한 번만 채워요.
     Component.onCompleted: Qt.callLater(rebuild)
     function rebuild() {

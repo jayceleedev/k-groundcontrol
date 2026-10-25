@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T20] specs/features/0.0.2-theme.md
 /** 숫자의 단위와 허용 범위를 보여줘요.
  * 입력: value, from, to, stepSize, decimals, unit, valueModified(value)를 사용해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: 허용한 숫자를 value와 valueModified로 내고 acceptableInput으로 입력 유효성을 알려요.
+ * 실패: 유한하지 않거나 from~to 밖인 값은 commit에서 거부하고 오류를 표시해요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 
 FocusScope {
@@ -18,7 +17,7 @@ FocusScope {
     property string unit: ""
     readonly property bool acceptableInput: Number.isFinite(Number(field.text)) && Number(field.text) >= from && Number(field.text) <= to
     signal valueModified(real value)
-    implicitWidth: Theme.languageWidth
+    implicitWidth: Theme.inputWidth
     implicitHeight: field.implicitHeight
     function commit(next: real) {
         if (Number.isFinite(next) && next >= from && next <= to) { value = next; valueModified(next) }

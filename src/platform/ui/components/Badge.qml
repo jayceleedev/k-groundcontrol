@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12] specs/features/0.0.2-theme.md
 /** 알림 개수를 둥근 표식으로 보여줘요.
  * 입력: value를 받아요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: value를 위험 색 원형 바탕 위 숫자로 표시해요.
+ * 실패: 음수도 받은 정수 그대로 표시하므로 개수 유효성은 호출자가 확인해요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 
 Rectangle {

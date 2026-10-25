@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T22] specs/features/0.0.2-theme.md
 /** 시간에 따른 여러 값을 확대하고 이동하며 비교해요.
  * 입력: seriesNames, maxPoints, xFrom/xTo, yFrom/yTo와 append(seriesIndex, x, y), clear(), seriesAt(index)를 사용해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: lines와 seriesAt(index)로 계열을 제공하고 점·축·범례를 그려요.
+ * 실패: 없는 계열이나 유한하지 않은 점은 append에서 무시해요. 잘못된 위치의 seriesAt은 null이에요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 import QtGraphs
 
@@ -18,8 +17,8 @@ Item {
     property real yFrom: 0
     property real yTo: 100
     property list<QtObject> lines: []
-    implicitWidth: Theme.languageWidth * 2
-    implicitHeight: Theme.instrumentHeight
+    implicitWidth: Theme.chartWidth
+    implicitHeight: Theme.chartHeight
     function seriesAt(index: int): QtObject { return index >= 0 && index < lines.length ? lines[index] : null }
     function append(seriesIndex: int, x: real, y: real) {
         const series = seriesAt(seriesIndex)
@@ -54,7 +53,7 @@ Item {
     GraphsView {
         id: graph
         anchors.fill: parent
-        anchors.bottomMargin: Theme.menuHeight
+        anchors.bottomMargin: Theme.chartLegendHeight
         marginLeft: Theme.inset; marginRight: Theme.inset; marginTop: Theme.inset; marginBottom: Theme.inset
         axisX: ValueAxis { min: chart.xFrom; max: chart.xTo; labelDecimals: 0 }
         axisY: ValueAxis { min: chart.yFrom; max: chart.yTo; labelDecimals: 0 }

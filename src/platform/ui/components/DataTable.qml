@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12] specs/features/0.0.2-theme.md
 /** 열 이름과 선택한 행을 구분하는 표예요.
  * 입력: columns는 제목 목록, rows는 행 목록이며 currentIndex, sortColumn, sortAscending과 sortRequested를 사용해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: 선택한 행의 currentIndex와 머리줄의 sortRequested(column, ascending)를 내요.
+ * 실패: 정렬은 직접 하지 않아요. 행 길이와 열 개수의 일치는 호출자가 보장해요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 
 Column {
@@ -16,7 +15,7 @@ Column {
     property int sortColumn: -1
     property bool sortAscending: true
     signal sortRequested(int column, bool ascending)
-    width: Theme.languageWidth * 2
+    width: Theme.dataTableWidth
     Row {
         width: parent.width
         Repeater {
@@ -39,7 +38,7 @@ Column {
             required property int index
             required property var modelData
             width: table.width
-            height: Theme.menuHeight
+            height: Theme.dataRowHeight
             color: table.currentIndex === index ? Theme.infoSoft : index % 2 ? Theme.surfaceAlt : Theme.surface
             Row {
                 anchors.fill: parent

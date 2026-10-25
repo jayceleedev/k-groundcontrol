@@ -1,18 +1,17 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12] specs/features/0.0.2-theme.md
 /** 닫을 수 있는 상태 알림을 보여줘요.
  * 입력: text, level과 closed()를 사용해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: 닫기 단추가 visible을 거짓으로 바꾸고 closed를 내요.
+ * 실패: 모르는 level의 색은 바탕 부품 Chip의 기본 상태 표시를 따라요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 
 Chip {
     id: control
     signal closed()
-    implicitWidth: contentItem.implicitWidth + padding * 2 + Theme.menuHeight
-    rightPadding: Theme.menuHeight + Theme.inset
+    implicitWidth: contentItem.implicitWidth + padding * 2 + Theme.controlHeight
+    rightPadding: Theme.controlHeight + Theme.inset
     radius: Theme.radiusMedium
     IconButton { anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter; name: "x"; hint: qsTr("닫기"); onClicked: { control.visible = false; control.closed() } }
 }

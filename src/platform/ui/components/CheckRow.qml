@@ -1,8 +1,8 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T17] specs/features/0.0.2-theme.md
 /** 선택 상태를 글자와 함께 보여줘요.
  * 입력: text, checked, enabled와 clicked를 사용해요. checkState로 세 상태를 구분해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: checkState로 세 상태를 보여 주고 clicked와 checkStateChanged를 내요.
+ * 실패: 비활성 체크 행은 눌러도 checkState를 바꾸지 않아요.
  */
 import QtQuick
 import QtQuick.Controls.Basic as Basic
@@ -11,7 +11,7 @@ import Kgc.Ui
 Basic.CheckBox {
     id: control
     tristate: true
-    implicitHeight: Theme.menuHeight
+    implicitHeight: Theme.controlHeight
     implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
     padding: Theme.inset
     leftPadding: indicator.width + Theme.inset * 2

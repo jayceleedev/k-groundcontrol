@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T22] specs/features/0.0.2-theme.md
 /** 경고 구간과 위험 구간이 있는 반원 계기예요.
  * 입력: value, from, to, warning, danger, unit을 받아요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: angle(value)로 제한된 바늘 각도를 구하고 경고·위험 구간과 눈금을 그려요.
+ * 실패: 바늘 각도를 반원 안으로 제한해요. warning·danger의 순서는 호출자가 보장해요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 import QtQuick.Shapes
 
@@ -18,8 +17,8 @@ Item {
     property real danger: 90
     property string unit: ""
     readonly property real radiusValue: width / 2 - Theme.panelInset
-    implicitWidth: Theme.languageWidth
-    implicitHeight: Theme.languageWidth / 2 + Theme.menuHeight
+    implicitWidth: Theme.arcGaugeWidth
+    implicitHeight: Theme.arcGaugeHeight
     function angle(value: real): real { return 180 * Math.max(0, Math.min(1, (value - from) / Math.max(1, to - from))) }
     Shape {
         anchors.fill: parent

@@ -1,8 +1,8 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12] specs/features/0.0.2-theme.md
 /** 수준별 색을 가진 기록을 끝까지 따라가며 보여줘요.
  * 입력: model은 text, level(info, debug, warn, error) 목록이며 followTail을 받아요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: 수준별 색으로 기록을 표시하고 followTail이면 새 행이 생길 때 끝으로 이동해요.
+ * 실패: 알 수 없는 level은 info 글자 색을 쓰고, 빈 model에는 기록을 표시하지 않아요.
  */
 import QtQuick
 import QtQuick.Controls.Basic as Basic
@@ -12,8 +12,8 @@ Basic.ScrollView {
     id: control
     property var model: []
     property bool followTail: true
-    implicitWidth: Theme.languageWidth * 2
-    implicitHeight: Theme.menuHeight * 4
+    implicitWidth: Theme.logViewWidth
+    implicitHeight: Theme.logViewHeight
     clip: true
     background: Rectangle { color: Theme.surfaceAlt; border.color: Theme.line; radius: Theme.radiusSmall }
     ListView {
@@ -27,7 +27,7 @@ Basic.ScrollView {
             color: modelData.level === "error" ? Theme.danger : modelData.level === "warn" ? Theme.warn : modelData.level === "debug" ? Theme.inkMuted : Theme.ink
             font.family: Theme.monoFamily
             font.pixelSize: Theme.fontSize
-            padding: Theme.menuGap
+            padding: Theme.logLinePadding
             wrapMode: Text.Wrap
         }
     }

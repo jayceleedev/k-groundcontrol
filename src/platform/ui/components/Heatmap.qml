@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T22] specs/features/0.0.2-theme.md
 /** 값의 크기를 칸의 색과 범례로 보여줘요.
  * 입력: values, columns, from, to를 받아요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: values를 격자 칸으로 나누어 색과 불투명도로 표시하고 범례를 그려요.
+ * 실패: 칸의 비율을 0~1로 제한해요. columns에는 양수를 줘야 칸 너비가 맞아요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 
 Column {
@@ -15,7 +14,7 @@ Column {
     property real from: 0
     property real to: 100
     spacing: Theme.inset
-    width: Theme.languageWidth
+    width: Theme.heatmapWidth
     Grid {
         columns: Math.max(1, map.columns)
         spacing: Theme.lineWidth

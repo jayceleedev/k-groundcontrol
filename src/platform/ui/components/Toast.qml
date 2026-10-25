@@ -1,8 +1,8 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12] specs/features/0.0.2-theme.md
 /** 짧은 알림의 모양을 제공해요.
  * 입력: text를 받아요. 표시 시점과 수명은 호출자가 정해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: ink 바탕과 inkInverse 글자로 짧은 알림 모양을 제공해요.
+ * 실패: 자동으로 닫히지 않으므로 호출자가 visible과 수명을 관리해야 해요.
  */
 import QtQuick
 import QtQuick.Controls.Basic as Basic

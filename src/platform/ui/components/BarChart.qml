@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T22] specs/features/0.0.2-theme.md
 /** 범주별 값을 묶은 막대로 비교해요.
- * 입력: categories, seriesNames, values(줄별 값 목록), horizontal, from, to를 받아요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 입력: categories, seriesNames, values(줄별 값 목록), horizontal, from, to, decimals(기본 0)를 받아요.
+ * 출력: values의 행마다 막대 묶음 하나와 decimals 자리의 값 글자를 표시해요.
+ * 실패: 없는 계열 이름은 빈 글자로 표시해요. 숫자와 범주 길이의 유효성은 호출자가 보장해요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 import QtGraphs
 
@@ -18,8 +17,8 @@ Item {
     property bool horizontal: false
     property real from: 0
     property real to: 100
-    implicitWidth: Theme.languageWidth * 2
-    implicitHeight: Theme.instrumentHeight
+    implicitWidth: Theme.chartWidth
+    implicitHeight: Theme.chartHeight
     // 생성 중 들어오는 값과 이름 변경을 모아 계열이 준비된 뒤 한 번만 채워요.
     Component.onCompleted: Qt.callLater(rebuild)
     function rebuild() {
@@ -37,7 +36,7 @@ Item {
     }
     GraphsView {
         anchors.fill: parent
-        anchors.bottomMargin: Theme.menuHeight
+        anchors.bottomMargin: Theme.chartLegendHeight
         marginLeft: Theme.inset; marginRight: Theme.inset; marginTop: Theme.inset; marginBottom: Theme.inset
         orientation: chart.horizontal ? Qt.Horizontal : Qt.Vertical
         axisX: BarCategoryAxis { categories: chart.categories }

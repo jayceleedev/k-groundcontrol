@@ -1,11 +1,10 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T17] specs/features/0.0.2-theme.md
 /** 선택한 항목을 강조하는 단추예요.
  * 입력: text, checked와 clicked를 사용해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: checked에 따라 바탕을 강조하고 clicked로 누름을 알려요.
+ * 실패: 비활성 Pill은 눌러도 선택 상태가 바뀌지 않아요.
  */
 import QtQuick
-import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
 
 ActionButton {

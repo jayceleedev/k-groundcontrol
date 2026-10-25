@@ -1,8 +1,8 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T14] specs/features/0.0.2-theme.md
 /** 값과 이름표와 오류를 한 입력란에 묶어요.
  * 입력: text, label, placeholderText, errorText, readOnly, echoMode와 editingFinished를 사용해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: 편집한 text와 editingFinished를 제공하고 errorText를 오류 색으로 보여줘요.
+ * 실패: 입력값을 스스로 판정하지 않아요. 호출자가 준 errorText를 표시해요.
  */
 import QtQuick
 import QtQuick.Controls.Basic as Basic
@@ -12,10 +12,10 @@ Basic.TextField {
     id: control
     property string label: ""
     property string errorText: ""
-    implicitWidth: Theme.languageWidth
-    implicitHeight: Theme.menuHeight + (label ? Theme.menuHeight : 0) + (errorText ? Theme.menuHeight : 0)
-    topPadding: Theme.inset + (label ? Theme.menuHeight : 0)
-    bottomPadding: Theme.inset + (errorText ? Theme.menuHeight : 0)
+    implicitWidth: Theme.inputWidth
+    implicitHeight: Theme.controlHeight + (label ? Theme.inputLabelHeight : 0) + (errorText ? Theme.inputLabelHeight : 0)
+    topPadding: Theme.inset + (label ? Theme.inputLabelHeight : 0)
+    bottomPadding: Theme.inset + (errorText ? Theme.inputLabelHeight : 0)
     padding: Theme.inset
     color: enabled ? Theme.ink : Theme.inkDisabled
     placeholderTextColor: Theme.inkMuted
@@ -25,8 +25,8 @@ Basic.TextField {
     font.pixelSize: Theme.fontSize
     selectByMouse: true
     background: Rectangle {
-        y: control.label ? Theme.menuHeight : 0
-        height: control.height - y - (control.errorText ? Theme.menuHeight : 0)
+        y: control.label ? Theme.inputLabelHeight : 0
+        height: control.height - y - (control.errorText ? Theme.inputLabelHeight : 0)
         color: Theme.surface
         border.color: control.errorText ? Theme.danger : control.activeFocus ? Theme.focus : Theme.lineStrong
         border.width: control.activeFocus ? Theme.lineWidth * 2 : Theme.lineWidth

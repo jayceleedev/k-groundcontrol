@@ -1,9 +1,9 @@
-// [0.0.2 T8 T10–T14 T17 T22 T23] specs/features/0.0.2-theme.md
+// [0.0.2 T12 T14 T17] specs/features/0.0.2-theme.md
 /** 동작의 중요도와 초점을 구분하는 단추예요.
  * 입력: text, icon, kind, checked, enabled를 받고 clicked를 내요.
  * textColor, radius, outlineColor, outlineWidth로 파생 부품의 강조를 정해요.
- * 출력: 화면과 해당 부품의 변경 시그널이에요.
- * 실패: 잘못된 입력은 표시하지 않거나 범위 안으로 제한해요.
+ * 출력: 눌렀을 때 clicked를 내고 textColor로 현재 글자 색을 제공해요.
+ * 실패: enabled가 거짓이면 사용자 입력으로 clicked를 내지 않아요.
  */
 import QtQuick
 import QtQuick.Controls.Basic as Basic
@@ -17,8 +17,8 @@ Basic.Button {
     property real radius: Theme.radiusSmall
     property color outlineColor: activeFocus ? Theme.focus : kind === "ghost" ? "transparent" : Theme.line
     property real outlineWidth: activeFocus ? Theme.lineWidth * 2 : Theme.lineWidth
-    implicitHeight: Theme.menuHeight
-    implicitWidth: Math.max(Theme.menuHeight, contentItem.implicitWidth + padding * 2)
+    implicitHeight: Theme.controlHeight
+    implicitWidth: Math.max(Theme.controlHeight, contentItem.implicitWidth + padding * 2)
     padding: Theme.inset
     spacing: Theme.inset
     font.family: Theme.fontFamily

@@ -18,6 +18,8 @@ jobs:
         with:
           version: '6.12.0'
           arch: win64_msvc2022_64
+          # 0.0.2 차트(Qt Graphs)는 추가 모듈이고, Graphs 라이브러리가 Quick3D·ShaderTools에 기대요.
+          modules: 'qtgraphs qtquick3d qtshadertools'
           cache: true
           # aqtinstall 3.3.0은 Qt 6.11+ Windows 저장소 구조를 못 읽어요. 지원이 들어간 master 커밋으로 고정해요.
           aqtsource: 'git+https://github.com/miurahr/aqtinstall.git@076e1659807d0b362a3ed684d54c2e9c775eb9c7'

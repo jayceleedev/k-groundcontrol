@@ -5,10 +5,11 @@
 #include <QtLogging>
 
 namespace kgc::app::log {
+struct LogEvent;
 namespace detail {
 // 수준 매크로의 구현만 접근하도록 공개 서비스와 구분해요.
 template<class... Values>
-void writeLog(LogLevel level, const char* category, const char* eventName,
+void writeLog(LogLevel level, const char* category, LogEvent event, const char* eventName,
               const char* message, const Values&... values);
 }
 /** 앱과 Qt의 로그를 같은 파일에 기록해요.
@@ -26,7 +27,7 @@ public:
     static bool install(const QString& dir, LogLevel level, int maxFileMB, int maxFiles);
 private:
     template<class... Values>
-    friend void detail::writeLog(LogLevel, const char*, const char*, const char*, const Values&...);
+    friend void detail::writeLog(LogLevel, const char*, LogEvent, const char*, const char*, const Values&...);
     static void write(LogLevel level, const QString& category, const QString& event, const QString& message);
     static QString format(LogLevel level, const QString& category,
                           const QString& event, const QString& message);

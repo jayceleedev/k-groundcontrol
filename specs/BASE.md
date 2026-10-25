@@ -346,7 +346,7 @@ k-groundcontrol/
 | 알림 / 기체 메시지 | `Notification` / `VehicleMessage` | |
 | 앱 로그 / 텔레메트리 로그 / 기체 로그 | `AppLog` / `TelemetryLog` / `OnboardLog` | |
 | 로그 사건 / 기체 이벤트 | `LogEvent` / `VehicleEvent` | 우리 로그 / PX4 events |
-| 로그 수준 | `LogLevel`(Debug·Info·Warn·Error) | `app/log` api의 enum, 부팅 설정이 넘김 |
+| 로그 수준 | `LogLevel`(Debug·Info·Warn·Error), `parseLogLevel` | `app/log` api의 enum과 이름 변환, 부팅 설정이 넘김 |
 | 운영 설정 / 부팅 설정 / 고정값 / 비밀값 / 모듈 id | `Setting` / `BootOption` / `Constant` / `Secret` / `ModuleId` | |
 | 펌웨어 세팅 모듈 / 안전·페일세이프 모듈 / 연결 모듈 | `fcFlash` / `failsafe` / `link` | 기능 id |
 

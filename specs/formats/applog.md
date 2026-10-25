@@ -24,7 +24,8 @@
 
 ## 회전
 - 파일이 `[log] maxFileMB`(기본 5)를 넘으면 `kgc.log → kgc.1.log → …`로 밀고 `maxFiles`(기본 5)를 넘는 것은 지운다.
-- 수준은 `[log] level`(기본 `info`) 또는 `--log-level`.
+- 수준은 `[log] level`(기본 `info`) 또는 `--log-level`. 이름은 `debug`·`info`·`warn`·`error`.
+- 틀린 값: `--log-level`이 틀리면 시작하지 않고 오류 메시지(Windows는 메시지 상자)를 낸다. `kgc.ini`의 `[log] level`이 틀리면 그 값을 무시하고 기본값 `info`로 시작한다(파일 오타로 앱이 안 뜨지 않게).
 
 ## `kgc.ini`(부팅 설정) — 0.0.1에서 읽는 키
 ```ini

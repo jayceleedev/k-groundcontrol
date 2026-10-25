@@ -49,6 +49,24 @@
     </message>
 </context>
 <context>
+    <name>BootOptions</name>
+    <message>
+        <location filename="../src/platform/app/boot/internal/BootOptions.cpp" line="14"/>
+        <source>로그 수준</source>
+        <translation>Log level</translation>
+    </message>
+    <message>
+        <location filename="../src/platform/app/boot/internal/BootOptions.cpp" line="15"/>
+        <source>데이터 폴더</source>
+        <translation>Data folder</translation>
+    </message>
+    <message>
+        <location filename="../src/platform/app/boot/internal/BootOptions.cpp" line="23"/>
+        <source>지원하지 않는 로그 수준: %1</source>
+        <translation>Unsupported log level: %1</translation>
+    </message>
+</context>
+<context>
     <name>CenterArea</name>
     <message>
         <location filename="../src/features/shell/ui/CenterArea.qml" line="37"/>

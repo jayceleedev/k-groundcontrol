@@ -10,18 +10,19 @@ BootOptions BootOptions::parse(const QStringList& args)
     QSettings ini(QDir(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation))
                       .filePath("kgc.ini"), QSettings::IniFormat);
     QCommandLineParser parser;
-    // 터미널용 설명은 화면 번역과 분리해 한국어 원문으로 유지해요.
-    parser.addOption({"log-level", "로그 수준", "level"});
-    parser.addOption({"data-dir", "데이터 폴더", "path"});
+    // 번역 목록에는 넣되, 번역기가 없는 부팅 단계에서는 한국어 원문을 보여 줘요.
+    parser.addOption({"log-level", QT_TRANSLATE_NOOP("BootOptions", "로그 수준"), "level"});
+    parser.addOption({"data-dir", QT_TRANSLATE_NOOP("BootOptions", "데이터 폴더"), "path"});
     parser.process(args);
     BootOptions options;
     const auto levelName = parser.isSet("log-level") ? parser.value("log-level")
         : ini.value("log/level", "info").toString();
     const auto level = kgc::app::log::parseLogLevel(levelName);
-    if (!level)
+    if (!level && parser.isSet("log-level"))
         QCommandLineParser::showMessageAndExit(QCommandLineParser::MessageType::Error,
-            QString("지원하지 않는 로그 수준: %1").arg(levelName), 1);
-    options.logLevel = *level;
+            QString(QT_TRANSLATE_NOOP("BootOptions", "지원하지 않는 로그 수준: %1")).arg(levelName), 1);
+    // 파일 오타 때문에 앱이 열리지 않는 일을 막도록 기본 수준으로 돌아가요.
+    options.logLevel = level.value_or(kgc::app::log::LogLevel::Info);
     options.maxFileMB = qMax(1, ini.value("log/maxFileMB", 5).toInt());
     options.maxFiles = qMax(1, ini.value("log/maxFiles", 5).toInt());
     options.dataDir = parser.isSet("data-dir") ? parser.value("data-dir")

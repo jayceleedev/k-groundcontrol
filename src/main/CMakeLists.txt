@@ -10,7 +10,7 @@ target_link_libraries(kgc_composition PUBLIC kgc_app_errors kgc_app_boot kgc_app
 qt_add_translations(kgc_composition
     TS_FILES "${PROJECT_SOURCE_DIR}/i18n/kgc_en.ts"
     RESOURCE_PREFIX /kgc/i18n
-    SOURCE_TARGETS kgc_ui kgc_shell kgc_appSettings kgc_composition)
+    SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_appSettings kgc_composition)
 qt_add_executable(KGroundControl main.cpp)
 set_target_properties(KGroundControl PROPERTIES WIN32_EXECUTABLE TRUE)
 target_link_libraries(KGroundControl PRIVATE kgc_composition)

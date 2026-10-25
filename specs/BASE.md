@@ -46,8 +46,8 @@
 ## 2. 기술 기반 (D3·D4·R-N18; §17-1~2 확정)
 
 - 언어 **C++23**(`std::expected`). GCC 13+, MSVC 2022 17.8+(CMake가 `/std:c++latest`로 넘긴다).
-- Qt 6.12 LTS. 층별로 쓸 수 있는 Qt 모듈: `app` Core·Network·Sql·Positioning·TextToSpeech / `comm` + SerialPort / `vehicle` 추가 없음 / `platform/ui` + Quick·Qml·QuickControls / 기능 모듈 + Location·Multimedia·Graphs·Quick3D(필요한 기능만). GPL-3.0이라 모듈 제한 없음.
-- 빌드 CMake ≥ 3.28 + Ninja, `CMakePresets.json`(linux-debug·linux-release·windows-release). Qt는 aqtinstall 패치 버전 고정, C/C++ 의존은 CPM(태그·체크섬 고정), vcpkg 안 씀. 제3자 코드는 CPM 캐시에 두고 모든 검사에서 제외.
+- Qt 6.12 LTS. 층별로 쓸 수 있는 Qt 모듈: `app` Core·Network·Sql·Positioning·TextToSpeech / `comm` + SerialPort / `vehicle` 추가 없음 / `platform/ui` + Quick·Qml·QuickControls·QuickEffects·Graphs·Svg / 기능 모듈 + Location·Multimedia·Graphs·Quick3D(필요한 기능만). GPL-3.0이라 모듈 제한 없음.
+- 빌드 CMake ≥ 3.28 + Ninja, `CMakePresets.json`(linux-debug·linux-release·windows-release). Qt는 aqtinstall 패치 버전 고정, C/C++ 의존과 자원 꾸러미(아이콘 Tabler Icons 3.49.0, npm 꾸러미 URL + SHA-256)는 CPM(태그·체크섬 고정), vcpkg 안 씀. 제3자 코드는 CPM 캐시에 두고 모든 검사에서 제외.
 - MAVLink: `mavlink/c_library_v2` CPM 커밋 고정, 방언 **ardupilotmega**(common 포함). include는 `<kgc/comm/mavlink/Mavlink.h>` **한 곳**을 통해서만(설정 매크로 뒤 include). 허용: `comm`·`vehicle`·기능 `internal/`. 금지: `app`, `platform/ui`, 모든 `ui/`. PX4 이벤트 해석은 libevents(CPM).
 - QML 모듈: 바탕 `Kgc.Ui`, 기능마다 `Kgc.<Id>`(`qt_add_qml_module`, STATIC). `src/main`이 `Q_IMPORT_QML_PLUGIN`으로 전부 링크하고 `Composition`이 기능마다 `registerUi(uiRegistry, <그 모듈의 전역 서비스>)`(선언은 그 모듈 `api/kgc/<id>/Ui.h`; `kgc::ui::UiRegistry`는 PanelRegistry·슬롯 넷·Navigator·QQmlEngine을 묶은 참조 묶음)를 **직접 호출**한다(정적 초기화 객체에 기대지 않는다 — 링커가 버린다).
 - 네임스페이스는 모듈 경로를 따른다: `kgc::app`, `kgc::comm::mavlink`, `kgc::vehicle::firmware`, `kgc::esc`, `kgc::tracker`.
@@ -63,12 +63,12 @@ k-groundcontrol/
 │  │  ├─ app/       0   boot settings secrets paths store scheduler job net log errors notify i18n units geo crc util
 │  │  ├─ comm/      1   links(serial udp tcp mock) rawport(ByteStream RawPort PortRegistry) lease(PortLease) mavlink(parser channel signing) espflash(ESP 시리얼 부트로더 클라이언트) tlog joystick
 │  │  ├─ vehicle/   2   registry Vehicle states firmware(px4 ardupilot generic) outbound(VehicleSender) safety(ArmGuard WorkLock ArmedPolicy RebootWindow JobArmWatch) command(CommandQueue)
-│  │  └─ ui/        2.5 Theme components(HoldToConfirm JobView Pill Chip TimerBox) PanelRegistry Slots(Topbar StatusChip RightTab MapLayer) Navigator
+│  │  └─ ui/        2.5 Theme themes(ThemeBase + 테마 파일) components(§9.7 목록) ThemeSwitcher(resolveTheme) UiSettingValues PanelRegistry SlotModel Slots(Topbar StatusChip RightTab MapLayer) Navigator
 │  ├─ features/<id>/   api/kgc/<id>/  internal/  ui/  CMakeLists.txt  MODULE.md
 │  └─ main/            main.cpp Composition.cpp
 ├─ tracker/            ESP32 스케치 + protocol/ 공용 헤더 (§11)
 ├─ firmware/tracker/<변종>/   CI가 넣는 트래커 이미지
-├─ i18n/  resources/(qrc icons silhouettes data/<이름>/)  tools/check/(+hooks/ requirements.txt)  tests/  docs/  specs/
+├─ i18n/  resources/(qrc icons/icons.txt silhouettes data/<이름>/)  cmake/icons/Icons.cmake  tools/check/(+hooks/ requirements.txt)  tests/  docs/  specs/
 ├─ cmake/gen/SettingsGen.cmake   설정 접근자 생성기(CMake 스크립트, 빌드 의존에 Python 없음)
 ├─ .github/workflows/  AGENTS.md  LICENSE  README.md   (THIRD_PARTY_NOTICES.md는 빌드가 만들어 산출물에 넣음 §15)
 └─ .pm/   (gitignore)
@@ -85,6 +85,7 @@ k-groundcontrol/
 | `notify` | 알림 화면 | 전역 | 상단 벨·목록·토스트·TTS 호출 | §10 |
 | `ai` | AI 세팅 | 전역 패널 + 기체별 서비스 | 상단 오른쪽 아이콘·패널, 첫 사용 동의 | R-D4~D8, R-N23 |
 | `appSettings` | 앱 설정 | 전역 | 좌 메뉴 15, **정보 창**(버전·라이선스·고지·소스) | R-N16·17·22 |
+| `uiGallery` | UI 부품 목록(개발 단계) | 전역 | 좌 메뉴 16(appSettings 뒤 구분선 다음) | R-N25 |
 | `analyze` | 인스펙터·콘솔·앱 로그 뷰어·진동 | 기체별 + 전역(앱 로그) | 좌 메뉴(나중 순서) | E3, C-55·57 |
 | `link` | 연결 | 전역 | 하단 기체 칩(링크 상태) + 연결 팝업. 저장된 링크 목록의 편집 화면은 `appSettings`가 갖고, 둘 다 바탕 `comm/links/LinkManager` api를 직접 쓴다(같은 순위라 서로 부르지 않음) | R-Q1, C-1~C-8 |
 | `fly` | 비행 조작 | 기체별 | 상단바 조작 띠(슬롯), 유도 명령(지도 클릭 팝업·표식 레이어) | R-Q4·R-Q5 |
@@ -119,7 +120,7 @@ k-groundcontrol/
 | 순위 | 기능 |
 |---|---|
 | 1 | `shell` |
-| 2 | `notify` `ai` `appSettings` `analyze` `link` |
+| 2 | `notify` `ai` `appSettings` `analyze` `link` `uiGallery` |
 | 3 | `fly` `mission` `vehicleInfo` `preflight` `logs` |
 | 4 | `layout` |
 | 5 | `sensors` `radio` `flightModes` `power` `failsafe` `motors` `tuning` `fcFlash` `esc` `elrs` `tracker` |
@@ -143,8 +144,8 @@ k-groundcontrol/
 | **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings **IniFormat** — `QSettings(IniFormat, UserScope, "K-GroundControl", "K-GroundControl")`로 명시 생성(`QCoreApplication`의 organizationName은 **비워 둠**, applicationName만 `K-GroundControl`); Linux `~/.config/K-GroundControl/K-GroundControl.ini`, Windows `%APPDATA%\K-GroundControl\K-GroundControl.ini`; 레지스트리 안 씀 |
 | **고정값** | 바꾸면 안 되는 수 | 모듈 `internal/Constants.h`; 여러 모듈이 쓰는 값만 `platform/app/constants/`(§6) | 코드 | 코드 |
 
-- 운영 설정은 **메타데이터 먼저**(R-N17). 항목: `id`(`<모듈>.<이름>`), `type`(`bool|int|double|string|enum|list<object>`), `default`, `min/max`, `enum`, `labelKey`(번역 키), `category`(모듈 id). 빌드 때 생성기 `cmake/gen/SettingsGen.cmake`(CMake `string(JSON)`, Python 불필요)가 **모듈마다** 빌드 폴더 `${CMAKE_BINARY_DIR}/gen/kgc/<id>/Settings.h`에 형이 있는 접근자를 만들고 그 모듈 타깃의 PUBLIC include 경로에 더한다(소스 트리에 커밋하지 않음; include는 `<kgc/<id>/Settings.h>` 그대로). 없는 키는 컴파일 오류. 코드에 설정 키 문자열을 쓰지 않는다. 바탕 `app/settings`는 모듈을 모르고 등록·저장·검색만 한다.
-- **다른 모듈의 설정을 읽을 때**는 그 모듈 `api/`의 접근자를 순위표 방향으로만. 여러 기능이 함께 쓰는 안전 설정은 바탕에 둔다: 길게 누르기 시간 → `platform/ui`, 유도 거리·고도 한계·강제 시동 보이기 → `platform/vehicle/safety`.
+- 운영 설정은 **메타데이터 먼저**(R-N17). 항목: `id`(`<모듈>.<이름>`), `type`(`bool|int|double|string|enum|list<object>`), `default`, `min/max`, `enum`, `labelKey`(번역 키), `category`(모듈 id). 빌드 때 생성기 `cmake/gen/SettingsGen.cmake`(CMake `string(JSON)`, Python 불필요)가 **모듈마다** 빌드 폴더 `${CMAKE_BINARY_DIR}/gen/<id>/kgc/<id>/Settings.h`에 형이 있는 접근자(enum은 `<name>Values()`, min/max가 있는 int·double은 `<name>Min()`·`<name>Max()`도)를 만든다(소스 트리에 커밋하지 않음; include는 `<kgc/<id>/Settings.h>` 그대로). 설정을 가진 모듈은 자기 타깃을 만든 뒤 `kgc_use_settings(<target> <id>)`를 불러 `${CMAKE_BINARY_DIR}/gen/<id>`(PUBLIC include)와 `kgc_app_settings`(PUBLIC 링크)를 붙인다 — 그래서 다른 모듈의 설정은 그 모듈 타깃을 링크해야만 보이고, 순위 검사가 방향을 지킨다. `Settings`는 정의의 min/max를 지킨다: 범위 밖 쓰기는 거부(`setValue`가 `false`), 저장된 값이 범위 밖이면 읽을 때 default(판정은 `app/settings` api의 `withinRange`). 없는 키는 컴파일 오류. 코드에 설정 키 문자열을 쓰지 않는다. 바탕 `app/settings`는 모듈을 모르고 등록·저장·검색만 한다.
+- **다른 모듈의 설정을 읽을 때**는 그 모듈 `api/`의 접근자를 순위표 방향으로만. 여러 기능이 함께 쓰는 안전 설정은 바탕에 둔다: 길게 누르기 시간 → `platform/ui`(`ui.holdToConfirmMs`; 같은 자리에 테마 `ui.theme`), 유도 거리·고도 한계·강제 시동 보이기 → `platform/vehicle/safety`.
 - 설정 기본값은 JSON에만(코드 상수와 두 곳 금지).
 - **비밀값**(API 키·서명 키·바인드 문구·WiFi 비밀번호): `platform/app/secrets/SecretStore`(QtKeychain, §17-4). 값은 `Secret` 형으로만: `QString` 암시 변환 없음, `QDebug <<` 없음, `reveal()`은 허용 파일에서만(검사). 설정 JSON에는 "있음/없음"만.
 - **파일 자리**(`platform/app/paths/Paths`, 데이터 폴더 아래 — 데이터 폴더 기본값은 `QStandardPaths::AppLocalDataLocation`(organizationName이 비어 있으므로 Linux `~/.local/share/K-GroundControl`, Windows `%LOCALAPPDATA%\K-GroundControl`), 부팅 설정 `--data-dir`/`[paths] dataDir`로 바꿀 수 있음; `kgc.ini`는 `QStandardPaths::AppConfigLocation`(Linux `~/.config/K-GroundControl/kgc.ini`, Windows `%LOCALAPPDATA%\K-GroundControl\kgc.ini`)): `logs/app`, `logs/tlog`, `logs/onboard`, `missions`, `layouts`, `params/backups`(쓰기 전 전체 백업), `params/cache`(PX4 해시 캐시), `ai/changes`(AI·구성도 변경 사유), `video`, `cache/firmware`(해시 기록), `cache/tiles`, `cache/metadata`, `cache/terrain`.
@@ -181,7 +182,7 @@ k-groundcontrol/
 ## 6. 고정값·열거·오류 코드·로그 사건
 
 - **고정값**: 모듈 `internal/Constants.h`. 여러 모듈이 쓰는 값만 `platform/app/constants/`: `mavlink.h`(ACK 1200ms·3회, GCS 하트비트 1Hz, 끊김 3500ms), `safety.h`(비상 정지 21196, 강제 시동 2989, 모터 시험 3초), `mission.h`(1500ms·250ms·5회). CRC 다항식은 `app/crc`, 트래커 프로토콜 상수는 공용 헤더(§11)에만.
-- 검사 범위: `chrono` 리터럴, 타이머·Timeout 인자, 4자리 이상 16진수, 3자리 이상 10진수(허용 360·180·90·1000·60). 오프셋·시프트·인덱스(<256)는 대상 아님. QML은 `width`·`height`·`padding`·`margins`·`spacing`·`radius`·색 리터럴만 `Theme`에(anchors·z·opacity 등은 대상 아님).
+- 검사 범위: `chrono` 리터럴, 타이머·Timeout 인자, 4자리 이상 16진수, 3자리 이상 10진수(허용 360·180·90·1000·60). 오프셋·시프트·인덱스(<256)는 대상 아님. QML은 `width`·`height`·`implicitWidth`·`implicitHeight`·`padding`·`*Padding`·`margins`·`*Margin`·`spacing`·`radius`의 0 아닌 숫자 리터럴(값 전체가 리터럴일 때)과 색 리터럴(`"transparent"` 제외)을 `platform/ui/Theme.qml`과 `platform/ui/themes/`에만 둔다(anchors·z·opacity 등은 대상 아님; 검사 `qml_literal`).
 - **열거**: 모듈 `api/`의 `enum class`. 펌웨어가 정하는 열거(모드·회전·서보 기능)는 플러그인이 메타데이터에서 읽어 제공.
 - **모듈 id**: 모듈마다 `api/kgc/<id>/ModuleId.h`에 `inline constexpr kgc::app::errors::ModuleId kModuleId{18};`(16비트, 모듈별 고유, 10진). 바탕 `app/errors/ModuleId`는 형만 정의하고 값을 모른다. 중복은 검사가 모아 본다. `ModuleId.h`는 고정값 검사에서 제외한다.
 - **오류 코드**: `platform/app/errors/ErrorCode = {ModuleId module; uint16 code;}` 하나의 형. 모듈은 `api/kgc/<id>/Errors.h`에 `enum class EscError : uint16_t`와 `ErrorCode make(EscError)`를 둔다. `Result<T> = std::expected<T, ErrorCode>`. 사용자 문구는 모듈이 `errorText(ErrorCode)`(번역 대상)로.
@@ -269,7 +270,7 @@ k-groundcontrol/
 `platform/app/geo/Altitude`(AMSL·상대·지형·타원체고↔MSL, frame 인자) **한 묶음**, `Geodesy`(방위·고각·거리 — R-D23의 한 함수), `app/units`(표시 단위), `app/crc`(CRC16-XMODEM, CRC-0xA001, CRC8-0xD5 — 시험 벡터는 `tests/`), `app/util`. 네임스페이스 범위의 자유 함수가 두 모듈에 같은 이름이면 검사가 잡는다.
 
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
-- `Theme.qml`(크기·색·글꼴 토큰), `components/`(HoldToConfirm, JobView, Pill, Chip, TimerBox), `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 모듈의 메뉴 자리를 `Composition`이 등록), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`), `Navigator`(`open(panelId, arg)`).
+- `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품과 TimerBox — 목록은 0.0.2 스펙 §3.5; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 모듈의 메뉴 자리를 `Composition`이 등록), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`; 공통 바탕 `SlotModel`), `Navigator`(`open(panelId, arg)`).
 - 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만들어 QML 컨텍스트 프로퍼티(`<id>Controller`)로 둔다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
 - QML `import` 허용: `QtQuick*`·`QtQml*`, §2의 Qt 모듈(Location·Positioning·Multimedia·Graphs·Quick3D), `Kgc.Ui`, 자기 `Kgc.<Id>`, **순위표에서 아래인** `Kgc.<Id>`. 그 밖은 검사가 잡는다.
@@ -328,6 +329,8 @@ k-groundcontrol/
 | 공개 인터페이스 / 내부 / 화면 | `api` / `internal` / `ui` | 모듈 폴더 |
 | 화면 바탕 | `platform/ui` | 테마·부품·등록부·슬롯 |
 | 기여 지점 / 이름으로 열기 / 자리 표시 | `Slot` / `Navigator` / `Placeholder` | §9.7·9.8 |
+| 테마 / 테마 바탕 / 테마 판정 / 테마 바꾸개 / 유리 바탕 | `Theme` / `ThemeBase` / `resolveTheme`·`ThemeChoice`·`ThemeReason` / `ThemeSwitcher` / `GlassSurface` | §9.7 |
+| 화면 설정값 노출 / 슬롯 바탕 / 지도 바닥 / 가운데 안쪽 / UI 부품 목록 / 아이콘 그림 / 범위 판정 | `UiSettingValues` / `SlotModel` / `mapStage` / `centerViewport` / `uiGallery` / `IconGlyph` / `withinRange` | 부품 이름은 0.0.2 스펙 §3.5 |
 | 기체 / 활성 기체 / 컴포넌트 | `Vehicle` / `ActiveVehicle` / `Component` | |
 | 링크 / 주 링크 / 원시 포트 / 포트 임대 / 포트 등록부 | `Link` / `PrimaryLink` / `RawPort` / `PortLease` / `PortRegistry` | §9.1 |
 | 상태 묶음 / 주인 / 목록 상태 | `Bundle` / `Owner` / `ListModel` | §5 |
@@ -362,6 +365,8 @@ k-groundcontrol/
 | MODULE.md | 모듈마다 있고 100줄 이하; api·의존 변경 커밋에 함께 | 0.0.1 |
 | QML import | §9.7 허용 목록 밖 import | 0.0.1 |
 | 문자열(QML) | `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴에 `qsTr(` 없음; `console.log` | 0.0.1 |
+| QML 리터럴 | §6 QML 범위(`qml_literal`) | 0.0.2 |
+| 테마 토큰 | `themes/`의 각 파일이 `ThemeBase` required 토큰을 정확히 채움(`theme_tokens`) | 0.0.2 |
 | MAVLink include | `<kgc/comm/mavlink/Mavlink.h>` 밖의 `mavlink/*.h`, `ui/`의 MAVLink | 0.1.x |
 | 펌웨어 분기 | §8 규칙 + 허용 목록 | 0.1.x |
 | 송신 | §9.2 규칙 | 0.1.x |
@@ -419,3 +424,4 @@ k-groundcontrol/
 | 2026-10-24 | PM | 사실 고치기(알림만, 0.0.1 스펙 검토 지적): 설정 생성기 `cmake/gen/SettingsGen.cmake`(빌드 폴더 생성), QSettings IniFormat·조직/앱 이름, 데이터 폴더 기본값·`--data-dir`, PanelRegistry 항목(order·group·titleKey·icon)·자리 표시 등록·메뉴 제목 번역 방식, 순환 검사는 CMakeLists 텍스트(configure 불필요), 훅 requirements.txt·fetch-depth, 고지 목록·HOMEPAGE_URL |
 | 2026-10-25 | PM | 사실 고치기(알림만, 0.0.1 구조 검수 1 지적 15·7): §10 번역 전환 문구(Translator는 엔진을 모르고 Composition이 `engine.retranslate()` 연결), §13 용어 `LogLevel` |
 | 2026-10-25 | PM | 사실 고치기(알림만, 0.0.1 구조 검수 3 지적 r2-2): §10 부팅 단계 터미널 출력 규칙 |
+| 2026-10-25 | 사용자 | 0.0.2 스펙 초안 4와 함께 승인: §2 platform/ui Qt 모듈(QuickEffects·Graphs·Svg)·Tabler 꾸러미, §3 트리·§3.1 `uiGallery`·§3.2 순위 2, §4 생성 헤더 위치·`kgc_use_settings`·Values/Min/Max·범위 지키기·`ui.theme`, §6 QML 리터럴 자리, §9.7 테마·ThemeSwitcher·UiSettingValues·부품·Basic 스타일·SlotModel, §13 용어, §14 `qml_literal`·`theme_tokens` |

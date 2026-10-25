@@ -53,7 +53,7 @@
 
 ## 생성되는 것
 
-`${CMAKE_BINARY_DIR}/gen/kgc/<module>/Settings.h` (include는 `<kgc/<module>/Settings.h>`):
+`${CMAKE_BINARY_DIR}/gen/<module>/kgc/<module>/Settings.h` (include는 `<kgc/<module>/Settings.h>`; 모듈 타깃은 `kgc_use_settings(<target> <module>)`로 include 경로와 `kgc_app_settings` 링크를 받음; enum은 `<name>Values()`, min/max가 있으면 `<name>Min()`·`<name>Max()`도 생성; `Settings`는 범위 밖 쓰기를 거부하고 범위 밖 저장값은 default로 읽음):
 
 ```cpp
 namespace kgc::shell::settings {

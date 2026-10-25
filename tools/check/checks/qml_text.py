@@ -8,6 +8,7 @@ def check(ctx):
     for path, text in ctx["files"].items():
         if path.endswith(".qml"):
             for number, line in enumerate(text.splitlines(), 1):
-                # 붙임 속성은 전용 규칙이 맡으므로 일반 본문 속성만 확인해요.
-                if re.search(r'(?<![\w.])text\s*:\s*["\']', line):
+                # ToolTip.text만 전용 규칙이 맡고, 다른 객체의 본문 속성도 여기서 확인해요.
+                matches = re.finditer(r'(?<!\w)(?:(\w+)\.)?text\s*:\s*["\']', line)
+                if any(match[1] != "ToolTip" for match in matches):
                     yield path, number, "번역하지 않은 화면 문자열"

@@ -272,7 +272,7 @@ k-groundcontrol/
 
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
 - `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 모듈의 메뉴 자리를 `Composition`이 등록), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽, `RightTabSlot`, `MapLayerSlot`, 하단바 맨 오른쪽 단추 `BottomActionSlot`; 공통 바탕 `SlotModel` — `add(entry)`·order 정렬·같은 id 거부), `Navigator`(`open(panelId, arg)`).
-- **별도 창**: 기능 컨트롤러가 주인(처음 열 때 같은 엔진의 루트 문맥에서 만들고, 부모는 컨트롤러, transientParent 없음, 닫으면 숨김). 자리는 `WindowPlacement`(화면 기준 좌표, 끌어오기 식)로 복원·저장하고, 창 일은 공용 도우미 `SeparateWindow`가 한다. `Composition`이 셸 창 닫기를 앱 종료에 잇는다.
+- **별도 창**: 기능 컨트롤러가 소유한 `SeparateWindow`가 창을 만든다(처음 열 때 같은 엔진의 루트 문맥에서, 창의 부모는 `SeparateWindow`, transientParent 없음, 닫으면 숨김). 자리는 `WindowPlacement`(화면 기준 좌표, 끌어오기 식)로 복원·저장하고, 창 일은 공용 도우미 `SeparateWindow`가 한다. `Composition`이 셸 창 닫기를 앱 종료에 잇는다.
 - 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만들어 QML 컨텍스트 프로퍼티(`<id>Controller`)로 둔다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
 - QML `import` 허용: `QtQuick*`·`QtQml*`, §2의 Qt 모듈(Location·Positioning·Multimedia·Graphs·Quick3D), `Kgc.Ui`, 자기 `Kgc.<Id>`, **순위표에서 아래인** `Kgc.<Id>`. 그 밖은 검사가 잡는다.
@@ -434,3 +434,4 @@ k-groundcontrol/
 | 2026-10-25 | PM | 사실 고치기(알림만): §9.7 UiSettingValues 설명에 배경, `applyDefaultSurfaceFormat` |
 | 2026-10-25 | 사용자 | 0.0.3 스펙 초안 3과 함께 승인: §3 트리(LogFeed·BottomAction·WindowPlacement), §3.1 `secondPanel`·`analyze` 보이는 곳, §3.2 순위 2 `secondPanel`, §9.7 BottomActionSlot·SlotModel 등록·별도 창 규칙·기여 표, §10 LogFeed, §13 용어 |
 | 2026-10-25 | PM | 사실 고치기(알림만, 0.0.3 구조 검수 1): §9.7 `SeparateWindow`, §10 되돌이 막기 경로는 조립이 넘김, §13 용어 |
+| 2026-10-25 | PM | 사실 고치기(알림만): §9.7 별도 창 부모 = SeparateWindow |

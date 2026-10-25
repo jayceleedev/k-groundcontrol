@@ -8,7 +8,7 @@
 #include <kgc/app/i18n/Translator.h>
 #include <kgc/appSettings/Settings.h>
 #include <QGuiApplication>
-#include <QSurfaceFormat>
+#include <kgc/ui/SurfaceFormat.h>
 #include <QQuickStyle>
 #include <QQmlApplicationEngine>
 
@@ -17,7 +17,7 @@
  * 출력: 종료 코드.
  * 실패: 로그나 창 초기화 실패는 1.
  * 흐름:
- * 1. QSurfaceFormat::setDefaultFormat — 창 생성 전에 멀티샘플 수를 정해요.
+ * 1. kgc::ui::applyDefaultSurfaceFormat — 창 생성 전에 공용 표면 형식을 정해요.
  * 2. BootOptions::parse — 부팅 값을 읽어요.
  * 3. Paths::init — 데이터 폴더를 정해요.
  * 4. LogSink::install — 로그를 열어요.
@@ -29,10 +29,7 @@
  */
 int main(int argc, char* argv[])
 {
-    // 외부 QuickTest의 applicationAvailable()에서도 창 생성 전에 이 세 줄을 적용해요.
-    auto format = QSurfaceFormat::defaultFormat();
-    format.setSamples(4);
-    QSurfaceFormat::setDefaultFormat(format);
+    kgc::ui::applyDefaultSurfaceFormat();
     QGuiApplication app(argc, argv);
     app.setApplicationName("K-GroundControl");
     app.setApplicationVersion(KGC_VERSION);

@@ -13,3 +13,8 @@ add_test(NAME slot_model COMMAND test_slot_model)
 qt_add_executable(test_theme_choice test_theme_choice.cpp)
 target_link_libraries(test_theme_choice PRIVATE kgc_ui Qt6::Test)
 add_test(NAME theme_choice COMMAND test_theme_choice)
+
+# [0.0.3 T8] specs/features/0.0.3-windows.md
+qt_add_executable(test_log_feed test_log_feed.cpp)
+target_link_libraries(test_log_feed PRIVATE kgc_app_log Qt6::Test)
+add_test(NAME log_feed COMMAND test_log_feed)

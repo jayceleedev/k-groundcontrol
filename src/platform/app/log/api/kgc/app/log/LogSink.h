@@ -1,3 +1,4 @@
+// [0.0.3 T7 T8] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #pragma once
 #include <kgc/app/log/LogLevel.h>
@@ -6,6 +7,7 @@
 
 namespace kgc::app::log {
 struct LogEvent;
+class LogFeed;
 namespace detail {
 // 수준 매크로의 구현만 접근하도록 공개 서비스와 구분해요.
 template<class... Values>
@@ -25,10 +27,17 @@ public:
  * 실패: 파일을 열 수 없으면 false.
  */
     static bool install(const QString& dir, LogLevel level, int maxFileMB, int maxFiles);
+    /** 화면으로 로그를 전달할 통로를 붙이거나 떼어요.
+     * 입력: 엔진보다 오래 사는 통로, 떼려면 nullptr.
+     * 출력: 없음.
+     * 실패: 없음.
+     */
+    static void attachFeed(LogFeed* feed);
 private:
     template<class... Values>
     friend void detail::writeLog(LogLevel, const char*, LogEvent, const char*, const char*, const Values&...);
-    static void write(LogLevel level, const QString& category, const QString& event, const QString& message);
+    static void write(LogLevel level, const QString& category, const QString& event, const QString& message,
+                      const QMessageLogContext& context = {});
     static QString format(LogLevel level, const QString& category,
                           const QString& event, const QString& message);
     static LogLevel fromQtLevel(QtMsgType level);

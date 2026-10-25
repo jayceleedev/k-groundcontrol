@@ -20,6 +20,18 @@ ActionButton {
     padding: flat ? 0 : Theme.inset
     implicitWidth: flat ? Theme.flatIconButtonSize : Theme.controlHeight
     implicitHeight: flat ? Theme.flatIconButtonSize : Theme.controlHeight
+    // 글자 없는 단추라서 빈 글자 칸이 높이·간격을 차지해 아이콘이 왼쪽 위로 밀리지 않게, 아이콘만 상자 한가운데에 놓아요.
+    contentItem: Item {
+        implicitWidth: control.icon.width
+        implicitHeight: control.icon.height
+        IconGlyph {
+            anchors.centerIn: parent
+            source: control.icon.source
+            color: control.icon.color
+            width: control.icon.width
+            height: control.icon.height
+        }
+    }
     Accessible.name: hint
     HintTip { text: control.hint; visible: control.hovered && text.length > 0 }
 }

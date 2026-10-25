@@ -29,7 +29,14 @@ LogLevel LogSink::fromQtLevel(QtMsgType level)
 QString LogSink::format(LogLevel level, const QString& category,
                         const QString& event, const QString& message)
 {
-    const auto label = QString::fromLatin1(levels.at(static_cast<std::size_t>(level)).label);
+    QString label;
+    for (const auto& entry : levels) {
+        if (entry.level == level) {
+            label = QString::fromLatin1(entry.label);
+            break;
+        }
+    }
+    Q_ASSERT(!label.isEmpty());
     auto escaped = message;
     escaped.replace('\r', "\\r").replace('\n', "\\n");
     return QDateTime::currentDateTime().toOffsetFromUtc(

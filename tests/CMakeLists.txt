@@ -24,3 +24,9 @@ add_test(NAME window_placement COMMAND test_window_placement)
 qt_add_executable(test_cell_arrangement test_cell_arrangement.cpp)
 target_link_libraries(test_cell_arrangement PRIVATE kgc_secondPanel Qt6::Test)
 add_test(NAME cell_arrangement COMMAND test_cell_arrangement)
+
+# [0.0.4 T2] specs/features/0.0.4-righttabs.md
+qt_add_executable(test_right_tab_slot test_right_tab_slot.cpp)
+target_compile_definitions(test_right_tab_slot PRIVATE KGC_TS_FILE="${PROJECT_SOURCE_DIR}/i18n/kgc_en.ts")
+target_link_libraries(test_right_tab_slot PRIVATE kgc_ui Qt6::Test)
+add_test(NAME right_tab_slot COMMAND test_right_tab_slot)

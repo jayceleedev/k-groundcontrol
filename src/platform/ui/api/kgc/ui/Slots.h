@@ -1,8 +1,10 @@
 // [0.0.3 T2 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
+// [0.0.4 T2] specs/features/0.0.4-righttabs.md
 #pragma once
 #include <kgc/ui/SlotModel.h>
 #include <QPointer>
+#include <QUrl>
 
 namespace kgc::ui {
 /** 상단바의 왼쪽·가운데·오른쪽 자리에 기능 기여와 자리 표시를 순서대로 담아요.
@@ -68,10 +70,14 @@ public:
  */
     QHash<int, QByteArray> roleNames() const override;
 };
-/** 다음 기능이 기여할 빈 목록을 제공해요.
- * 입력: 없음.
- * 출력: 없음.
- * 실패: 없음.
+/** 우 사이드바에서 항목이 들어갈 자리예요.
+ * Top: 탭 줄 위 계기 칸(하나만). Tab: 탭 줄의 탭 하나.
+ */
+enum class RightTabPlacement { Top, Tab };
+/** 우 사이드바의 계기 칸과 탭 줄에 기능 기여를 순서대로 담아요.
+ * 입력: 등록 항목.
+ * 출력: 순서대로 정렬된 목록과 titleKey·component·placement("top"|"tab") 역할.
+ * 실패: 같은 식별자는 DuplicateId, 두 번째 Top 항목은 TopTaken.
  */
 class RightTabSlot : public SlotModel {
     Q_OBJECT
@@ -82,6 +88,19 @@ public:
  * 실패: 없음.
  */
     explicit RightTabSlot(QObject* parent = nullptr);
+/** 우 사이드바에 계기 칸 항목이나 탭 하나를 등록해요.
+ * 입력: 식별자, 순서, 번역 문맥 "RightTab"의 이름 원문, 그릴 QML 주소, 자리(Top·Tab).
+ * 출력: 등록 결과.
+ * 실패: 같은 식별자는 DuplicateId(먼저 봐요), 이미 Top 항목이 있는데 또 Top이면 TopTaken. 실패한 항목은 목록에 들어가지 않아요.
+ */
+    kgc::app::errors::Result<void> registerTab(const QString& id, int order, const QString& titleKey,
+        const QUrl& component, RightTabPlacement placement);
+/** 우 사이드바 항목의 표시 역할을 알려줘요.
+ * 입력: 없음.
+ * 출력: 공통 역할과 titleKey·component·placement.
+ * 실패: 없음.
+ */
+    QHash<int, QByteArray> roleNames() const override;
 };
 /** 다음 기능이 기여할 빈 목록을 제공해요.
  * 입력: 없음.

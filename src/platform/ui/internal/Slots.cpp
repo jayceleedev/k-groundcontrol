@@ -1,5 +1,6 @@
 // [0.0.3 T2 T15 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
+// [0.0.4 T2] specs/features/0.0.4-righttabs.md
 #include <kgc/ui/Slots.h>
 #include <kgc/ui/Errors.h>
 #include <algorithm>
@@ -47,6 +48,28 @@ QHash<int, QByteArray> StatusChipSlot::roleNames() const
     return roles;
 }
 RightTabSlot::RightTabSlot(QObject* parent) : SlotModel(parent) {}
+kgc::app::errors::Result<void> RightTabSlot::registerTab(const QString& id, int order, const QString& titleKey,
+    const QUrl& component, RightTabPlacement placement)
+{
+    const bool top = placement == RightTabPlacement::Top;
+    // 같은 id는 Top 중복보다 먼저 알려야 해서(스펙의 검사 순서) add에 맡기기 전에 직접 봐요.
+    for (int row = 0; row < rowCount(); ++row) {
+        if (entryAt(row).id == id) return std::unexpected(make(UiError::DuplicateId));
+    }
+    for (int row = 0; top && row < rowCount(); ++row) {
+        if (entryAt(row).values.value("placement").toString() == u"top") return std::unexpected(make(UiError::TopTaken));
+    }
+    return add({id, order, {{"titleKey", titleKey}, {"component", component},
+        {"placement", top ? QStringLiteral("top") : QStringLiteral("tab")}}});
+}
+QHash<int, QByteArray> RightTabSlot::roleNames() const
+{
+    auto roles = SlotModel::roleNames();
+    roles.insert(Qt::UserRole + 3, "titleKey");
+    roles.insert(Qt::UserRole + 4, "component");
+    roles.insert(Qt::UserRole + 5, "placement");
+    return roles;
+}
 MapLayerSlot::MapLayerSlot(QObject* parent) : SlotModel(parent) {}
 kgc::app::errors::Result<void> SlotModel::add(SlotEntry entry)
 {

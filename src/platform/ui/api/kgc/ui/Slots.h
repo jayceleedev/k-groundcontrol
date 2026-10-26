@@ -1,4 +1,4 @@
-// [0.0.3 T2] specs/features/0.0.3-windows.md
+// [0.0.3 T2 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #pragma once
 #include <kgc/ui/SlotModel.h>

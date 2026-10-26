@@ -1,5 +1,5 @@
-// [0.0.3 T1 T13] specs/features/0.0.3-windows.md
-// [0.0.1 T1–T10 T17] specs/features/0.0.1-shell.md
+// [0.0.3 T1 T13 T17 T21] specs/features/0.0.3-windows.md
+// [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #include "Composition.h"
 #include <kgc/ui/UiRegistry.h>
 #include <kgc/ui/ThemeSwitcher.h>

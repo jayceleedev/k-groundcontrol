@@ -1,4 +1,4 @@
-// [0.0.1 T17] specs/features/0.0.1-shell.md
+// [0.0.3 T21] specs/features/0.0.3-windows.md
 /** 상단바 슬롯 한 항목을 그 영역에 그려요. 아직 기능이 없는 자리는 비활성 단추로 보여요.
  * 입력: area(이 줄이 그리는 영역)와 슬롯 모델의 id·area·labelKey·icon·iconOnly·separatorBefore.
  * 출력: 영역이 맞으면 앞 구분선과 단추를, 아니면 아무것도 보이지 않아요.

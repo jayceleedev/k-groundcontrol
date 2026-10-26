@@ -1,3 +1,4 @@
+// [0.0.3 T18] specs/features/0.0.3-windows.md
 // [0.0.2 T12] specs/features/0.0.2-theme.md
 /** 검색어를 쉽게 지울 수 있는 입력란이에요.
  * 입력: text, placeholderText와 editingFinished를 사용해요.

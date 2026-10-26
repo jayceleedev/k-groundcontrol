@@ -1,6 +1,5 @@
 // [0.0.2 T8 T14 T18] specs/features/0.0.2-theme.md
-// [0.0.3 T2] specs/features/0.0.3-windows.md
-// [0.0.1 T17] specs/features/0.0.1-shell.md
+// [0.0.3 T2 T21] specs/features/0.0.3-windows.md
 import QtQuick
 import Kgc.Ui
 GlassSurface {

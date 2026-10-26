@@ -22,6 +22,8 @@ COLORS = set(('aliceblue antiquewhite aqua aquamarine azure beige bisque black '
     'seagreen seashell sienna silver skyblue slateblue slategray slategrey snow '
     'springgreen steelblue tan teal thistle tomato turquoise violet wheat white '
     'whitesmoke yellow yellowgreen').split())
+# 색 리터럴은 #RGB·#ARGB·#RRGGBB·#AARRGGBB만이에요. Quick3D 기본 도형 이름("#Cube")처럼 '#'으로 시작하는 다른 문자열은 색이 아니에요.
+HEX_COLOR = re.compile(r'#(?:[0-9a-fA-F]{3,4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})')
 
 
 def check(ctx):
@@ -41,6 +43,6 @@ def check(ctx):
                 if size and re.fullmatch(r'[+-]?(?:\d+(?:\.\d*)?|\.\d+)', value) and float(value):
                     yield path, number, '테마 밖의 고정 크기: ' + name
                 strings = re.findall(r'[\"\']([^\"\']*)[\"\']', value)
-                if any(s.startswith('#') or s.lower() in COLORS for s in strings) \
+                if any(HEX_COLOR.fullmatch(s) or s.lower() in COLORS for s in strings) \
                         or re.search(r'Qt\.(?:rgba|hsla|hsva)\s*\(', value):
                     yield path, number, '테마 밖의 색 리터럴'

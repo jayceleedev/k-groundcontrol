@@ -84,9 +84,11 @@ GlassSurface {
             onLoaded: content.contentY = 0
         }
         // 스크롤바는 내용 위 오른쪽 Theme.inset 여백 안에 겹쳐 그려 내용 폭을 줄이지 않아요.
+        // 폭은 width가 아니라 implicitWidth로 줘요. 붙은 스크롤바는 implicitWidth가 바뀔 때만 x를 다시 계산해서,
+        // width로 주면 uiScale이 바뀐 뒤 x가 옛 폭 기준으로 남아 여백 밖으로 밀려나요.
         Basic.ScrollBar.vertical: Basic.ScrollBar {
             objectName: "rightTabScrollBar"
-            width: Theme.inset
+            implicitWidth: Theme.inset
             padding: 0
             policy: Basic.ScrollBar.AlwaysOn
             visible: content.contentHeight > content.height

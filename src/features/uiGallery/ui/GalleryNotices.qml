@@ -1,4 +1,5 @@
 // [0.0.2 T1 T10 T17] specs/features/0.0.2-theme.md
+// [0.0.4 T11] specs/features/0.0.4-righttabs.md
 import QtQuick
 import QtQuick.Controls.Basic as Basic
 import Kgc.Ui
@@ -17,6 +18,7 @@ Card {
             HintTip { objectName: "gallery_HintTip"; text: qsTr("설정 열기"); visible: tipAnchor.hovered }
         }
         ActionButton { kind: "danger"; text: qsTr("확인 창 열기"); onClicked: confirmDialog.open() }
+        EmptyState { objectName: "gallery_EmptyState"; title: qsTr("아직 메시지가 없어요"); detail: qsTr("기체가 보내는 상태 메시지가 여기에 쌓여요.") }
     }
     ConfirmDialog {
         id: confirmDialog

@@ -1,4 +1,5 @@
 // [0.0.2 T1 T10 T17] specs/features/0.0.2-theme.md
+// [0.0.4 T11] specs/features/0.0.4-righttabs.md
 import QtQuick
 import Kgc.Ui
 Card {
@@ -25,6 +26,21 @@ Card {
             spacing: Theme.panelInset
             Sparkline { objectName: "gallery_Sparkline"; values: [25, 22, 24, 15, 18, 10, 14, 8, 12] }
             Heatmap { objectName: "gallery_Heatmap"; values: [15, 30, 60, 90, 80, 100, 65, 70, 40, 20, 10, 5] }
+        }
+        // 계기는 토글로 기체 값 유무를, 슬라이더로 roll·pitch·heading을 바꿔 자세 그림을 확인해요.
+        Column {
+            spacing: Theme.inset
+            AttitudeIndicator {
+                objectName: "gallery_AttitudeIndicator"
+                available: attitudeAvailable.checked
+                roll: attitudeRoll.value
+                pitch: attitudePitch.value
+                heading: attitudeHeading.value
+            }
+            Toggle { id: attitudeAvailable; objectName: "gallery_AttitudeIndicator_available"; text: qsTr("기체 값 있음"); checked: true }
+            SliderField { id: attitudeRoll; objectName: "gallery_AttitudeIndicator_roll"; from: -90; to: 90; stepSize: 1; unit: qsTr("° 롤") }
+            SliderField { id: attitudePitch; objectName: "gallery_AttitudeIndicator_pitch"; from: -90; to: 90; stepSize: 1; unit: qsTr("° 피치") }
+            SliderField { id: attitudeHeading; objectName: "gallery_AttitudeIndicator_heading"; from: 0; to: 360; stepSize: 1; unit: qsTr("° 헤딩") }
         }
     }
 }

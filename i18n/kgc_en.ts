@@ -124,7 +124,7 @@
 <context>
     <name>AttitudeIndicator</name>
     <message>
-        <location filename="../src/platform/ui/components/AttitudeIndicator.qml" line="172"/>
+        <location filename="../src/platform/ui/components/AttitudeIndicator.qml" line="176"/>
         <source>기체 없음</source>
         <translation>No vehicle</translation>
     </message>
@@ -407,89 +407,103 @@
 <context>
     <name>GalleryCharts</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="6"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="7"/>
         <source>차트</source>
         <translation>Charts</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="13"/>
         <source>목표</source>
         <translation>Target</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="13"/>
         <source>실제</source>
         <translation>Actual</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>앞</source>
         <translation>Front</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>뒤</source>
         <translation>Rear</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>왼쪽</source>
         <translation>Left</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>오른쪽</source>
         <translation>Right</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>출력</source>
         <translation>Output</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
         <source>사용</source>
         <translation>Used</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
         <source>남음</source>
         <translation>Remaining</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
         <source>70%</source>
         <translation>70%</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="24"/>
         <source>% 배터리</source>
         <translation>% battery</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="24"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="25"/>
         <source>A</source>
         <translation>A</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="40"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="41"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="70"/>
         <source>기체 값 있음</source>
         <translation>Vehicle data</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="41"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="42"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="71"/>
         <source>° 롤</source>
         <translation>° roll</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="42"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="43"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="72"/>
         <source>° 피치</source>
         <translation>° pitch</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="43"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="44"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="73"/>
         <source>° 헤딩</source>
         <translation>° heading</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="74"/>
+        <source>m/s 속도</source>
+        <translation>m/s speed</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="75"/>
+        <source>m 고도</source>
+        <translation>m altitude</translation>
     </message>
 </context>
 <context>
@@ -895,14 +909,69 @@
     </message>
 </context>
 <context>
+    <name>HeadUpDisplay</name>
+    <message>
+        <location filename="../src/platform/ui/components/HeadUpDisplay.qml" line="184"/>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
+    </message>
+</context>
+<context>
+    <name>InstrumentOsd</name>
+    <message>
+        <location filename="../src/platform/ui/components/InstrumentOsd.qml" line="63"/>
+        <location filename="../src/platform/ui/components/InstrumentOsd.qml" line="117"/>
+        <source>GPS %1 · 위성 %2</source>
+        <translation>GPS %1 · Sats %2</translation>
+    </message>
+    <message>
+        <location filename="../src/platform/ui/components/InstrumentOsd.qml" line="83"/>
+        <source>링크 %1%</source>
+        <translation>Link %1%</translation>
+    </message>
+    <message>
+        <location filename="../src/platform/ui/components/InstrumentOsd.qml" line="103"/>
+        <source>홈 %1 m</source>
+        <translation>Home %1 m</translation>
+    </message>
+</context>
+<context>
+    <name>InstrumentView</name>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/InstrumentView.qml" line="11"/>
+        <source>둥근 계기</source>
+        <translation>Round</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/InstrumentView.qml" line="11"/>
+        <source>PFD</source>
+        <translation>PFD</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/InstrumentView.qml" line="11"/>
+        <source>HUD</source>
+        <translation>HUD</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/InstrumentView.qml" line="11"/>
+        <source>3D</source>
+        <translation>3D</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/InstrumentView.qml" line="19"/>
+        <source>계기 모양</source>
+        <translation>Instrument style</translation>
+    </message>
+</context>
+<context>
     <name>LeftMenu</name>
     <message>
-        <location filename="../src/features/shell/ui/LeftMenu.qml" line="23"/>
+        <location filename="../src/features/shell/ui/LeftMenu.qml" line="28"/>
         <source>메뉴 펼치기</source>
         <translation>Expand menu</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/LeftMenu.qml" line="23"/>
+        <location filename="../src/features/shell/ui/LeftMenu.qml" line="28"/>
         <source>메뉴 접기</source>
         <translation>Collapse menu</translation>
     </message>
@@ -1201,6 +1270,14 @@
     </message>
 </context>
 <context>
+    <name>PrimaryFlightDisplay</name>
+    <message>
+        <location filename="../src/platform/ui/components/PrimaryFlightDisplay.qml" line="250"/>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
+    </message>
+</context>
+<context>
     <name>RightTab</name>
     <message>
         <location filename="../src/features/vehicleInfo/ui/register.cpp" line="14"/>
@@ -1236,7 +1313,7 @@
 <context>
     <name>SearchBox</name>
     <message>
-        <location filename="../src/platform/ui/components/SearchBox.qml" line="16"/>
+        <location filename="../src/platform/ui/components/SearchBox.qml" line="17"/>
         <source>검색어 지우기</source>
         <translation>Clear search</translation>
     </message>
@@ -1300,22 +1377,22 @@
 <context>
     <name>Theme</name>
     <message>
-        <location filename="../src/platform/ui/themes/AeroDark.qml" line="56"/>
+        <location filename="../src/platform/ui/themes/AeroDark.qml" line="67"/>
         <source>에어로 다크</source>
         <translation>Aero Dark</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/themes/AeroLight.qml" line="56"/>
+        <location filename="../src/platform/ui/themes/AeroLight.qml" line="67"/>
         <source>에어로 라이트</source>
         <translation>Aero Light</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/themes/Dark.qml" line="56"/>
+        <location filename="../src/platform/ui/themes/Dark.qml" line="67"/>
         <source>다크</source>
         <translation>Dark</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/themes/Light.qml" line="56"/>
+        <location filename="../src/platform/ui/themes/Light.qml" line="67"/>
         <source>라이트</source>
         <translation>Light</translation>
     </message>
@@ -1339,6 +1416,14 @@
         <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="27"/>
         <source>우 사이드바 계기 자리는 하나만 쓸 수 있어요.</source>
         <translation>Only one item can use the right sidebar instrument area.</translation>
+    </message>
+</context>
+<context>
+    <name>VehicleAttitude3D</name>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/VehicleAttitude3D.qml" line="153"/>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
     </message>
 </context>
 </TS>

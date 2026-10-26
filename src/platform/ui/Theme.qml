@@ -1,4 +1,5 @@
 // [0.0.4 T8 T9 T9b T12] specs/features/0.0.4-righttabs.md
+// [0.0.4 T16 T19 T20 T23a T25a T29] specs/features/0.0.4-righttabs.md
 // [0.0.3 T17 T18 T19] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 // [0.0.2 T8 T12 T13 T22] specs/features/0.0.2-theme.md
@@ -10,7 +11,6 @@ QtObject {
     readonly property int baseHeight: 900
     property real uiScale: 1
     readonly property int topBarHeight: Math.round(48 * uiScale)
-    readonly property int leftMenuWidth: Math.round(200 * uiScale)
     readonly property int leftMenuCollapsedWidth: Math.round(56 * uiScale)
     readonly property int rightBarWidth: Math.round(280 * uiScale)
     readonly property int bottomBarHeight: Math.round(32 * uiScale)
@@ -109,6 +109,14 @@ QtObject {
     readonly property int attitudePitchMarkNarrow: Math.round(24 * uiScale)
     // 계기 가운데 고정 기체 표시의 날개 너비예요.
     readonly property int attitudeAircraftWidth: Math.round(60 * uiScale)
+    // 계기 칸 맨 위 모양 단추 줄의 높이예요. 그림 칸은 계기 칸에서 이만큼 줄어요.
+    readonly property int instrumentStyleBarHeight: Math.round(24 * uiScale)
+    // PFD 왼쪽 속도 띠·오른쪽 고도 띠의 너비예요.
+    readonly property int attitudeTapeWidth: Math.round(44 * uiScale)
+    // PFD·HUD 방위 띠의 높이예요.
+    readonly property int attitudeHeadingTapeHeight: Math.round(20 * uiScale)
+    // 띠 가운데 숫자 상자의 높이예요.
+    readonly property int attitudeReadoutHeight: Math.round(18 * uiScale)
     // ThemeSwitcher만 current를 바꿔요. 부품은 Theme의 토큰만 읽어요.
     property ThemeBase current: Light {}
     readonly property color series1: current.series1
@@ -159,6 +167,17 @@ QtObject {
     readonly property color mapPatternB: current.mapPatternB
     readonly property color attitudeSky: current.attitudeSky
     readonly property color attitudeGround: current.attitudeGround
+    readonly property color attitudeMark: current.attitudeMark
+    readonly property color attitudeTape: current.attitudeTape
+    readonly property color osdInk: current.osdInk
+    readonly property color osdShadow: current.osdShadow
+    readonly property color attitudeAircraft: current.attitudeAircraft
+    readonly property color hudBackground: current.hudBackground
+    readonly property color hudInk: current.hudInk
+    readonly property color modelBody: current.modelBody
+    readonly property color modelAccent: current.modelAccent
+    readonly property color compassRing: current.compassRing
+    readonly property color compassNorthColor: current.compassNorthColor
     readonly property int order: current.order
     readonly property bool dark: current.dark
     readonly property bool glass: current.glass

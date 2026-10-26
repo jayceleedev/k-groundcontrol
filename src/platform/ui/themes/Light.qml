@@ -1,5 +1,5 @@
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
-// [0.0.4 T9 T9a] specs/features/0.0.4-righttabs.md
+// [0.0.4 T9 T9a T16] specs/features/0.0.4-righttabs.md
 import QtQuick
 ThemeBase {
     series1: "#2563eb"
@@ -47,8 +47,19 @@ ThemeBase {
     shadowColor: "#1f000000"
     mapPatternA: "#cbd5e1"
     mapPatternB: "#e2e8f0"
-    attitudeSky: "#dbeafe"
-    attitudeGround: "#d6d3d1"
+    attitudeSky: "#4a90d9"
+    attitudeGround: "#8b5a2b"
+    attitudeMark: "#ffffff"
+    attitudeTape: "#99000000"
+    osdInk: "#ffffff"
+    osdShadow: "#cc000000"
+    attitudeAircraft: "#facc15"
+    hudBackground: "#0b1410"
+    hudInk: "#3ddc84"
+    modelBody: "#3f3f46"
+    modelAccent: "#f97316"
+    compassRing: "#a1a1aa"
+    compassNorthColor: "#ef4444"
     order: 10
     dark: false
     glass: false

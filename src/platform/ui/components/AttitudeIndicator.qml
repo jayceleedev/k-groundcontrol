@@ -1,9 +1,12 @@
 // [0.0.4 T3 T8 T8a T8b T8c T9 T12] specs/features/0.0.4-righttabs.md
+// [0.0.4 T16 T17 T20] specs/features/0.0.4-righttabs.md
 /** 기체 자세(roll·pitch)와 헤딩을 항공 자세계 관례대로 보여줘요.
- * 입력: roll·pitch(도; roll +는 오른쪽으로 기울임, pitch +는 기수 들기), heading(도), available(기체 값이 있는지, 기본 거짓)을 받아요.
+ * 입력: roll·pitch(도; roll +는 오른쪽으로 기울임, pitch +는 기수 들기), heading(도), available(기체 값이 있는지, 기본 거짓),
+ *       maxDialSize(원 지름의 상한 픽셀, 기본 Theme.attitudeDialSize; 계기 칸이 그림 칸 높이에서 글자 두 줄을 뺀 값을 줘요)를 받아요.
  * 출력: available이 참이면 하늘·땅·수평선을 함께 화면에서 반시계로 roll도 돌리고, 돈 방향의 아래로 pitch × dialRadius / 30 픽셀 옮겨
  *       원 안에 그려요(±30°에서 원 가장자리). 아래에 헤딩을 "%1°"(0~359, 반올림)로 써요.
- *       거짓이면 수평 그림을 surfaceAlt 한 색으로 흐리게 그리고 "기체 없음"과 "---°"를 써요.
+ *       거짓이면 정자세(수평선 가운데)로 같은 하늘·땅 색을 그대로 그리고 원 아래에 "기체 없음"과 "---°"를 inkMuted로 써요.
+ *       눈금은 흰색(attitudeMark), 가운데 기체 표시는 노란색(attitudeAircraft)이라 available과 상관없이 같아요.
  *       dialRadius는 원 반지름(픽셀)이에요. 시험용 고정 이름은 attitudeHorizon·attitudeSkyFill·attitudeGroundFill·attitudeHeading이에요.
  * 실패: pitch는 −90~90으로 제한해 그리고, 숫자가 아닌 heading은 "---°"로 보여요.
  */
@@ -18,12 +21,14 @@ Item {
     property real pitch: 0
     property real heading: 0
     property bool available: false
-    readonly property real dialRadius: Theme.attitudeDialSize / 2
+    property real maxDialSize: Theme.attitudeDialSize
+    readonly property real dialSize: Math.max(0, Math.min(Theme.attitudeDialSize, maxDialSize))
+    readonly property real dialRadius: dialSize / 2
     // 기체 값이 없으면 수평 그림만 남기도록, 화면에 쓰는 각도와 옮김을 여기서 한 번만 정해요.
     readonly property real shownRoll: available ? roll : 0
     readonly property real shownOffset: available ? Math.max(-90, Math.min(90, pitch)) * dialRadius / 30 : 0
-    readonly property color markColor: available ? Theme.ink : Theme.inkMuted
-    readonly property color symbolColor: available ? Theme.accent : Theme.inkMuted
+    // 원 밖 헤딩 글자는 바탕(surface) 위라 테마 글자색을 쓰고, 원 안은 색 있는 하늘·땅 위라 늘 같은 색을 써요.
+    readonly property color textColor: available ? Theme.ink : Theme.inkMuted
     // 원 위쪽 가장자리의 고정 roll 눈금(0·±30·±60) 다섯 개를 바깥 끝 → 안쪽 끝 선으로 만들어요.
     readonly property var rollMarks: [0, 30, -30, 60, -60].map(angle => {
         const t = angle * Math.PI / 180
@@ -37,7 +42,7 @@ Item {
         return [[Qt.point(c - w / 2, c), Qt.point(c - w / 5, c), Qt.point(c - w / 10, c + w / 10)],
                 [Qt.point(c + w / 2, c), Qt.point(c + w / 5, c), Qt.point(c + w / 10, c + w / 10)]]
     }
-    implicitWidth: Theme.attitudeDialSize
+    implicitWidth: dialSize
     implicitHeight: column.implicitHeight
 
     // 헤딩을 0~359로 맞춘 뒤 반올림해요. 360이 되면 0이고, 숫자가 아니면 "---°"예요.
@@ -53,8 +58,8 @@ Item {
         spacing: Theme.valueLabelGap
         Item {
             id: dial
-            width: Theme.attitudeDialSize
-            height: Theme.attitudeDialSize
+            width: indicator.dialSize
+            height: indicator.dialSize
             // 하늘·땅은 원 밖으로 넘치게 그리고, 둥근 가림판(dialMask)으로 원 안만 남겨요.
             Item {
                 anchors.fill: parent
@@ -80,7 +85,7 @@ Item {
                         width: parent.width
                         height: parent.height / 2
                         antialiasing: true
-                        color: indicator.available ? Theme.attitudeSky : Theme.surfaceAlt
+                        color: Theme.attitudeSky
                     }
                     Rectangle {
                         objectName: "attitudeGroundFill"
@@ -88,27 +93,26 @@ Item {
                         width: parent.width
                         height: parent.height / 2
                         antialiasing: true
-                        color: indicator.available ? Theme.attitudeGround : Theme.surfaceAlt
+                        color: Theme.attitudeGround
                     }
                     Rectangle {
                         anchors.verticalCenter: parent.verticalCenter
                         width: parent.width
                         height: Theme.lineWidth * 2
                         antialiasing: true
-                        color: indicator.markColor
+                        color: Theme.attitudeMark
                     }
                     // pitch 눈금 ±10°·±20°는 수평선과 함께 움직여요(+는 하늘 쪽).
                     Repeater {
                         model: [20, 10, -10, -20]
                         Rectangle {
                             required property int modelData
-                            visible: indicator.available
                             anchors.horizontalCenter: parent.horizontalCenter
                             y: horizon.height / 2 - modelData * indicator.dialRadius / 30 - height / 2
                             width: Math.abs(modelData) === 10 ? Theme.attitudePitchMarkWide : Theme.attitudePitchMarkNarrow
                             height: Theme.lineWidth
                             antialiasing: true
-                            color: Theme.ink
+                            color: Theme.attitudeMark
                         }
                     }
                 }
@@ -130,13 +134,13 @@ Item {
                 }
                 ShapePath {
                     fillColor: "transparent"
-                    strokeColor: indicator.markColor
+                    strokeColor: Theme.attitudeMark
                     strokeWidth: Theme.lineWidth * 2
                     PathMultiline { paths: indicator.rollMarks }
                 }
                 ShapePath {
                     fillColor: "transparent"
-                    strokeColor: indicator.symbolColor
+                    strokeColor: Theme.attitudeAircraft
                     strokeWidth: Theme.lineWidth * 3
                     capStyle: ShapePath.RoundCap
                     joinStyle: ShapePath.RoundJoin
@@ -149,7 +153,7 @@ Item {
                 rotation: -indicator.shownRoll
                 preferredRendererType: Shape.CurveRenderer
                 ShapePath {
-                    fillColor: indicator.symbolColor
+                    fillColor: Theme.attitudeMark
                     strokeColor: "transparent"
                     startX: indicator.dialRadius
                     startY: Theme.attitudeMarkLength + Theme.lineWidth * 2
@@ -163,7 +167,7 @@ Item {
                 width: Theme.attitudeMarkLength / 2
                 height: width
                 radius: width / 2
-                color: indicator.symbolColor
+                color: Theme.attitudeAircraft
             }
         }
         Text {
@@ -179,7 +183,7 @@ Item {
             objectName: "attitudeHeading"
             anchors.horizontalCenter: parent.horizontalCenter
             text: indicator.available ? indicator.headingText(indicator.heading) : "---°"
-            color: indicator.markColor
+            color: indicator.textColor
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize
         }

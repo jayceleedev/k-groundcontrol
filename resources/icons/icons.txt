@@ -32,3 +32,7 @@ player-pause outline/player-pause
 player-play outline/player-play
 hand-stop outline/hand-stop
 sparkles outline/sparkles
+gauge outline/gauge
+device-desktop-analytics outline/device-desktop-analytics
+focus-2 outline/focus-2
+cube-3d-sphere outline/cube-3d-sphere

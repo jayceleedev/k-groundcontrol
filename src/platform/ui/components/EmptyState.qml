@@ -18,6 +18,7 @@ Item {
     // Rectangle의 테두리는 점선을 못 그려서 Shape로 상자 테두리를 그려요.
     Shape {
         anchors.fill: parent
+        preferredRendererType: Shape.CurveRenderer
         ShapePath {
             fillColor: "transparent"
             strokeColor: Theme.line

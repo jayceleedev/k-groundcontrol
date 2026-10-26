@@ -100,7 +100,7 @@ QtObject {
     readonly property int confirmDialogWidth: Math.round(480 * uiScale)
     // 빈 상태 안내의 설명처럼 본문보다 한 단계 작은 글자예요.
     readonly property int captionSize: Math.round(11 * uiScale)
-    // 계기 원의 지름이에요(반지름의 ±30°가 원 가장자리에 닿는 기준).
+    // 계기 원의 지름이에요. pitch ±30°가 원 가장자리(반지름)에 닿아요.
     readonly property int attitudeDialSize: Math.round(160 * uiScale)
     // 계기 roll 눈금의 길이와 roll 지침 삼각형의 크기예요.
     readonly property int attitudeMarkLength: Math.round(8 * uiScale)

@@ -1,7 +1,7 @@
 # logs (기능 순위 3)
 역할: 텔레메트리·온보드 로그를 다뤄요. 이번 버전엔 우 사이드바 로그 탭을 "기체 없음" 모습으로만 보여줘요.
 수명: 혼합(전역 LogsViewer; 기체별 내려받기 서비스는 아직 없어요).
-받는 것: Theme 토큰, Translator.language(탭 이름은 셸이 번역 문맥 "RightTab"으로 그려요).
+받는 것: Theme 토큰(언어 전환은 엔진 retranslate와 셸의 qsTranslate("RightTab")가 맡아요).
 주는 것: LogsViewer(상태·함수 없음, Composition이 하나 만듦), registerUi(UiRegistry&, LogsViewer&), ModuleId 106.
 기여: RightTabSlot — logs(Tab, order 40, LogsTab).
 의존: app/errors, ui(RightTabSlot·UiRegistry·공용 부품 Section·KeyValueRow·ActionButton·EmptyState).

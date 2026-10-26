@@ -29,7 +29,7 @@ QVariantList SecondPanelController::cells() const
 void SecondPanelController::chooseArrangement(int index)
 {
     const auto values = settings::arrangementValues();
-    if (index >= 0 && index < values.size()) service_.setArrangement(settings::fromString(values[index]));
+    if (index >= 0 && index < values.size()) service_.setArrangement(settings::arrangementFromString(values[index]));
 }
 void SecondPanelController::open()
 {

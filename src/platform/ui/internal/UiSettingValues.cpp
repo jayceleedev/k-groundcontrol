@@ -37,7 +37,7 @@ QUrl UiSettingValues::backgroundImageSource() const
 }
 void UiSettingValues::setBackgroundKind(const QString& value)
 {
-    if (backgroundKinds().contains(value)) settings::setBackgroundKind(settings::fromString(value));
+    if (backgroundKinds().contains(value)) settings::setBackgroundKind(settings::backgroundKindFromString(value));
 }
 void UiSettingValues::setBackgroundImage(const QString& value)
 {

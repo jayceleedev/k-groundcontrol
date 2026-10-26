@@ -29,6 +29,6 @@ QString AppSettingsController::language() const { return settings::toString(sett
 QString AppSettingsController::languageName(const QString& code) const { return QLocale(code).nativeLanguageName(); }
 void AppSettingsController::setLanguage(const QString& code)
 {
-    if (languages().contains(code)) settings::setLanguage(settings::fromString(code));
+    if (languages().contains(code)) settings::setLanguage(settings::languageFromString(code));
 }
 }

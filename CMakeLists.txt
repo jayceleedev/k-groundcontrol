@@ -1,7 +1,8 @@
+# [0.0.4 T1] specs/features/0.0.4-righttabs.md
 # [0.0.3 T1 T14] specs/features/0.0.3-windows.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 cmake_minimum_required(VERSION 3.28)
-project(KGroundControl VERSION 0.0.3 LANGUAGES CXX
+project(KGroundControl VERSION 0.0.4 LANGUAGES CXX
     HOMEPAGE_URL "https://github.com/jayceleedev/k-groundcontrol")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -18,7 +19,7 @@ include(cmake/icons/Icons.cmake)
 foreach(module app/errors app/log app/paths app/boot app/settings app/i18n ui)
     add_subdirectory(src/platform/${module})
 endforeach()
-foreach(module shell appSettings uiGallery analyze secondPanel)
+foreach(module shell appSettings uiGallery analyze secondPanel vehicleInfo logs preflight)
     add_subdirectory(src/features/${module})
 endforeach()
 add_subdirectory(src/main)

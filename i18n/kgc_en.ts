@@ -122,9 +122,17 @@
     </message>
 </context>
 <context>
+    <name>AttitudeIndicator</name>
+    <message>
+        <location filename="../src/platform/ui/components/AttitudeIndicator.qml" line="172"/>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
+    </message>
+</context>
+<context>
     <name>Banner</name>
     <message>
-        <location filename="../src/platform/ui/components/Banner.qml" line="16"/>
+        <location filename="../src/platform/ui/components/Banner.qml" line="17"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
@@ -132,117 +140,117 @@
 <context>
     <name>Bar</name>
     <message>
-        <location filename="../src/main/Composition.cpp" line="66"/>
+        <location filename="../src/main/Composition.cpp" line="74"/>
         <source>기체</source>
         <translation>Vehicle</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="67"/>
+        <location filename="../src/main/Composition.cpp" line="75"/>
         <source>모드</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="68"/>
+        <location filename="../src/main/Composition.cpp" line="76"/>
         <source>ARM</source>
         <translation>ARM</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="69"/>
+        <location filename="../src/main/Composition.cpp" line="77"/>
         <source>이륙</source>
         <translation>Takeoff</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="70"/>
+        <location filename="../src/main/Composition.cpp" line="78"/>
         <source>착륙</source>
         <translation>Land</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="71"/>
+        <location filename="../src/main/Composition.cpp" line="79"/>
         <source>RTL</source>
         <translation>RTL</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="72"/>
+        <location filename="../src/main/Composition.cpp" line="80"/>
         <source>일시정지</source>
         <translation>Pause</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="73"/>
+        <location filename="../src/main/Composition.cpp" line="81"/>
         <source>미션</source>
         <translation>Mission</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="74"/>
+        <location filename="../src/main/Composition.cpp" line="82"/>
         <source>미션 시작</source>
         <translation>Start Mission</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="75"/>
+        <location filename="../src/main/Composition.cpp" line="83"/>
         <source>WP</source>
         <translation>WP</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="76"/>
+        <location filename="../src/main/Composition.cpp" line="84"/>
         <source>비상 정지</source>
         <translation>Emergency Stop</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="77"/>
+        <location filename="../src/main/Composition.cpp" line="85"/>
         <source>알림</source>
         <translation>Notifications</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="78"/>
+        <location filename="../src/main/Composition.cpp" line="86"/>
         <source>AI</source>
         <translation>AI</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="83"/>
+        <location filename="../src/main/Composition.cpp" line="91"/>
         <source>기체 연결</source>
         <translation>Vehicle Link</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="84"/>
+        <location filename="../src/main/Composition.cpp" line="92"/>
         <source>GPS</source>
         <translation>GPS</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="85"/>
+        <location filename="../src/main/Composition.cpp" line="93"/>
         <source>나침반</source>
         <translation>Compass</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="86"/>
+        <location filename="../src/main/Composition.cpp" line="94"/>
         <source>IMU</source>
         <translation>IMU</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="87"/>
+        <location filename="../src/main/Composition.cpp" line="95"/>
         <source>기압계</source>
         <translation>Barometer</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="88"/>
+        <location filename="../src/main/Composition.cpp" line="96"/>
         <source>RC</source>
         <translation>RC</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="89"/>
+        <location filename="../src/main/Composition.cpp" line="97"/>
         <source>TLM</source>
         <translation>TLM</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="90"/>
+        <location filename="../src/main/Composition.cpp" line="98"/>
         <source>배터리</source>
         <translation>Battery</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="91"/>
+        <location filename="../src/main/Composition.cpp" line="99"/>
         <source>트래커</source>
         <translation>Tracker</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="92"/>
+        <location filename="../src/main/Composition.cpp" line="100"/>
         <source>GCS GPS</source>
         <translation>GCS GPS</translation>
     </message>
@@ -281,17 +289,17 @@
 <context>
     <name>CenterArea</name>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="89"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="90"/>
         <source>지도</source>
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="125"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="126"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="133"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="134"/>
         <source>준비 중</source>
         <translation>Coming soon</translation>
     </message>
@@ -320,6 +328,24 @@
         <location filename="../src/platform/ui/components/ConfirmDialog.qml" line="26"/>
         <source>취소</source>
         <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>DetailTab</name>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/DetailTab.qml" line="13"/>
+        <source>값 이름 찾기</source>
+        <translation>Find a value</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/DetailTab.qml" line="17"/>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/DetailTab.qml" line="18"/>
+        <source>기체가 연결되면 받은 값이 묶음별로 떠요.</source>
+        <translation>Values appear by group once a vehicle connects.</translation>
     </message>
 </context>
 <context>
@@ -381,69 +407,89 @@
 <context>
     <name>GalleryCharts</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="5"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="6"/>
         <source>차트</source>
         <translation>Charts</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="11"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="12"/>
         <source>목표</source>
         <translation>Target</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="11"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="12"/>
         <source>실제</source>
         <translation>Actual</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>앞</source>
         <translation>Front</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>뒤</source>
         <translation>Rear</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>왼쪽</source>
         <translation>Left</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>오른쪽</source>
         <translation>Right</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="20"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
         <source>출력</source>
         <translation>Output</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>사용</source>
         <translation>Used</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>남음</source>
         <translation>Remaining</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="21"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
         <source>70%</source>
         <translation>70%</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="22"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
         <source>% 배터리</source>
         <translation>% battery</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="24"/>
         <source>A</source>
         <translation>A</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="40"/>
+        <source>기체 값 있음</source>
+        <translation>Vehicle data</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="41"/>
+        <source>° 롤</source>
+        <translation>° roll</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="42"/>
+        <source>° 피치</source>
+        <translation>° pitch</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="43"/>
+        <source>° 헤딩</source>
+        <translation>° heading</translation>
     </message>
 </context>
 <context>
@@ -788,52 +834,62 @@
 <context>
     <name>GalleryNotices</name>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="6"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="7"/>
         <source>알림</source>
         <translation>Notices</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="7"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="8"/>
         <source>시동 중에는 펌웨어를 굽지 않아요</source>
         <translation>Do not flash firmware while armed</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="8"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="9"/>
         <source>새 펌웨어가 있어요</source>
         <translation>New firmware is available</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="12"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="13"/>
         <source>설정을 저장했어요</source>
         <translation>Settings saved</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="16"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="17"/>
         <source>도움말</source>
         <translation>Help</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="17"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="18"/>
         <source>설정 열기</source>
         <translation>Open settings</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="19"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="20"/>
         <source>확인 창 열기</source>
         <translation>Open confirmation</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="26"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="21"/>
+        <source>아직 메시지가 없어요</source>
+        <translation>No messages yet</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="21"/>
+        <source>기체가 보내는 상태 메시지가 여기에 쌓여요.</source>
+        <translation>Status messages from the vehicle collect here.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="28"/>
         <source>설정을 초기화할까요?</source>
         <translation>Reset settings?</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="27"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="29"/>
         <source>이 목록에서는 실제 설정을 바꾸지 않아요.</source>
         <translation>This gallery does not change actual settings.</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="29"/>
+        <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="31"/>
         <source>초기화</source>
         <translation>Reset</translation>
     </message>
@@ -841,97 +897,183 @@
 <context>
     <name>LeftMenu</name>
     <message>
-        <location filename="../src/features/shell/ui/LeftMenu.qml" line="22"/>
+        <location filename="../src/features/shell/ui/LeftMenu.qml" line="23"/>
         <source>메뉴 펼치기</source>
         <translation>Expand menu</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/LeftMenu.qml" line="22"/>
+        <location filename="../src/features/shell/ui/LeftMenu.qml" line="23"/>
         <source>메뉴 접기</source>
         <translation>Collapse menu</translation>
     </message>
 </context>
 <context>
+    <name>LogsTab</name>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="15"/>
+        <source>텔레메트리 기록(tlog)</source>
+        <translation>Telemetry log (tlog)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="16"/>
+        <source>상태</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="16"/>
+        <source>기록 안 함(기체 없음)</source>
+        <translation>Not recording (no vehicle)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="17"/>
+        <source>폴더 열기</source>
+        <translation>Open folder</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="21"/>
+        <source>온보드 로그</source>
+        <translation>Onboard logs</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="22"/>
+        <source>목록 읽기</source>
+        <translation>Read list</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="27"/>
+        <source>기체가 연결되면 목록을 읽어요</source>
+        <translation>The list is read once a vehicle connects</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="31"/>
+        <source>내려받기</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/LogsTab.qml" line="32"/>
+        <source>모두 지우기</source>
+        <translation>Erase all</translation>
+    </message>
+</context>
+<context>
     <name>Menu</name>
     <message>
-        <location filename="../src/features/appSettings/ui/register.cpp" line="11"/>
+        <location filename="../src/features/appSettings/ui/register.cpp" line="12"/>
         <source>앱 설정</source>
         <translation>App Settings</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="43"/>
+        <location filename="../src/main/Composition.cpp" line="51"/>
         <source>펌웨어 세팅</source>
         <translation>Firmware Setup</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="44"/>
+        <location filename="../src/main/Composition.cpp" line="52"/>
         <source>기체 구성도</source>
         <translation>Vehicle Layout</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="45"/>
+        <location filename="../src/main/Composition.cpp" line="53"/>
         <source>센서 보정</source>
         <translation>Sensor Calibration</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="46"/>
+        <location filename="../src/main/Composition.cpp" line="54"/>
         <source>조종기</source>
         <translation>Radio</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="47"/>
+        <location filename="../src/main/Composition.cpp" line="55"/>
         <source>비행 모드</source>
         <translation>Flight Modes</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="48"/>
+        <location filename="../src/main/Composition.cpp" line="56"/>
         <source>배터리 · 전원</source>
         <translation>Battery &amp; Power</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="49"/>
+        <location filename="../src/main/Composition.cpp" line="57"/>
         <source>안전 · 페일세이프</source>
         <translation>Safety &amp; Failsafe</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="50"/>
+        <location filename="../src/main/Composition.cpp" line="58"/>
         <source>모터 시험</source>
         <translation>Motor Test</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="51"/>
+        <location filename="../src/main/Composition.cpp" line="59"/>
         <source>튜닝</source>
         <translation>Tuning</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="52"/>
+        <location filename="../src/main/Composition.cpp" line="60"/>
         <source>로그 분석</source>
         <translation>Log Analysis</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="53"/>
+        <location filename="../src/main/Composition.cpp" line="61"/>
         <source>ESC 설정</source>
         <translation>ESC Setup</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="54"/>
+        <location filename="../src/main/Composition.cpp" line="62"/>
         <source>ELRS 설정</source>
         <translation>ELRS Setup</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="55"/>
+        <location filename="../src/main/Composition.cpp" line="63"/>
         <source>안테나 트래커</source>
         <translation>Antenna Tracker</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="56"/>
+        <location filename="../src/main/Composition.cpp" line="64"/>
         <source>수동 기체 설정</source>
         <translation>Manual Vehicle Setup</translation>
     </message>
     <message>
-        <location filename="../src/features/uiGallery/ui/register.cpp" line="10"/>
+        <location filename="../src/features/uiGallery/ui/register.cpp" line="11"/>
         <source>UI 부품 목록</source>
         <translation>UI Components</translation>
+    </message>
+</context>
+<context>
+    <name>MessagesTab</name>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="13"/>
+        <source>전체</source>
+        <translation>All</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="13"/>
+        <source>오류</source>
+        <translation>Error</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="13"/>
+        <source>경고</source>
+        <translation>Warning</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="13"/>
+        <source>정보</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="14"/>
+        <source>찾기</source>
+        <translation>Find</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="18"/>
+        <source>아직 메시지가 없어요</source>
+        <translation>No messages yet</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="19"/>
+        <source>기체가 보내는 상태 메시지가 여기에 쌓여요.</source>
+        <translation>Status messages from the vehicle collect here.</translation>
     </message>
 </context>
 <context>
@@ -953,9 +1095,148 @@
     </message>
 </context>
 <context>
+    <name>OverviewTab</name>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="15"/>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="16"/>
+        <source>하단 왼쪽 &quot;기체 연결&quot;에서 연결해요.</source>
+        <translation>Connect from &quot;Vehicle Link&quot; at the bottom left.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="20"/>
+        <source>상태</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="21"/>
+        <source>시동 · 모드</source>
+        <translation>Arming · Mode</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="25"/>
+        <source>배터리</source>
+        <translation>Battery</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="26"/>
+        <source>잔량</source>
+        <translation>Remaining</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="28"/>
+        <source>전압 · 전류</source>
+        <translation>Voltage · Current</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="32"/>
+        <source>위치 · GPS</source>
+        <translation>Position · GPS</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="33"/>
+        <source>고도(상대 / AMSL)</source>
+        <translation>Altitude (rel / AMSL)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="34"/>
+        <source>속도(수평 / 수직)</source>
+        <translation>Speed (horiz / vert)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="35"/>
+        <source>GPS</source>
+        <translation>GPS</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="36"/>
+        <source>홈까지 거리</source>
+        <translation>Distance to home</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="40"/>
+        <source>링크</source>
+        <translation>Link</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="41"/>
+        <source>연결</source>
+        <translation>Connection</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="41"/>
+        <source>없음</source>
+        <translation>None</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="45"/>
+        <source>비행</source>
+        <translation>Flight</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="46"/>
+        <source>비행 시간 · 거리</source>
+        <translation>Flight time · Distance</translation>
+    </message>
+</context>
+<context>
+    <name>PreflightTab</name>
+    <message>
+        <location filename="../src/features/preflight/ui/PreflightTab.qml" line="13"/>
+        <source>점검표</source>
+        <translation>Checklist</translation>
+    </message>
+    <message>
+        <location filename="../src/features/preflight/ui/PreflightTab.qml" line="17"/>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
+    </message>
+    <message>
+        <location filename="../src/features/preflight/ui/PreflightTab.qml" line="18"/>
+        <source>점검표는 기체 종류에 맞춰 골라져요. 기체가 연결되면 떠요.</source>
+        <translation>The checklist is chosen for the vehicle type and appears once a vehicle connects.</translation>
+    </message>
+</context>
+<context>
+    <name>RightTab</name>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/register.cpp" line="14"/>
+        <source>계기</source>
+        <translation>Instrument</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/register.cpp" line="15"/>
+        <source>개요</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/register.cpp" line="16"/>
+        <source>상세</source>
+        <translation>Data</translation>
+    </message>
+    <message>
+        <location filename="../src/features/vehicleInfo/ui/register.cpp" line="17"/>
+        <source>메시지</source>
+        <translation>Msgs</translation>
+    </message>
+    <message>
+        <location filename="../src/features/logs/ui/register.cpp" line="10"/>
+        <source>로그</source>
+        <translation>Logs</translation>
+    </message>
+    <message>
+        <location filename="../src/features/preflight/ui/register.cpp" line="7"/>
+        <source>점검</source>
+        <translation>Check</translation>
+    </message>
+</context>
+<context>
     <name>SearchBox</name>
     <message>
-        <location filename="../src/platform/ui/components/SearchBox.qml" line="15"/>
+        <location filename="../src/platform/ui/components/SearchBox.qml" line="16"/>
         <source>검색어 지우기</source>
         <translation>Clear search</translation>
     </message>
@@ -1019,22 +1300,22 @@
 <context>
     <name>Theme</name>
     <message>
-        <location filename="../src/platform/ui/themes/AeroDark.qml" line="53"/>
+        <location filename="../src/platform/ui/themes/AeroDark.qml" line="56"/>
         <source>에어로 다크</source>
         <translation>Aero Dark</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/themes/AeroLight.qml" line="53"/>
+        <location filename="../src/platform/ui/themes/AeroLight.qml" line="56"/>
         <source>에어로 라이트</source>
         <translation>Aero Light</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/themes/Dark.qml" line="53"/>
+        <location filename="../src/platform/ui/themes/Dark.qml" line="56"/>
         <source>다크</source>
         <translation>Dark</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/themes/Light.qml" line="53"/>
+        <location filename="../src/platform/ui/themes/Light.qml" line="56"/>
         <source>라이트</source>
         <translation>Light</translation>
     </message>
@@ -1050,9 +1331,14 @@
 <context>
     <name>Ui</name>
     <message>
-        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="22"/>
+        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="26"/>
         <source>같은 항목이 이미 등록되어 있어요.</source>
         <translation>An item with the same ID is already registered.</translation>
+    </message>
+    <message>
+        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="27"/>
+        <source>우 사이드바 계기 자리는 하나만 쓸 수 있어요.</source>
+        <translation>Only one item can use the right sidebar instrument area.</translation>
     </message>
 </context>
 </TS>

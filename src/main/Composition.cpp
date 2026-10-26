@@ -1,3 +1,4 @@
+// [0.0.4 T1 T3 T4] specs/features/0.0.4-righttabs.md
 // [0.0.3 T1 T13 T17 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #include "Composition.h"
@@ -15,6 +16,10 @@
 #include <kgc/analyze/Ui.h>
 #include <kgc/secondPanel/SecondPanelService.h>
 #include <kgc/secondPanel/Ui.h>
+#include <kgc/vehicleInfo/Ui.h>
+#include <kgc/logs/LogsViewer.h>
+#include <kgc/logs/Ui.h>
+#include <kgc/preflight/Ui.h>
 #include <QCoreApplication>
 #include <QQmlComponent>
 #include <QQmlContext>
@@ -27,6 +32,9 @@ Q_IMPORT_QML_PLUGIN(Kgc_AppSettingsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiGalleryPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_AnalyzePlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_SecondPanelPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_VehicleInfoPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_LogsPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_PreflightPlugin)
 
 // 정적 라이브러리의 자원을 링커가 버리지 않도록 전역에서 참조해요.
 static void initKgcResources() { Q_INIT_RESOURCE(kgc); Q_INIT_RESOURCE(tabler_icons); }
@@ -126,6 +134,11 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     analyze::registerUi(registry, *appLogService);
     auto* secondPanelService = new secondPanel::SecondPanelService(this);
     secondPanel::registerUi(registry, *secondPanelService);
+    // 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
+    vehicleInfo::registerUi(registry);
+    auto* logsViewer = new logs::LogsViewer(this);
+    logs::registerUi(registry, *logsViewer);
+    preflight::registerUi(registry);
     registerPlaceholders(panels);
     registerBarPlaceholders(topbar, statusChips);
     connect(&translator, &app::i18n::Translator::languageChanged, &engine, &QQmlEngine::retranslate);

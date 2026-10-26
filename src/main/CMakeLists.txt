@@ -1,3 +1,4 @@
+# [0.0.4 T1] specs/features/0.0.4-righttabs.md
 # [0.0.3 T1 T14] specs/features/0.0.3-windows.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 # [0.0.2 T27] specs/features/0.0.2-theme.md
@@ -9,11 +10,14 @@ target_compile_definitions(kgc_composition PUBLIC
     KGC_VERSION="${PROJECT_VERSION}" KGC_HOMEPAGE_URL="${PROJECT_HOMEPAGE_URL}")
 target_link_libraries(kgc_composition PUBLIC kgc_app_errors kgc_app_boot kgc_app_paths
     kgc_app_log kgc_app_settings kgc_app_i18n kgc_ui kgc_shell kgc_appSettings kgc_uiGallery kgc_analyze kgc_secondPanel
-    kgc_uiplugin kgc_shellplugin kgc_appSettingsplugin kgc_uiGalleryplugin kgc_analyzeplugin kgc_secondPanelplugin)
+    kgc_vehicleInfo kgc_logs kgc_preflight
+    kgc_uiplugin kgc_shellplugin kgc_appSettingsplugin kgc_uiGalleryplugin kgc_analyzeplugin kgc_secondPanelplugin
+    kgc_vehicleInfoplugin kgc_logsplugin kgc_preflightplugin)
 qt_add_translations(kgc_composition
     TS_FILES "${PROJECT_SOURCE_DIR}/i18n/kgc_en.ts"
     RESOURCE_PREFIX /kgc/i18n
-    SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_appSettings kgc_uiGallery kgc_analyze kgc_secondPanel kgc_composition)
+    SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_appSettings kgc_uiGallery kgc_analyze kgc_secondPanel
+        kgc_vehicleInfo kgc_logs kgc_preflight kgc_composition)
 qt_add_executable(KGroundControl main.cpp)
 if(WIN32)
     enable_language(RC)

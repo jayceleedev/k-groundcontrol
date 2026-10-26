@@ -48,6 +48,13 @@ public:
      * 실패: 없음.
      */
     QHash<int, QByteArray> roleNames() const override;
+protected:
+    /** 파생 슬롯이 이웃 항목을 보고 역할 값을 정할 수 있게 등록 항목을 읽어요.
+     * 입력: 행 번호.
+     * 출력: 그 행의 등록 항목.
+     * 실패: 범위 밖 행은 부르는 쪽의 프로그래밍 오류예요.
+     */
+    const SlotEntry& entryAt(int row) const { return entries_[row]; }
 private:
     QList<SlotEntry> entries_;
     mutable QHash<int, QByteArray> roles_;

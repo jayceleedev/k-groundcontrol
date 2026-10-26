@@ -130,6 +130,124 @@
     </message>
 </context>
 <context>
+    <name>Bar</name>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="66"/>
+        <source>기체</source>
+        <translation>Vehicle</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="67"/>
+        <source>모드</source>
+        <translation>Mode</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="68"/>
+        <source>ARM</source>
+        <translation>ARM</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="69"/>
+        <source>이륙</source>
+        <translation>Takeoff</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="70"/>
+        <source>착륙</source>
+        <translation>Land</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="71"/>
+        <source>RTL</source>
+        <translation>RTL</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="72"/>
+        <source>일시정지</source>
+        <translation>Pause</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="73"/>
+        <source>미션</source>
+        <translation>Mission</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="74"/>
+        <source>미션 시작</source>
+        <translation>Start Mission</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="75"/>
+        <source>WP</source>
+        <translation>WP</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="76"/>
+        <source>비상 정지</source>
+        <translation>Emergency Stop</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="77"/>
+        <source>알림</source>
+        <translation>Notifications</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="78"/>
+        <source>AI</source>
+        <translation>AI</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="83"/>
+        <source>기체 연결</source>
+        <translation>Vehicle Link</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="84"/>
+        <source>GPS</source>
+        <translation>GPS</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="85"/>
+        <source>나침반</source>
+        <translation>Compass</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="86"/>
+        <source>IMU</source>
+        <translation>IMU</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="87"/>
+        <source>기압계</source>
+        <translation>Barometer</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="88"/>
+        <source>RC</source>
+        <translation>RC</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="89"/>
+        <source>TLM</source>
+        <translation>TLM</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="90"/>
+        <source>배터리</source>
+        <translation>Battery</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="91"/>
+        <source>트래커</source>
+        <translation>Tracker</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="92"/>
+        <source>GCS GPS</source>
+        <translation>GCS GPS</translation>
+    </message>
+</context>
+<context>
     <name>BootOptions</name>
     <message>
         <location filename="../src/platform/app/boot/internal/BootOptions.cpp" line="14"/>
@@ -168,12 +286,12 @@
         <translation>Map</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="120"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="125"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="128"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="133"/>
         <source>준비 중</source>
         <translation>Coming soon</translation>
     </message>
@@ -723,12 +841,12 @@
 <context>
     <name>LeftMenu</name>
     <message>
-        <location filename="../src/features/shell/ui/LeftMenu.qml" line="19"/>
+        <location filename="../src/features/shell/ui/LeftMenu.qml" line="22"/>
         <source>메뉴 펼치기</source>
         <translation>Expand menu</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/LeftMenu.qml" line="19"/>
+        <location filename="../src/features/shell/ui/LeftMenu.qml" line="22"/>
         <source>메뉴 접기</source>
         <translation>Collapse menu</translation>
     </message>
@@ -924,7 +1042,7 @@
 <context>
     <name>TopBar</name>
     <message>
-        <location filename="../src/features/shell/ui/TopBar.qml" line="17"/>
+        <location filename="../src/features/shell/ui/TopBar.qml" line="20"/>
         <source>정보</source>
         <translation>About</translation>
     </message>

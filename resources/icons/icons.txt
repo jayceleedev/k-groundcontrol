@@ -25,3 +25,10 @@ minus outline/minus
 bell outline/bell
 layout-dashboard outline/layout-dashboard
 logs outline/logs
+plane-departure outline/plane-departure
+plane-arrival outline/plane-arrival
+home outline/home
+player-pause outline/player-pause
+player-play outline/player-play
+hand-stop outline/hand-stop
+sparkles outline/sparkles

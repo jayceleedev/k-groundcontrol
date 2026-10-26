@@ -1,5 +1,5 @@
 // [0.0.3 T1 T13] specs/features/0.0.3-windows.md
-// [0.0.1 T1–T10] specs/features/0.0.1-shell.md
+// [0.0.1 T1–T10 T17] specs/features/0.0.1-shell.md
 #include "Composition.h"
 #include <kgc/ui/UiRegistry.h>
 #include <kgc/ui/ThemeSwitcher.h>
@@ -55,6 +55,42 @@ void registerPlaceholders(ui::PanelRegistry* panels)
     registerPlaceholder("tracker", 13, 3, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
     registerPlaceholder("params", 14, 4, QT_TRANSLATE_NOOP("Menu", "수동 기체 설정"), QUrl("qrc:/kgc/icons/menu/params.svg"));
 }
+// 시안(specs/ui/main-screen.html)의 순서대로 상단바·하단바 자리를 잡아 두고, 기능이 생기면 같은 id·순서로 바꿔 넣어요.
+void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
+{
+    const auto top = [topbar](const char* id, int order, const char* area, int group, const char* labelKey,
+                              const char* icon, bool iconOnly = false) {
+        const auto result = topbar->registerPlaceholder(id, order, area, group, labelKey, icon, iconOnly);
+        Q_ASSERT(result.has_value());
+    };
+    top("fly.vehicle", 1, "centre", 1, QT_TRANSLATE_NOOP("Bar", "기체"), "");
+    top("fly.mode", 2, "centre", 2, QT_TRANSLATE_NOOP("Bar", "모드"), "");
+    top("fly.arm", 3, "centre", 2, QT_TRANSLATE_NOOP("Bar", "ARM"), "");
+    top("fly.takeoff", 4, "centre", 3, QT_TRANSLATE_NOOP("Bar", "이륙"), "plane-departure");
+    top("fly.land", 5, "centre", 3, QT_TRANSLATE_NOOP("Bar", "착륙"), "plane-arrival");
+    top("fly.rtl", 6, "centre", 3, QT_TRANSLATE_NOOP("Bar", "RTL"), "home");
+    top("fly.pause", 7, "centre", 3, QT_TRANSLATE_NOOP("Bar", "일시정지"), "player-pause");
+    top("mission.select", 8, "centre", 4, QT_TRANSLATE_NOOP("Bar", "미션"), "");
+    top("mission.start", 9, "centre", 4, QT_TRANSLATE_NOOP("Bar", "미션 시작"), "player-play");
+    top("mission.progress", 10, "centre", 4, QT_TRANSLATE_NOOP("Bar", "WP"), "");
+    top("fly.emergencyStop", 11, "right", 5, QT_TRANSLATE_NOOP("Bar", "비상 정지"), "hand-stop");
+    top("notify.bell", 12, "right", 5, QT_TRANSLATE_NOOP("Bar", "알림"), "bell", true);
+    top("ai.panel", 13, "right", 5, QT_TRANSLATE_NOOP("Bar", "AI"), "sparkles", true);
+    const auto chip = [chips](const char* id, int order, const char* side, const char* labelKey) {
+        const auto result = chips->registerPlaceholder(id, order, side, labelKey);
+        Q_ASSERT(result.has_value());
+    };
+    chip("link.connection", 1, "left", QT_TRANSLATE_NOOP("Bar", "기체 연결"));
+    chip("vehicleInfo.gps", 2, "left", QT_TRANSLATE_NOOP("Bar", "GPS"));
+    chip("vehicleInfo.compass", 3, "left", QT_TRANSLATE_NOOP("Bar", "나침반"));
+    chip("vehicleInfo.imu", 4, "left", QT_TRANSLATE_NOOP("Bar", "IMU"));
+    chip("vehicleInfo.baro", 5, "left", QT_TRANSLATE_NOOP("Bar", "기압계"));
+    chip("vehicleInfo.rc", 6, "left", QT_TRANSLATE_NOOP("Bar", "RC"));
+    chip("vehicleInfo.telemetry", 7, "left", QT_TRANSLATE_NOOP("Bar", "TLM"));
+    chip("vehicleInfo.battery", 8, "left", QT_TRANSLATE_NOOP("Bar", "배터리"));
+    chip("tracker.status", 9, "right", QT_TRANSLATE_NOOP("Bar", "트래커"));
+    chip("gcsposition.gps", 10, "right", QT_TRANSLATE_NOOP("Bar", "GCS GPS"));
+}
 }
 Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
                          app::log::LogFeed& feed)
@@ -91,6 +127,7 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* secondPanelService = new secondPanel::SecondPanelService(this);
     secondPanel::registerUi(registry, *secondPanelService);
     registerPlaceholders(panels);
+    registerBarPlaceholders(topbar, statusChips);
     connect(&translator, &app::i18n::Translator::languageChanged, &engine, &QQmlEngine::retranslate);
 }
 QQuickWindow* Composition::loadShell()

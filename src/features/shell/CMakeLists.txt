@@ -6,9 +6,12 @@ set_source_files_properties(ui/LeftMenu.qml PROPERTIES QT_RESOURCE_ALIAS LeftMen
 set_source_files_properties(ui/CenterArea.qml PROPERTIES QT_RESOURCE_ALIAS CenterArea.qml)
 set_source_files_properties(ui/RightBar.qml PROPERTIES QT_RESOURCE_ALIAS RightBar.qml)
 set_source_files_properties(ui/BottomBar.qml PROPERTIES QT_RESOURCE_ALIAS BottomBar.qml)
+set_source_files_properties(ui/TopbarEntry.qml PROPERTIES QT_RESOURCE_ALIAS TopbarEntry.qml)
+set_source_files_properties(ui/StatusChipEntry.qml PROPERTIES QT_RESOURCE_ALIAS StatusChipEntry.qml)
 qt_add_qml_module(kgc_shell STATIC URI Kgc.Shell
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qml/Kgc/Shell"
     QML_FILES ui/Shell.qml ui/TopBar.qml ui/LeftMenu.qml ui/CenterArea.qml ui/RightBar.qml ui/BottomBar.qml
+        ui/TopbarEntry.qml ui/StatusChipEntry.qml
     SOURCES ${headers} internal/ShellService.cpp internal/Events.h
         ui/ShellController.h ui/ShellController.cpp ui/register.cpp)
 target_include_directories(kgc_shell PUBLIC api PRIVATE internal ui)

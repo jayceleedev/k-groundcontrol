@@ -5,7 +5,47 @@
 #include <algorithm>
 namespace kgc::ui {
 TopbarSlot::TopbarSlot(QObject* parent) : SlotModel(parent) {}
+kgc::app::errors::Result<void> TopbarSlot::registerPlaceholder(const QString& id, int order, const QString& area,
+    int group, const QString& labelKey, const QString& icon, bool iconOnly)
+{
+    if (area != u"left" && area != u"centre" && area != u"right") qFatal("registerPlaceholder: unknown topbar area");
+    return add({id, order, {{"area", area}, {"group", group}, {"labelKey", labelKey}, {"icon", icon},
+        {"iconOnly", iconOnly}}});
+}
+QVariant TopbarSlot::data(const QModelIndex& index, int role) const
+{
+    if (roleNames().value(role) != "separatorBefore") return SlotModel::data(index, role);
+    if (!index.isValid() || index.row() <= 0 || index.row() >= rowCount()) return false;
+    const auto& current = entryAt(index.row());
+    const auto& previous = entryAt(index.row() - 1);
+    return previous.values.value("area") == current.values.value("area")
+        && previous.values.value("group") != current.values.value("group");
+}
+QHash<int, QByteArray> TopbarSlot::roleNames() const
+{
+    auto roles = SlotModel::roleNames();
+    roles.insert(Qt::UserRole + 3, "area");
+    roles.insert(Qt::UserRole + 4, "group");
+    roles.insert(Qt::UserRole + 5, "labelKey");
+    roles.insert(Qt::UserRole + 6, "icon");
+    roles.insert(Qt::UserRole + 7, "iconOnly");
+    roles.insert(Qt::UserRole + 8, "separatorBefore");
+    return roles;
+}
 StatusChipSlot::StatusChipSlot(QObject* parent) : SlotModel(parent) {}
+kgc::app::errors::Result<void> StatusChipSlot::registerPlaceholder(const QString& id, int order,
+    const QString& side, const QString& labelKey)
+{
+    if (side != u"left" && side != u"right") qFatal("registerPlaceholder: unknown status chip side");
+    return add({id, order, {{"side", side}, {"labelKey", labelKey}}});
+}
+QHash<int, QByteArray> StatusChipSlot::roleNames() const
+{
+    auto roles = SlotModel::roleNames();
+    roles.insert(Qt::UserRole + 3, "side");
+    roles.insert(Qt::UserRole + 4, "labelKey");
+    return roles;
+}
 RightTabSlot::RightTabSlot(QObject* parent) : SlotModel(parent) {}
 MapLayerSlot::MapLayerSlot(QObject* parent) : SlotModel(parent) {}
 kgc::app::errors::Result<void> SlotModel::add(SlotEntry entry)
@@ -20,6 +60,8 @@ kgc::app::errors::Result<void> SlotModel::add(SlotEntry entry)
     beginInsertRows({}, row, row);
     entries_.insert(row, std::move(entry));
     endInsertRows();
+    // 끼어든 항목 때문에 바로 뒤 항목의 앞 구분선 같은 이웃 기준 값이 바뀔 수 있어 다시 읽게 해요.
+    if (row + 1 < entries_.size()) emit dataChanged(index(row + 1), index(row + 1));
     return {};
 }
 int SlotModel::rowCount(const QModelIndex& parent) const

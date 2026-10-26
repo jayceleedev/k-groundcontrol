@@ -1,5 +1,6 @@
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
 // [0.0.2 T24] specs/features/0.0.2-theme.md
+// [0.0.4 T18 T27] specs/features/0.0.4-righttabs.md
 #include <kgc/ui/UiSettingValues.h>
 #include <kgc/ui/Settings.h>
 #include <kgc/ui/ModuleId.h>
@@ -19,6 +20,7 @@ UiSettingValues::UiSettingValues(QObject* parent) : QObject(parent)
         emit backgroundImageChanged();
     });
     settings::onHoldToConfirmMsChanged(this, [this](int) { emit holdToConfirmMsChanged(); });
+    settings::onInstrumentStyleChanged(this, [this](auto) { emit instrumentStyleChanged(); });
     reportBackgroundImageMissing(backgroundImage());
 }
 int UiSettingValues::holdToConfirmMs() const { return settings::holdToConfirmMs(); }
@@ -57,5 +59,12 @@ void UiSettingValues::reportBackgroundImageMissing(const QString& path)
     if (!path.isEmpty() && !QImageReader(path).read().isNull()) return;
     warnedImagePaths_.insert(path);
     KGC_LOG_WARN(kCategory, UiEvent::BackgroundImageMissing, "배경 사진 못 읽음: %1", path);
+}
+// 생성 접근자가 목록 밖 저장값을 기본값 pfd로 돌려주므로 여기서 따로 거르지 않아요.
+QString UiSettingValues::instrumentStyle() const { return settings::toString(settings::instrumentStyle()); }
+QStringList UiSettingValues::instrumentStyles() const { return settings::instrumentStyleValues(); }
+void UiSettingValues::setInstrumentStyle(const QString& value)
+{
+    if (instrumentStyles().contains(value)) settings::setInstrumentStyle(settings::instrumentStyleFromString(value));
 }
 }

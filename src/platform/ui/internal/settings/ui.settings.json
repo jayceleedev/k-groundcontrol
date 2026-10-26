@@ -35,6 +35,19 @@
       "default": "",
       "category": "ui",
       "labelKey": "배경 사진"
+    },
+    {
+      "id": "ui.instrumentStyle",
+      "type": "enum",
+      "default": "pfd",
+      "enum": [
+        "round",
+        "pfd",
+        "hud",
+        "model3d"
+      ],
+      "category": "ui",
+      "labelKey": "계기 모양"
     }
   ]
 }

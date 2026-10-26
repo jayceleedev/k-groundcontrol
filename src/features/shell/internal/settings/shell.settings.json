@@ -7,6 +7,15 @@
       "default": false,
       "labelKey": "좌 메뉴 접힘",
       "category": "shell"
+    },
+    {
+      "id": "shell.leftMenuWidth",
+      "type": "int",
+      "default": 200,
+      "min": 160,
+      "max": 320,
+      "labelKey": "좌 메뉴 폭",
+      "category": "shell"
     }
   ]
 }

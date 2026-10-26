@@ -1,4 +1,5 @@
 // [0.0.1 T4–T10] specs/features/0.0.1-shell.md
+// [0.0.4 T25a T25b T25c] specs/features/0.0.4-righttabs.md
 #include "ShellController.h"
 #include <kgc/shell/ShellService.h>
 #include <kgc/shell/Settings.h>
@@ -15,6 +16,7 @@ ShellController::ShellController(ShellService& service, kgc::ui::Navigator& navi
         service_.menuCollapsed(collapsed);
         emit leftMenuCollapsedChanged();
     });
+    settings::onLeftMenuWidthChanged(this, [this](int) { emit leftMenuWidthChanged(); });
     connect(&navigator, &kgc::ui::Navigator::openRequested, this,
         [this](const QString& id, const QString& arg) {
             openPanel(id, arg);
@@ -26,6 +28,10 @@ QString ShellController::panelArg() const { return panelArg_; }
 bool ShellController::leftMenuCollapsed() const { return settings::leftMenuCollapsed(); }
 QSize ShellController::availableScreenSize() const { return availableScreenSize_; }
 void ShellController::setLeftMenuCollapsed(bool collapsed) { settings::setLeftMenuCollapsed(collapsed); }
+int ShellController::leftMenuWidth() const { return settings::leftMenuWidth(); }
+int ShellController::leftMenuWidthMin() const { return settings::leftMenuWidthMin(); }
+int ShellController::leftMenuWidthMax() const { return settings::leftMenuWidthMax(); }
+void ShellController::setLeftMenuWidth(int width) { settings::setLeftMenuWidth(width); }
 void ShellController::attachWindow(QQuickWindow* window)
 {
     disconnect(screenConnection_);

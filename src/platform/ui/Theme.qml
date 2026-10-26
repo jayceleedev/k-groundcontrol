@@ -1,3 +1,4 @@
+// [0.0.4 T8 T9 T9b T12] specs/features/0.0.4-righttabs.md
 // [0.0.3 T17 T18 T19] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 // [0.0.2 T8 T12 T13 T22] specs/features/0.0.2-theme.md
@@ -97,6 +98,17 @@ QtObject {
     readonly property int logLinePadding: Math.round(3 * uiScale)
     // 확인 대화 상자의 기본 너비예요.
     readonly property int confirmDialogWidth: Math.round(480 * uiScale)
+    // 빈 상태 안내의 설명처럼 본문보다 한 단계 작은 글자예요.
+    readonly property int captionSize: Math.round(11 * uiScale)
+    // 계기 원의 지름이에요(반지름의 ±30°가 원 가장자리에 닿는 기준).
+    readonly property int attitudeDialSize: Math.round(160 * uiScale)
+    // 계기 roll 눈금의 길이와 roll 지침 삼각형의 크기예요.
+    readonly property int attitudeMarkLength: Math.round(8 * uiScale)
+    // 계기 pitch ±10° 눈금(긴 것)과 ±20° 눈금(짧은 것)의 너비예요.
+    readonly property int attitudePitchMarkWide: Math.round(40 * uiScale)
+    readonly property int attitudePitchMarkNarrow: Math.round(24 * uiScale)
+    // 계기 가운데 고정 기체 표시의 날개 너비예요.
+    readonly property int attitudeAircraftWidth: Math.round(60 * uiScale)
     // ThemeSwitcher만 current를 바꿔요. 부품은 Theme의 토큰만 읽어요.
     property ThemeBase current: Light {}
     readonly property color series1: current.series1
@@ -145,6 +157,8 @@ QtObject {
     readonly property color shadowColor: current.shadowColor
     readonly property color mapPatternA: current.mapPatternA
     readonly property color mapPatternB: current.mapPatternB
+    readonly property color attitudeSky: current.attitudeSky
+    readonly property color attitudeGround: current.attitudeGround
     readonly property int order: current.order
     readonly property bool dark: current.dark
     readonly property bool glass: current.glass

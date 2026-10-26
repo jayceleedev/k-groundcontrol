@@ -1,6 +1,7 @@
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
 // 테마는 이 파일의 required 토큰을 모두 채운 파일 하나로 더해요.
 // 식별자는 파일 이름의 첫 글자를 소문자로 바꾸고, order가 작을수록 먼저 나와요.
+// [0.0.4 T9 T9a] specs/features/0.0.4-righttabs.md
 import QtQuick
 QtObject {
     required property color series1
@@ -48,6 +49,9 @@ QtObject {
     required property color shadowColor
     required property color mapPatternA
     required property color mapPatternB
+    // 계기(AttitudeIndicator)의 하늘·땅 색이에요.
+    required property color attitudeSky
+    required property color attitudeGround
     required property int order
     required property bool dark
     required property bool glass

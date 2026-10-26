@@ -1,4 +1,5 @@
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
+// [0.0.4 T9 T9a] specs/features/0.0.4-righttabs.md
 import QtQuick
 ThemeBase {
     series1: "#7cb3ff"
@@ -46,6 +47,8 @@ ThemeBase {
     shadowColor: "#73000000"
     mapPatternA: "#16365e"
     mapPatternB: "#24507f"
+    attitudeSky: "#1e3a5f"
+    attitudeGround: "#44403c"
     order: 40
     dark: true
     glass: true

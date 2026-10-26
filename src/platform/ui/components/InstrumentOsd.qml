@@ -4,7 +4,7 @@
  *       homeDistance(m), climbRate(m/s), linkQuality(%)를 받아요. inkColor·outlined로 글자색과 그림자 테두리를,
  *       bottomInset으로 맨 아래에 비워 둘 높이(PFD의 방위 띠)를 정해요.
  * 출력: 위 왼쪽 링크, 위 오른쪽 모드 · 시동, 아래쪽 세 줄(상승률, 홈 거리, 왼쪽 배터리·오른쪽 GPS)을 그려요.
- *       lineHeight는 글자 한 줄 높이, topReserve·bottomReserve는 띠를 놓을 때 피해야 할 위·아래 높이예요.
+ *       topReserve·bottomReserve는 띠를 놓을 때 피해야 할 위·아래 높이로, 글자 상자의 실제 높이를 더해 구해요.
  * 실패: 숫자가 아니거나 빈 값이면 그 자리만 "—"로 쓰고, available이 거짓이면 모든 자리가 "—"예요.
  *       모드·GPS fix 글자가 자기 자리 폭에 안 들어가면 그 글자 끝만 …로 줄여요.
  */
@@ -26,9 +26,11 @@ Item {
     property color inkColor: Theme.osdInk
     property bool outlined: true
     property real bottomInset: 0
-    readonly property real lineHeight: metrics.height
-    readonly property real topReserve: lineHeight
-    readonly property real bottomReserve: bottomInset + lineHeight * 3
+    // 한글·"—"·"↕"는 다른 글꼴로 그려져 FontMetrics 한 줄보다 1~2 px 커질 수 있어요.
+    // 그래서 줄 간격은 글자 상자(Text)의 실제 높이로 쌓아요.
+    readonly property real bottomRowHeight: Math.max(battery.height, gps.height)
+    readonly property real topReserve: Math.max(link.height, modeArm.height)
+    readonly property real bottomReserve: bottomInset + bottomRowHeight + home.height + climb.height
     readonly property real sidePadding: Theme.inset / 2
     readonly property string dash: "—"
     readonly property string armText: !available ? dash : armed === true ? "ARMED" : armed === false ? "DISARMED" : dash
@@ -83,37 +85,41 @@ Item {
         text: qsTr("링크 %1%").arg(osd.whole(osd.linkQuality))
     }
     OsdText {
+        id: modeArm
         objectName: "osdModeArm"
         anchors.right: parent.right
         anchors.rightMargin: osd.sidePadding
         text: modeFit.elidedText + modeTail.text
     }
     OsdText {
+        id: climb
         objectName: "osdClimb"
         anchors.right: parent.right
         anchors.rightMargin: osd.sidePadding
-        y: osd.height - osd.bottomInset - osd.lineHeight * 3
+        y: home.y - height
         text: osd.climbText
     }
     OsdText {
+        id: home
         objectName: "osdHome"
         anchors.right: parent.right
         anchors.rightMargin: osd.sidePadding
-        y: osd.height - osd.bottomInset - osd.lineHeight * 2
+        y: osd.height - osd.bottomInset - osd.bottomRowHeight - height
         text: qsTr("홈 %1 m").arg(osd.whole(osd.homeDistance))
     }
     OsdText {
         id: battery
         objectName: "osdBattery"
         x: osd.sidePadding
-        y: osd.height - osd.bottomInset - osd.lineHeight
+        y: osd.height - osd.bottomInset - height
         text: osd.batteryText
     }
     OsdText {
+        id: gps
         objectName: "osdGps"
         anchors.right: parent.right
         anchors.rightMargin: osd.sidePadding
-        y: osd.height - osd.bottomInset - osd.lineHeight
+        y: osd.height - osd.bottomInset - height
         text: qsTr("GPS %1 · 위성 %2").arg(gpsFit.elidedText).arg(osd.whole(osd.satellites))
     }
 }

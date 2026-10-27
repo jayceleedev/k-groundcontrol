@@ -53,7 +53,7 @@ void ThemeSwitcher::apply()
     const auto choice = resolveTheme(settings::theme(), qGuiApp->styleHints()->colorScheme(), sources_.keys());
     if (choice.reason == ThemeReason::Unknown && !warnedSelections_.contains(settings::theme())) {
         warnedSelections_.insert(settings::theme());
-        KGC_LOG_WARN(kCategory, UiEvent::ThemeUnknown, "테마 없음: %1, 시스템 따라감", settings::theme());
+        KGC_LOG_WARN(kCategory, UiEvent::ThemeUnknown, "Theme unknown: %1, following system", settings::theme());
     }
     if (choice.id == themeId_) return;
     QQmlComponent component(&engine_, sources_.value(choice.id));
@@ -68,7 +68,7 @@ void ThemeSwitcher::apply()
     current_ = next;
     themeId_ = choice.id;
     emit themeIdChanged();
-    KGC_LOG_INFO(kCategory, UiEvent::ThemeApplied, "테마 적용: %1, 이유: %2", themeId_,
-        choice.reason == ThemeReason::Setting ? "설정" : "시스템");
+    KGC_LOG_INFO(kCategory, UiEvent::ThemeApplied, "Theme applied: %1, reason: %2", themeId_,
+        choice.reason == ThemeReason::Setting ? "setting" : "system");
 }
 }

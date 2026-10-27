@@ -58,7 +58,7 @@ void UiSettingValues::reportBackgroundImageMissing(const QString& path)
     // 머리 정보만 멀쩡한 손상 파일도 놓치지 않도록 사진 전체를 읽어요.
     if (!path.isEmpty() && !QImageReader(path).read().isNull()) return;
     warnedImagePaths_.insert(path);
-    KGC_LOG_WARN(kCategory, UiEvent::BackgroundImageMissing, "배경 사진 못 읽음: %1", path);
+    KGC_LOG_WARN(kCategory, UiEvent::BackgroundImageMissing, "Background image not readable: %1", path);
 }
 // 생성 접근자가 목록 밖 저장값을 기본값 pfd로 돌려주므로 여기서 따로 거르지 않아요.
 QString UiSettingValues::instrumentStyle() const { return settings::toString(settings::instrumentStyle()); }

@@ -20,7 +20,7 @@ int AppLogController::saveDelayMs() const { return kSaveDelayMs; }
 QAbstractListModel* AppLogController::model() const { return service_.model(); }
 void AppLogController::open()
 {
-    if (window_.open()) KGC_LOG_INFO(kCategory, AnalyzeEvent::LogWindowOpened, "로그 창 열림");
+    if (window_.open()) KGC_LOG_INFO(kCategory, AnalyzeEvent::LogWindowOpened, "Log window opened");
 }
 void AppLogController::savePlacement() { window_.savePlacement(); }
 }

@@ -12,7 +12,7 @@ AppSettingsService::AppSettingsService(AppInfo info, kgc::app::i18n::Translator&
     settings::onLanguageChanged(this, [&translator](settings::Language language) {
         const auto previous = translator.language();
         translator.setLanguage(settings::toString(language));
-        KGC_LOG_INFO(kCategory, AppSettingsEvent::LanguageChanged, "언어 변경: %1→%2", previous, translator.language());
+        KGC_LOG_INFO(kCategory, AppSettingsEvent::LanguageChanged, "Language changed: %1 -> %2", previous, translator.language());
     });
 }
 const AppInfo& AppSettingsService::info() const { return info_; }

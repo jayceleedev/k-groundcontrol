@@ -27,9 +27,9 @@ jobs:
       - run: cmake --build --preset linux-release
       - run: ctest --preset linux-release
       - run: cmake --build build/linux-release --target package
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
-          name: K-GroundControl-linux
+          archive: false
           path: build/linux-release/*.AppImage
       - uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/tags/v')

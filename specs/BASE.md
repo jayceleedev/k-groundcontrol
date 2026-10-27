@@ -297,10 +297,10 @@ k-groundcontrol/
 ## 10. 로그·오류·알림·번역 (§17-6 확정)
 
 - **로그 통로** `platform/app/log/LogFeed`: 파일에 쓴 줄과 같은 기록(`LogRecord`, seq)을 화면에 넘기는 유일한 통로. seq는 `publish`가 잠금 안에서 매기고 늘 queued로 낸다. 로그 화면이 낳은 `kgc.qt` 경고는 통로로 다시 내보내지 않는다(되돌이 막기; 막을 경로는 기능이 내고 조립이 넘김 — 바탕은 기능 경로를 모름). 다른 모듈은 로그 파일을 다시 읽지 않는다.
-- **로그**: 호출은 `KGC_LOG_DEBUG / KGC_LOG_INFO / KGC_LOG_WARN / KGC_LOG_ERROR(kCategory, EscEvent::FlashFailed, "메시지", 값…)` **네 수준 매크로**(같은 모양; 이 문서에서 `KGC_LOG`라 하면 이 넷)로만(`qDebug`·`qInfo`·`qWarning` 직접 호출과 QML `console.log` 금지 — 검사). 카테고리는 모듈 경로(`kgc.comm.serial`, `kgc.esc`). 메시지는 **한국어 명사형 전보체**(값은 콜론 뒤, 절은 쉼표, 문장 어미 없음). 사건은 모듈 `Events.h`의 열거(§6). `platform/app/log/LogSink`가 Qt 메시지 핸들러로 파일 회전(부팅 설정)과 비밀값 마스킹을 한다. tlog·포워딩에는 `comm/mavlink/signing`의 필터가 SETUP_SIGNING을 뺀다(R-N12·R-N23).
+- **로그**: 호출은 `KGC_LOG_DEBUG / KGC_LOG_INFO / KGC_LOG_WARN / KGC_LOG_ERROR(kCategory, EscEvent::FlashFailed, "Message", 값…)` **네 수준 매크로**(같은 모양; 이 문서에서 `KGC_LOG`라 하면 이 넷)로만(`qDebug`·`qInfo`·`qWarning` 직접 호출과 QML `console.log` 금지 — 검사). 카테고리는 모듈 경로(`kgc.comm.serial`, `kgc.esc`). 메시지는 **영어**(2026-10-27 사용자 결정): 짧은 구, 첫 글자 대문자, 마침표 없음, 값은 콜론 뒤, 절은 쉼표(`"Panel opened: esc"`). 한글을 넣지 않고 번역하지 않는다(앱 로그 창에도 원문 그대로). 사건은 모듈 `Events.h`의 열거(§6). `platform/app/log/LogSink`가 Qt 메시지 핸들러로 파일 회전(부팅 설정)과 비밀값 마스킹을 한다. tlog·포워딩에는 `comm/mavlink/signing`의 필터가 SETUP_SIGNING을 뺀다(R-N12·R-N23).
 - **오류**: §6의 `ErrorCode`. 사용자 문구는 `tr()`.
 - **알림**: `platform/app/notify/Notify`(저장·수준 `Info/Warning/Critical`·출처(기체·트래커·GCS·앱)·시각·읽음) — 상단 벨·토스트·TTS(`Speech`)가 읽는 한 입구. 기체 메시지 중 무엇을 알림으로 올릴지는 **기능 스펙(B4)이 정한다**.
-- **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator`가 언어를 바꾸고(`languageChanged`), `Composition`이 그 시그널을 `QQmlEngine::retranslate()`에 이어 재시작 없이 전환(R-N16; Translator는 QML 엔진을 모름). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖에 있으면, QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
+- **번역**: 원문 **한국어**, `i18n/kgc_en.ts`가 영어. `platform/app/i18n/Translator`가 언어를 바꾸고(`languageChanged`), `Composition`이 그 시그널을 `QQmlEngine::retranslate()`에 이어 재시작 없이 전환(R-N16; Translator는 QML 엔진을 모름). 검사: C++의 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(` 밖에 있으면(`KGC_LOG` 메시지 안의 한글도 잡는다), QML의 `text:`·`title:`·`placeholderText:`·`ToolTip.text:` 리터럴이 `qsTr(` 없이 있으면 잡는다.
 - **부팅 단계의 터미널 출력**(명령줄 옵션 설명·부팅 오류)은 번역기가 설치되기 전이라 **한국어 원문**을 그대로 보인다. 문자열 검사를 위해 `QT_TRANSLATE_NOOP("BootOptions", …)`로 표시하고, `.ts`의 영어는 나중에 터미널 출력을 번역할 때 쓸 자리로 둔다(지금은 화면에 나오지 않음).
 
 ## 11. 트래커 스케치 `tracker/` (R-D27)
@@ -382,7 +382,8 @@ k-groundcontrol/
 | 고정값 | §6 범위 | 0.1.x |
 | 설정 키 | 설정 키 문자열 리터럴(생성 접근자 밖) | 0.1.x |
 | 로그·오류 | `qDebug` 계열 직접 호출; 등록부(모든 모듈 `Events.h`·`Errors.h`·`ModuleId.h`) 밖·중복; `KGC_LOG` 메시지에 문장 어미(…다/…요) | 0.1.x |
-| 문자열(C++) | 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(`·`KGC_LOG(` 밖 | 0.1.x |
+| 로그 언어 | `KGC_LOG_*` 호출 안 문자열 리터럴에 한글(check `log_english`) | 2026-10-27 |
+| 문자열(C++) | 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(` 밖 | 0.1.x |
 | 비밀값 | `Secret::reveal()`이 허용 파일 밖 | 비밀값이 처음 쓰일 때 |
 | 이름 중복 | 자유 함수 이름이 두 모듈에 | 0.1.x |
 
@@ -441,3 +442,4 @@ k-groundcontrol/
 | 2026-10-26 | 사용자 | 상단바·하단바 자리 표시: `TopbarSlot`·`StatusChipSlot`의 `registerPlaceholder`, 순서는 시안대로(0.0.3 §12.5) |
 | 2026-10-26 | 사용자 | 0.0.4 스펙 초안 3과 함께 승인: §2·§9.7 전역 부분 없는 기체별 모듈의 `registerUi(uiRegistry)`, §3 로직 없는 기능 모듈은 `internal/` 생략 가능, §9.7 `RightTabSlot.registerTab`·`placement`·부품 둘·색 토큰·자리 표시 = 아직 없는 기여, §13 용어 |
 | 2026-10-26 | 사용자 | 0.0.4 §12 초안 2와 함께 승인: §4 바탕 설정에 `ui.instrumentStyle`(주인 ui), §9.7 `UiSettingValues` 계기 모양·부품 `PrimaryFlightDisplay`·`HeadUpDisplay`·`VehicleAttitude3D`(vehicleInfo), §13 용어 |
+| 2026-10-27 | 사용자 | 로그 메시지는 영어(모든 프로젝트): §10 로그·번역 검사, §14 검사표 `log_english`; 0.0.1~0.0.3 스펙과 formats/applog의 로그 문구 예시도 영어로 |

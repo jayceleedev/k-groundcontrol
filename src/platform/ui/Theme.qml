@@ -1,3 +1,4 @@
+// [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.4 T8 T9 T9b T12] specs/features/0.0.4-righttabs.md
 // [0.0.4 T16 T19 T20 T23a T25a T29] specs/features/0.0.4-righttabs.md
 // [0.0.3 T17 T18 T19] specs/features/0.0.3-windows.md
@@ -16,6 +17,9 @@ QtObject {
     readonly property int bottomBarHeight: Math.round(32 * uiScale)
     readonly property int instrumentHeight: Math.round(240 * uiScale)
     readonly property int inset: Math.round(8 * uiScale)
+    // 막대가 숨겨져도 내용 폭이 바뀌지 않도록 홈을 항상 비워 둬요.
+    readonly property int scrollBarWidth: Math.round(8 * uiScale)
+    readonly property int scrollGutter: scrollBarWidth + inset
     readonly property int panelInset: Math.round(16 * uiScale)
     readonly property int menuGap: Math.round(3 * uiScale)
     // 좌 메뉴 묶음 사이 구분선이 차지하는 세로 공간이에요(선은 그 가운데).

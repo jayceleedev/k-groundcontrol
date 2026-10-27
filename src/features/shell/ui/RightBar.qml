@@ -1,3 +1,4 @@
+// [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T8 T14 T18] specs/features/0.0.2-theme.md
 // [0.0.4 T3 T4 T7 T10 T10a T13] specs/features/0.0.4-righttabs.md
 // 셸은 우 탭의 주인을 모르고 RightTabSlot의 역할 값(placement·titleKey·component)만 읽어 배치해요.
@@ -77,18 +78,19 @@ GlassSurface {
         interactive: contentHeight > height
         Loader {
             id: page
-            width: content.width
+            width: content.width - Theme.scrollGutter + Theme.inset
             height: Math.max(item ? item.implicitHeight : 0, content.height)
             source: bar.tabs.length > 0 ? bar.tabs[Math.min(tabStrip.currentIndex, bar.tabs.length - 1)].component : ""
             // 탭을 바꾸면 새 탭이 맨 위에서 시작해요.
             onLoaded: content.contentY = 0
         }
-        // 스크롤바는 내용 위 오른쪽 Theme.inset 여백 안에 겹쳐 그려 내용 폭을 줄이지 않아요.
+        // 탭 자체의 오른쪽 Theme.inset과 따로 비운 막대 폭을 합쳐, 숨겨져도 홈을 유지해요.
+        // 스크롤바는 홈의 오른쪽 끝에 놓여 내용과 Theme.inset만큼 떨어져요.
         // 폭은 width가 아니라 implicitWidth로 줘요. 붙은 스크롤바는 implicitWidth가 바뀔 때만 x를 다시 계산해서,
         // width로 주면 uiScale이 바뀐 뒤 x가 옛 폭 기준으로 남아 여백 밖으로 밀려나요.
         Basic.ScrollBar.vertical: Basic.ScrollBar {
             objectName: "rightTabScrollBar"
-            implicitWidth: Theme.inset
+            implicitWidth: Theme.scrollBarWidth
             padding: 0
             policy: Basic.ScrollBar.AlwaysOn
             visible: content.contentHeight > content.height

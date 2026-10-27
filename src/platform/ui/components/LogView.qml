@@ -1,3 +1,4 @@
+// [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T12] specs/features/0.0.2-theme.md
 // [0.0.3 T4 T5 T6] specs/features/0.0.3-windows.md
 /** 수준별 색을 가진 기록을 끝까지 따라가며 보여줘요.
@@ -23,12 +24,15 @@ Basic.ScrollView {
     }
     implicitWidth: Theme.logViewWidth
     implicitHeight: Theme.logViewHeight
+    rightPadding: Theme.scrollGutter
+    contentWidth: availableWidth
     clip: true
     background: Rectangle { color: Theme.surfaceAlt; border.color: Theme.line; radius: Theme.radiusSmall }
     // 막대를 바꿔 끼우면 ScrollView가 하던 자리 잡기가 사라져 왼쪽 위에 작게 놓이므로, 오른쪽 끝 자리를 직접 줘요.
     Basic.ScrollBar.vertical: Basic.ScrollBar {
         id: bar
         parent: control
+        implicitWidth: Theme.scrollBarWidth
         x: control.width - width
         y: control.topPadding
         height: control.availableHeight

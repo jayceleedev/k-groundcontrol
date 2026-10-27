@@ -1,3 +1,4 @@
+// [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T12 T14] specs/features/0.0.2-theme.md
 // [0.0.4 T6a] specs/features/0.0.4-righttabs.md
 /** 선택 목록과 이름표를 함께 보여줘요.
@@ -33,10 +34,10 @@ Basic.ComboBox {
     }
     delegate: Basic.ItemDelegate {
         required property int index
-        width: control.width
+        width: popupList.width - Theme.scrollGutter
         text: control.textAt(index)
         font: control.font
-        contentItem: Text { text: parent.text; color: Theme.ink; font: control.font }
+        contentItem: Text { text: parent.text; color: Theme.ink; font: control.font; elide: Text.ElideRight }
         background: Rectangle { color: control.highlightedIndex === index ? Theme.infoSoft : Theme.surface }
     }
     popup: Basic.Popup {
@@ -46,11 +47,13 @@ Basic.ComboBox {
         padding: Theme.lineWidth
         background: Rectangle { color: Theme.surface; border.color: Theme.lineStrong; radius: Theme.radiusSmall }
         contentItem: ListView {
+            id: popupList
             clip: true
+            contentWidth: width
             implicitHeight: contentHeight
             model: control.popup.visible ? control.delegateModel : null
             currentIndex: control.highlightedIndex
-            Basic.ScrollIndicator.vertical: Basic.ScrollIndicator {}
+            Basic.ScrollIndicator.vertical: Basic.ScrollIndicator { implicitWidth: Theme.scrollBarWidth }
         }
     }
 }

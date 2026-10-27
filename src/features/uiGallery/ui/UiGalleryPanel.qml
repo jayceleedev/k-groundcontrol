@@ -1,3 +1,4 @@
+// [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T1 T10 T17] specs/features/0.0.2-theme.md
 import QtQuick
 import QtQuick.Controls.Basic as Basic
@@ -6,6 +7,8 @@ Basic.ScrollView {
     id: panel
     property Item glassSource: null
     contentWidth: availableWidth
+    rightPadding: Theme.scrollGutter
+    Basic.ScrollBar.vertical.implicitWidth: Theme.scrollBarWidth
     clip: true
     /** 패널을 열면 첫 조작 위치를 테마 선택에 맞춰요.
      * 입력: 사용하지 않는 탐색 인자.

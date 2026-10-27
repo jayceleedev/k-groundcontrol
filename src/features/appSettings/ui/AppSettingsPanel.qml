@@ -1,3 +1,4 @@
+// [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T4 T14 T15 T20 T24 T25] specs/features/0.0.2-theme.md
 import QtQuick
 import QtQuick.Dialogs
@@ -117,6 +118,9 @@ SettingsPage {
         footer: DialogButtonBox { ActionButton { text: qsTr("닫기"); onClicked: licenseDialog.close() } }
         contentItem: ScrollView {
             clip: true
+            rightPadding: Theme.scrollGutter
+            contentWidth: availableWidth
+            ScrollBar.vertical.implicitWidth: Theme.scrollBarWidth
             TextArea {
                 objectName: "licenseText"
                 text: appSettingsController.licenseText
@@ -141,6 +145,9 @@ SettingsPage {
         footer: DialogButtonBox { ActionButton { text: qsTr("닫기"); onClicked: noticesDialog.close() } }
         contentItem: ScrollView {
             clip: true
+            rightPadding: Theme.scrollGutter
+            contentWidth: availableWidth
+            ScrollBar.vertical.implicitWidth: Theme.scrollBarWidth
             TextArea {
                 objectName: "noticesText"
                 text: appSettingsController.noticesText

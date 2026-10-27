@@ -1,3 +1,4 @@
+// [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T25] specs/features/0.0.2-theme.md
 /** 카테고리와 설정 항목을 일정한 비율로 나눠 보여줘요.
  * 입력: categories는 id·title 목록, currentIndex는 선택 위치이며 기본 자식 Section의 category로 항목을 나눠요.
@@ -79,7 +80,8 @@ Item {
         width: page.width * 3 / 4
         height: page.height
         leftPadding: Theme.panelInset
-        rightPadding: Theme.inset
+        rightPadding: Theme.scrollGutter
+        Basic.ScrollBar.vertical.implicitWidth: Theme.scrollBarWidth
         contentWidth: availableWidth
         clip: true
         Column {

@@ -363,7 +363,7 @@ k-groundcontrol/
 
 ## 14. 자동 검사 `tools/check/` (R-N21; §17-7 확정)
 
-커밋 훅(`core.hooksPath=tools/check/hooks`)과 CI(`before..after` 범위의 커밋마다, `fetch-depth: 0`)가 같은 Python 3 스크립트를 돈다. 함수 길이는 lizard(`tools/check/requirements.txt`로 버전 고정; 훅은 PATH의 `python3`에 lizard가 없으면 `pip install -r tools/check/requirements.txt`를 안내하고 실패). 검사 스크립트는 **Qt·configure 없이** 돈다. 제3자·생성 코드 제외.
+커밋 훅(`core.hooksPath=tools/check/hooks`)과 CI(push된 최신 커밋 하나, `<sha>~1..<sha>`, `fetch-depth: 2`; 2026-10-27 사용자 결정)가 같은 Python 3 스크립트를 돈다. 함수 길이는 lizard(`tools/check/requirements.txt`로 버전 고정; 훅은 PATH의 `python3`에 lizard가 없으면 `pip install -r tools/check/requirements.txt`를 안내하고 실패). 검사 스크립트는 **Qt·configure 없이** 돈다. 제3자·생성 코드 제외.
 
 | 검사 | 규칙 | 도입 |
 |---|---|---|
@@ -443,3 +443,4 @@ k-groundcontrol/
 | 2026-10-26 | 사용자 | 0.0.4 스펙 초안 3과 함께 승인: §2·§9.7 전역 부분 없는 기체별 모듈의 `registerUi(uiRegistry)`, §3 로직 없는 기능 모듈은 `internal/` 생략 가능, §9.7 `RightTabSlot.registerTab`·`placement`·부품 둘·색 토큰·자리 표시 = 아직 없는 기여, §13 용어 |
 | 2026-10-26 | 사용자 | 0.0.4 §12 초안 2와 함께 승인: §4 바탕 설정에 `ui.instrumentStyle`(주인 ui), §9.7 `UiSettingValues` 계기 모양·부품 `PrimaryFlightDisplay`·`HeadUpDisplay`·`VehicleAttitude3D`(vehicleInfo), §13 용어 |
 | 2026-10-27 | 사용자 | 로그 메시지는 영어(모든 프로젝트): §10 로그·번역 검사, §14 검사표 `log_english`; 0.0.1~0.0.3 스펙과 formats/applog의 로그 문구 예시도 영어로 |
+| 2026-10-27 | 사용자 | §14 CI 구조 검사는 push 범위의 모든 커밋이 아니라 최신 커밋 하나만 |

@@ -8,13 +8,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 2
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
       - run: pip install -r tools/check/requirements.txt
-      - name: 커밋 범위 검사
+      - name: 최신 커밋 검사
         env:
-          BEFORE: ${{ github.event.before }}
           AFTER: ${{ github.sha }}
-        run: python3 tools/check/run.py --range "$BEFORE..$AFTER"
+        run: python3 tools/check/run.py --range "$AFTER~1..$AFTER"

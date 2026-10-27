@@ -389,7 +389,7 @@ k-groundcontrol/
 
 ## 15. 빌드·CI·배포 (R-N18~R-N22)
 
-- `.github/workflows/`: `check.yml`(구조 검사만, Qt 없음; `tests/`는 `linux.yml`·`windows.yml`의 ctest에서), `linux.yml`(Ubuntu 24.04 → AppImage), `windows.yml`(MSVC 2022, Qt 6.12.x aqtinstall → zip), `tracker.yml`(트래커 이미지). 태그에서 Release.
+- `.github/workflows/`: `check.yml`(구조 검사만, Qt 없음; `tests/`는 `linux.yml`·`windows.yml`의 ctest에서), `linux.yml`(Ubuntu 24.04 → AppImage), `windows.yml`(MSVC 2022, Qt 6.12.x aqtinstall → zip), `tracker.yml`(트래커 이미지). 태그에서 Release. 내려받는 산출물은 한 번만 압축한다: 파일 하나(zip·AppImage)를 `actions/upload-artifact@v7`의 `archive: false`로 올려 Actions 산출물이 그 파일 그대로다(산출물 이름 = 파일 이름).
 - 산출물에 `LICENSE`, `THIRD_PARTY_NOTICES.md`(CPM 목록 + `cmake/notices/extra.json`의 CPM 밖 의존 — Qt(LGPL-3.0)·GStreamer·MSVC 재배포 런타임·linuxdeploy·트래커 라이브러리 — 를 CI가 합쳐 생성; 소스 URL은 `project(HOMEPAGE_URL)`에서), 소스 위치. 정보 창(`appSettings`)이 이것을 읽어 보여 준다. SBOM은 0.1.x부터.
 - 0.0.1 산출물: Windows zip(windeployqt·MSVC 런타임) + AppImage. GStreamer·NSIS는 영상 기능이 들어오는 버전부터.
 
@@ -444,3 +444,4 @@ k-groundcontrol/
 | 2026-10-26 | 사용자 | 0.0.4 §12 초안 2와 함께 승인: §4 바탕 설정에 `ui.instrumentStyle`(주인 ui), §9.7 `UiSettingValues` 계기 모양·부품 `PrimaryFlightDisplay`·`HeadUpDisplay`·`VehicleAttitude3D`(vehicleInfo), §13 용어 |
 | 2026-10-27 | 사용자 | 로그 메시지는 영어(모든 프로젝트): §10 로그·번역 검사, §14 검사표 `log_english`; 0.0.1~0.0.3 스펙과 formats/applog의 로그 문구 예시도 영어로 |
 | 2026-10-27 | 사용자 | §14 CI 구조 검사는 push 범위의 모든 커밋이 아니라 최신 커밋 하나만 |
+| 2026-10-28 | 사용자 | §15 산출물 한 번만 압축(upload-artifact v7 `archive: false`, Windows zip·Linux AppImage) — 0.0.4 검수에서 zip 안 zip |

@@ -1,4 +1,5 @@
 // [0.0.4 T1 T3 T4] specs/features/0.0.4-righttabs.md
+// [0.0.4 T33 T34] specs/features/0.0.4-righttabs.md
 // [0.0.3 T1 T13 T17 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #include "Composition.h"
@@ -67,20 +68,20 @@ void registerPlaceholders(ui::PanelRegistry* panels)
 void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
 {
     const auto top = [topbar](const char* id, int order, const char* area, int group, const char* labelKey,
-                              const char* icon, bool iconOnly = false) {
-        const auto result = topbar->registerPlaceholder(id, order, area, group, labelKey, icon, iconOnly);
+                              const char* icon, bool iconOnly = false, const char* shape = "button") {
+        const auto result = topbar->registerPlaceholder(id, order, area, group, labelKey, icon, iconOnly, shape);
         Q_ASSERT(result.has_value());
     };
-    top("fly.vehicle", 1, "centre", 1, QT_TRANSLATE_NOOP("Bar", "기체"), "");
-    top("fly.mode", 2, "centre", 2, QT_TRANSLATE_NOOP("Bar", "모드"), "");
+    top("fly.vehicle", 1, "centre", 1, QT_TRANSLATE_NOOP("Bar", "기체"), "", false, "display");
+    top("fly.mode", 2, "centre", 2, QT_TRANSLATE_NOOP("Bar", "모드: —"), "", false, "dropdown");
     top("fly.arm", 3, "centre", 2, QT_TRANSLATE_NOOP("Bar", "ARM"), "");
     top("fly.takeoff", 4, "centre", 3, QT_TRANSLATE_NOOP("Bar", "이륙"), "plane-departure");
     top("fly.land", 5, "centre", 3, QT_TRANSLATE_NOOP("Bar", "착륙"), "plane-arrival");
     top("fly.rtl", 6, "centre", 3, QT_TRANSLATE_NOOP("Bar", "RTL"), "home");
     top("fly.pause", 7, "centre", 3, QT_TRANSLATE_NOOP("Bar", "일시정지"), "player-pause");
-    top("mission.select", 8, "centre", 4, QT_TRANSLATE_NOOP("Bar", "미션"), "");
+    top("mission.select", 8, "centre", 4, QT_TRANSLATE_NOOP("Bar", "미션: —"), "", false, "dropdown");
     top("mission.start", 9, "centre", 4, QT_TRANSLATE_NOOP("Bar", "미션 시작"), "player-play");
-    top("mission.progress", 10, "centre", 4, QT_TRANSLATE_NOOP("Bar", "WP"), "");
+    top("mission.progress", 10, "centre", 4, QT_TRANSLATE_NOOP("Bar", "WP"), "", false, "display");
     top("fly.emergencyStop", 11, "right", 5, QT_TRANSLATE_NOOP("Bar", "비상 정지"), "hand-stop");
     top("notify.bell", 12, "right", 5, QT_TRANSLATE_NOOP("Bar", "알림"), "bell", true);
     top("ai.panel", 13, "right", 5, QT_TRANSLATE_NOOP("Bar", "AI"), "sparkles", true);

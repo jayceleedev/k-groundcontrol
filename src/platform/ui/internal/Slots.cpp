@@ -1,17 +1,20 @@
 // [0.0.3 T2 T15 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 // [0.0.4 T2] specs/features/0.0.4-righttabs.md
+// [0.0.4 T33 T34] specs/features/0.0.4-righttabs.md
 #include <kgc/ui/Slots.h>
 #include <kgc/ui/Errors.h>
 #include <algorithm>
 namespace kgc::ui {
 TopbarSlot::TopbarSlot(QObject* parent) : SlotModel(parent) {}
 kgc::app::errors::Result<void> TopbarSlot::registerPlaceholder(const QString& id, int order, const QString& area,
-    int group, const QString& labelKey, const QString& icon, bool iconOnly)
+    int group, const QString& labelKey, const QString& icon, bool iconOnly, const QString& shape)
 {
     if (area != u"left" && area != u"centre" && area != u"right") qFatal("registerPlaceholder: unknown topbar area");
+    if (shape != u"button" && shape != u"dropdown" && shape != u"display")
+        qFatal("registerPlaceholder: unknown topbar shape");
     return add({id, order, {{"area", area}, {"group", group}, {"labelKey", labelKey}, {"icon", icon},
-        {"iconOnly", iconOnly}}});
+        {"iconOnly", iconOnly}, {"shape", shape}}});
 }
 QVariant TopbarSlot::data(const QModelIndex& index, int role) const
 {
@@ -31,6 +34,7 @@ QHash<int, QByteArray> TopbarSlot::roleNames() const
     roles.insert(Qt::UserRole + 6, "icon");
     roles.insert(Qt::UserRole + 7, "iconOnly");
     roles.insert(Qt::UserRole + 8, "separatorBefore");
+    roles.insert(Qt::UserRole + 9, "shape");
     return roles;
 }
 StatusChipSlot::StatusChipSlot(QObject* parent) : SlotModel(parent) {}

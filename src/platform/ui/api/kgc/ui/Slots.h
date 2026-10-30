@@ -1,6 +1,7 @@
 // [0.0.3 T2 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 // [0.0.4 T2] specs/features/0.0.4-righttabs.md
+// [0.0.4 T33 T34] specs/features/0.0.4-righttabs.md
 #pragma once
 #include <kgc/ui/SlotModel.h>
 #include <QPointer>
@@ -9,7 +10,7 @@
 namespace kgc::ui {
 /** 상단바의 왼쪽·가운데·오른쪽 자리에 기능 기여와 자리 표시를 순서대로 담아요.
  * 입력: 등록 항목과 자리 표시.
- * 출력: 순서대로 정렬된 목록과 영역·묶음·이름·아이콘·앞 구분선 역할.
+ * 출력: 순서대로 정렬된 목록과 영역·묶음·이름·아이콘·앞 구분선·모양 역할.
  * 실패: 같은 식별자는 DuplicateId.
  */
 class TopbarSlot : public SlotModel {
@@ -21,14 +22,15 @@ public:
  * 실패: 없음.
  */
     explicit TopbarSlot(QObject* parent = nullptr);
-/** 아직 없는 기능의 상단바 자리를 비활성 단추로 잡아 둬요.
+/** 아직 없는 기능의 상단바 자리를 단추·드롭다운·글자 표시로 잡아 둬요.
  * 입력: 식별자, 순서, 영역("left"·"centre"·"right"), 구분선 묶음 번호, 번역 문맥 "Bar"의 이름 원문, 아이콘 이름(없으면 빈 값),
- *       iconOnly(참이면 이름은 설명 풍선으로만 보이는 아이콘 단추).
+ *       iconOnly(참이면 이름은 설명 풍선으로만 보이는 아이콘 단추), shape("button" 기본·"dropdown"·"display").
  * 출력: 등록 결과.
- * 실패: 같은 식별자는 DuplicateId, 모르는 영역은 프로그래밍 오류로 종료해요.
+ * 실패: 같은 식별자는 DuplicateId, 모르는 영역이나 모양은 프로그래밍 오류로 종료해요.
  */
     kgc::app::errors::Result<void> registerPlaceholder(const QString& id, int order, const QString& area,
-        int group, const QString& labelKey, const QString& icon, bool iconOnly = false);
+        int group, const QString& labelKey, const QString& icon, bool iconOnly = false,
+        const QString& shape = QStringLiteral("button"));
 /** 등록 값과 같은 영역 앞 항목과 묶음이 바뀌는지를 읽어요.
  * 입력: 인덱스와 역할.
  * 출력: 역할 값, separatorBefore는 앞 항목과 묶음이 다를 때 참.
@@ -37,7 +39,7 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 /** 상단바 항목의 표시 역할을 알려줘요.
  * 입력: 없음.
- * 출력: 공통 역할과 area·group·labelKey·icon·iconOnly·separatorBefore.
+ * 출력: 공통 역할과 area·group·labelKey·icon·iconOnly·separatorBefore·shape.
  * 실패: 없음.
  */
     QHash<int, QByteArray> roleNames() const override;

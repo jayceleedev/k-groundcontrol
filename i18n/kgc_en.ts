@@ -146,8 +146,8 @@
     </message>
     <message>
         <location filename="../src/main/Composition.cpp" line="75"/>
-        <source>모드</source>
-        <translation>Mode</translation>
+        <source>모드: —</source>
+        <translation>Mode: —</translation>
     </message>
     <message>
         <location filename="../src/main/Composition.cpp" line="76"/>
@@ -176,8 +176,8 @@
     </message>
     <message>
         <location filename="../src/main/Composition.cpp" line="81"/>
-        <source>미션</source>
-        <translation>Mission</translation>
+        <source>미션: —</source>
+        <translation>Mission: —</translation>
     </message>
     <message>
         <location filename="../src/main/Composition.cpp" line="82"/>

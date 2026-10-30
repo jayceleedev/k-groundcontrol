@@ -195,6 +195,21 @@
         <translation>Emergency Stop</translation>
     </message>
     <message>
+        <location filename="../src/main/Composition.cpp" line="87"/>
+        <source>포트: —</source>
+        <translation>Port: —</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="88"/>
+        <source>속도: —</source>
+        <translation>Baud: —</translation>
+    </message>
+    <message>
+        <location filename="../src/main/Composition.cpp" line="89"/>
+        <source>연결</source>
+        <translation>Connect</translation>
+    </message>
+    <message>
         <location filename="../src/main/Composition.cpp" line="85"/>
         <source>알림</source>
         <translation>Notifications</translation>

@@ -84,8 +84,9 @@ k-groundcontrol/
 | `shell` | 틀 | 전역 | 메인 창(기준 1920×900, 최소는 화면 가용 영역과 작은 쪽, 그 아래선 축소 배치), 상단·좌·우·하단 바의 틀, 슬롯 배치. 앱 아이콘 → `Navigator.open("appSettings","about")` | R-N24 |
 | `notify` | 알림 화면 | 전역 | 상단 벨·목록·토스트·TTS 호출 | §10 |
 | `ai` | AI 세팅 | 전역 패널 + 기체별 서비스 | 상단 오른쪽 아이콘·패널, 첫 사용 동의 | R-D4~D8, R-N23 |
-| `appSettings` | 앱 설정 | 전역 | 좌 메뉴 15, **정보 창**(버전·라이선스·고지·소스) | R-N16·17·22 |
-| `uiGallery` | UI 부품 목록(개발 단계) | 전역 | 좌 메뉴 16(appSettings 뒤 구분선 다음) | R-N25 |
+| `reference` | 참고 | 전역 | 좌 메뉴 15, 사이트 소개와 바로가기(0.0.4 §16) | 사용자 지시 2026-10-30 |
+| `appSettings` | 앱 설정 | 전역 | 좌 메뉴 16, **정보 창**(버전·라이선스·고지·소스) | R-N16·17·22 |
+| `uiGallery` | UI 부품 목록(개발 단계) | 전역 | 좌 메뉴 17(appSettings 뒤 구분선 다음) | R-N25 |
 | `secondPanel` | 세컨드 패널 | 전역 | 하단바 오른쪽 단추, 별도 창(칸 배치 최대 6) | R-N26 |
 | `analyze` | 인스펙터·콘솔·앱 로그 뷰어·진동 | 기체별 + 전역(앱 로그) | 좌 메뉴(나중 순서), 하단바 오른쪽 단추(앱 로그 창) | E3, C-55·57 |
 | `link` | 연결 | 전역 | 상단 연결 옵션(포트·속도·연결) + 하단 기체 칩(링크 상태) + 연결 팝업. 저장된 링크 목록의 편집 화면은 `appSettings`가 갖고, 둘 다 바탕 `comm/links/LinkManager` api를 직접 쓴다(같은 순위라 서로 부르지 않음) | R-Q1, C-1~C-8 |
@@ -121,7 +122,7 @@ k-groundcontrol/
 | 순위 | 기능 |
 |---|---|
 | 1 | `shell` |
-| 2 | `notify` `ai` `appSettings` `analyze` `link` `uiGallery` `secondPanel` |
+| 2 | `notify` `ai` `appSettings` `reference` `analyze` `link` `uiGallery` `secondPanel` |
 | 3 | `fly` `mission` `vehicleInfo` `preflight` `logs` |
 | 4 | `layout` |
 | 5 | `sensors` `radio` `flightModes` `power` `failsafe` `motors` `tuning` `fcFlash` `esc` `elrs` `tracker` |
@@ -360,7 +361,7 @@ k-groundcontrol/
 | 로그 사건 / 기체 이벤트 | `LogEvent` / `VehicleEvent` | 우리 로그 / PX4 events |
 | 로그 수준 | `LogLevel`(Debug·Info·Warn·Error), `parseLogLevel` | `app/log` api의 enum과 이름 변환, 부팅 설정이 넘김 |
 | 운영 설정 / 부팅 설정 / 고정값 / 비밀값 / 모듈 id | `Setting` / `BootOption` / `Constant` / `Secret` / `ModuleId` | |
-| 펌웨어 세팅 모듈 / 안전·페일세이프 모듈 / 연결 모듈 | `fcFlash` / `failsafe` / `link` | 기능 id |
+| 펌웨어 세팅 모듈 / 안전·페일세이프 모듈 / 연결 모듈 / 참고 모듈 | `fcFlash` / `failsafe` / `link` / `reference` | 기능 id |
 
 ## 14. 자동 검사 `tools/check/` (R-N21; §17-7 확정)
 
@@ -448,4 +449,5 @@ k-groundcontrol/
 | 2026-10-28 | 사용자 | §15 산출물 한 번만 압축(upload-artifact v7 `archive: false`, Windows zip·Linux AppImage) — 0.0.4 검수에서 zip 안 zip |
 | 2026-10-30 | 사용자 | §9.7 `TopbarSlot.registerPlaceholder`에 `shape`(0.0.4 §14) |
 | 2026-10-30 | 사용자 | §3.1·§9.8 상단바 연결 옵션은 `link`, 상단바 차례는 0.0.4 §15 |
+| 2026-10-30 | 사용자 | §3.1·§3.2·§13 기능 `reference`(참고), 좌 메뉴 15, appSettings 16, uiGallery 17(0.0.4 §16) |
 | 2026-10-30 | 사용자 | §15 Actions 산출물 보관 2일(`retention-days: 2`) — 저장 한도 초과로 업로드 실패 |

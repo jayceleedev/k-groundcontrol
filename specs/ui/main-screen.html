@@ -253,6 +253,7 @@
       <button data-panel="tracker"><span class="ico">◎</span><span class="txt">안테나 트래커</span></button>
       <div class="sep"></div>
       <button data-panel="params"><span class="ico">≡</span><span class="txt">수동 기체 설정</span></button>
+      <button data-panel="reference"><span class="ico">📖</span><span class="txt">참고</span></button>
       <button data-panel="appSettings"><span class="ico">⚒</span><span class="txt">앱 설정</span></button>
     </div>
   </div>
@@ -420,6 +421,15 @@
 
 
 <div id="panelStore" style="display:none">
+  <!-- 참고 -->
+  <div class="card" id="p-reference">
+    <div class="ph"><span>참고 <small>0.0.4 §16</small></span><span class="x">✕</span></div>
+    <div class="pb">
+      <div class="note">설정할 때 참고할 공식 문서예요. 바로가기를 누르면 브라우저에서 열려요.</div>
+      <div class="bx"><h5>ArduPilot</h5><div class="note">멀티콥터, 비행기, 로버 등을 위한 오픈소스 자동조종 펌웨어의 공식 문서예요.</div><div class="ln"><small>https://ardupilot.org/ardupilot/</small> <span class="btn2">↗ 바로가기</span></div></div>
+      <div class="bx"><h5>PX4</h5><div class="note">PX4 자동조종 펌웨어의 공식 사용자 안내서예요.</div><div class="ln"><small>https://docs.px4.io/main/en/</small> <span class="btn2">↗ 바로가기</span></div></div>
+    </div>
+  </div>
   
 
   <!-- 1 펌웨어 세팅 -->
@@ -774,7 +784,7 @@
   document.getElementById('connChip').onclick = () => conn.classList.toggle('on');
   document.getElementById('connClose').onclick = () => conn.classList.remove('on');
 
-  const titles = {fcFlash:'펌웨어 세팅', layout:'기체 구성도', sensors:'센서 보정', radio:'조종기', flightModes:'비행 모드', power:'배터리 · 전원', failsafe:'안전 · 페일세이프', motors:'모터 시험', tuning:'튜닝', logs:'로그 분석', esc:'ESC 설정', elrs:'ELRS 설정', tracker:'안테나 트래커', params:'수동 기체 설정 (전체 파라미터)', appSettings:'앱 설정'};
+  const titles = {reference:'참고', fcFlash:'펌웨어 세팅', layout:'기체 구성도', sensors:'센서 보정', radio:'조종기', flightModes:'비행 모드', power:'배터리 · 전원', failsafe:'안전 · 페일세이프', motors:'모터 시험', tuning:'튜닝', logs:'로그 분석', esc:'ESC 설정', elrs:'ELRS 설정', tracker:'안테나 트래커', params:'수동 기체 설정 (전체 파라미터)', appSettings:'앱 설정'};
   const panel = document.getElementById('panel');
   document.querySelectorAll('#menu button').forEach(b => b.onclick = () => {
     document.querySelectorAll('#menu button').forEach(x => x.classList.remove('on'));

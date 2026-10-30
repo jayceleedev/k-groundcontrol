@@ -44,7 +44,7 @@ Rules the compiler and `tools/check` enforce — never work around them:
 | Rank | Features |
 |---|---|
 | 1 | `shell` |
-| 2 | `notify` `ai` `appSettings` `analyze` `link` `uiGallery` `secondPanel` |
+| 2 | `notify` `ai` `appSettings` `reference` `analyze` `link` `uiGallery` `secondPanel` |
 | 3 | `fly` `mission` `vehicleInfo` `preflight` `logs` |
 | 4 | `layout` |
 | 5 | `sensors` `radio` `flightModes` `power` `failsafe` `motors` `tuning` `fcFlash` `esc` `elrs` `tracker` |
@@ -56,7 +56,7 @@ Rules the compiler and `tools/check` enforce — never work around them:
 A module may use the `api/` of any module with a **larger** rank number (skipping rows is fine). Same rank: never. Lower never calls higher. To reach upward: emit a signal, publish state, register a contribution (§4), or `Navigator::open(id, arg)`. `tools/check` reads every module's `target_link_libraries` text (no configure, no Qt) and compares the graph with this table; cycles and wrong-direction links fail the check.
 
 ### 1.3 Lifetimes (BASE §3.1)
-- **Global** modules: `Composition` creates exactly one instance for the app's lifetime (`shell`, `notify`, `appSettings`, `link`, `fcFlash`, `esc`, `elrs`, `tracker`, `map`, `video`, `gcsposition`, the `MissionEditor` part of `mission`, the viewer part of `logs`, the panel part of `ai`, the global lookup part of `terrain`, the app-log part of `analyze`). Global feature bundles: `TrackerStates`, `GcsPositionStates`.
+- **Global** modules: `Composition` creates exactly one instance for the app's lifetime (`shell`, `notify`, `appSettings`, `reference`, `link`, `fcFlash`, `esc`, `elrs`, `tracker`, `map`, `video`, `gcsposition`, the `MissionEditor` part of `mission`, the viewer part of `logs`, the panel part of `ai`, the global lookup part of `terrain`, the app-log part of `analyze`). Global feature bundles: `TrackerStates`, `GcsPositionStates`.
 - **Per-vehicle** modules: `Composition` creates them when a `Vehicle` appears and parents them to the `Vehicle` (`fly`, `vehicleInfo`, `preflight`, `layout`, `sensors`, `radio`, `flightModes`, `power`, `failsafe`, `motors`, `tuning`, `params`, the `MissionService` part of `mission`, the download part of `logs`, the per-vehicle part of `ai`/`analyze`/`terrain`).
 - **Mixed** modules keep two separately named services (`LogsViewer` global, `LogDownloadService::of(vehicle)` per vehicle).
 - Other modules obtain a per-vehicle service with the static lookup in its `api/`: `XService::of(Vehicle*)` (it finds the service among the `Vehicle`'s children). Controllers rebind on `VehicleRegistry::activeChanged`.
@@ -134,7 +134,7 @@ If the feature spec's "기반" section does not list a value, state, function or
 - `BottomActionSlot` (bottom bar, far right) ← `secondPanel` (second panel window), `analyze` (app log window); slots share `SlotModel` (`add(entry)`, order sort, duplicate id rejected); objectName `bottomAction_<id>`.
 - Separate windows: the feature controller owns one `SeparateWindow` (platform/ui), which creates the window on first open from the same engine's root context (window parent = the `SeparateWindow`, no transientParent, closing hides it) and handles aboutToQuit; placement is restored and saved through `platform/ui` `WindowPlacement`; `Composition` connects the shell window's closing to application quit.
 - Contribution table: `TopbarSlot` centre ← `fly` (flight strip), `mission` (mission selector/start); `TopbarSlot` right ← `link` (port, baud, connect), `notify` (bell), `ai` (icon/panel); `StatusChipSlot` left ← `link` (vehicle chip + connection popup), `vehicleInfo` (sensor/battery/RSSI chips); `StatusChipSlot` right ← `tracker`, `gcsposition`; `RightTabSlot` ← `vehicleInfo` (instrument, overview, detail, messages), `logs`, `preflight`; `MapLayerSlot` ← `mission` (route, fence, rally, edit), `fly` (guided markers), `tracker` (fan), `terrain` (profile), `video` (PiP), ADS-B module; about window ← `appSettings` via `Navigator`.
-- Left menu order (BASE §3.1): 1 fcFlash | 2 layout, 3 sensors, 4 radio, 5 flightModes, 6 power, 7 failsafe, 8 motors, 9 tuning, 10 logs | 11 esc, 12 elrs, 13 tracker | 14 params, 15 appSettings | 16 uiGallery (`|` = separator = group change).
+- Left menu order (BASE §3.1): 1 fcFlash | 2 layout, 3 sensors, 4 radio, 5 flightModes, 6 power, 7 failsafe, 8 motors, 9 tuning, 10 logs | 11 esc, 12 elrs, 13 tracker | 14 params, 15 reference, 16 appSettings | 17 uiGallery (`|` = separator = group change).
 - Controllers (`<Id>Controller`, Q_PROPERTY/Q_INVOKABLE) only map state to display values and call services. Decisions belong to services and `ArmedPolicy`.
 - QML imports allowed: `QtQuick*`, `QtQml*`, the Qt modules allowed for your layer (§2), `Kgc.Ui`, your own `Kgc.<Id>`, and `Kgc.<Id>` of lower-ranked features. Nothing else.
 

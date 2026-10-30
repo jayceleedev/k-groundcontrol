@@ -88,7 +88,7 @@ k-groundcontrol/
 | `uiGallery` | UI 부품 목록(개발 단계) | 전역 | 좌 메뉴 16(appSettings 뒤 구분선 다음) | R-N25 |
 | `secondPanel` | 세컨드 패널 | 전역 | 하단바 오른쪽 단추, 별도 창(칸 배치 최대 6) | R-N26 |
 | `analyze` | 인스펙터·콘솔·앱 로그 뷰어·진동 | 기체별 + 전역(앱 로그) | 좌 메뉴(나중 순서), 하단바 오른쪽 단추(앱 로그 창) | E3, C-55·57 |
-| `link` | 연결 | 전역 | 하단 기체 칩(링크 상태) + 연결 팝업. 저장된 링크 목록의 편집 화면은 `appSettings`가 갖고, 둘 다 바탕 `comm/links/LinkManager` api를 직접 쓴다(같은 순위라 서로 부르지 않음) | R-Q1, C-1~C-8 |
+| `link` | 연결 | 전역 | 상단 연결 옵션(포트·속도·연결) + 하단 기체 칩(링크 상태) + 연결 팝업. 저장된 링크 목록의 편집 화면은 `appSettings`가 갖고, 둘 다 바탕 `comm/links/LinkManager` api를 직접 쓴다(같은 순위라 서로 부르지 않음) | R-Q1, C-1~C-8 |
 | `fly` | 비행 조작 | 기체별 | 상단바 조작 띠(슬롯), 유도 명령(지도 클릭 팝업·표식 레이어) | R-Q4·R-Q5 |
 | `mission` | 미션 | **전역 편집기**(`MissionEditor`: .plan 편집·저장, 기체 없이도) + **기체별** `MissionService`(전송·동기·현재 항목) | 지도 패널 편집 레이어, 상단바 미션 선택·시작 슬롯 | R-Q7·R-Q8, R-N13 |
 | `vehicleInfo` | 기체 정보 | 기체별 | 우 사이드바 계기 + 개요·상세·메시지 탭, 하단 센서 ✓/✕·배터리·RSSI 칩 | B2~B5, F-7, F-9 |
@@ -271,7 +271,7 @@ k-groundcontrol/
 `platform/app/geo/Altitude`(AMSL·상대·지형·타원체고↔MSL, frame 인자) **한 묶음**, `Geodesy`(방위·고각·거리 — R-D23의 한 함수), `app/units`(표시 단위), `app/crc`(CRC16-XMODEM, CRC-0xA001, CRC8-0xD5 — 시험 벡터는 `tests/`), `app/util`. 네임스페이스 범위의 자유 함수가 두 모듈에 같은 이름이면 검사가 잡는다.
 
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
-- `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정, 계기 모양과 그 목록), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5와 0.0.4 스펙 §3.3(`AttitudeIndicator`, 색 토큰 `attitudeSky`·`attitudeGround`)·§3.4(`EmptyState`)·§12(`PrimaryFlightDisplay`·`HeadUpDisplay`, 계기·OSD·HUD·3D 색 토큰); 기체 3D `VehicleAttitude3D`는 Quick3D를 쓰므로 기능 `vehicleInfo` 안; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 **기여**의 메뉴 자리를 `Composition`이 등록; 모듈이 있어도 그 기여가 아직 없으면 자리 표시), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽 — 둘 다 `registerPlaceholder`로 아직 없는 기능의 자리를 `Composition`이 잡아 둠(상단은 영역·묶음 번호·아이콘·아이콘만 여부·모양 `shape`(단추·드롭다운·표시; 0.0.4 §14), 하단은 쪽; 이름은 번역 문맥 "Bar"; 순서는 0.0.3 스펙 §12.5), `RightTabSlot`(`registerTab(id, order, titleKey, component, placement)`; `placement` = `Top`(탭 줄 위 계기 칸, 하나만 — 둘째는 `UiError::TopTaken`) | `Tab`; 이름 번역 문맥 "RightTab"; 0.0.4 §3.2), `MapLayerSlot`, 하단바 맨 오른쪽 단추 `BottomActionSlot`; 공통 바탕 `SlotModel` — `add(entry)`·order 정렬·같은 id 거부), `Navigator`(`open(panelId, arg)`).
+- `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정, 계기 모양과 그 목록), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5와 0.0.4 스펙 §3.3(`AttitudeIndicator`, 색 토큰 `attitudeSky`·`attitudeGround`)·§3.4(`EmptyState`)·§12(`PrimaryFlightDisplay`·`HeadUpDisplay`, 계기·OSD·HUD·3D 색 토큰); 기체 3D `VehicleAttitude3D`는 Quick3D를 쓰므로 기능 `vehicleInfo` 안; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 **기여**의 메뉴 자리를 `Composition`이 등록; 모듈이 있어도 그 기여가 아직 없으면 자리 표시), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽 — 둘 다 `registerPlaceholder`로 아직 없는 기능의 자리를 `Composition`이 잡아 둠(상단은 영역·묶음 번호·아이콘·아이콘만 여부·모양 `shape`(단추·드롭다운·표시; 0.0.4 §14), 하단은 쪽; 이름은 번역 문맥 "Bar"; 순서는 0.0.4 스펙 §15), `RightTabSlot`(`registerTab(id, order, titleKey, component, placement)`; `placement` = `Top`(탭 줄 위 계기 칸, 하나만 — 둘째는 `UiError::TopTaken`) | `Tab`; 이름 번역 문맥 "RightTab"; 0.0.4 §3.2), `MapLayerSlot`, 하단바 맨 오른쪽 단추 `BottomActionSlot`; 공통 바탕 `SlotModel` — `add(entry)`·order 정렬·같은 id 거부), `Navigator`(`open(panelId, arg)`).
 - **별도 창**: 기능 컨트롤러가 소유한 `SeparateWindow`가 창을 만든다(처음 열 때 같은 엔진의 루트 문맥에서, 창의 부모는 `SeparateWindow`, transientParent 없음, 닫으면 숨김). 자리는 `WindowPlacement`(화면 기준 좌표, 끌어오기 식)로 복원·저장하고, 창 일은 공용 도우미 `SeparateWindow`가 한다. `Composition`이 셸 창 닫기를 앱 종료에 잇는다.
 - 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`(전역 부분이 없는 기체별 모듈은 `registerUi(uiRegistry)`)에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만들어 QML 컨텍스트 프로퍼티(`<id>Controller`)로 둔다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
@@ -283,6 +283,7 @@ k-groundcontrol/
 |---|---|---|
 | 상단바 조작 띠(모드·ARM·이륙·착륙·RTL·일시정지·비상 정지) | `fly` | `TopbarSlot(가운데)` |
 | 상단바 미션 선택·시작·WP | `mission` | `TopbarSlot(가운데)` |
+| 상단바 연결 옵션(포트·속도·연결) | `link` | `TopbarSlot(오른쪽)` |
 | 상단바 벨 | `notify` | `TopbarSlot(오른쪽)` |
 | 상단바 AI 아이콘·패널 | `ai` | `TopbarSlot(오른쪽)` |
 | 하단 기체 칩·연결 팝업 | `link` | `StatusChipSlot(왼쪽)` |
@@ -446,4 +447,5 @@ k-groundcontrol/
 | 2026-10-27 | 사용자 | §14 CI 구조 검사는 push 범위의 모든 커밋이 아니라 최신 커밋 하나만 |
 | 2026-10-28 | 사용자 | §15 산출물 한 번만 압축(upload-artifact v7 `archive: false`, Windows zip·Linux AppImage) — 0.0.4 검수에서 zip 안 zip |
 | 2026-10-30 | 사용자 | §9.7 `TopbarSlot.registerPlaceholder`에 `shape`(0.0.4 §14) |
+| 2026-10-30 | 사용자 | §3.1·§9.8 상단바 연결 옵션은 `link`, 상단바 차례는 0.0.4 §15 |
 | 2026-10-30 | 사용자 | §15 Actions 산출물 보관 2일(`retention-days: 2`) — 저장 한도 초과로 업로드 실패 |

@@ -36,3 +36,4 @@ gauge outline/gauge
 device-desktop-analytics outline/device-desktop-analytics
 focus-2 outline/focus-2
 cube-3d-sphere outline/cube-3d-sphere
+plug-connected outline/plug-connected

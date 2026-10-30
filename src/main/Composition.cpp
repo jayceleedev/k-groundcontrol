@@ -86,7 +86,7 @@ void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
     top("mission.progress", 11, "centre", 5, QT_TRANSLATE_NOOP("Bar", "WP"), "", false, "display");
     top("link.port", 12, "right", 6, QT_TRANSLATE_NOOP("Bar", "포트: —"), "", false, "dropdown");
     top("link.baud", 13, "right", 6, QT_TRANSLATE_NOOP("Bar", "속도: —"), "", false, "dropdown");
-    top("link.connect", 14, "right", 6, QT_TRANSLATE_NOOP("Bar", "연결"), "");
+    top("link.connect", 14, "right", 6, QT_TRANSLATE_NOOP("Bar", "연결"), "plug-connected");
     top("notify.bell", 15, "right", 7, QT_TRANSLATE_NOOP("Bar", "알림"), "bell", true);
     top("ai.panel", 16, "right", 7, QT_TRANSLATE_NOOP("Bar", "AI"), "sparkles", true);
     const auto chip = [chips](const char* id, int order, const char* side, const char* labelKey) {

@@ -1,3 +1,4 @@
+// [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
 // [0.0.4 T1 T3 T4] specs/features/0.0.4-righttabs.md
 // [0.0.4 T33 T34] specs/features/0.0.4-righttabs.md
 // [0.0.4 T38] specs/features/0.0.4-righttabs.md
@@ -13,6 +14,8 @@
 #include <kgc/appSettings/Ui.h>
 #include <kgc/uiGallery/UiGalleryService.h>
 #include <kgc/uiGallery/Ui.h>
+#include <kgc/reference/ReferenceService.h>
+#include <kgc/reference/Ui.h>
 #include <kgc/app/i18n/Translator.h>
 #include <kgc/analyze/AppLogService.h>
 #include <kgc/analyze/Ui.h>
@@ -32,6 +35,7 @@ Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ShellPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_AppSettingsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiGalleryPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_ReferencePlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_AnalyzePlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_SecondPanelPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_VehicleInfoPlugin)
@@ -133,6 +137,8 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* appSettingsService = new appSettings::AppSettingsService(std::move(info), translator, this);
     shell::registerUi(registry, *shellService);
     appSettings::registerUi(registry, *appSettingsService);
+    auto* referenceService = new reference::ReferenceService(this);
+    reference::registerUi(registry, *referenceService);
     auto* galleryService = new uiGallery::UiGalleryService(this);
     uiGallery::registerUi(registry, *galleryService);
     auto* appLogService = new analyze::AppLogService(feed, this);

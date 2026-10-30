@@ -1,3 +1,4 @@
+# [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
 # [0.0.4 T1] specs/features/0.0.4-righttabs.md
 # [0.0.3 T1 T14] specs/features/0.0.3-windows.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
@@ -19,7 +20,7 @@ include(cmake/icons/Icons.cmake)
 foreach(module app/errors app/log app/paths app/boot app/settings app/i18n ui)
     add_subdirectory(src/platform/${module})
 endforeach()
-foreach(module shell appSettings uiGallery analyze secondPanel vehicleInfo logs preflight)
+foreach(module shell reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight)
     add_subdirectory(src/features/${module})
 endforeach()
 add_subdirectory(src/main)

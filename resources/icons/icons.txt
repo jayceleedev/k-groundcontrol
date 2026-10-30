@@ -12,8 +12,10 @@ menu/esc outline/bolt
 menu/elrs outline/antenna
 menu/tracker outline/radar-2
 menu/params outline/list-details
+menu/reference outline/book-2
 menu/appSettings outline/settings
 menu/uiGallery outline/components
+external-link outline/external-link
 x outline/x
 layout-sidebar-left-collapse outline/layout-sidebar-left-collapse
 layout-sidebar-left-expand outline/layout-sidebar-left-expand

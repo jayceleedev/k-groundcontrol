@@ -1042,6 +1042,10 @@
 <context>
     <name>Menu</name>
     <message>
+        <source>참고</source>
+        <translation>References</translation>
+    </message>
+    <message>
         <location filename="../src/features/appSettings/ui/register.cpp" line="12"/>
         <source>앱 설정</source>
         <translation>App Settings</translation>
@@ -1439,6 +1443,44 @@
         <location filename="../src/features/vehicleInfo/ui/VehicleAttitude3D.qml" line="153"/>
         <source>기체 없음</source>
         <translation>No vehicle</translation>
+    </message>
+</context>
+<context>
+    <name>ReferencePanel</name>
+    <message>
+        <source>설정할 때 참고할 공식 문서예요. 바로가기를 누르면 브라우저에서 열려요.</source>
+        <translation>Official documents for setup. Open shows them in your browser.</translation>
+    </message>
+    <message>
+        <source>멀티콥터, 비행기, 로버 등을 위한 오픈소스 자동조종 펌웨어의 공식 문서예요. 기체 설정과 파라미터를 찾아볼 수 있어요.</source>
+        <translation>Official documentation for the open-source autopilot for copters, planes, rovers and more. Covers vehicle setup and parameters.</translation>
+    </message>
+    <message>
+        <source>PX4 자동조종 펌웨어의 공식 사용자 안내서예요. 기체 조립, 설정, 비행 방법을 다뤄요.</source>
+        <translation>Official user guide for the PX4 autopilot. Covers assembly, configuration and flying.</translation>
+    </message>
+    <message>
+        <source>브러시리스 모터 ESC용 오픈소스 펌웨어예요. 펌웨어 내려받기와 웹 설정 도구가 있어요.</source>
+        <translation>Open-source firmware for brushless motor ESCs. Offers firmware downloads and a web configurator.</translation>
+    </message>
+    <message>
+        <source>BLHeli_S 계열 ESC용 오픈소스 디지털 펌웨어예요. 소스, 릴리스, 설정 정보를 GitHub에서 볼 수 있어요.</source>
+        <translation>Open-source digital firmware for BLHeli_S ESCs. Source, releases and settings are on GitHub.</translation>
+    </message>
+    <message>
+        <source>오픈소스 무선 조종 링크예요. 송수신기 설정 안내와 지원 장비를 찾아볼 수 있어요.</source>
+        <translation>Open-source radio control link. Covers transmitter and receiver setup and supported hardware.</translation>
+    </message>
+    <message>
+        <source>지상국과 기체가 주고받는 메시지 규격의 개발자 안내서예요. 메시지와 명령의 뜻을 찾아볼 수 있어요.</source>
+        <translation>Developer guide for the messaging protocol between ground stations and vehicles. Covers messages and commands.</translation>
+    </message>
+</context>
+<context>
+    <name>ReferenceCard</name>
+    <message>
+        <source>바로가기</source>
+        <translation>Open</translation>
     </message>
 </context>
 </TS>

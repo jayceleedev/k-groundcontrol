@@ -189,6 +189,7 @@ QGC에는 없는 기능. Mission Planner의 GCS 주도형 트래커(GPL-3)가 �
 - MAVLink ESC_EEPROM(292) 메시지(초안, 쓰지 않음)
 - Mission Planner·ELRS·AM32 설정기·esc-configurator(AGPL-3)의 **코드 복사**(동작은 참고). AM32 공식 설정기 둘은 라이선스가 없어 코드를 옮기면 안 됨
 - Python 런타임 동봉
+- Betaflight 기반 FC와 DFU 굽기(PX4·ArduPilot 부트로더가 있는 FC만 대상, 2026-11-01)
 - 로컬 LLM
 - INAV 등 Betaflight 외 FC를 거치는 ELRS 패스스루
 - 안테나 트래커: Mission Planner의 서보 제어기 프로토콜 호환(지원 목록은 소스 미확인), 연속 회전·스테퍼 구동부, AVR 아두이노(Uno·Nano·Mega), 트래커 자체 탐색 스윕
@@ -204,6 +205,8 @@ QGC에는 없는 기능. Mission Planner의 GCS 주도형 트래커(GPL-3)가 �
 | 0.0.3 | 별도 창: 세컨드 패널(빈 칸 배치 7가지)과 앱 로그 창, 하단바 오른쪽 단추, 창 자리 기억(R-N26) | Windows에서 두 창 열기·둘째 모니터에서 다시 열기 | 0.0.2 |
 | 0.0.4 | 우 사이드바: 계기와 탭 다섯(개요·상세·메시지·로그·점검)을 "기체 없음" 상태로 | Windows zip에서 다섯 탭·계기·배율 확인 | 0.0.3 |
 | 0.1.x | 1층 통신 + 2층 기체 모델: UDP·시리얼로 기체에 붙어 하트비트·자세·위치가 화면에 보인다 | SITL 두 종 모두에서(실제 FC는 있으면 추가 확인) | 0.0.1 |
+| 0.2.0 | 펌웨어 업그레이드: PX4·ArduPilot 공식 목록과 파일로 FC 굽기, 재연결로 확인(R-Q10 일부) | 가짜 장치 시험과 실제 FC, Windows zip | 0.1.x |
+| 0.3.0 | 수동 기체 설정: 파라미터 내려받기·검색·묶음·편집·파일(R-Q9, R-D1·D2) | SITL과 실제 FC | 0.2.0 |
 | 이후 | 기능 묶음 하나씩. 순서는 그때 정한다 | — | — |
 
 ## 9. 검증 환경
@@ -225,7 +228,6 @@ QGC에는 없는 기능. Mission Planner의 GCS 주도형 트래커(GPL-3)가 �
 | FC 뒤의 ELRS RX를 패스스루로 만지는 것; TX USB CRSF 설정이 실기에서 끝까지 되는지 | R-D19⑤, R-D21 |
 | PX4 param.pck(FTP 파라미터)가 들어간 릴리스 | R-Q9 |
 | AP PARAM_SET 타입 처리(mavlink.io와 ardupilot.org 불일치) | R-Q9 |
-| PX4 펌웨어 S3 주소와 옛 저장소명 `PX4/Firmware` 유효성 | R-Q10 |
 | Windows USB 드라이버(부트로더 모드, SiK) | R-Q10 |
 | PX4의 MAV_CMD_CONTROL_HIGH_LATENCY 처리 | R-Q3 |
 | AP MAVFTP 로그(`@MAV_LOG`) | R-Q3 |

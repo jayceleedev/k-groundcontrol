@@ -61,7 +61,7 @@ k-groundcontrol/
 ├─ src/
 │  ├─ platform/
 │  │  ├─ app/       0   boot settings secrets paths store scheduler job net log(LogSink LogFeed) errors notify i18n units geo crc util
-│  │  ├─ comm/      1   links(serial udp tcp mock) rawport(ByteStream RawPort PortRegistry) lease(PortLease) mavlink(parser channel signing) espflash(ESP 시리얼 부트로더 클라이언트) tlog joystick
+│  │  ├─ comm/      1   links(serial udp tcp mock) rawport(ByteStream RawPort PortRegistry PortLease) mavlink(parser channel signing) espflash(ESP 시리얼 부트로더 클라이언트) tlog joystick
 │  │  ├─ vehicle/   2   registry Vehicle states firmware(px4 ardupilot generic) outbound(VehicleSender) safety(ArmGuard WorkLock ArmedPolicy RebootWindow JobArmWatch) command(CommandQueue)
 │  │  └─ ui/        2.5 Theme themes(ThemeBase + 테마 파일) components(§9.7 목록) ThemeSwitcher(resolveTheme) UiSettingValues PanelRegistry SlotModel Slots(Topbar StatusChip RightTab MapLayer BottomAction) WindowPlacement Navigator
 │  ├─ features/<id>/   api/kgc/<id>/  internal/  ui/  CMakeLists.txt  MODULE.md
@@ -142,7 +142,7 @@ k-groundcontrol/
 
 | 종류 | 뜻 | 자리 | 바꾸는 사람 | 저장 |
 |---|---|---|---|---|
-| **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`, `--extra-serial <경로>`) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
+| **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`, `--extra-serial <경로>`; 반복 가능, 파일이 있을 때만 목록에 든다) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
 | **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings **IniFormat** — `QSettings(IniFormat, UserScope, "K-GroundControl", "K-GroundControl")`로 명시 생성(`QCoreApplication`의 organizationName은 **비워 둠**, applicationName만 `K-GroundControl`); Linux `~/.config/K-GroundControl/K-GroundControl.ini`, Windows `%APPDATA%\K-GroundControl\K-GroundControl.ini`; 레지스트리 안 씀 |
 | **고정값** | 바꾸면 안 되는 수 | 모듈 `internal/Constants.h`; 여러 모듈이 쓰는 값만 `platform/app/constants/`(§6) | 코드 | 코드 |
 
@@ -199,6 +199,7 @@ k-groundcontrol/
 | 앱 로그(한 줄 = 시각·수준·카테고리·사건·메시지) | `platform/app/log` | `specs/formats/applog.md` |
 | 미션 `.plan`(QGC v1 호환), `.waypoints` 읽기, KML 내보내기, KML/SHP 가져오기, 명령 카탈로그 JSON | `features/mission`, `resources/data/mission/` | `specs/formats/plan.md`, `mission-commands.md` |
 | 기체 구성도 `.kgclayout.json` + `.params` 묶음, 실루엣 | `features/layout`, `resources/silhouettes/` | `specs/formats/layout.md` |
+| PX4 보드 ID 표 `px4-boards.json`(출처 PX4 `firmware.prototype`, BSD-3) | `features/fcFlash`, `resources/data/fcflash/` | 0.2.0 스펙 |
 | 파라미터 파일(QGC 형식 + MP 2열 읽기), 묶음 이름·작업 단위 묶음 정의(펌웨어·버전별), PX4 해시 캐시 | `features/params`, `resources/data/params/` | `specs/formats/params.md`, `taskset.md` |
 | 비행 전 점검표 정의 | `features/preflight`, `resources/data/preflight/` | `specs/formats/preflight.md` |
 | 텔레메트리 로그 `.tlog`(8바이트 BE µs + 패킷), CSV 텔레메트리 | `platform/comm/tlog` | `specs/formats/tlog.md` |
@@ -227,9 +228,9 @@ k-groundcontrol/
 - `src/main/Composition`이 모든 `api/`를 include해 조립한다(로직 없음). `main.cpp`: BootOptions → Paths → LogSink(여기서부터 로그) → Settings → Translator → Composition → Shell 창.
 - `comm/links/LinkManager`(링크), `vehicle/registry/VehicleRegistry`(기체, sysid 키; compid 1이 자동조종기, 다른 compid는 그 기체의 `Component`). **활성 기체** `VehicleRegistry::active` 하나 — 상단바 기체 표시, 트래커 기본 대상, 구성도 편집 대상이 본다.
 - 수명은 §3.1 규칙. 기체 삭제: `vehicleRemoved` → `deleteLater`. 참조는 `QPointer`/활성 기체 프로퍼티.
-- **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다. 0.1.0은 포트 소유자가 시리얼 링크 하나뿐이라 등록부 없이 시리얼 링크를 먼저 만들고, 임대가 생기는 버전에 등록부를 더한다.
+- **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다. 0.1.0은 포트 소유자가 시리얼 링크 하나뿐이라 등록부 없이 시리얼 링크를 먼저 만들고, 임대가 생기는 버전에 등록부를 더한다. 0.2.0의 임대는 빈 포트만 받고, `suspend`와 소유자 `RawPort`는 쓰는 버전에서 더한다. `PortLease`는 `comm/rawport` 안에 둔다.
 - **임대의 동작**(R-Q1a (가)): `PortLease::acquire(port, quietFor)`는 그 포트를 쓰던 MAVLink 링크에 `LinkManager::suspend(link)`를 걸어 **GCS 하트비트·자동 재접속·끊김 경고를 멈추고**, `quietFor`만큼 조용히 기다린 뒤(값은 호출한 기능이 넘긴다 — AP BLHeli 경로의 4초는 `esc/internal/paths/blhPassthrough`가 안다; 바탕은 그 뜻을 모른다) **`RawPort` 손잡이**를 넘긴다. `Link.suspended`=true가 되고 기체는 "작업 중"으로 표시된다. 임대 중 그 기체로 가는 Sender 송신은 `ErrorCode LinkSuspended`(`vehicle/outbound`의 `Errors.h`)로 즉시 실패한다. **큐에 남아 있던 명령도 `LinkSuspended`로 끝내고 재시도하지 않는다**(R-Q1a (가)의 "명령 큐를 멈춘다"는 뜻이 이것이다; 임대가 풀린 뒤 필요한 명령은 작업이 다시 보낸다). **기체의 링크 중 하나라도 임대 중이면 그 기체 전체를 `suspended`로 본다**(보수적; 살아 있는 다른 링크로도 보내지 않고, 끊김 판정도 멈춘다). `release()`가 포트를 돌려받고 `resume(link)`으로 되돌린다.
-- **포트 손잡이**: `comm/rawport/ByteStream`(인터페이스 — 바이트 읽기·쓰기 시그널, 그리고 **선택적** 제어 `canControlLine()`·`setBaud()`·`setDtrRts()`)과 그것을 실제 시리얼 포트로 구현한 `RawPort`. 이것이 **유일한 비-MAVLink 시리얼 통로**다. `espflash`·`esc/internal/paths/direct`·`elrs/internal/paths/uart`는 `ByteStream`만 받는다(`QSerialPort`를 직접 만들지 않는다). BF·EdgeTX 패스스루처럼 다른 통로 위에 ESP 부트로더를 태울 때는 `ByteStream`을 구현한 래퍼를 넘기고, 래퍼는 `canControlLine()==false`를 돌려 `EspFlasher`가 DTR/RTS 리셋 대신 패스스루 쪽 리셋 절차를 쓰게 한다.
+- **포트 손잡이**: `comm/rawport/ByteStream`(인터페이스 — 작업 스레드에서 막아서 쓰는 바이트 읽기·쓰기, 그리고 **선택적** 제어 `canControlLine()`·`setBaud()`·`setDtrRts()`)과 그것을 실제 시리얼 포트로 구현한 `RawPort`. 이것이 **유일한 비-MAVLink 시리얼 통로**다. `espflash`·`esc/internal/paths/direct`·`elrs/internal/paths/uart`는 `ByteStream`만 받는다(`QSerialPort`를 직접 만들지 않는다). BF·EdgeTX 패스스루처럼 다른 통로 위에 ESP 부트로더를 태울 때는 `ByteStream`을 구현한 래퍼를 넘기고, 래퍼는 `canControlLine()==false`를 돌려 `EspFlasher`가 DTR/RTS 리셋 대신 패스스루 쪽 리셋 절차를 쓰게 한다.
 - **의도한 재부팅 구간** `vehicle/safety/RebootWindow`: 기능이 `begin(vehicle, timeout)`으로 열면 그동안 끊김 판정이 "끊김"이 아니라 "재부팅 중"(`Link.rebooting`)이 된다(R-Q1a (나)).
 
 ### 9.2 기체로 나가는 문 하나와 시동 중 규칙
@@ -247,14 +248,14 @@ k-groundcontrol/
   - **작업 도중 시동이 걸리면**: `vehicle/safety/JobArmWatch`(Job에 붙은 도우미)가 `Arming.armed` 변화를 보고 Deny 종류는 Job을 **중단**(안전한 단계까지 끝낸 뒤), AllowWithWarning 종류는 경고만.
 - `vehicle/command/CommandQueue`는 Sender 위의 **재시도 계층**(COMMAND_LONG/INT·ACK·타임아웃·재시도). 보정 시작처럼 ACK가 늦는 명령은 `{retries=0, timeout=설정값}` 모드로 큐를 탄다 — 예외 목록 없음. AP 가속도 보정의 "다음"(COMMAND_ACK 송신)도 Sender를 지난다.
 - 보내기 스레드: Sender가 `QMetaObject::invokeMethod(link, …, Qt::QueuedConnection)`으로 링크 워커에 넘긴다.
-- 0.1.0의 Sender는 `Other`만 보내므로 `WorkLock`·`RebootWindow` 검사와 `LinkSuspended`가 없다. `vehicle/safety`가 생기는 버전에 더한다. §9.1의 `Component`도 그때까지 만들지 않는다.
+- 0.1.0의 Sender는 `Other`만 보내므로 `WorkLock`·`RebootWindow` 검사와 `LinkSuspended`가 없다. `vehicle/safety`가 생기는 버전에 더한다. §9.1의 `Component`도 그때까지 만들지 않는다. `vehicle/safety`는 0.2.0에 `ArmedPolicy`부터 들어오고, `WorkLock`·`RebootWindow`·`JobArmWatch`는 쓸 곳이 생기는 버전에 더한다. 0.2.0의 FC 굽기는 링크를 닫고 하므로 필요 없다.
 - 검사: 링크 쓰기 API는 `comm/`·`vehicle/outbound/` 밖 금지; `command_(long|int)_(pack|encode)`는 `vehicle/command/` 밖 금지.
 
 ### 9.3 바깥과 닿는 자리
 
 | 무엇 | 유일한 자리 | 검사 |
 |---|---|---|
-| HTTP(S) | `platform/app/net/Http`: HTTPS만, 타임아웃·재시도, 다운로드 캐시+해시 기록, `onlineChanged`(R-N13) | `QNetworkAccessManager`가 밖에 있으면 |
+| HTTP(S) | `platform/app/net/Http`: HTTPS만, 타임아웃·재시도, 다운로드 캐시+해시 기록(0.2.0에는 없고 뒤 버전), `onlineChanged`(R-N13) | `QNetworkAccessManager`가 밖에 있으면 |
 | 환경 변수 | `platform/app/boot/BootOptions` | `qEnvironmentVariable`·`getenv` 위치 |
 | 시리얼 포트 | `platform/comm/links/serial`, `platform/comm/rawport`(그 밖은 `RawPort`/`ByteStream` 인터페이스만; `comm/lease`·`comm/espflash` 포함) | `QSerialPort` 생성 위치 |
 | 조이스틱(SDL3) | `platform/comm/joystick` | SDL include 위치 |
@@ -262,7 +263,7 @@ k-groundcontrol/
 | TTS | `platform/app/notify/Speech` | — |
 
 ### 9.4 오래 걸리는 작업과 오류
-- `platform/app/job/Job`(QObject): `OperationKind`, 상태(대기·진행·성공·실패·취소), 단계 이름, 진행률, 남은 시간, `cancel()`, 끝날 때 `finished(Result<void>)` 한 번, `errorCode`·`errorText` 프로퍼티. **Job은 상위 층을 모른다**: 임대·잠금·ArmGuard 토큰은 상위 층이 `job.hold(Releaser)`로 넘긴 **형을 지운 해제 핸들**(이동만 되는 호출 가능 객체)로 쥐고, 끝날 때 역순으로 부른다(RAII). 시동 감시는 2층 `vehicle/safety/JobArmWatch`가 `attach(job, scope)`로 붙여서 `Arming.armed` 변화에 Job을 중단·경고한다(§9.2). `OperationKind` 열거는 0층 `<kgc/app/job/OperationKind.h>`에 두는데 기능 이름(`EscFlash`, `LayoutWrite`…)이 들어 있다 — **"바탕은 기능을 모른다"의 명시적 예외 하나**(이름표 열거일 뿐 코드 의존이 아니다). 화면은 `platform/ui/components/JobView.qml`로 보여 준다. FC·ESC·ELRS·트래커 굽기, 미션 전송, 파라미터 내려받기, 보정, 로그 내려받기가 전부 Job이다.
+- `platform/app/job/Job`(QObject): `OperationKind`, 상태(대기·진행·성공·실패·취소), 단계 이름, 진행률, 남은 시간, `cancel()`, 끝날 때 `finished(Result<void>)` 한 번, `errorCode`·`errorText` 프로퍼티. **Job은 상위 층을 모른다**: 임대·잠금·ArmGuard 토큰은 상위 층이 `job.hold(Releaser)`로 넘긴 **형을 지운 해제 핸들**(이동만 되는 호출 가능 객체)로 쥐고, 끝날 때 역순으로 부른다(RAII). 시동 감시는 2층 `vehicle/safety/JobArmWatch`가 `attach(job, scope)`로 붙여서 `Arming.armed` 변화에 Job을 중단·경고한다(§9.2). `OperationKind` 열거는 0층 `<kgc/app/job/OperationKind.h>`에 두는데 기능 이름(`EscFlash`, `LayoutWrite`…)이 들어 있다 — **"바탕은 기능을 모른다"의 명시적 예외 하나**(이름표 열거일 뿐 코드 의존이 아니다). 화면은 `platform/ui/components/JobView.qml`로 보여 준다. FC·ESC·ELRS·트래커 굽기, 미션 전송, 파라미터 내려받기, 보정, 로그 내려받기가 전부 Job이다. **예외 하나**: FC 굽기의 포트 임대는 재시도와 재연결 때문에 Job보다 오래 살아서 `hold`가 아니라 `FcFlashService`가 쥔다.
 - `Result<T> = std::expected<T, ErrorCode>`. 함수는 예외 대신 Result. 예외·`Q_ASSERT`·`qFatal`은 프로그램 버그에만. 워커 스레드의 오류는 `ErrorCode`를 큐드 시그널로 소유 객체에 올리고, 알림은 소유 객체만 낸다.
 
 ### 9.5 주기 작업·타임아웃·스레드
@@ -352,7 +353,9 @@ k-groundcontrol/
 | 작업 잠금 / 시동 지킴이 / 시동 중 규칙 / 재부팅 구간 / 작업 시동 감시 | `WorkLock` / `ArmGuard` / `ArmedPolicy` / `RebootWindow` / `JobArmWatch` | |
 | 포트 손잡이 / 바이트 스트림 / 해제 핸들 | `RawPort` / `ByteStream` / `Releaser` | §9.1, §9.4 |
 | 상태 구조체 | `LinkBundle`·`ArmingBundle`·`AttitudeBundle`·`PositionBundle`·`GpsBundle`·`BatteryBundle`·`CapabilitiesBundle` | §5, 0.1.0 |
-| 연결 낱말 | `MavlinkParser` / `dropV1NonHeartbeat` / `LinkConfig` / `LinkError` / `UdpLink` / `SerialLink` / `LinkService` / `LinkController` / `UdpPeers` / `serialErrorClosesLink` / `noVehicleTooLong` | 0.1.0, 0.1.1 |
+| 연결 낱말 | `MavlinkParser` / `dropV1NonHeartbeat` / `LinkConfig` / `LinkError` / `UdpLink` / `SerialLink` / `LinkService` / `LinkController` / `UdpPeers` / `serialErrorClosesLink` / `noVehicleTooLong` / `PortInfo` | 0.1.0, 0.1.1, 0.2.0 |
+| 굽기 낱말 | `Bootloader` / `FirmwareImage` / `FlashWorker` / `crc32Bootloader` / `scanManifest` / `pickCandidate` | 0.2.0 |
+| 명령·HTTP 낱말 | `CommandLong` / `CommandOptions` / `CommandResult` / `HttpRequest` / `HttpOptions` / `gunzip` | 0.2.0 |
 | 기체 낱말 | `StreamRequest` / `VehicleSelection` / `isLinkLost` / `VehicleInfoValues` | 0.1.0 |
 | 작업 | `Job` | §9.4 |
 | 서비스 / 컨트롤러 / 패널 / 메뉴 | `Service` / `Controller` / `Panel` / `Menu` | |
@@ -459,3 +462,4 @@ k-groundcontrol/
 | 2026-10-30 | 사용자 | §15 Actions 산출물 보관 2일(`retention-days: 2`) — 저장 한도 초과로 업로드 실패 |
 | 2026-10-31 | 사용자 | 0.1.0 스펙 초안 2와 함께 승인(§10): §2·§9.7 `registerUi(uiRegistry, VehicleRegistry&)`, 새 컨트롤러는 QML 싱글턴; §4 `--extra-serial`; §5 `<이름>Bundle`과 0.1.0 부분집합; §6 GCS id; §9.1·§9.2 등록부·안전 검사는 뒤 버전; §9.5 `registerTask`의 `fn`, GCS 하트비트는 Sender; §13 낱말; §14 고정값·이름 중복 범위와 qmllint |
 | 2026-10-31 | 사용자 | 0.1.1 스펙 초안 2와 함께 승인(§8): §5 `Link` 마지막 수신 시각, §9.2·§9.5 링크 유지 하트비트는 `LinkHeartbeat`, §9.5 스트림 요청 반복·기체 없음 검사, §13 낱말 |
+| 2026-11-01 | 사용자 | 0.2.0 스펙 초안 2와 함께 승인(§10): §3 `vehicle/command`·`vehicle/safety` 자리, `PortLease`는 `comm/rawport`, §4 `--extra-serial` 반복, §7 `px4-boards.json`, §9.1 `ByteStream`은 막아서 쓰는 인터페이스, §9.2 `ArmedPolicy`부터, §9.3 캐시는 뒤 버전, §9.4 굽기 임대 예외, §13 낱말 |

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko">
+<!-- [0.2.0] specs/features/0.2.0-fcflash.md 펌웨어 세팅 네 단계 -->
+<meta charset="utf-8"><title>펌웨어 세팅 시안</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--line:#d8dce3;--ink:#1f2530;--sub:#667085;--accent:#2f6fde;--ok:#1f8a4c;--warn:#b7791f;--danger:#c0392b}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,sans-serif}
+.panel{max-width:760px;margin:0 auto 24px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px}
+.steps{display:flex;gap:6px;margin-bottom:14px;font-size:12px}.steps span{padding:3px 10px;border-radius:6px;background:var(--bg);color:var(--sub)}.steps .on{background:#e4edfc;color:var(--accent)}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0}.sub{color:var(--sub)}.sp{justify-content:space-between}
+.field,.btn{border:1px solid var(--line);border-radius:6px;padding:5px 10px}.btn.main{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.hold{color:var(--danger)}
+.pill{padding:3px 10px;border-radius:6px;background:var(--bg);color:var(--sub)}.pill.on{background:#e4edfc;color:var(--accent)}
+table{width:100%;border-collapse:collapse}td{padding:5px 6px;border-top:1px solid var(--line)}.bar{height:6px;background:var(--bg);border-radius:3px}.bar i{display:block;height:6px;width:55%;background:var(--accent);border-radius:3px}
+.warn{color:var(--warn)}.ok{color:var(--ok)}.danger{color:var(--danger)}
+</style>
+<body>
+<section class="panel" id="stepBoard"><div class="steps"><span class="on">1 보드 확인</span><span>2 펌웨어 선택</span><span>3 확인</span><span>4 굽기</span></div>
+<div class="row"><span class="sub">포트</span><span class="field">COM7 (KoaFC) ▾</span><span class="btn main">보드 확인</span></div>
+<div class="row sub">Idle: 앱이 FC를 부트로더로 넣고 보드 정보를 읽어요.</div>
+<div class="row sub">Probing: 포트를 확인하고 있어요 / Rebooting: FC를 부트로더로 넣고 있어요</div>
+<div class="row warn">WaitReplug: USB를 뽑았다가 다시 꽂아요 · 28초</div>
+<div class="row"><span class="sub">PickPort: 부트로더 포트가 둘 이상이에요. 하나를 골라요.</span><span class="field">COM9 ▾</span><span class="btn main">이 포트로 계속</span></div>
+<div class="row danger">Failed: 부트로더를 찾지 못했어요. USB를 다시 꽂고 다시 해요. <span class="btn">다시 하기</span></div></section>
+<section class="panel" id="stepFirmware"><div class="steps"><span>1 보드 확인</span><span class="on">2 펌웨어 선택</span><span>3 확인</span><span>4 굽기</span></div>
+<div class="row sub">Koadrone KoaFC · 보드 ID 1013 · 플래시 2048 KB · 부트로더 5</div>
+<div class="row"><span class="pill on">PX4</span><span class="pill">ArduPilot</span><span class="pill">파일 선택</span></div>
+<div class="row"><span class="sub">버전</span><span class="field">v1.17.0 (안정판) ▾</span></div>
+<table><tr><td class="sub">맞는 펌웨어 5개. 직접 골라요.</td></tr><tr><td>hkust_nxt-dual · default</td></tr><tr><td>hkust_nxt-v1 · default</td></tr><tr><td>matek_h743 · default</td></tr><tr><td>matek_h743-mini · default</td></tr><tr><td>matek_h743-slim · default</td></tr></table>
+<div class="row sp"><span class="btn">취소하고 FC 부팅</span><span class="btn main">다음</span></div></section>
+<section class="panel" id="stepConfirm"><div class="steps"><span>1 보드 확인</span><span>2 펌웨어 선택</span><span class="on">3 확인</span><span>4 굽기</span></div>
+<table><tr><td class="sub">FC 이름</td><td>Koadrone KoaFC</td></tr><tr><td class="sub">올릴 펌웨어</td><td>PX4 1.16.2 · KoaFC</td></tr><tr><td class="sub">출처</td><td>내 PC 파일</td></tr></table>
+<div class="row sp"><span class="btn">뒤로</span><span class="btn hold">길게 눌러 굽기</span></div></section>
+<section class="panel" id="stepFlash"><div class="steps"><span>1 보드 확인</span><span>2 펌웨어 선택</span><span>3 확인</span><span class="on">4 굽기</span></div>
+<div class="row">쓰는 중 · 약 40초 남음</div><div class="bar"><i></i></div>
+<div class="row sub">✓ 내려받기 · ✓ 지우기 · ● 쓰기 · 검증 · 재부팅 · 재연결</div>
+<div class="row ok">Done: PX4 1.16.2로 올라갔어요 <span class="btn">처음으로</span></div>
+<div class="row warn">Mismatch: 올린 펌웨어와 달라요: PX4 1.16.0 <span class="btn">처음으로</span></div>
+<div class="row warn">NoReturn: 굽기는 끝났지만 FC가 돌아오지 않았어요. 포트를 골라 직접 연결해요. <span class="btn">처음으로</span></div>
+<div class="row danger">Failed: 검증에 실패했어요. FC는 부트로더에서 기다리고 있어요. <span class="btn">다시 굽기</span> <span class="btn">처음으로</span></div></section>
+</body></html>

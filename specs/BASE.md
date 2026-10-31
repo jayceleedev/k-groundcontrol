@@ -49,7 +49,7 @@
 - Qt 6.12 LTS. 층별로 쓸 수 있는 Qt 모듈: `app` Core·Network·Sql·Positioning·TextToSpeech / `comm` + SerialPort / `vehicle` 추가 없음 / `platform/ui` + Quick·Qml·QuickControls·QuickEffects·Graphs·Svg / 기능 모듈 + Location·Multimedia·Graphs·Quick3D(필요한 기능만). GPL-3.0이라 모듈 제한 없음.
 - 빌드 CMake ≥ 3.28 + Ninja, `CMakePresets.json`(linux-debug·linux-release·windows-release). Qt는 aqtinstall 패치 버전 고정, C/C++ 의존과 자원 꾸러미(아이콘 Tabler Icons 3.49.0, npm 꾸러미 URL + SHA-256)는 CPM(태그·체크섬 고정), vcpkg 안 씀. 제3자 코드는 CPM 캐시에 두고 모든 검사에서 제외.
 - MAVLink: `mavlink/c_library_v2` CPM 커밋 고정, 방언 **ardupilotmega**(common 포함). include는 `<kgc/comm/mavlink/Mavlink.h>` **한 곳**을 통해서만(설정 매크로 뒤 include). 허용: `comm`·`vehicle`·기능 `internal/`. 금지: `app`, `platform/ui`, 모든 `ui/`. PX4 이벤트 해석은 libevents(CPM).
-- QML 모듈: 바탕 `Kgc.Ui`, 기능마다 `Kgc.<Id>`(`qt_add_qml_module`, STATIC). `src/main`이 `Q_IMPORT_QML_PLUGIN`으로 전부 링크하고 `Composition`이 기능마다 `registerUi(uiRegistry, <그 모듈의 전역 서비스>)`(전역 부분이 없는 기체별 모듈 — `vehicleInfo`·`preflight` — 은 `registerUi(uiRegistry)`; 이것도 앱 시작 때 한 번 부르고, 컨트롤러는 그 안에서 만들어 활성 기체에 다시 묶는다 — §3.1 얻는 법. 혼합 모듈은 그 전역 서비스를 넘긴다; 선언은 그 모듈 `api/kgc/<id>/Ui.h`; `kgc::ui::UiRegistry`는 PanelRegistry·슬롯 넷·Navigator·QQmlEngine을 묶은 참조 묶음)를 **직접 호출**한다(정적 초기화 객체에 기대지 않는다 — 링커가 버린다).
+- QML 모듈: 바탕 `Kgc.Ui`, 기능마다 `Kgc.<Id>`(`qt_add_qml_module`, STATIC). `src/main`이 `Q_IMPORT_QML_PLUGIN`으로 전부 링크하고 `Composition`이 기능마다 `registerUi(uiRegistry, <그 모듈의 전역 서비스>)`(전역 부분이 없는 기체별 모듈 — `vehicleInfo`·`preflight` — 은 `registerUi(uiRegistry)`, 활성 기체를 보는 모듈은 `registerUi(uiRegistry, VehicleRegistry&)`; 이것도 앱 시작 때 한 번 부르고, 컨트롤러는 그 안에서 만들어 활성 기체에 다시 묶는다 — §3.1 얻는 법. 혼합 모듈은 그 전역 서비스를 넘긴다; 선언은 그 모듈 `api/kgc/<id>/Ui.h`; `kgc::ui::UiRegistry`는 PanelRegistry·슬롯 넷·Navigator·QQmlEngine을 묶은 참조 묶음)를 **직접 호출**한다(정적 초기화 객체에 기대지 않는다 — 링커가 버린다).
 - 네임스페이스는 모듈 경로를 따른다: `kgc::app`, `kgc::comm::mavlink`, `kgc::vehicle::firmware`, `kgc::esc`, `kgc::tracker`.
 - 버전은 `CMakeLists.txt`의 `project(VERSION)` 한 곳. 정보 창·로그·산출물 이름이 읽는다. `0.0.1`부터.
 
@@ -142,7 +142,7 @@ k-groundcontrol/
 
 | 종류 | 뜻 | 자리 | 바꾸는 사람 | 저장 |
 |---|---|---|---|---|
-| **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
+| **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`, `--extra-serial <경로>`) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
 | **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings **IniFormat** — `QSettings(IniFormat, UserScope, "K-GroundControl", "K-GroundControl")`로 명시 생성(`QCoreApplication`의 organizationName은 **비워 둠**, applicationName만 `K-GroundControl`); Linux `~/.config/K-GroundControl/K-GroundControl.ini`, Windows `%APPDATA%\K-GroundControl\K-GroundControl.ini`; 레지스트리 안 씀 |
 | **고정값** | 바꾸면 안 되는 수 | 모듈 `internal/Constants.h`; 여러 모듈이 쓰는 값만 `platform/app/constants/`(§6) | 코드 | 코드 |
 
@@ -157,6 +157,7 @@ k-groundcontrol/
 - **바탕 묶음**(기체 자체의 값)은 `platform/vehicle/states/VehicleStates`(QObject, 기체마다 하나)가 갖는다. 값 묶음은 `Q_GADGET` 구조체 + `Q_PROPERTY … NOTIFY <bundle>Changed`; 큰 목록은 `QAbstractListModel`(행 단위 변경). 주인은 `VehicleStateOwner` 하나. 메시지 해석은 `internal/updaters/<Bundle>Updater`의 **순수 함수**(메시지 → 묶음 변경)라 Owner는 배선만 한다. QML은 활성 기체의 VehicleStates에 직접 바인딩해도 된다.
 - **기능 묶음**(기능이 만드는 값)은 그 기능의 기체별 서비스가 `api/`로 내놓는다. 바탕은 기능 묶음을 모른다.
 - 같은 값을 자기 캐시로 들지 않는다. 쓰려면 주인에게 요청하지 않는다 — 쓸 일은 상태가 아니라 명령(§9.2).
+- 구조체 이름은 `<이름>Bundle`(`LinkBundle`, comm의 `Link`와 겹치지 않게), 프로퍼티와 시그널은 소문자 이름(`link`·`linkChanged`). 아래 표는 전체 모습이고 버전마다 필요한 필드부터 넣는다. 0.1.0의 배터리는 SYS_STATUS 하나의 `BatteryBundle`이고 `Battery[]` 목록은 BATTERY_STATUS를 쓰는 버전에서, `Capabilities`는 HEARTBEAT 단계 필드만이다.
 
 | 묶음 | 담는 것 | 출처 | 주인 | 모양 |
 |---|---|---|---|---|
@@ -183,7 +184,7 @@ k-groundcontrol/
 
 ## 6. 고정값·열거·오류 코드·로그 사건
 
-- **고정값**: 모듈 `internal/Constants.h`. 여러 모듈이 쓰는 값만 `platform/app/constants/`: `mavlink.h`(ACK 1200ms·3회, GCS 하트비트 1Hz, 끊김 3500ms), `safety.h`(비상 정지 21196, 강제 시동 2989, 모터 시험 3초), `mission.h`(1500ms·250ms·5회). CRC 다항식은 `app/crc`, 트래커 프로토콜 상수는 공용 헤더(§11)에만.
+- **고정값**: 모듈 `internal/Constants.h`. 여러 모듈이 쓰는 값만 `platform/app/constants/`: `mavlink.h`(ACK 1200ms·3회, GCS 하트비트 1Hz, 끊김 3500ms, GCS sysid 255·compid 190; ACK 값은 `CommandQueue` 버전부터), `safety.h`(비상 정지 21196, 강제 시동 2989, 모터 시험 3초), `mission.h`(1500ms·250ms·5회). CRC 다항식은 `app/crc`, 트래커 프로토콜 상수는 공용 헤더(§11)에만.
 - 검사 범위: `chrono` 리터럴, 타이머·Timeout 인자, 4자리 이상 16진수, 3자리 이상 10진수(허용 360·180·90·1000·60). 오프셋·시프트·인덱스(<256)는 대상 아님. QML은 `width`·`height`·`implicitWidth`·`implicitHeight`·`padding`·`*Padding`·`margins`·`*Margin`·`spacing`·`radius`의 0 아닌 숫자 리터럴(값 전체가 리터럴일 때)과 색 리터럴(`"transparent"` 제외)을 `platform/ui/Theme.qml`과 `platform/ui/themes/`에만 둔다(anchors·z·opacity 등은 대상 아님; 검사 `qml_literal`).
 - **열거**: 모듈 `api/`의 `enum class`. 펌웨어가 정하는 열거(모드·회전·서보 기능)는 플러그인이 메타데이터에서 읽어 제공.
 - **모듈 id**: 모듈마다 `api/kgc/<id>/ModuleId.h`에 `inline constexpr kgc::app::errors::ModuleId kModuleId{18};`(16비트, 모듈별 고유, 10진). 바탕 `app/errors/ModuleId`는 형만 정의하고 값을 모른다. 중복은 검사가 모아 본다. `ModuleId.h`는 고정값 검사에서 제외한다.
@@ -226,7 +227,7 @@ k-groundcontrol/
 - `src/main/Composition`이 모든 `api/`를 include해 조립한다(로직 없음). `main.cpp`: BootOptions → Paths → LogSink(여기서부터 로그) → Settings → Translator → Composition → Shell 창.
 - `comm/links/LinkManager`(링크), `vehicle/registry/VehicleRegistry`(기체, sysid 키; compid 1이 자동조종기, 다른 compid는 그 기체의 `Component`). **활성 기체** `VehicleRegistry::active` 하나 — 상단바 기체 표시, 트래커 기본 대상, 구성도 편집 대상이 본다.
 - 수명은 §3.1 규칙. 기체 삭제: `vehicleRemoved` → `deleteLater`. 참조는 `QPointer`/활성 기체 프로퍼티.
-- **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다.
+- **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다. 0.1.0은 포트 소유자가 시리얼 링크 하나뿐이라 등록부 없이 시리얼 링크를 먼저 만들고, 임대가 생기는 버전에 등록부를 더한다.
 - **임대의 동작**(R-Q1a (가)): `PortLease::acquire(port, quietFor)`는 그 포트를 쓰던 MAVLink 링크에 `LinkManager::suspend(link)`를 걸어 **GCS 하트비트·자동 재접속·끊김 경고를 멈추고**, `quietFor`만큼 조용히 기다린 뒤(값은 호출한 기능이 넘긴다 — AP BLHeli 경로의 4초는 `esc/internal/paths/blhPassthrough`가 안다; 바탕은 그 뜻을 모른다) **`RawPort` 손잡이**를 넘긴다. `Link.suspended`=true가 되고 기체는 "작업 중"으로 표시된다. 임대 중 그 기체로 가는 Sender 송신은 `ErrorCode LinkSuspended`(`vehicle/outbound`의 `Errors.h`)로 즉시 실패한다. **큐에 남아 있던 명령도 `LinkSuspended`로 끝내고 재시도하지 않는다**(R-Q1a (가)의 "명령 큐를 멈춘다"는 뜻이 이것이다; 임대가 풀린 뒤 필요한 명령은 작업이 다시 보낸다). **기체의 링크 중 하나라도 임대 중이면 그 기체 전체를 `suspended`로 본다**(보수적; 살아 있는 다른 링크로도 보내지 않고, 끊김 판정도 멈춘다). `release()`가 포트를 돌려받고 `resume(link)`으로 되돌린다.
 - **포트 손잡이**: `comm/rawport/ByteStream`(인터페이스 — 바이트 읽기·쓰기 시그널, 그리고 **선택적** 제어 `canControlLine()`·`setBaud()`·`setDtrRts()`)과 그것을 실제 시리얼 포트로 구현한 `RawPort`. 이것이 **유일한 비-MAVLink 시리얼 통로**다. `espflash`·`esc/internal/paths/direct`·`elrs/internal/paths/uart`는 `ByteStream`만 받는다(`QSerialPort`를 직접 만들지 않는다). BF·EdgeTX 패스스루처럼 다른 통로 위에 ESP 부트로더를 태울 때는 `ByteStream`을 구현한 래퍼를 넘기고, 래퍼는 `canControlLine()==false`를 돌려 `EspFlasher`가 DTR/RTS 리셋 대신 패스스루 쪽 리셋 절차를 쓰게 한다.
 - **의도한 재부팅 구간** `vehicle/safety/RebootWindow`: 기능이 `begin(vehicle, timeout)`으로 열면 그동안 끊김 판정이 "끊김"이 아니라 "재부팅 중"(`Link.rebooting`)이 된다(R-Q1a (나)).
@@ -246,6 +247,7 @@ k-groundcontrol/
   - **작업 도중 시동이 걸리면**: `vehicle/safety/JobArmWatch`(Job에 붙은 도우미)가 `Arming.armed` 변화를 보고 Deny 종류는 Job을 **중단**(안전한 단계까지 끝낸 뒤), AllowWithWarning 종류는 경고만.
 - `vehicle/command/CommandQueue`는 Sender 위의 **재시도 계층**(COMMAND_LONG/INT·ACK·타임아웃·재시도). 보정 시작처럼 ACK가 늦는 명령은 `{retries=0, timeout=설정값}` 모드로 큐를 탄다 — 예외 목록 없음. AP 가속도 보정의 "다음"(COMMAND_ACK 송신)도 Sender를 지난다.
 - 보내기 스레드: Sender가 `QMetaObject::invokeMethod(link, …, Qt::QueuedConnection)`으로 링크 워커에 넘긴다.
+- 0.1.0의 Sender는 `Other`만 보내므로 `WorkLock`·`RebootWindow` 검사와 `LinkSuspended`가 없다. `vehicle/safety`가 생기는 버전에 더한다. §9.1의 `Component`도 그때까지 만들지 않는다.
 - 검사: 링크 쓰기 API는 `comm/`·`vehicle/outbound/` 밖 금지; `command_(long|int)_(pack|encode)`는 `vehicle/command/` 밖 금지.
 
 ### 9.3 바깥과 닿는 자리
@@ -264,7 +266,7 @@ k-groundcontrol/
 - `Result<T> = std::expected<T, ErrorCode>`. 함수는 예외 대신 Result. 예외·`Q_ASSERT`·`qFatal`은 프로그램 버그에만. 워커 스레드의 오류는 `ErrorCode`를 큐드 시그널로 소유 객체에 올리고, 알림은 소유 객체만 낸다.
 
 ### 9.5 주기 작업·타임아웃·스레드
-- `platform/app/scheduler/Scheduler`에 **이름 있는 반복 작업만** `registerTask(name, period, owner, context)`(`register`는 C++ 예약어)(context 스레드에서 돈다): GCS 하트비트 1Hz(링크 스레드), 끊김 검사 1Hz, 시리얼 포트 목록 1Hz, tlog 플러시. 트래커 각도 송신은 반복이 아니라 **위치 수신에 따라**(최대 5Hz 제한은 `Timeout`).
+- `platform/app/scheduler/Scheduler`에 **이름 있는 반복 작업만** `registerTask(name, period, owner, context, fn)`(`register`는 C++ 예약어)(`fn`은 context 스레드에서 돌고 owner가 사라지면 끝난다; 이름이 겹치면 프로그래밍 오류): GCS 하트비트 1Hz(`VehicleSender`가 GUI 스레드에서 만들고 링크 워커가 쓴다 — §9.2의 유일한 문), 끊김 검사 1Hz, 시리얼 포트 목록 1Hz, tlog 플러시. 트래커 각도 송신은 반복이 아니라 **위치 수신에 따라**(최대 5Hz 제한은 `Timeout`).
 - 일회성 타임아웃은 이름 붙은 `app/scheduler/Timeout`. QML `Timer`는 `platform/ui/components/TimerBox`만. 검사 대상 `QTimer`·`singleShot`·`startTimer(`·`QBasicTimer`·QML `Timer {`.
 - 스레드: 링크 I/O·MAVLink 파싱은 링크마다 워커, **영상 디코드·타일 로드·지형 조회도 워커**(R-N15). 상태 갱신·기능 로직·화면은 GUI 스레드.
 
@@ -274,7 +276,7 @@ k-groundcontrol/
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
 - `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정, 계기 모양과 그 목록), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5와 0.0.4 스펙 §3.3(`AttitudeIndicator`, 색 토큰 `attitudeSky`·`attitudeGround`)·§3.4(`EmptyState`)·§12(`PrimaryFlightDisplay`·`HeadUpDisplay`, 계기·OSD·HUD·3D 색 토큰); 기체 3D `VehicleAttitude3D`는 Quick3D를 쓰므로 기능 `vehicleInfo` 안; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 **기여**의 메뉴 자리를 `Composition`이 등록; 모듈이 있어도 그 기여가 아직 없으면 자리 표시), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽 — 둘 다 `registerPlaceholder`로 아직 없는 기능의 자리를 `Composition`이 잡아 둠(상단은 영역·묶음 번호·아이콘·아이콘만 여부·모양 `shape`(단추·드롭다운·표시; 0.0.4 §14), 하단은 쪽; 이름은 번역 문맥 "Bar"; 순서는 0.0.4 스펙 §15), `RightTabSlot`(`registerTab(id, order, titleKey, component, placement)`; `placement` = `Top`(탭 줄 위 계기 칸, 하나만 — 둘째는 `UiError::TopTaken`) | `Tab`; 이름 번역 문맥 "RightTab"; 0.0.4 §3.2), `MapLayerSlot`, 하단바 맨 오른쪽 단추 `BottomActionSlot`; 공통 바탕 `SlotModel` — `add(entry)`·order 정렬·같은 id 거부), `Navigator`(`open(panelId, arg)`).
 - **별도 창**: 기능 컨트롤러가 소유한 `SeparateWindow`가 창을 만든다(처음 열 때 같은 엔진의 루트 문맥에서, 창의 부모는 `SeparateWindow`, transientParent 없음, 닫으면 숨김). 자리는 `WindowPlacement`(화면 기준 좌표, 끌어오기 식)로 복원·저장하고, 창 일은 공용 도우미 `SeparateWindow`가 한다. `Composition`이 셸 창 닫기를 앱 종료에 잇는다.
-- 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`(전역 부분이 없는 기체별 모듈은 `registerUi(uiRegistry)`)에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만들어 QML 컨텍스트 프로퍼티(`<id>Controller`)로 둔다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
+- 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`(전역 부분이 없는 기체별 모듈은 `registerUi(uiRegistry)`)에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만든다. **새 컨트롤러(0.1.0부터)는 형이 있는 QML 싱글턴**(`QML_ELEMENT`·`QML_SINGLETON`·`static create`, 객체는 `registerUi`가 만들어 C++가 소유, QML은 `Kgc.<Id>`를 명시해 import)으로 내서 qmllint가 이름을 검사하게 한다. 기존 컨텍스트 프로퍼티(`<id>Controller`)는 그 모듈을 고치는 버전에서 옮긴다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
 - QML `import` 허용: `QtQuick*`·`QtQml*`, §2의 Qt 모듈(Location·Positioning·Multimedia·Graphs·Quick3D), `Kgc.Ui`, 자기 `Kgc.<Id>`, **순위표에서 아래인** `Kgc.<Id>`. 그 밖은 검사가 잡는다.
 
@@ -349,6 +351,9 @@ k-groundcontrol/
 | 작업 종류 / 기체 범위 | `OperationKind` / `VehicleScope` | 시동 중 규칙 판정 |
 | 작업 잠금 / 시동 지킴이 / 시동 중 규칙 / 재부팅 구간 / 작업 시동 감시 | `WorkLock` / `ArmGuard` / `ArmedPolicy` / `RebootWindow` / `JobArmWatch` | |
 | 포트 손잡이 / 바이트 스트림 / 해제 핸들 | `RawPort` / `ByteStream` / `Releaser` | §9.1, §9.4 |
+| 상태 구조체 | `LinkBundle`·`ArmingBundle`·`AttitudeBundle`·`PositionBundle`·`GpsBundle`·`BatteryBundle`·`CapabilitiesBundle` | §5, 0.1.0 |
+| 연결 낱말 | `MavlinkParser` / `dropV1NonHeartbeat` / `LinkConfig` / `LinkError` / `UdpLink` / `SerialLink` / `LinkService` / `LinkController` | 0.1.0 |
+| 기체 낱말 | `StreamRequest` / `VehicleSelection` / `isLinkLost` | 0.1.0 |
 | 작업 | `Job` | §9.4 |
 | 서비스 / 컨트롤러 / 패널 / 메뉴 | `Service` / `Controller` / `Panel` / `Menu` | |
 | 파라미터 / 묶음(계열) / 작업 단위 묶음 | `Param` / `ParamGroup` / `TaskSet` | |
@@ -381,13 +386,14 @@ k-groundcontrol/
 | 송신 | §9.2 규칙 | 0.1.x |
 | 바깥 접점 | §9.3 표 | 각 자리가 처음 쓰일 때 |
 | 타이머 | §9.5 | 0.1.x |
-| 고정값 | §6 범위 | 0.1.x |
+| 고정값 | §6 범위. `src/`만 보고 `Constants.h`·`platform/app/constants/`·`ModuleId.h`·생성 코드는 제외 | 0.1.x |
 | 설정 키 | 설정 키 문자열 리터럴(생성 접근자 밖) | 0.1.x |
 | 로그·오류 | `qDebug` 계열 직접 호출; 등록부(모든 모듈 `Events.h`·`Errors.h`·`ModuleId.h`) 밖·중복; `KGC_LOG` 메시지에 문장 어미(…다/…요) | 0.1.x |
 | 로그 언어 | `KGC_LOG_*` 호출 안 문자열 리터럴에 한글(check `log_english`) | 2026-10-27 |
 | 문자열(C++) | 한글 리터럴이 `tr(`·`QT_TR_NOOP(`·`QT_TRANSLATE_NOOP(` 밖 | 0.1.x |
 | 비밀값 | `Secret::reveal()`이 허용 파일 밖 | 비밀값이 처음 쓰일 때 |
-| 이름 중복 | 자유 함수 이름이 두 모듈에 | 0.1.x |
+| 이름 중복 | 자유 함수 이름이 두 모듈에. 모듈마다 있어야 하는 `registerUi`·`make`·`errorText`는 제외 | 0.1.x |
+| qmllint | `linux.yml`이 전체 빌드 뒤 형이 있는 컨트롤러를 쓰는 모듈을 `--unqualified disable --max-warnings 0`으로 검사 | 0.1.0 |
 
 ## 15. 빌드·CI·배포 (R-N18~R-N22)
 
@@ -451,3 +457,4 @@ k-groundcontrol/
 | 2026-10-30 | 사용자 | §3.1·§9.8 상단바 연결 옵션은 `link`, 상단바 차례는 0.0.4 §15 |
 | 2026-10-30 | 사용자 | §3.1·§3.2·§13 기능 `reference`(참고), 좌 메뉴 15, appSettings 16, uiGallery 17(0.0.4 §16) |
 | 2026-10-30 | 사용자 | §15 Actions 산출물 보관 2일(`retention-days: 2`) — 저장 한도 초과로 업로드 실패 |
+| 2026-10-31 | 사용자 | 0.1.0 스펙 초안 2와 함께 승인(§10): §2·§9.7 `registerUi(uiRegistry, VehicleRegistry&)`, 새 컨트롤러는 QML 싱글턴; §4 `--extra-serial`; §5 `<이름>Bundle`과 0.1.0 부분집합; §6 GCS id; §9.1·§9.2 등록부·안전 검사는 뒤 버전; §9.5 `registerTask`의 `fn`, GCS 하트비트는 Sender; §13 낱말; §14 고정값·이름 중복 범위와 qmllint |

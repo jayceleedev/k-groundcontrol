@@ -1,3 +1,4 @@
+// [0.1.1 T1 T2 T3] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include <kgc/vehicle/registry/VehicleRegistry.h>
 #include <kgc/vehicle/registry/VehicleSelection.h>
@@ -22,7 +23,7 @@ void VehicleRegistry::receive(int linkId, const __mavlink_message& message)
     if (message.msgid == MAVLINK_MSG_ID_HEARTBEAT) {
         mavlink_heartbeat_t heartbeat{};
         mavlink_msg_heartbeat_decode(&message, &heartbeat);
-        if (!VehicleSelection::accepts(message.compid, heartbeat.autopilot, heartbeat.type)) return;
+        if (!VehicleSelection::accepts(message.sysid, message.compid, heartbeat.autopilot, heartbeat.type)) return;
         if (vehicle && VehicleSelection::recreate(vehicle->autopilot(), heartbeat.autopilot)) {
             remove(message.sysid);
             vehicle = nullptr;

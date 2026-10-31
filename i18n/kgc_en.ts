@@ -1522,6 +1522,14 @@
 <context>
     <name>LinkConnection</name>
     <message>
+        <source>신호가 없어요. 포트와 속도를 확인해요</source>
+        <translation>No signal. Check the port and speed</translation>
+    </message>
+    <message>
+        <source>신호가 없어요. 기체가 14550으로 보내는지 확인해요</source>
+        <translation>No signal. Check that the vehicle sends to 14550</translation>
+    </message>
+    <message>
         <source>기체 연결</source>
         <translation>Connect vehicle</translation>
     </message>

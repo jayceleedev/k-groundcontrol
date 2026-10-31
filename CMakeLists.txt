@@ -1,10 +1,11 @@
+# [0.1.1 T7] specs/features/0.1.1-link-hardening.md
 # [0.1.0 T1–T6] specs/features/0.1.0-link.md
 # [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
 # [0.0.4 T1] specs/features/0.0.4-righttabs.md
 # [0.0.3 T1 T14] specs/features/0.0.3-windows.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 cmake_minimum_required(VERSION 3.28)
-project(KGroundControl VERSION 0.1.0 LANGUAGES CXX
+project(KGroundControl VERSION 0.1.1 LANGUAGES CXX
     HOMEPAGE_URL "https://github.com/jayceleedev/k-groundcontrol")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

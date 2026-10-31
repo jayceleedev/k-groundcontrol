@@ -1,3 +1,4 @@
+// [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
 import QtQuick
 import Kgc.Ui
@@ -11,7 +12,13 @@ Chip {
         case LinkService.Failed: return qsTr("연결 실패: %1").arg(LinkController.failureText())
         case LinkService.Opening: return qsTr("기체 찾는 중")
         default:
-            if (LinkController.sysid < 0) return qsTr("기체 찾는 중")
+            if (LinkController.sysid < 0) {
+                if (LinkController.noVehicle)
+                    return LinkController.serialLink
+                        ? qsTr("신호가 없어요. 포트와 속도를 확인해요")
+                        : qsTr("신호가 없어요. 기체가 14550으로 보내는지 확인해요")
+                return qsTr("기체 찾는 중")
+            }
             if (LinkController.lost) return qsTr("기체 응답 없음")
             return qsTr("%1 · 시스템 %2").arg(LinkController.firmwareName).arg(LinkController.sysid)
         }

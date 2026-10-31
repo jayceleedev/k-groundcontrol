@@ -1,3 +1,4 @@
+// [0.1.1 T4 T5 T13 T15 T16] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
 #include <kgc/comm/links/LinkConfig.h>
@@ -11,7 +12,7 @@ namespace kgc::app::scheduler { class Scheduler; }
 namespace kgc::comm::links {
 /** 하나의 링크와 포트 목록을 GUI 스레드에서 관리해요.
  * 입력: 포트 조회용 스케줄러와 연결·해제 요청이에요.
- * 출력: 포트 목록과 링크의 열기·수신·종료 결과를 제공해요.
+ * 출력: 포트 목록과 링크의 열기·수신·종료 결과를 제공하며, 사용 중인 포트가 목록과 /dev/ 장치 파일 양쪽에서 사라지면 종료해요.
  * 실패: 중복 연결은 반환 오류이며 비동기 열기·통신 오류는 시그널로 알려요.
  */
 class LinkManager : public QObject {
@@ -19,7 +20,7 @@ class LinkManager : public QObject {
 public:
 /** 포트 목록 갱신 작업과 큐드 전달 형식을 준비해요.
  * 입력: scheduler, 목록에 추가할 extraSerial 경로, 선택적인 parent예요.
- * 출력: 초기 포트 목록과 1Hz 갱신 작업을 준비해요.
+ * 출력: 초기 포트 목록과 1Hz 갱신·포트 유실 확인 작업을 준비해요.
  * 실패: 같은 스케줄러에 serialPorts 이름이 이미 있으면 프로그래밍 오류예요.
  */
     explicit LinkManager(kgc::app::scheduler::Scheduler& scheduler,
@@ -96,7 +97,7 @@ signals:
 /** 연결의 정상 종료나 통신 오류를 한 번 알려요.
  * 입력: 종료한 linkId와 선택적인 오류 error예요.
  * 출력: 워커 종료 뒤 나오는 끝 신호이며 같은 연결에 linkFailed는 나오지 않아요.
- * 실패: 사용자 취소는 nullopt예요. 열기 중 취소하면 linkOpened 없이 나올 수 있고 포트 유실이면 PortLost를 담아요.
+ * 실패: 사용자 취소는 nullopt예요. 열기 중 취소하면 linkOpened 없이 나올 수 있어요. 시리얼의 NoError·TimeoutError 이외 오류, 음수 쓰기 결과, 목록과 /dev/ 장치 파일 양쪽에서의 유실은 PortLost를 담아요.
  */
     void linkClosed(int linkId, std::optional<kgc::app::errors::ErrorCode> error);
 /** 워커에서 해석한 메시지를 GUI 스레드로 전달해요.

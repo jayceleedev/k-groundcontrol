@@ -1,3 +1,4 @@
+// [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
 #include "LinkController.h"
 #include "Constants.h"
@@ -7,6 +8,7 @@ LinkController::LinkController(LinkService& service)
 {
     Q_ASSERT(!instance_);
     instance_ = this;
+    connect(&service_, &LinkService::noVehicleChanged, this, &LinkController::noVehicleChanged);
     connect(&service_, &LinkService::connectionStateChanged, this, &LinkController::connectionStateChanged);
     connect(&service_, &LinkService::portsChanged, this, &LinkController::refreshPorts);
     connect(&service_.vehicles(), &kgc::vehicle::registry::VehicleRegistry::activeChanged, this, &LinkController::rebind);

@@ -23,7 +23,7 @@ private slots:
         QVERIFY(std::isnan(position.groundSpeedMs) && std::isnan(position.climbMs) && std::isnan(position.headingDeg));
         const AttitudeBundle attitude;
         QVERIFY(std::isnan(attitude.rollDeg) && std::isnan(attitude.pitchDeg) && std::isnan(attitude.yawDeg));
-        QCOMPARE(LinkBundle{}.lastHeartbeatMs, -1);
+        QCOMPARE(LinkBundle{}.lastMessageMs, -1);
         QVERIFY(!LinkBundle{}.connected && !LinkBundle{}.lost);
         QCOMPARE(ArmingBundle{}.modeId, -1);
         QCOMPARE(CapabilitiesBundle{}.vehicleType, -1);
@@ -35,6 +35,15 @@ private slots:
         QVERIFY(std::isnan(battery.voltageV) && std::isnan(battery.currentA));
         QCOMPARE(battery.remainingPct, -1);
     }
+    /** [0.1.1 T3] 하트비트가 아닌 메시지도 링크가 살아 있음을 알려요. */
+    void test_T3_any_message_refreshes_link()
+    {
+        mavlink_message_t message{};
+        mavlink_msg_attitude_pack(1, 1, &message, 1, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f);
+        const auto link = updateLink(message, 7890);
+        QVERIFY(link.connected && !link.lost);
+        QCOMPARE(link.lastMessageMs, 7890);
+    }
     /** T2: 하트비트는 링크와 시동, 모드, 펌웨어 묶음을 채워요. */
     void test_T2_heartbeat()
     {
@@ -44,7 +53,7 @@ private slots:
         auto plugin = kgc::vehicle::firmware::FirmwarePluginFactory::create(MAV_AUTOPILOT_PX4);
         const auto link = updateLink(message, 4567);
         QVERIFY(link.connected && !link.lost);
-        QCOMPARE(link.lastHeartbeatMs, 4567);
+        QCOMPARE(link.lastMessageMs, 4567);
         const auto arming = updateArming(message, *plugin);
         QVERIFY(arming.armed);
         QCOMPARE(arming.modeId, 3u << 16);

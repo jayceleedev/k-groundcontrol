@@ -4,7 +4,7 @@
 class LinkLossTest : public QObject {
     Q_OBJECT
 private slots:
-    /** T3: 마지막 하트비트에서 정확히 3500밀리초일 때 끊김으로 판정해요. */
+    /** T3: 마지막 수신에서 정확히 3500밀리초일 때 끊김으로 판정해요. */
     void test_T3_threshold()
     {
         using kgc::vehicle::states::isLinkLost;

@@ -1,3 +1,4 @@
+// [0.1.1 T1 T2 T3] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include <kgc/vehicle/states/VehicleStateOwner.h>
 #include <kgc/vehicle/states/VehicleStates.h>
@@ -22,19 +23,21 @@ VehicleStateOwner::VehicleStateOwner(VehicleStates& states, const kgc::vehicle::
 }
 void VehicleStateOwner::checkLinkLoss()
 {
-    const auto lost = isLinkLost(states_.link_.lastHeartbeatMs, clock_.elapsed());
+    const auto lost = isLinkLost(states_.link_.lastMessageMs, clock_.elapsed());
     if (states_.link_.lost == lost) return;
     states_.link_.lost = lost;
     emit states_.linkChanged();
 }
 void VehicleStateOwner::consume(const mavlink_message_t& message)
 {
+    const auto wasLost = states_.link_.lost;
+    states_.link_ = updateLink(message, clock_.elapsed());
+    if (message.msgid == MAVLINK_MSG_ID_HEARTBEAT || wasLost != states_.link_.lost)
+        emit states_.linkChanged();
     switch (message.msgid) {
     case MAVLINK_MSG_ID_HEARTBEAT:
-        states_.link_ = updateLink(message, clock_.elapsed());
         states_.arming_ = updateArming(message, plugin_);
         states_.capabilities_ = updateCapabilities(message, plugin_);
-        emit states_.linkChanged();
         emit states_.armingChanged();
         emit states_.capabilitiesChanged();
         break;

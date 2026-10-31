@@ -1,3 +1,4 @@
+// [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
 #pragma once
 #include <kgc/link/LinkService.h>
@@ -16,6 +17,8 @@ class LinkController : public QObject {
     QML_ELEMENT
     QML_SINGLETON
     Q_PROPERTY(kgc::link::LinkService::ConnectionState connectionState READ connectionState NOTIFY connectionStateChanged)
+    Q_PROPERTY(bool noVehicle READ noVehicle NOTIFY noVehicleChanged)
+    Q_PROPERTY(bool serialLink READ serialLink NOTIFY connectionStateChanged)
     Q_PROPERTY(bool canConnect READ canConnect NOTIFY connectionStateChanged)
     Q_PROPERTY(QVariantList ports READ ports NOTIFY portsChanged)
     Q_PROPERTY(int portIndex READ portIndex NOTIFY portsChanged)
@@ -50,6 +53,18 @@ public:
  * 실패: 없어요.
  */
     bool canConnect() const { return service_.canConnect(); }
+/** 서비스의 기체 없음 안내 여부를 읽어요.
+ * 입력: 없어요.
+ * 출력: 기체 없음 안내를 보여야 하면 참이에요.
+ * 실패: 없어요.
+ */
+    bool noVehicle() const { return service_.noVehicle(); }
+/** 서비스가 가진 현재 연결 종류를 읽어요.
+ * 입력: 없어요.
+ * 출력: 현재 연결 값이 시리얼이면 참이에요.
+ * 실패: 없어요.
+ */
+    bool serialLink() const { return service_.serialLink(); }
 /** 포트 이름과 설명을 원본 값으로 제공해요.
  * 입력: 없어요.
  * 출력: 첫 항목은 빈 포트 이름인 UDP이고, 뒤는 portName·description 값의 목록이에요.
@@ -132,6 +147,12 @@ public:
  */
     Q_INVOKABLE void toggleConnection();
 signals:
+/** 기체 없음 안내 여부를 다시 읽도록 알려요.
+ * 입력: 없어요.
+ * 출력: 변경 알림이에요.
+ * 실패: 없어요.
+ */
+    void noVehicleChanged();
 /** 표시값을 다시 읽도록 알려요.
  * 입력: 없어요.
  * 출력: 변경 알림이에요.

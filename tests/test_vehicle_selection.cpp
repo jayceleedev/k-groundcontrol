@@ -9,12 +9,19 @@ private slots:
     /** T6: 자동조종기 하트비트만 받아들이고 GCS와 짐벌은 걸러요. */
     void test_T6_selection()
     {
-        QVERIFY(VehicleSelection::accepts(1, MAV_AUTOPILOT_PX4, MAV_TYPE_QUADROTOR));
-        QVERIFY(VehicleSelection::accepts(1, 250, MAV_TYPE_QUADROTOR));
-        QVERIFY(!VehicleSelection::accepts(2, MAV_AUTOPILOT_PX4, MAV_TYPE_QUADROTOR));
-        QVERIFY(!VehicleSelection::accepts(1, MAV_AUTOPILOT_INVALID, MAV_TYPE_QUADROTOR));
-        QVERIFY(!VehicleSelection::accepts(1, MAV_AUTOPILOT_PX4, MAV_TYPE_GCS));
-        QVERIFY(!VehicleSelection::accepts(1, MAV_AUTOPILOT_PX4, MAV_TYPE_GIMBAL));
+        QVERIFY(VehicleSelection::accepts(1, 1, MAV_AUTOPILOT_PX4, MAV_TYPE_QUADROTOR));
+        QVERIFY(VehicleSelection::accepts(1, 1, 250, MAV_TYPE_QUADROTOR));
+        QVERIFY(!VehicleSelection::accepts(1, 2, MAV_AUTOPILOT_PX4, MAV_TYPE_QUADROTOR));
+        QVERIFY(!VehicleSelection::accepts(1, 1, MAV_AUTOPILOT_INVALID, MAV_TYPE_QUADROTOR));
+        QVERIFY(!VehicleSelection::accepts(1, 1, MAV_AUTOPILOT_PX4, MAV_TYPE_GCS));
+        QVERIFY(!VehicleSelection::accepts(1, 1, MAV_AUTOPILOT_PX4, MAV_TYPE_GIMBAL));
+    }
+    /** [0.1.1 T1] sysid 0과 기체가 아닌 장치의 하트비트는 받지 않아요. */
+    void test_T1_rejects_non_vehicles()
+    {
+        QVERIFY(!VehicleSelection::accepts(0, 1, MAV_AUTOPILOT_PX4, MAV_TYPE_QUADROTOR));
+        QVERIFY(!VehicleSelection::accepts(1, 1, MAV_AUTOPILOT_PX4, MAV_TYPE_ONBOARD_CONTROLLER));
+        QVERIFY(!VehicleSelection::accepts(1, 1, MAV_AUTOPILOT_PX4, MAV_TYPE_ADSB));
     }
     /** T6: 같은 시스템의 펌웨어가 바뀌었을 때만 재생성을 요청해요. */
     void test_T6_recreate()

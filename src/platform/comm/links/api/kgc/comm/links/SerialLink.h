@@ -1,3 +1,4 @@
+// [0.1.1 T4 T5 T13 T15 T16] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
 #include <kgc/comm/links/Link.h>
@@ -6,7 +7,7 @@ namespace kgc::comm::links {
 /** 시리얼 입출력을 링크 워커 안에 가둬요.
  * 입력: 시리얼 연결 값과 송수신 바이트예요.
  * 출력: Link의 열기·수신·종료 시그널을 제공해요.
- * 실패: 열기 오류는 failed, 열린 포트의 오류는 closed의 PortLost로 전달해요.
+ * 실패: 열기 오류는 failed로 알려요. 열린 뒤 NoError·TimeoutError 이외의 오류와 음수 쓰기 결과는 closed의 PortLost로 전달해요.
  */
 class SerialLink final : public Link {
 public:
@@ -24,8 +25,8 @@ public:
     ~SerialLink() override;
 /** 워커에서 시리얼 포트를 열어요.
  * 입력: 생성자에 넘긴 포트 이름과 속도예요.
- * 출력: 열기에 성공하면 opened를 내보내요.
- * 실패: 권한 오류는 PermissionDenied, 점유 오류는 PortBusy, 나머지는 PortOpenFailed를 failed로 알려요.
+ * 출력: 열기 뒤 DTR·RTS를 켜고 opened를 내보내요. 제어선 실패는 오류를 지우고 계속하며, 미지원 이외에는 경고를 남겨요.
+ * 실패: 권한 오류는 PermissionDenied, 점유 오류는 PortBusy, 나머지 열기 오류는 PortOpenFailed를 failed로 알려요. 제어선 실패로는 연결을 닫지 않아요.
  */
     void open() override;
 /** 포트를 닫고 종료를 알려요.

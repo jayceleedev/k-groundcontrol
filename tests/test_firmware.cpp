@@ -27,6 +27,13 @@ private slots:
         QVERIFY(plugin->modeName((4u << 16) | (255u << 24), MAV_TYPE_QUADROTOR).isEmpty());
         QVERIFY(plugin->streamRequests().isEmpty());
     }
+    /** [0.1.1 T2] 프레임을 정하지 않은 ArduCopter는 Copter 모드 표로 읽어요. */
+    void test_T2_generic_type_uses_copter_modes()
+    {
+        const auto plugin = FirmwarePluginFactory::create(MAV_AUTOPILOT_ARDUPILOTMEGA);
+        QCOMPARE(plugin->modeName(5, MAV_TYPE_GENERIC), QString("LOITER"));
+        QVERIFY(plugin->modeName(5, MAV_TYPE_FIXED_WING).isEmpty());
+    }
     /** T5: Copter의 기체 종류에만 모드 이름을 붙이고 스트림 요청을 제공해요. */
     void test_T5_copter_modes()
     {

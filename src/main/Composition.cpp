@@ -1,3 +1,4 @@
+// [0.1.1 T8 T9 T14] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T10 T13 T17] specs/features/0.1.0-link.md
 // [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
 // [0.0.4 T1 T3 T4] specs/features/0.0.4-righttabs.md
@@ -9,6 +10,7 @@
 #include <kgc/app/scheduler/Scheduler.h>
 #include <kgc/comm/links/LinkManager.h>
 #include <kgc/vehicle/registry/VehicleRegistry.h>
+#include <kgc/vehicle/outbound/LinkHeartbeat.h>
 #include <kgc/link/LinkService.h>
 #include <kgc/link/Ui.h>
 #include <kgc/ui/UiRegistry.h>
@@ -151,8 +153,9 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     // 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
     auto* scheduler = new app::scheduler::Scheduler(this);
     auto* links = new comm::links::LinkManager(*scheduler, extraSerial, this);
+    new vehicle::outbound::LinkHeartbeat(*links, *scheduler, this);
     auto* vehicles = new vehicle::registry::VehicleRegistry(*links, *scheduler, this);
-    auto* linkService = new link::LinkService(*links, *vehicles, this);
+    auto* linkService = new link::LinkService(*links, *vehicles, *scheduler, this);
     link::registerUi(registry, *linkService);
     vehicleInfo::registerUi(registry, *vehicles);
     auto* logsViewer = new logs::LogsViewer(this);

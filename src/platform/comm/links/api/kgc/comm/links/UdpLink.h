@@ -1,9 +1,10 @@
+// [0.1.1 T4 T5 T13 T15 T16] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
 #include <kgc/comm/links/Link.h>
 #include <kgc/comm/links/LinkConfig.h>
 namespace kgc::comm::links {
-/** UDP 소켓과 마지막 송신자 주소를 링크 워커 안에 가둬요.
+/** UDP 소켓과 최근 송신자 주소 목록을 링크 워커 안에 가둬요.
  * 입력: 송수신 데이터그램이며 수신 포트는 고정값을 사용해요.
  * 출력: Link의 열기·수신·종료 시그널을 제공해요.
  * 실패: 바인딩 실패는 failed의 UdpBindFailed로 전달해요.
@@ -36,7 +37,7 @@ public:
     void close() override;
 /** 완성된 프레임을 포트에 써요.
  * 입력: 송신할 bytes예요.
- * 출력: 마지막으로 유효한 데이터그램을 보낸 주소에 바이트를 보내요.
+ * 출력: 최근 10초 안에 유효한 데이터그램을 보낸 모든 주소에 같은 바이트를 보내요.
  * 실패: 상대 주소가 없으면 조용히 버리고, 데이터그램 쓰기 실패는 별도 신호로 알리지 않아요.
  */
     void writeBytes(const QByteArray& bytes) override;

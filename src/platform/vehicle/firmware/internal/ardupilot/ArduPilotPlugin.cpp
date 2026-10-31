@@ -1,3 +1,4 @@
+// [0.1.1 T1 T2 T3] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include "ArduPilotPlugin.h"
 #include <kgc/comm/mavlink/Mavlink.h>
@@ -7,7 +8,7 @@ QString ArduPilotPlugin::displayName() const { return "ArduPilot"; }
 QString ArduPilotPlugin::modeName(std::uint32_t customMode, std::uint8_t mavType) const
 {
     switch (mavType) {
-    case MAV_TYPE_QUADROTOR: case MAV_TYPE_HEXAROTOR: case MAV_TYPE_OCTOROTOR:
+    case MAV_TYPE_GENERIC: case MAV_TYPE_QUADROTOR: case MAV_TYPE_HEXAROTOR: case MAV_TYPE_OCTOROTOR:
     case MAV_TYPE_TRICOPTER: case MAV_TYPE_HELICOPTER: case MAV_TYPE_COAXIAL:
     case MAV_TYPE_DODECAROTOR: case MAV_TYPE_DECAROTOR: break;
     default: return {};

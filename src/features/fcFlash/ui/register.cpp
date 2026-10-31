@@ -5,8 +5,10 @@
 namespace kgc::fcFlash {
 void registerUi(kgc::ui::UiRegistry& registry, FcFlashService& service)
 {
-    // WORKER-FILL: spec §6.9 — PanelRegistry에 id fcFlash, 순서 1, 그룹 1, 제목 "펌웨어 세팅", 패널 FcFlashPanel.qml을 등록해요.
-    Q_UNUSED(registry);
+    const auto result = registry.panels.registerPanel({"fcFlash", 1, 1,
+        QT_TRANSLATE_NOOP("Menu", "펌웨어 세팅"), QUrl("qrc:/kgc/icons/menu/fcFlash.svg"),
+        QUrl("qrc:/qt/qml/Kgc/FcFlash/FcFlashPanel.qml")});
+    Q_ASSERT(result.has_value());
     new FcFlashController(service);
 }
 }

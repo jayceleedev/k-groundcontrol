@@ -24,6 +24,7 @@ Basic.ProgressBar {
             SequentialAnimation on x {
                 running: control.indeterminate && control.visible
                 loops: Animation.Infinite
+                onStopped: fill.x = 0
                 NumberAnimation { from: -fill.width; to: control.width; duration: 1500 }
             }
         }

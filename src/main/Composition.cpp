@@ -15,6 +15,10 @@
 #include <kgc/vehicle/outbound/LinkHeartbeat.h>
 #include <kgc/link/LinkService.h>
 #include <kgc/link/Ui.h>
+#include <kgc/fcFlash/FcFlashService.h>
+#include <kgc/fcFlash/Ui.h>
+#include <kgc/app/net/Http.h>
+#include <kgc/vehicle/safety/ArmedPolicy.h>
 #include <kgc/ui/UiRegistry.h>
 #include <kgc/ui/ThemeSwitcher.h>
 #include <kgc/ui/UiSettingValues.h>
@@ -41,6 +45,7 @@
 #include <QQuickWindow>
 #include <QtQml/QQmlExtensionPlugin>
 
+Q_IMPORT_QML_PLUGIN(Kgc_FcFlashPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_LinkPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ShellPlugin)
@@ -65,7 +70,6 @@ void registerPlaceholders(ui::PanelRegistry* panels)
         const auto result = panels->registerPlaceholder(id, order, group, titleKey, icon);
         Q_ASSERT(result.has_value());
     };
-    registerPlaceholder("fcFlash", 1, 1, QT_TRANSLATE_NOOP("Menu", "펌웨어 세팅"), QUrl("qrc:/kgc/icons/menu/fcFlash.svg"));
     registerPlaceholder("layout", 2, 2, QT_TRANSLATE_NOOP("Menu", "기체 구성도"), QUrl("qrc:/kgc/icons/menu/layout.svg"));
     registerPlaceholder("sensors", 3, 2, QT_TRANSLATE_NOOP("Menu", "센서 보정"), QUrl("qrc:/kgc/icons/menu/sensors.svg"));
     registerPlaceholder("radio", 4, 2, QT_TRANSLATE_NOOP("Menu", "조종기"), QUrl("qrc:/kgc/icons/menu/radio.svg"));
@@ -153,6 +157,8 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* secondPanelService = new secondPanel::SecondPanelService(this);
     secondPanel::registerUi(registry, *secondPanelService);
     // 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
+    // 서비스가 포트와 HTTP보다 먼저 정리되어 임대 해제 때도 의존 객체가 살아 있게 해요.
+    auto* flashLifetime = new QObject(this);
     auto* scheduler = new app::scheduler::Scheduler(this);
     auto* ports = new comm::rawport::PortRegistry(this);
     auto* links = new comm::links::LinkManager(*scheduler, *ports, extraSerial, this);
@@ -160,6 +166,11 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* vehicles = new vehicle::registry::VehicleRegistry(*links, *scheduler, this);
     auto* linkService = new link::LinkService(*links, *vehicles, *scheduler, this);
     link::registerUi(registry, *linkService);
+    auto* http = new app::net::Http(this);
+    auto* policy = new vehicle::safety::ArmedPolicy(*vehicles);
+    auto* flashService = new fcFlash::FcFlashService(*links, *vehicles, *policy, *ports, *http, *scheduler, flashLifetime);
+    connect(flashService, &QObject::destroyed, this, [policy] { delete policy; });
+    fcFlash::registerUi(registry, *flashService);
     vehicleInfo::registerUi(registry, *vehicles);
     auto* logsViewer = new logs::LogsViewer(this);
     logs::registerUi(registry, *logsViewer);

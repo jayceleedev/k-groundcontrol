@@ -2,6 +2,7 @@
 #pragma once
 #include <kgc/fcFlash/FcFlashService.h>
 #include <QPointer>
+#include <QVariantList>
 #include <QQmlEngine>
 namespace kgc::fcFlash {
 /** 굽기 흐름의 값을 QML에 옮기고 서비스를 불러요.
@@ -15,6 +16,32 @@ class FcFlashController : public QObject {
     QML_SINGLETON
     Q_PROPERTY(kgc::fcFlash::Step step READ step NOTIFY changed)
     Q_PROPERTY(kgc::fcFlash::Phase phase READ phase NOTIFY changed)
+    Q_PROPERTY(int secondsLeft READ secondsLeft NOTIFY changed)
+    Q_PROPERTY(bool canRetry READ canRetry NOTIFY changed)
+    Q_PROPERTY(QStringList pickPorts READ pickPorts NOTIFY changed)
+    Q_PROPERTY(QString boardManufacturer READ boardManufacturer NOTIFY changed)
+    Q_PROPERTY(QString boardProduct READ boardProduct NOTIFY changed)
+    Q_PROPERTY(int boardId READ boardId NOTIFY changed)
+    Q_PROPERTY(int flashKb READ flashKb NOTIFY changed)
+    Q_PROPERTY(int bootloaderRevision READ bootloaderRevision NOTIFY changed)
+    Q_PROPERTY(kgc::fcFlash::FirmwareSource source READ source NOTIFY changed)
+    Q_PROPERTY(QString vehicle READ vehicle NOTIFY changed)
+    Q_PROPERTY(QStringList versions READ versions NOTIFY changed)
+    Q_PROPERTY(int versionIndex READ versionIndex NOTIFY changed)
+    Q_PROPERTY(QStringList candidates READ candidates NOTIFY changed)
+    Q_PROPERTY(int candidateIndex READ candidateIndex NOTIFY changed)
+    Q_PROPERTY(bool listLoading READ listLoading NOTIFY changed)
+    Q_PROPERTY(bool listFailed READ listFailed NOTIFY changed)
+    Q_PROPERTY(bool canContinue READ canContinue NOTIFY changed)
+    Q_PROPERTY(QString filePath READ filePath NOTIFY changed)
+    Q_PROPERTY(QString firmwareName READ firmwareName NOTIFY changed)
+    Q_PROPERTY(QString expectedVersion READ expectedVersion NOTIFY changed)
+    Q_PROPERTY(QString firmwareBoard READ firmwareBoard NOTIFY changed)
+    Q_PROPERTY(kgc::app::job::Job* job READ job NOTIFY changed)
+    Q_PROPERTY(QString vehicleVersion READ vehicleVersion NOTIFY changed)
+    Q_PROPERTY(QString vehicleFirmwareName READ vehicleFirmwareName NOTIFY changed)
+    Q_PROPERTY(int flashStage READ flashStage NOTIFY changed)
+    Q_PROPERTY(QVariantList ports READ ports NOTIFY portsChanged)
 public:
 /** 서비스를 부모로 삼아 화면 수명을 묶어요.
  * 입력: 서비스예요.
@@ -38,7 +65,178 @@ public:
  * 실패: 없어요.
  */
     Q_INVOKABLE QString failureText() const { return service_.failureText(); }
-    // WORKER-FILL: spec §6.9 — FcFlashService의 나머지 프로퍼티와 공개 함수를 Q_PROPERTY·Q_INVOKABLE로 옮기고 흐름을 적어요.
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 secondsLeft 값이에요. 실패: 없어요. */
+    int secondsLeft() const { return service_.secondsLeft(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 canRetry 값이에요. 실패: 없어요. */
+    bool canRetry() const { return service_.canRetry(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 pickPorts 값이에요. 실패: 없어요. */
+    QStringList pickPorts() const { return service_.pickPorts(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 boardManufacturer 값이에요. 실패: 없어요. */
+    QString boardManufacturer() const { return service_.boardManufacturer(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 boardProduct 값이에요. 실패: 없어요. */
+    QString boardProduct() const { return service_.boardProduct(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 boardId 값이에요. 실패: 없어요. */
+    int boardId() const { return service_.boardId(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 flashKb 값이에요. 실패: 없어요. */
+    int flashKb() const { return service_.flashKb(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 bootloaderRevision 값이에요. 실패: 없어요. */
+    int bootloaderRevision() const { return service_.bootloaderRevision(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 source 값이에요. 실패: 없어요. */
+    FirmwareSource source() const { return service_.source(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 vehicle 값이에요. 실패: 없어요. */
+    QString vehicle() const { return service_.vehicle(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 versions 값이에요. 실패: 없어요. */
+    QStringList versions() const { return service_.versions(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 versionIndex 값이에요. 실패: 없어요. */
+    int versionIndex() const { return service_.versionIndex(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 candidates 값이에요. 실패: 없어요. */
+    QStringList candidates() const { return service_.candidates(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 candidateIndex 값이에요. 실패: 없어요. */
+    int candidateIndex() const { return service_.candidateIndex(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 listLoading 값이에요. 실패: 없어요. */
+    bool listLoading() const { return service_.listLoading(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 listFailed 값이에요. 실패: 없어요. */
+    bool listFailed() const { return service_.listFailed(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 canContinue 값이에요. 실패: 없어요. */
+    bool canContinue() const { return service_.canContinue(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 filePath 값이에요. 실패: 없어요. */
+    QString filePath() const { return service_.filePath(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 firmwareName 값이에요. 실패: 없어요. */
+    QString firmwareName() const { return service_.firmwareName(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 expectedVersion 값이에요. 실패: 없어요. */
+    QString expectedVersion() const { return service_.expectedVersion(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 firmwareBoard 값이에요. 실패: 없어요. */
+    QString firmwareBoard() const { return service_.firmwareBoard(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 job 값이에요. 실패: 없어요. */
+    kgc::app::job::Job* job() const { return service_.job(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 vehicleVersion 값이에요. 실패: 없어요. */
+    QString vehicleVersion() const { return service_.vehicleVersion(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 vehicleFirmwareName 값이에요. 실패: 없어요. */
+    QString vehicleFirmwareName() const { return service_.vehicleFirmwareName(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 flashStage 값이에요. 실패: 없어요. */
+    int flashStage() const { return service_.flashStage(); }
+    /** 포트 목록을 화면 형식으로 바꿔요. 입력: 없어요. 출력: 이름과 설명 목록이에요. 실패: 없어요. */
+    QVariantList ports() const;
+    /** 보드 확인을 요청해요.
+     * 입력: 화면에서 고른 값이에요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::beginProbe — 보드 확인을 요청해요.
+     */
+    Q_INVOKABLE void beginProbe(const QString& portName) { service_.beginProbe(portName); }
+    /** 응답한 포트를 골라요.
+     * 입력: 화면에서 고른 값이에요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::pickPort — 응답한 포트를 골라요.
+     */
+    Q_INVOKABLE void pickPort(const QString& portName) { service_.pickPort(portName); }
+    /** 보드 확인을 다시 요청해요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::retryProbe — 보드 확인을 다시 요청해요.
+     */
+    Q_INVOKABLE void retryProbe() { service_.retryProbe(); }
+    /** 펌웨어 출처를 골라요.
+     * 입력: 화면에서 고른 값이에요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::chooseSource — 펌웨어 출처를 골라요.
+     */
+    Q_INVOKABLE void chooseSource(FirmwareSource source) { service_.chooseSource(source); }
+    /** 기체 종류를 골라요.
+     * 입력: 화면에서 고른 값이에요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::chooseVehicle — 기체 종류를 골라요.
+     */
+    Q_INVOKABLE void chooseVehicle(const QString& name) { service_.chooseVehicle(name); }
+    /** 펌웨어 버전을 골라요.
+     * 입력: 화면에서 고른 값이에요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::chooseVersion — 펌웨어 버전을 골라요.
+     */
+    Q_INVOKABLE void chooseVersion(int index) { service_.chooseVersion(index); }
+    /** 펌웨어 후보를 골라요.
+     * 입력: 화면에서 고른 값이에요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::chooseCandidate — 펌웨어 후보를 골라요.
+     */
+    Q_INVOKABLE void chooseCandidate(int index) { service_.chooseCandidate(index); }
+    /** 펌웨어 파일을 골라요.
+     * 입력: 화면에서 고른 값이에요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::chooseFile — 펌웨어 파일을 골라요.
+     */
+    Q_INVOKABLE void chooseFile(const QString& path) { service_.chooseFile(path); }
+    /** 확인 화면으로 이동해요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::toConfirm — 확인 화면으로 이동해요.
+     */
+    Q_INVOKABLE void toConfirm() { service_.toConfirm(); }
+    /** 선택 화면으로 돌아가요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::backToFirmware — 선택 화면으로 돌아가요.
+     */
+    Q_INVOKABLE void backToFirmware() { service_.backToFirmware(); }
+    /** 굽기를 요청해요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::startFlash — 굽기를 요청해요.
+     */
+    Q_INVOKABLE void startFlash() { service_.startFlash(); }
+    /** 지우기 전의 굽기를 취소해요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::cancelFlash — 지우기 전의 굽기를 취소해요.
+     */
+    Q_INVOKABLE void cancelFlash() { service_.cancelFlash(); }
+    /** 굽기를 다시 요청해요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::retryFlash — 굽기를 다시 요청해요.
+     */
+    Q_INVOKABLE void retryFlash() { service_.retryFlash(); }
+    /** FC를 부팅하고 돌아가요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::bootAndReset — FC를 부팅하고 돌아가요.
+     */
+    Q_INVOKABLE void bootAndReset() { service_.bootAndReset(); }
+    /** 부팅 없이 처음으로 돌아가요.
+     * 입력: 없어요.
+     * 출력: 서비스 상태가 바뀌면 changed로 알려요.
+     * 실패: 서비스의 실패 문구로 알려요.
+     * 흐름:
+     * 1. FcFlashService::reset — 부팅 없이 처음으로 돌아가요.
+     */
+    Q_INVOKABLE void reset() { service_.reset(); }
 signals:
 /** 표시값을 다시 읽도록 알려요.
  * 입력: 없어요.
@@ -46,6 +244,8 @@ signals:
  * 실패: 없어요.
  */
     void changed();
+    /** 포트 목록 갱신을 알려요. 입력: 없어요. 출력: 목록 변경 알림이에요. 실패: 없어요. */
+    void portsChanged();
 private:
     FcFlashService& service_;
     inline static QPointer<FcFlashController> instance_;

@@ -46,6 +46,12 @@ inline constexpr std::chrono::milliseconds kEraseExtraPerMb{4000};
 inline constexpr qint64 kEraseExtraAboveBytes = 2000 * 1024;
 inline constexpr std::chrono::milliseconds kVerifyTimeout{5000};
 inline constexpr std::chrono::milliseconds kExtfVerifyTimeout{10000};
+inline constexpr std::chrono::milliseconds kDeviceTimeout{1000};
+inline constexpr std::chrono::milliseconds kProgramTimeout{2000};
+inline constexpr std::chrono::milliseconds kExtfEraseTimeout{60000};
+inline constexpr qint64 kBytesPerKb = 1024;
+inline constexpr qint64 kBytesPerMb = 1024 * 1024;
+inline constexpr int kFullPercent = 100;
 inline constexpr int kProgramChunk = 252;
 inline constexpr char kPadByte = static_cast<char>(0xFF);
 // 파일 형식과 보드 ID의 값이에요(스펙 §6.5·§6.6).

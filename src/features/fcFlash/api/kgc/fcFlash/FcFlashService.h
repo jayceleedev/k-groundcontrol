@@ -45,6 +45,8 @@ class FcFlashService : public QObject {
     Q_PROPERTY(QString firmwareBoard READ firmwareBoard NOTIFY changed)
     Q_PROPERTY(kgc::app::job::Job* job READ job NOTIFY changed)
     Q_PROPERTY(QString vehicleVersion READ vehicleVersion NOTIFY changed)
+    Q_PROPERTY(QString vehicleFirmwareName READ vehicleFirmwareName NOTIFY changed)
+    Q_PROPERTY(int flashStage READ flashStage NOTIFY changed)
 public:
 /** 서비스를 대기 상태로 만들어요.
  * 입력: 수명 동안 유지되는 스펙 §5.10의 전역 객체들과 선택적인 parent예요.
@@ -60,55 +62,61 @@ public:
  * 실패: 없어요.
  */
     ~FcFlashService() override;
-    /** 입력: 없어요. 출력: 지금 화면 단계예요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 지금 화면 단계예요. 실패: 없어요. */
     Step step() const;
-    /** 입력: 없어요. 출력: 지금 Phase예요. 실패: 없어요. */
+    /** 포트 선택에 쓸 목록을 그대로 전달해요. 입력: 없어요. 출력: 이름과 설명의 쌍이에요. 실패: 없어요. */
+    QList<QPair<QString, QString>> ports() const;
+    /** 돌아온 펌웨어 종류를 읽어요. 입력: 없어요. 출력: 기체의 종류 이름이에요. 실패: 없어요. */
+    QString vehicleFirmwareName() const;
+    /** 진행 행의 위치를 읽어요. 입력: 없어요. 출력: 내려받기 0부터 재연결 5, 완료 6이에요. 실패: 없어요. */
+    int flashStage() const;
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 지금 Phase예요. 실패: 없어요. */
     Phase phase() const;
-    /** 입력: 없어요. 출력: WaitReplug의 남은 초이며, 그 밖에는 0이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: WaitReplug의 남은 초이며, 그 밖에는 0이에요. 실패: 없어요. */
     int secondsLeft() const;
-    /** 입력: 없어요. 출력: Failed에서 다시 할 수 있으면 참이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: Failed에서 다시 할 수 있으면 참이에요. 실패: 없어요. */
     bool canRetry() const;
-    /** 입력: 없어요. 출력: PickPort에서 응답한 포트 이름 목록이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: PickPort에서 응답한 포트 이름 목록이에요. 실패: 없어요. */
     QStringList pickPorts() const;
-    /** 입력: 없어요. 출력: USB 제조사 이름이며, 없으면 빈 값이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: USB 제조사 이름이며, 없으면 빈 값이에요. 실패: 없어요. */
     QString boardManufacturer() const;
-    /** 입력: 없어요. 출력: USB 제품 이름이며, 없으면 빈 값이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: USB 제품 이름이며, 없으면 빈 값이에요. 실패: 없어요. */
     QString boardProduct() const;
-    /** 입력: 없어요. 출력: 부트로더가 알려 준 보드 ID이며, 모르면 0이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 부트로더가 알려 준 보드 ID이며, 모르면 0이에요. 실패: 없어요. */
     int boardId() const;
-    /** 입력: 없어요. 출력: 플래시 크기(KB)이며, 모르면 0이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 플래시 크기(KB)이며, 모르면 0이에요. 실패: 없어요. */
     int flashKb() const;
-    /** 입력: 없어요. 출력: 부트로더 판이며, 모르면 0이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 부트로더 판이며, 모르면 0이에요. 실패: 없어요. */
     int bootloaderRevision() const;
-    /** 입력: 없어요. 출력: 고른 출처이며, 기본은 Px4Official이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 고른 출처이며, 기본은 Px4Official이에요. 실패: 없어요. */
     FirmwareSource source() const;
-    /** 입력: 없어요. 출력: ArduPilot 기체 이름(Copter·Heli·Plane·Rover·Sub)이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: ArduPilot 기체 이름(Copter·Heli·Plane·Rover·Sub)이에요. 실패: 없어요. */
     QString vehicle() const;
-    /** 입력: 없어요. 출력: 버전 콤보의 값 목록이며, 첫 항목이 안정판이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 버전 콤보의 값 목록이며, 첫 항목이 안정판이에요. 실패: 없어요. */
     QStringList versions() const;
-    /** 입력: 없어요. 출력: 고른 버전 위치이며, 없으면 -1이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 고른 버전 위치이며, 없으면 -1이에요. 실패: 없어요. */
     int versionIndex() const;
-    /** 입력: 없어요. 출력: 후보 표시 목록이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 후보 표시 목록이에요. 실패: 없어요. */
     QStringList candidates() const;
-    /** 입력: 없어요. 출력: 고른 후보 위치이며, 없으면 -1이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 고른 후보 위치이며, 없으면 -1이에요. 실패: 없어요. */
     int candidateIndex() const;
-    /** 입력: 없어요. 출력: 목록을 받거나 해석하는 중이면 참이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 목록을 받거나 해석하는 중이면 참이에요. 실패: 없어요. */
     bool listLoading() const;
-    /** 입력: 없어요. 출력: 목록을 받지 못했으면 참이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 목록을 받지 못했으면 참이에요. 실패: 없어요. */
     bool listFailed() const;
-    /** 입력: 없어요. 출력: 다음 단추를 쓸 수 있으면(선택이 있으면) 참이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 다음 단추를 쓸 수 있으면(선택이 있으면) 참이에요. 실패: 없어요. */
     bool canContinue() const;
-    /** 입력: 없어요. 출력: 고른 파일 경로이며, 없으면 빈 값이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 고른 파일 경로이며, 없으면 빈 값이에요. 실패: 없어요. */
     QString filePath() const;
-    /** 입력: 없어요. 출력: 올릴 펌웨어 종류 이름이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 올릴 펌웨어 종류 이름이에요. 실패: 없어요. */
     QString firmwareName() const;
-    /** 입력: 없어요. 출력: 비교 버전 expectedVersion이며, 모르면 빈 값이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 비교 버전 expectedVersion이며, 모르면 빈 값이에요. 실패: 없어요. */
     QString expectedVersion() const;
-    /** 입력: 없어요. 출력: 공식은 후보 표시, 파일은 summary예요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 공식은 후보 표시, 파일은 summary예요. 실패: 없어요. */
     QString firmwareBoard() const;
-    /** 입력: 없어요. 출력: 이번 굽기의 Job이며, 없으면 nullptr예요. 소유권은 넘기지 않아요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 이번 굽기의 Job이며, 없으면 nullptr예요. 소유권은 넘기지 않아요. 실패: 없어요. */
     kgc::app::job::Job* job() const;
-    /** 입력: 없어요. 출력: 재연결한 기체의 버전이며, 모르면 빈 값이에요. 실패: 없어요. */
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 재연결한 기체의 버전이며, 모르면 빈 값이에요. 실패: 없어요. */
     QString vehicleVersion() const;
 /** 실패 글자를 현재 언어로 만들어요.
  * 입력: 없어요.
@@ -124,9 +132,10 @@ public:
  * 1. ArmedPolicy::check(FcFlash, Any) — Deny면 시작하지 않아요.
  * 2. LinkManager::refreshPorts — 포트 목록을 known으로 기억해요.
  * 3. PortLease::acquire → FlashWorker::probePorts — 고른 포트에 sync·identify를 해요. 성공하면 Ready예요.
- * 4. LinkManager::connectLink — 없으면 임시 링크를 열고 kHeartbeatWait 동안 기체를 기다려요.
- * 5. CommandQueue::send — 재부팅 명령(param1 = 3)을 보내요. ACCEPTED면 끊고 Rebooting이에요.
- * 6. Scheduler fcFlashScan — 500ms마다 후보 포트를 탐색해요. 실패하면 WaitReplug, 시간이 넘으면 BootloaderNotFound예요.
+ * 4. LinkManager::connectLink — 닫은 포트는 500ms 뒤에 열고, 열기 실패는 3초 안에서 다시 시도해요.
+ * 5. ArmedPolicy::check(FcFlash, One) — 발견한 기체가 시동 중이면 임시 연결을 닫고 끝내요.
+ * 6. CommandQueue::send — 재부팅 명령(param1 = 3)을 보내요. ACCEPTED면 끊고 Rebooting이에요.
+ * 7. Scheduler fcFlashScan — 500ms마다 후보 포트를 탐색해요. 실패하면 WaitReplug, 시간이 넘으면 BootloaderNotFound예요.
  */
     void beginProbe(const QString& portName);
 /** PickPort에서 포트 하나를 골라요.
@@ -141,6 +150,8 @@ public:
  * 입력: 없어요.
  * 출력: 마지막으로 고른 포트로 beginProbe를 다시 해요.
  * 실패: canRetry가 거짓이면 무시해요.
+ * 흐름:
+ * 1. beginProbe — 마지막으로 고른 포트의 확인 절차를 다시 시작해요.
  */
     void retryProbe();
 /** 펌웨어 출처를 골라요.
@@ -148,27 +159,39 @@ public:
  * 출력: 공식 출처면 목록을 받아 versions와 candidates를 채워요.
  * 실패: 목록을 못 받으면 listFailed가 참이에요.
  * 흐름:
- * 1. Http::get — PX4 릴리스 또는 ArduPilot 목록을 받아요.
- * 2. FlashWorker::parseManifest — ArduPilot 목록은 작업 스레드에서 풀고 해석해요.
- * 3. pickCandidate — 후보가 하나면 자동으로 골라요.
+ * 1. HttpRequest::abort — 앞선 요청을 멈추고 이전 선택의 해석 결과를 버려요.
+ * 2. Http::get — 메모리에 없으면 PX4 릴리스 또는 ArduPilot 목록을 받아요.
+ * 3. FlashWorker::parseReleases·parseManifest — 목록을 작업 스레드에서 해석해요.
+ * 4. pickCandidate — 후보가 하나면 자동으로 골라요.
  */
     void chooseSource(FirmwareSource source);
 /** ArduPilot 기체를 골라요.
  * 입력: 기체 이름 name이에요.
  * 출력: versions와 candidates를 다시 채워요.
  * 실패: 없어요.
+ * 흐름:
+ * 1. HttpRequest::abort — 앞선 요청과 선택을 비워요.
+ * 2. Http::get → FlashWorker::parseManifest — 메모리에 없는 목록을 받아 해석해요.
+ * 3. manifestVersions·manifestCandidates — 고른 기체의 목록을 다시 만들어요.
  */
     void chooseVehicle(const QString& name);
 /** 버전을 골라요.
  * 입력: versions의 위치 index예요.
  * 출력: candidates를 다시 채워요.
  * 실패: 범위 밖이면 무시해요.
+ * 흐름:
+ * 1. HttpRequest::abort — 앞선 요청과 선택을 비워요.
+ * 2. px4Candidates·manifestCandidates — 고른 버전의 후보를 이름순으로 만들어요.
+ * 3. pickCandidate — 후보 하나만 있으면 자동으로 골라요.
  */
     void chooseVersion(int index);
 /** 후보를 골라요.
  * 입력: candidates의 위치 index예요.
  * 출력: candidateIndex를 바꿔요.
  * 실패: 범위 밖이면 무시해요.
+ * 흐름:
+ * 1. HttpRequest::abort — 앞선 요청과 이미지를 비워요.
+ * 2. changed — 후보의 주소와 표시값을 기억하고 화면에 알려요.
  */
     void chooseCandidate(int index);
 /** 파일을 골라 바로 해석하고 호환을 봐요.
@@ -176,20 +199,25 @@ public:
  * 출력: 맞으면 filePath와 canContinue를 채워요.
  * 실패: BadImage, WrongBoard, TooLarge를 failureText로 내놓아요.
  * 흐름:
- * 1. FlashWorker::parseImage — 작업 스레드에서 파일을 해석해요.
- * 2. checkImage — 보드 ID와 크기를 봐요.
+ * 1. HttpRequest::abort — 앞선 요청과 이미지를 비워요. 빈 경로는 무시해요.
+ * 2. FlashWorker::parseImage — 작업 스레드에서 파일을 해석하고 이전 선택의 결과는 버려요.
+ * 3. checkImage — 보드 ID와 크기를 봐요.
  */
     void chooseFile(const QString& path);
 /** 확인 단계로 가요.
  * 입력: 없어요.
  * 출력: Step::Confirm이에요.
  * 실패: canContinue가 거짓이면 무시해요.
+ * 흐름:
+ * 1. changed — 확인 단계로 바꾼 뒤 화면에 알려요.
  */
     void toConfirm();
 /** 펌웨어 선택 단계로 돌아가요.
  * 입력: 없어요.
  * 출력: Step::Firmware예요.
  * 실패: 없어요.
+ * 흐름:
+ * 1. changed — 펌웨어 선택 단계로 바꾼 뒤 화면에 알려요.
  */
     void backToFirmware();
 /** 굽기를 시작해요.
@@ -198,34 +226,49 @@ public:
  * 실패: 실패하면 Job fail, Phase::Failed예요. 검증 실패에는 부팅하지 않아요.
  * 흐름:
  * 1. Http::download — 공식 출처만 Paths::cacheFirmware로 내려받아요.
- * 2. FlashWorker::flash — 해석, 호환 판정, Bootloader::flashImage를 해요.
- * 3. Job::succeed → FlashWorker::bootAndClose — 부팅하고 포트를 닫아요.
- * 4. portClosed → PortLease 해제 → LinkManager::connectLink — 다시 연결해요.
- * 5. Capabilities 묶음 — 종류와 버전을 비교해 Done, Mismatch, NoReturn으로 끝내요.
+ * 2. FlashWorker::parseImage → checkImage — 내려받은 파일을 해석하고 호환을 확인해요.
+ * 3. FlashWorker::flash — sync·identify 뒤 Bootloader::flashImage로 구워요.
+ * 4. Job::succeed → FlashWorker::bootAndClose — 부팅하고 포트를 닫아요.
+ * 5. portClosed → PortLease 해제 → LinkManager::connectLink — 다시 연결해요.
+ * 6. Capabilities 묶음 — 종류와 버전을 비교해 Done, Mismatch, NoReturn으로 끝내요.
  */
     void startFlash();
 /** 지우기 전의 굽기를 취소해요.
  * 입력: 없어요.
  * 출력: Job::finishCancelled, Phase::Ready, Step::Confirm이에요. 임대는 유지해요.
  * 실패: cancellable이 거짓이면 무시해요.
+ * 흐름:
+ * 1. Job::finishCancelled — 지우기 전 작업을 취소 상태로 끝내요.
+ * 2. HttpRequest::abort — 진행 중인 다운로드를 멈추고 임대는 유지해요.
  */
     void cancelFlash();
-/** 실패한 굽기를 내려받기 없이 다시 해요.
+/** 실패한 굽기를 부트로더 확인부터 다시 해요.
  * 입력: 없어요.
  * 출력: 새 Job으로 sync·identify부터 다시 해요.
  * 실패: canRetry가 거짓이면 무시해요.
+ * 흐름:
+ * 1. Job — 새 굽기 작업을 만들어요.
+ * 2. FlashWorker::prepareRetry — sync·identify로 부트로더를 확인해요.
+ * 3. Http::download → FlashWorker::parseImage → checkImage — 이미지가 없으면 다시 받아 해석하고 호환을 봐요.
+ * 4. FlashWorker::flash — 확인한 이미지를 다시 구워요.
  */
     void retryFlash();
 /** 굽지 않고 FC를 부팅시키고 처음으로 돌아가요.
  * 입력: 없어요.
  * 출력: BOOT를 보내고 포트를 닫은 뒤 임대를 놓고 Idle로 가요.
  * 실패: 없어요.
+ * 흐름:
+ * 1. FlashWorker::bootAndClose — FC를 부팅시키고 원시 포트를 닫아요.
+ * 2. portClosed → PortLease 해제 — 닫힘 알림 뒤 임대를 놓고 처음으로 돌아가요.
  */
     void bootAndReset();
 /** 부팅 없이 처음으로 돌아가요.
  * 입력: 없어요.
  * 출력: 포트를 닫고 임대를 놓은 뒤 Idle로 가요. 연결이 있으면 유지해요.
  * 실패: 없어요.
+ * 흐름:
+ * 1. FlashWorker::closePorts — 부팅하지 않고 원시 포트를 닫아요.
+ * 2. portClosed → PortLease 해제 — 닫힘 알림 뒤 임대를 놓고 처음으로 돌아가요.
  */
     void reset();
 signals:
@@ -235,6 +278,8 @@ signals:
  * 실패: 없어요.
  */
     void changed();
+    /** 포트 목록 변경을 전달해요. 입력: 없어요. 출력: LinkManager의 변경 알림이에요. 실패: 없어요. */
+    void portsChanged();
 private:
     struct Private;
     std::unique_ptr<Private> d_;

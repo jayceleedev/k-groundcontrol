@@ -3,5 +3,6 @@
     <file alias="LICENSE">../LICENSE</file>
     <file>icons/app.svg</file>
     <file>icons/app-tile.svg</file>
+      <file>data/fcflash/px4-boards.json</file>
   </qresource>
 </RCC>

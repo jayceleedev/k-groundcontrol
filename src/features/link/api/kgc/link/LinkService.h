@@ -1,3 +1,4 @@
+// [0.2.0 T22] specs/features/0.2.0-fcflash.md
 // [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
 #pragma once
@@ -66,6 +67,12 @@ public:
  * 실패: 없어요.
  */
     bool serialLink() const;
+/** 현재 시리얼 링크의 포트 이름을 읽어요.
+ * 입력: 없어요.
+ * 출력: 열기·연결·종료 중인 시리얼 포트 이름이며, 링크가 없거나 UDP면 빈 값이에요.
+ * 실패: 없어요.
+ */
+    QString linkPortName() const;
 /** 관리자가 가진 포트 목록을 읽어요.
  * 입력: 없어요.
  * 출력: 포트 이름과 설명의 쌍이에요.

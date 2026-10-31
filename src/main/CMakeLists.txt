@@ -12,14 +12,14 @@ target_compile_definitions(kgc_composition PUBLIC
     KGC_VERSION="${PROJECT_VERSION}" KGC_HOMEPAGE_URL="${PROJECT_HOMEPAGE_URL}")
 target_link_libraries(kgc_composition PUBLIC kgc_app_errors kgc_app_boot kgc_app_paths
     kgc_app_log kgc_app_settings kgc_app_i18n kgc_ui kgc_shell kgc_reference kgc_appSettings kgc_uiGallery kgc_analyze kgc_secondPanel
-    kgc_vehicleInfo kgc_logs kgc_preflight kgc_link kgc_comm_links kgc_vehicle_registry kgc_app_scheduler
+    kgc_vehicleInfo kgc_logs kgc_preflight kgc_link kgc_fcFlash kgc_app_net kgc_comm_rawport kgc_vehicle_safety kgc_comm_links kgc_vehicle_registry kgc_app_scheduler
     kgc_uiplugin kgc_shellplugin kgc_referenceplugin kgc_appSettingsplugin kgc_uiGalleryplugin kgc_analyzeplugin kgc_secondPanelplugin
-    kgc_vehicleInfoplugin kgc_logsplugin kgc_preflightplugin kgc_linkplugin)
+    kgc_vehicleInfoplugin kgc_logsplugin kgc_preflightplugin kgc_linkplugin kgc_fcFlashplugin)
 qt_add_translations(kgc_composition
     TS_FILES "${PROJECT_SOURCE_DIR}/i18n/kgc_en.ts"
     RESOURCE_PREFIX /kgc/i18n
     SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_reference kgc_appSettings kgc_uiGallery kgc_analyze kgc_secondPanel
-        kgc_vehicleInfo kgc_logs kgc_preflight kgc_link kgc_comm_links kgc_composition)
+        kgc_vehicleInfo kgc_logs kgc_preflight kgc_link kgc_comm_links kgc_fcFlash kgc_app_job kgc_app_net kgc_comm_rawport kgc_composition)
 qt_add_executable(KGroundControl main.cpp)
 if(WIN32)
     enable_language(RC)

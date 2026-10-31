@@ -1,3 +1,4 @@
+// [0.2.0 T22] specs/features/0.2.0-fcflash.md
 // [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
 #include <kgc/link/LinkService.h>
@@ -57,6 +58,10 @@ void LinkService::checkNoVehicle()
     if (noVehicle_ == value) return;
     noVehicle_ = value;
     emit noVehicleChanged();
+}
+QString LinkService::linkPortName() const
+{
+    return links_.linkId() >= 0 && serialLink() ? links_.linkConfig().portName : QString{};
 }
 bool LinkService::serialLink() const
 {

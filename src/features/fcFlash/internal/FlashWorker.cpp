@@ -1,43 +1,109 @@
 // [0.2.0 T14–T23] specs/features/0.2.0-fcflash.md
 #include "FlashWorker.h"
+#include "Constants.h"
+#include <kgc/comm/rawport/RawPort.h>
+#include <kgc/app/net/Http.h>
+#include <QFile>
+#include <map>
 namespace kgc::fcFlash {
 struct FlashWorker::Private {
     const std::atomic_bool& abort;
+    std::map<QString, std::unique_ptr<kgc::comm::rawport::RawPort>> ports;
 };
-FlashWorker::FlashWorker(const std::atomic_bool& abort) : d_(new Private{abort}) {}
+FlashWorker::FlashWorker(const std::atomic_bool& abort) : d_(new Private{abort, {}}) {}
 FlashWorker::~FlashWorker() = default;
 void FlashWorker::probePorts(const QStringList& portNames)
 {
-    // WORKER-FILL: spec §6.3-9 — 후보마다 RawPort::open, sync, identify를 하고 응답 없는 포트는 닫아요.
-    Q_UNUSED(portNames);
+    QList<ProbeResult> found;
+    for (const auto& name : portNames) {
+        if (d_->abort) break;
+        auto port = kgc::comm::rawport::RawPort::open(name, kFlashBaud);
+        if (!port) continue;
+        Bootloader loader(**port, d_->abort);
+        if (!loader.sync()) continue;
+        const auto board = loader.identify();
+        if (!board) {
+            if (board.error() == make(FcFlashError::BadBootloaderRevision)) found.append({name, {}, board.error()});
+            continue;
+        }
+        d_->ports.emplace(name, std::move(*port));
+        found.append({name, *board});
+    }
+    // 응답하지 않은 후보도 닫은 뒤에 알려야 서비스가 임대를 안전하게 놓을 수 있어요.
+    emit probed(found);
+    emit portClosed();
 }
 void FlashWorker::keepPort(const QString& portName)
 {
-    // WORKER-FILL: spec §6.3-9 — 고른 포트만 남기고 부팅 없이 닫은 뒤 portClosed를 내요.
-    Q_UNUSED(portName);
+    std::erase_if(d_->ports, [&](const auto& entry) { return entry.first != portName; });
+    emit portClosed();
 }
 void FlashWorker::closePorts()
 {
-    // WORKER-FILL: spec §6.2 — 쥔 RawPort를 모두 닫고 portClosed를 내요.
+    d_->ports.clear();
+    emit portClosed();
 }
 void FlashWorker::flash(const FirmwareImage& image)
 {
-    // WORKER-FILL: spec §6.8-3 — Bootloader::flashImage를 부르고 flashFinished를 내요. boot는 부르지 않아요.
-    Q_UNUSED(image);
+    if (d_->ports.empty()) {
+        emit flashFinished(std::unexpected(make(FcFlashError::PortLost)));
+        return;
+    }
+    Bootloader loader(*d_->ports.begin()->second, d_->abort);
+    auto result = loader.sync();
+    if (result) {
+        const auto board = loader.identify();
+        if (!board) result = std::unexpected(board.error());
+        else result = loader.flashImage(image,
+            [this](BootloaderStage stage) { emit stageChanged(stage); },
+            [this](double value) { emit progressChanged(value); });
+    }
+    emit flashFinished(result);
+    if (!result && result.error() == make(FcFlashError::PortLost)) {
+        d_->ports.clear();
+        emit portLost();
+        emit portClosed();
+    }
 }
 void FlashWorker::bootAndClose()
 {
-    // WORKER-FILL: spec §6.8-4 — Bootloader::boot 뒤 포트를 닫고 portClosed를 내요.
+    for (const auto& [name, port] : d_->ports) {
+        Bootloader loader(*port, d_->abort);
+        loader.boot();
+    }
+    closePorts();
 }
-void FlashWorker::parseImage(const QString& path)
+void FlashWorker::parseImage(const QString& path, quint64 generation, bool temporary)
 {
-    // WORKER-FILL: spec §6.6 — 파일을 읽어 parseFirmwareImage를 부르고 imageParsed를 내요.
-    Q_UNUSED(path);
+    QFile file(path);
+    auto result = file.open(QIODevice::ReadOnly) ? parseFirmwareImage(file.readAll())
+        : kgc::app::errors::Result<FirmwareImage>(std::unexpected(make(FcFlashError::BadImage)));
+    file.close();
+    if (temporary) QFile::remove(path);
+    emit imageParsed(std::move(result), generation);
 }
-void FlashWorker::parseManifest(const QByteArray& gzipped, int boardId)
+void FlashWorker::parseManifest(const QByteArray& gzipped, int boardId, quint64 generation)
 {
-    // WORKER-FILL: spec §6.5 — gunzip 뒤 scanManifest를 부르고 manifestScanned를 내요.
-    Q_UNUSED(gzipped);
-    Q_UNUSED(boardId);
+    const auto bytes = kgc::app::net::gunzip(gzipped);
+    if (!bytes) emit manifestFailed(generation);
+    else emit manifestScanned(scanManifest(*bytes, boardId), boardId, generation);
+}
+void FlashWorker::parseReleases(const QByteArray& json, quint64 generation)
+{
+    emit releasesParsed(parsePx4Releases(json), generation);
+}
+void FlashWorker::prepareRetry()
+{
+    kgc::app::errors::Result<void> result;
+    if (d_->ports.empty()) result = std::unexpected(make(FcFlashError::PortLost));
+    else {
+        Bootloader loader(*d_->ports.begin()->second, d_->abort);
+        result = loader.sync();
+        if (result) {
+            const auto board = loader.identify();
+            if (!board) result = std::unexpected(board.error());
+        }
+    }
+    emit retryPrepared(result);
 }
 }

@@ -1604,4 +1604,413 @@
         <translation>The port connection was lost.</translation>
     </message>
 </context>
+<context>
+    <name>FcFlash</name>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="10" />
+        <source>시동 중에는 구울 수 없어요.</source>
+        <translation>Cannot flash while a vehicle is armed.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="11" />
+        <source>다른 연결을 먼저 끊어요.</source>
+        <translation>Disconnect the other link first.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="12" />
+        <source>부트로더를 찾지 못했어요. USB를 다시 꽂고 다시 해요.</source>
+        <translation>Bootloader not found. Reconnect USB and try again.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="13" />
+        <source>지원하지 않는 부트로더예요.</source>
+        <translation>This bootloader is not supported.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="14" />
+        <source>펌웨어가 FC 플래시보다 커요.</source>
+        <translation>The firmware is larger than the FC flash memory.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="15" />
+        <source>펌웨어 파일을 읽을 수 없어요.</source>
+        <translation>Cannot read the firmware file.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="16" />
+        <source>펌웨어를 내려받지 못했어요.</source>
+        <translation>Could not download the firmware.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="17" />
+        <source>포트를 잃었어요. USB를 다시 꽂고 처음부터 해요.</source>
+        <translation>The port was lost. Reconnect USB and start over.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="18" />
+        <source>취소했어요.</source>
+        <translation>Cancelled.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="23" />
+        <source>지우기</source>
+        <translation>Erase</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="24" />
+        <source>쓰기</source>
+        <translation>Program</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="24" />
+        <source>검증</source>
+        <translation>Verify</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/Errors.cpp" line="25" />
+        <source>%1에 실패했어요. FC는 부트로더에서 기다리고 있어요.</source>
+        <translation>%1 failed. The FC is waiting in the bootloader.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/FcFlashService.cpp" line="118" />
+        <source>%1 (안정판)</source>
+        <translation>%1 (stable)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/FcFlashService.cpp" line="150" />
+        <source>이 보드용 펌웨어가 아니에요: 보드 %1, 파일 %2</source>
+        <translation>This firmware is for a different board: board %1, file %2</translation>
+    </message>
+</context>
+<context>
+    <name>FcFlashPanel</name>
+    <message>
+        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
+        <source>1 보드 확인</source>
+        <translation>1 Identify board</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
+        <source>2 펌웨어 선택</source>
+        <translation>2 Select firmware</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
+        <source>3 확인</source>
+        <translation>3 Confirm</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
+        <source>4 굽기</source>
+        <translation>4 Flash</translation>
+    </message>
+</context>
+<context>
+    <name>Job</name>
+    <message>
+        <location filename="../src/features/fcFlash/internal/FcFlashRun.cpp" line="27" />
+        <source>내려받기</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/FcFlashRun.cpp" line="55" />
+        <location filename="../src/features/fcFlash/internal/FcFlashService.cpp" line="71" />
+        <source>지우기</source>
+        <translation>Erase</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/FcFlashService.cpp" line="71" />
+        <source>쓰기</source>
+        <translation>Program</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/internal/FcFlashService.cpp" line="71" />
+        <source>검증</source>
+        <translation>Verify</translation>
+    </message>
+    <message>
+        <source>취소했어요.</source>
+        <translation>Cancelled.</translation>
+    </message>
+</context>
+<context>
+    <name>JobView</name>
+    <message>
+        <location filename="../src/platform/ui/components/JobView.qml" line="32" />
+        <source>약 %1초 남음</source>
+        <translation>About %1 seconds remaining</translation>
+    </message>
+    <message>
+        <location filename="../src/platform/ui/components/JobView.qml" line="39" />
+        <source>취소</source>
+        <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>StepBoard</name>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="25" />
+        <source>포트</source>
+        <translation>Port</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="35" />
+        <source>보드 확인</source>
+        <translation>Identify board</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="48" />
+        <source>앱이 FC를 부트로더로 넣고 보드 정보를 읽어요.</source>
+        <translation>The app will enter the FC bootloader and read its board information.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="49" />
+        <source>포트를 확인하고 있어요</source>
+        <translation>Checking the port</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="50" />
+        <source>FC를 부트로더로 넣고 있어요</source>
+        <translation>Entering the FC bootloader</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="51" />
+        <source>USB를 뽑았다가 다시 꽂아요 · %1초</source>
+        <translation>Unplug and reconnect USB · %1 seconds</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="52" />
+        <source>부트로더 포트가 둘 이상이에요. 하나를 골라요.</source>
+        <translation>Multiple bootloader ports found. Select one.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="64" />
+        <source>이 포트로 계속</source>
+        <translation>Continue with this port</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="79" />
+        <source>다시 하기</source>
+        <translation>Try again</translation>
+    </message>
+</context>
+<context>
+    <name>StepConfirm</name>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="17" />
+        <source>FC 이름</source>
+        <translation>FC name</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="22" />
+        <source>올릴 펌웨어</source>
+        <translation>Firmware to install</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="27" />
+        <source>출처</source>
+        <translation>Source</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="28" />
+        <source>PX4 공식</source>
+        <translation>PX4 official</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="29" />
+        <source>ArduPilot 공식</source>
+        <translation>ArduPilot official</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="29" />
+        <source>내 PC 파일</source>
+        <translation>Local file</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="34" />
+        <source>뒤로</source>
+        <translation>Back</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="37" />
+        <source>길게 눌러 굽기</source>
+        <translation>Hold to flash</translation>
+    </message>
+</context>
+<context>
+    <name>StepFirmware</name>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="27" />
+        <source>%1 %2 · 보드 ID %3 · 플래시 %4 KB · 부트로더 %5</source>
+        <translation>%1 %2 · Board ID %3 · Flash %4 KB · Bootloader %5</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36" />
+        <source>PX4</source>
+        <translation>PX4</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36" />
+        <source>ArduPilot</source>
+        <translation>ArduPilot</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36" />
+        <source>파일 선택</source>
+        <translation>Select file</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="43" />
+        <source>기체</source>
+        <translation>Vehicle</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="52" />
+        <source>버전</source>
+        <translation>Version</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="61" />
+        <source>맞는 펌웨어 %1개. 직접 골라요.</source>
+        <translation>%1 matching firmware candidates. Select one.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="70" />
+        <source>펌웨어</source>
+        <translation>Firmware</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="84" />
+        <source>목록을 받지 못했어요. 인터넷을 확인하거나 파일을 직접 골라요.</source>
+        <translation>Could not retrieve the list. Check your internet connection or select a local file.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="85" />
+        <source>공식 목록에 이 보드용 펌웨어가 없어요. 파일을 직접 골라요.</source>
+        <translation>No official firmware matches this board. Select a local file.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="92" />
+        <source>.px4 또는 .apj 파일</source>
+        <translation>.px4 or .apj file</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="98" />
+        <source>펌웨어 파일 선택</source>
+        <translation>Select firmware file</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="99" />
+        <source>펌웨어 파일 (*.px4 *.apj)</source>
+        <translation>Firmware files (*.px4 *.apj)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="114" />
+        <source>취소하고 FC 부팅</source>
+        <translation>Cancel and boot FC</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="121" />
+        <source>다음</source>
+        <translation>Next</translation>
+    </message>
+</context>
+<context>
+    <name>StepFlash</name>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <source>내려받기</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <source>지우기</source>
+        <translation>Erase</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <source>쓰기</source>
+        <translation>Program</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <source>검증</source>
+        <translation>Verify</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <source>재부팅</source>
+        <translation>Reboot</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <source>재연결</source>
+        <translation>Reconnect</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="52" />
+        <source>FC가 돌아오길 기다리고 있어요</source>
+        <translation>Waiting for the FC to return</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53" />
+        <source>올라갔어요: %1 %2</source>
+        <translation>Installed: %1 %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53" />
+        <source>올라갔어요: %1</source>
+        <translation>Installed: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="54" />
+        <source>올린 펌웨어와 달라요: %1 %2</source>
+        <translation>The firmware differs from the selected image: %1 %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="55" />
+        <source>굽기는 끝났지만 FC가 돌아오지 않았어요. 포트를 골라 직접 연결해요.</source>
+        <translation>Flashing finished, but the FC did not return. Select a port and connect manually.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="66" />
+        <source>다시 굽기</source>
+        <translation>Flash again</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="71" />
+        <source>처음으로</source>
+        <translation>Start over</translation>
+    </message>
+</context>
+<context>
+    <name>Http</name>
+    <message>
+        <source>HTTPS 주소만 쓸 수 있어요.</source>
+        <translation>Only HTTPS addresses are supported.</translation>
+    </message>
+    <message>
+        <source>요청 시간이 지났어요.</source>
+        <translation>The request timed out.</translation>
+    </message>
+    <message>
+        <source>내려받지 못했어요.</source>
+        <translation>The download failed.</translation>
+    </message>
+</context>
+<context>
+    <name>Port</name>
+    <message>
+        <source>다른 작업이 포트를 쓰고 있어요.</source>
+        <translation>Another operation is using this port.</translation>
+    </message>
+    <message>
+        <source>포트를 잃었어요.</source>
+        <translation>The port was lost.</translation>
+    </message>
+    <message>
+        <source>포트가 응답하지 않아요.</source>
+        <translation>The port is not responding.</translation>
+    </message>
+</context>
 </TS>

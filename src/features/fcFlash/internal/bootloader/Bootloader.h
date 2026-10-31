@@ -1,6 +1,7 @@
 // [0.2.0 T7] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <kgc/app/errors/Result.h>
+#include <kgc/fcFlash/Errors.h>
 #include <kgc/comm/rawport/ByteStream.h>
 #include "image/FirmwareImage.h"
 #include <QByteArray>
@@ -103,6 +104,12 @@ public:
  */
     kgc::app::errors::Result<void> boot();
 private:
+    kgc::app::errors::Result<void> send(const QByteArray& bytes, FcFlashError failure);
+    kgc::app::errors::Result<QByteArray> receive(int count, std::chrono::milliseconds timeout,
+        FcFlashError failure, const ProgressFn& progress = {});
+    kgc::app::errors::Result<QByteArray> reply(int count, std::chrono::milliseconds timeout,
+        FcFlashError failure, const ProgressFn& progress = {});
+    kgc::app::errors::Result<void> programChunks(char command, const QByteArray& image, const ProgressFn& progress);
     kgc::comm::rawport::ByteStream& stream_;
     const std::atomic_bool& abort_;
     BoardInfo board_;

@@ -1,8 +1,11 @@
 # [0.2.0 T7–T10 T12 T14–T23] specs/features/0.2.0-fcflash.md
 file(GLOB headers CONFIGURE_DEPENDS api/kgc/fcFlash/*.h)
 file(GLOB_RECURSE internal_sources CONFIGURE_DEPENDS internal/*.h internal/*.cpp)
-set(qml_files)
-# WORKER-FILL: spec §5.10 — S7에서 FcFlashPanel StepBoard StepFirmware StepConfirm StepFlash를 QT_RESOURCE_ALIAS와 함께 더해요.
+set(qml_files ui/FcFlashPanel.qml ui/StepBoard.qml ui/StepFirmware.qml ui/StepConfirm.qml ui/StepFlash.qml)
+foreach(file IN LISTS qml_files)
+    get_filename_component(name "${file}" NAME)
+    set_source_files_properties("${file}" PROPERTIES QT_RESOURCE_ALIAS "${name}")
+endforeach()
 qt_add_qml_module(kgc_fcFlash STATIC URI Kgc.FcFlash
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qml/Kgc/FcFlash"
     QML_FILES ${qml_files}

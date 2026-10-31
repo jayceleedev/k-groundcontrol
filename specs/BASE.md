@@ -161,7 +161,7 @@ k-groundcontrol/
 
 | 묶음 | 담는 것 | 출처 | 주인 | 모양 |
 |---|---|---|---|---|
-| `Link` | 연결 여부·주 링크·손실률·하트비트 시각·끊김·재부팅 중·**임대로 멈춤(`suspended`)** | HEARTBEAT, RADIO_STATUS, 시퀀스, RebootWindow, `LinkManager::suspended` | `VehicleStateOwner`(1Hz 끊김 검사도 여기; `suspended`·`rebooting`이면 끊김으로 판정하지 않음) | Q_GADGET |
+| `Link` | 연결 여부·주 링크·손실률·마지막 수신 시각·끊김·재부팅 중·**임대로 멈춤(`suspended`)** | 자동조종기(compid 1)의 모든 메시지, RADIO_STATUS, 시퀀스, RebootWindow, `LinkManager::suspended` | `VehicleStateOwner`(1Hz 끊김 검사도 여기; `suspended`·`rebooting`이면 끊김으로 판정하지 않음) | Q_GADGET |
 | `Arming` | armed, 모드(id+표시 이름), 준비 상태, **기체 쪽** 시동 불가 사유 | HEARTBEAT, SYS_STATUS, EVENT/STATUSTEXT(플러그인 해석 함수) | Owner | Q_GADGET |
 | `Attitude` | roll·pitch·yaw·각속도 | ATTITUDE | Owner | Q_GADGET |
 | `Position` | 위도·경도·AMSL·상대 고도·속도·헤딩·홈·GCS 거리 | GLOBAL_POSITION_INT, HOME_POSITION | Owner | Q_GADGET |
@@ -233,7 +233,7 @@ k-groundcontrol/
 - **의도한 재부팅 구간** `vehicle/safety/RebootWindow`: 기능이 `begin(vehicle, timeout)`으로 열면 그동안 끊김 판정이 "끊김"이 아니라 "재부팅 중"(`Link.rebooting`)이 된다(R-Q1a (나)).
 
 ### 9.2 기체로 나가는 문 하나와 시동 중 규칙
-- `vehicle/outbound/VehicleSender`가 기체로 가는 **모든 MAVLink 송신**의 유일한 문(주 링크 선택, sysid·compid 채움). 송신마다 `OutboundKind`(Arm, Motion, Command, Param, Mission, Other).
+- `vehicle/outbound/VehicleSender`가 기체로 가는 **모든 MAVLink 송신**의 유일한 문(주 링크 선택, sysid·compid 채움). 송신마다 `OutboundKind`(Arm, Motion, Command, Param, Mission, Other). **예외 하나**: 링크 유지 GCS 하트비트는 대상 기체가 정해지기 전에 나가야 하므로 같은 모듈의 `LinkHeartbeat`(전역, 링크마다 1Hz)가 보낸다. `Other`처럼 `WorkLock`·`RebootWindow`로 막지 않고, 임대(`suspended`)가 생기는 버전에 그 링크에서 멈춘다.
 - **시동 중 규칙(R-N10)은 두 곳에서 판정한다.**
   - ① **작업 시작 때**: 호출자가 `OperationKind`를 밝히고 `vehicle/safety/ArmedPolicy::check(kind, scope)`를 부른다. `scope`는 `One(vehicle)`(그 기체만 본다) 또는 `Any`(연결된 기체 중 하나라도 시동 중이면 시동 중으로 본다). **기체 없는 작업**(ESC 직접 연결·ELRS UART/WiFi·트래커 굽기)은 모두 `Any`로 판정한다 — 어느 기체든 시동 중이면 조종 중인 장치를 구울 수 있으므로. 결과는 `Allow / AllowWithWarning(길게 눌러 확인) / Deny`. 표는 R-N10을 그대로 옮긴다:
 
@@ -266,7 +266,7 @@ k-groundcontrol/
 - `Result<T> = std::expected<T, ErrorCode>`. 함수는 예외 대신 Result. 예외·`Q_ASSERT`·`qFatal`은 프로그램 버그에만. 워커 스레드의 오류는 `ErrorCode`를 큐드 시그널로 소유 객체에 올리고, 알림은 소유 객체만 낸다.
 
 ### 9.5 주기 작업·타임아웃·스레드
-- `platform/app/scheduler/Scheduler`에 **이름 있는 반복 작업만** `registerTask(name, period, owner, context, fn)`(`register`는 C++ 예약어)(`fn`은 context 스레드에서 돌고 owner가 사라지면 끝난다; 이름이 겹치면 프로그래밍 오류): GCS 하트비트 1Hz(`VehicleSender`가 GUI 스레드에서 만들고 링크 워커가 쓴다 — §9.2의 유일한 문), 끊김 검사 1Hz, 시리얼 포트 목록 1Hz, tlog 플러시. 트래커 각도 송신은 반복이 아니라 **위치 수신에 따라**(최대 5Hz 제한은 `Timeout`).
+- `platform/app/scheduler/Scheduler`에 **이름 있는 반복 작업만** `registerTask(name, period, owner, context, fn)`(`register`는 C++ 예약어)(`fn`은 context 스레드에서 돌고 owner가 사라지면 끝난다; 이름이 겹치면 프로그래밍 오류): GCS 하트비트 1Hz(`LinkHeartbeat`가 GUI 스레드에서 만들고 링크 워커가 쓴다 — §9.2의 예외), AP 스트림 요청 반복 500ms(`VehicleSender`), 끊김 검사 1Hz, 기체 없음 검사 1Hz(`LinkService`), 시리얼 포트 목록 1Hz, tlog 플러시. 트래커 각도 송신은 반복이 아니라 **위치 수신에 따라**(최대 5Hz 제한은 `Timeout`).
 - 일회성 타임아웃은 이름 붙은 `app/scheduler/Timeout`. QML `Timer`는 `platform/ui/components/TimerBox`만. 검사 대상 `QTimer`·`singleShot`·`startTimer(`·`QBasicTimer`·QML `Timer {`.
 - 스레드: 링크 I/O·MAVLink 파싱은 링크마다 워커, **영상 디코드·타일 로드·지형 조회도 워커**(R-N15). 상태 갱신·기능 로직·화면은 GUI 스레드.
 
@@ -347,12 +347,12 @@ k-groundcontrol/
 | 상태 묶음 / 주인 / 목록 상태 | `Bundle` / `Owner` / `ListModel` | §5 |
 | 기능 비트마스크 | `Capability` | |
 | 펌웨어 플러그인 / 명령 단계 | `FirmwarePlugin` / `CommandStep` | §8 |
-| 송신 문 / 송신 종류 / 명령 큐 | `VehicleSender` / `OutboundKind` / `CommandQueue` | §9.2 |
+| 송신 문 / 링크 하트비트 / 송신 종류 / 명령 큐 | `VehicleSender` / `LinkHeartbeat` / `OutboundKind` / `CommandQueue` | §9.2 |
 | 작업 종류 / 기체 범위 | `OperationKind` / `VehicleScope` | 시동 중 규칙 판정 |
 | 작업 잠금 / 시동 지킴이 / 시동 중 규칙 / 재부팅 구간 / 작업 시동 감시 | `WorkLock` / `ArmGuard` / `ArmedPolicy` / `RebootWindow` / `JobArmWatch` | |
 | 포트 손잡이 / 바이트 스트림 / 해제 핸들 | `RawPort` / `ByteStream` / `Releaser` | §9.1, §9.4 |
 | 상태 구조체 | `LinkBundle`·`ArmingBundle`·`AttitudeBundle`·`PositionBundle`·`GpsBundle`·`BatteryBundle`·`CapabilitiesBundle` | §5, 0.1.0 |
-| 연결 낱말 | `MavlinkParser` / `dropV1NonHeartbeat` / `LinkConfig` / `LinkError` / `UdpLink` / `SerialLink` / `LinkService` / `LinkController` | 0.1.0 |
+| 연결 낱말 | `MavlinkParser` / `dropV1NonHeartbeat` / `LinkConfig` / `LinkError` / `UdpLink` / `SerialLink` / `LinkService` / `LinkController` / `UdpPeers` / `serialErrorClosesLink` / `noVehicleTooLong` | 0.1.0, 0.1.1 |
 | 기체 낱말 | `StreamRequest` / `VehicleSelection` / `isLinkLost` / `VehicleInfoValues` | 0.1.0 |
 | 작업 | `Job` | §9.4 |
 | 서비스 / 컨트롤러 / 패널 / 메뉴 | `Service` / `Controller` / `Panel` / `Menu` | |
@@ -458,3 +458,4 @@ k-groundcontrol/
 | 2026-10-30 | 사용자 | §3.1·§3.2·§13 기능 `reference`(참고), 좌 메뉴 15, appSettings 16, uiGallery 17(0.0.4 §16) |
 | 2026-10-30 | 사용자 | §15 Actions 산출물 보관 2일(`retention-days: 2`) — 저장 한도 초과로 업로드 실패 |
 | 2026-10-31 | 사용자 | 0.1.0 스펙 초안 2와 함께 승인(§10): §2·§9.7 `registerUi(uiRegistry, VehicleRegistry&)`, 새 컨트롤러는 QML 싱글턴; §4 `--extra-serial`; §5 `<이름>Bundle`과 0.1.0 부분집합; §6 GCS id; §9.1·§9.2 등록부·안전 검사는 뒤 버전; §9.5 `registerTask`의 `fn`, GCS 하트비트는 Sender; §13 낱말; §14 고정값·이름 중복 범위와 qmllint |
+| 2026-10-31 | 사용자 | 0.1.1 스펙 초안 2와 함께 승인(§8): §5 `Link` 마지막 수신 시각, §9.2·§9.5 링크 유지 하트비트는 `LinkHeartbeat`, §9.5 스트림 요청 반복·기체 없음 검사, §13 낱말 |

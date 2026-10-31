@@ -1,9 +1,12 @@
+// [0.1.0 T9 T10 T11 T12 T13 T16 T17 T20] specs/features/0.1.0-link.md
 // [0.0.4 T3 T4] specs/features/0.0.4-righttabs.md
 #include <kgc/vehicleInfo/Ui.h>
 #include <kgc/ui/UiRegistry.h>
+#include "VehicleInfoController.h"
 namespace kgc::vehicleInfo {
-void registerUi(kgc::ui::UiRegistry& registry)
+void registerUi(kgc::ui::UiRegistry& registry, kgc::vehicle::registry::VehicleRegistry& vehicles)
 {
+    new VehicleInfoController(vehicles);
     using kgc::ui::RightTabPlacement;
     const auto add = [&registry](const char* id, int order, const char* titleKey, const char* file,
                                  RightTabPlacement placement) {

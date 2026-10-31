@@ -4,7 +4,7 @@
 # [0.0.3 T1 T14] specs/features/0.0.3-windows.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 cmake_minimum_required(VERSION 3.28)
-project(KGroundControl VERSION 0.0.4 LANGUAGES CXX
+project(KGroundControl VERSION 0.1.0 LANGUAGES CXX
     HOMEPAGE_URL "https://github.com/jayceleedev/k-groundcontrol")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,7 +22,7 @@ foreach(module app/errors app/log app/paths app/boot app/settings app/i18n app/c
     vehicle/firmware vehicle/states vehicle/outbound vehicle/registry ui)
     add_subdirectory(src/platform/${module})
 endforeach()
-foreach(module shell reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight)
+foreach(module shell link reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight)
     add_subdirectory(src/features/${module})
 endforeach()
 add_subdirectory(src/main)

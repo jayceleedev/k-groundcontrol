@@ -20,3 +20,5 @@
 1. UiSettingValues.chooseBackgroundImage → setBackgroundImage·settings::setBackgroundKind — 사진 경로를 저장하고 사진 배경을 선택해요. 종류만 고를 때는 setBackgroundKind가 생성 접근자로 저장해요.
 2. backgroundImageSource → QUrl::fromLocalFile — 특수 문자와 운영체제별 경로를 화면 주소로 바꿔요.
 3. 생성자·설정 변경·화면의 읽기 실패 → reportBackgroundImageMissing — 빈 경로와 손상 파일을 포함한 읽기 실패를 판정하고 현재 사진 배경의 경로마다 한 번 기록해요.
+
+연결 기여: TopbarSlot.registerItem·StatusChipSlot.registerItem이 component 주소를 등록해요. Theme.topbarFieldWidth는 연결 선택 칸의 공통 폭이에요.

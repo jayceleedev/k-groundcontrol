@@ -6,3 +6,4 @@
 기여: 없음.
 의존: app/* < comm/mavlink < comm/links < vehicle/firmware < vehicle/states < vehicle/outbound < vehicle/registry 순서를 지켜요.
 안 하는 것: 사용자 화면과 명령 작업은 기능 모듈이 맡아요.
+조립: main이 LinkManager·Scheduler로 VehicleRegistry를 만들고 화면 컨트롤러는 activeChanged에 다시 묶여 상태를 읽어요.

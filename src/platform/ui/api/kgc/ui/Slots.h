@@ -1,3 +1,4 @@
+// [0.1.0 T7] specs/features/0.1.0-link.md
 // [0.0.3 T2 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 // [0.0.4 T2] specs/features/0.0.4-righttabs.md
@@ -22,6 +23,13 @@ public:
  * 실패: 없음.
  */
     explicit TopbarSlot(QObject* parent = nullptr);
+/** 실제 화면 기여를 등록해요.
+ * 입력: 식별자, 순서, 영역과 구분선 묶음, QML 주소.
+ * 출력: 정렬된 목록의 등록 결과와 component 역할.
+ * 실패: 같은 식별자는 DuplicateId, 잘못된 자리는 프로그래밍 오류예요.
+ */
+    kgc::app::errors::Result<void> registerItem(const QString& id, int order,
+        const QString& area, int group, const QUrl& component);
 /** 아직 없는 기능의 상단바 자리를 단추·드롭다운·글자 표시로 잡아 둬요.
  * 입력: 식별자, 순서, 영역("left"·"centre"·"right"), 구분선 묶음 번호, 번역 문맥 "Bar"의 이름 원문, 아이콘 이름(없으면 빈 값),
  *       iconOnly(참이면 이름은 설명 풍선으로만 보이는 아이콘 단추), shape("button" 기본·"dropdown"·"display").
@@ -39,7 +47,7 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
 /** 상단바 항목의 표시 역할을 알려줘요.
  * 입력: 없음.
- * 출력: 공통 역할과 area·group·labelKey·icon·iconOnly·separatorBefore·shape.
+ * 출력: 공통 역할과 area·group·labelKey·icon·iconOnly·separatorBefore·shape·component.
  * 실패: 없음.
  */
     QHash<int, QByteArray> roleNames() const override;
@@ -58,6 +66,13 @@ public:
  * 실패: 없음.
  */
     explicit StatusChipSlot(QObject* parent = nullptr);
+/** 실제 화면 기여를 등록해요.
+ * 입력: 식별자, 순서, 쪽, QML 주소.
+ * 출력: 정렬된 목록의 등록 결과와 component 역할.
+ * 실패: 같은 식별자는 DuplicateId, 잘못된 자리는 프로그래밍 오류예요.
+ */
+    kgc::app::errors::Result<void> registerItem(const QString& id, int order,
+        const QString& side, const QUrl& component);
 /** 아직 없는 기능의 하단 칩 자리를 흐린 칩으로 잡아 둬요.
  * 입력: 식별자, 순서, 쪽("left"·"right"), 번역 문맥 "Bar"의 이름 원문.
  * 출력: 등록 결과.
@@ -67,7 +82,7 @@ public:
         const QString& labelKey);
 /** 하단 칩의 표시 역할을 알려줘요.
  * 입력: 없음.
- * 출력: 공통 역할과 side·labelKey.
+ * 출력: 공통 역할과 side·labelKey·component.
  * 실패: 없음.
  */
     QHash<int, QByteArray> roleNames() const override;

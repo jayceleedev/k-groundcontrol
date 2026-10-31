@@ -1,3 +1,4 @@
+// [0.1.0 T10 T13 T17] specs/features/0.1.0-link.md
 // [0.0.3 T13] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #pragma once
@@ -10,19 +11,19 @@ namespace kgc::app::log { class LogFeed; }
 namespace kgc::app::i18n { class Translator; }
 namespace kgc {
 /** 엔진 수명에 맞춰 전역 모듈을 조립해요.
- * 입력: 엔진과 배포 정보와 번역기와 로그 통로.
+ * 입력: 엔진과 배포 정보와 번역기와 로그 통로, 시험용 시리얼 경로예요.
  * 출력: 없음.
  * 실패: 없음.
  */
 class Composition : public QObject {
 public:
 /** 등록부와 서비스를 만들어 화면에 연결해요.
- * 입력: 엔진과 배포 정보와 번역기와 로그 통로.
+ * 입력: 엔진과 배포 정보와 번역기와 로그 통로, 시험용 시리얼 경로예요.
  * 출력: 없음.
  * 실패: 없음.
  */
     Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
-                app::log::LogFeed& feed);
+                app::log::LogFeed& feed, const QString& extraSerial = {});
 /** 조립된 화면의 창을 만들고 표시해요.
  * 입력: 없음.
  * 출력: 창 포인터.

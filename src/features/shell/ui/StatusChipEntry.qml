@@ -1,18 +1,31 @@
-// [0.0.3 T21] specs/features/0.0.3-windows.md
-/** 하단 상태 칩 슬롯 한 항목을 그 쪽에 그려요. 아직 기능이 없는 자리는 흐린 칩으로 보여요.
- * 입력: side(이 줄이 그리는 쪽)와 슬롯 모델의 id·side·labelKey.
- * 출력: 쪽이 맞으면 칩을, 아니면 아무것도 보이지 않아요.
+// [0.1.0 T7] specs/features/0.1.0-link.md
+/** 기여 화면과 자리 표시가 같은 칩 높이를 쓰도록 감싸요.
+ * 입력: side와 슬롯 모델의 id·side·labelKey·component.
+ * 출력: 선택한 쪽의 기여 화면 또는 흐린 자리 표시예요.
  * 실패: 없음.
  */
 import QtQuick
 import Kgc.Ui
-Chip {
-    id: chip
+Item {
+    id: entry
     required property var model
     property string side
     visible: model.side === side
-    objectName: "statusChip_" + model.id
-    level: "idle"
     height: Theme.bottomBarHeight - Theme.inset
-    text: { translator.language; return qsTranslate("Bar", model.labelKey) }
+    width: content.implicitWidth
+    Loader {
+        id: content
+        active: entry.model.side === entry.side
+        height: parent.height
+        source: entry.model.component
+        sourceComponent: entry.model.component.toString() ? null : placeholder
+    }
+    Component {
+        id: placeholder
+        Chip {
+            objectName: "statusChip_" + entry.model.id
+            level: "idle"
+            text: { translator.language; return qsTranslate("Bar", entry.model.labelKey) }
+        }
+    }
 }

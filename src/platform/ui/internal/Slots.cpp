@@ -1,3 +1,4 @@
+// [0.1.0 T7] specs/features/0.1.0-link.md
 // [0.0.3 T2 T15 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 // [0.0.4 T2] specs/features/0.0.4-righttabs.md
@@ -14,7 +15,13 @@ kgc::app::errors::Result<void> TopbarSlot::registerPlaceholder(const QString& id
     if (shape != u"button" && shape != u"dropdown" && shape != u"display")
         qFatal("registerPlaceholder: unknown topbar shape");
     return add({id, order, {{"area", area}, {"group", group}, {"labelKey", labelKey}, {"icon", icon},
-        {"iconOnly", iconOnly}, {"shape", shape}}});
+        {"iconOnly", iconOnly}, {"shape", shape}, {"component", QUrl{}}}});
+}
+kgc::app::errors::Result<void> TopbarSlot::registerItem(const QString& id, int order,
+    const QString& area, int group, const QUrl& component)
+{
+    if (area != u"left" && area != u"centre" && area != u"right") qFatal("registerItem: unknown topbar area");
+    return add({id, order, {{"area", area}, {"group", group}, {"component", component}}});
 }
 QVariant TopbarSlot::data(const QModelIndex& index, int role) const
 {
@@ -35,6 +42,7 @@ QHash<int, QByteArray> TopbarSlot::roleNames() const
     roles.insert(Qt::UserRole + 7, "iconOnly");
     roles.insert(Qt::UserRole + 8, "separatorBefore");
     roles.insert(Qt::UserRole + 9, "shape");
+    roles.insert(Qt::UserRole + 10, "component");
     return roles;
 }
 StatusChipSlot::StatusChipSlot(QObject* parent) : SlotModel(parent) {}
@@ -42,13 +50,20 @@ kgc::app::errors::Result<void> StatusChipSlot::registerPlaceholder(const QString
     const QString& side, const QString& labelKey)
 {
     if (side != u"left" && side != u"right") qFatal("registerPlaceholder: unknown status chip side");
-    return add({id, order, {{"side", side}, {"labelKey", labelKey}}});
+    return add({id, order, {{"side", side}, {"labelKey", labelKey}, {"component", QUrl{}}}});
+}
+kgc::app::errors::Result<void> StatusChipSlot::registerItem(const QString& id, int order,
+    const QString& side, const QUrl& component)
+{
+    if (side != u"left" && side != u"right") qFatal("registerItem: unknown status chip side");
+    return add({id, order, {{"side", side}, {"component", component}}});
 }
 QHash<int, QByteArray> StatusChipSlot::roleNames() const
 {
     auto roles = SlotModel::roleNames();
     roles.insert(Qt::UserRole + 3, "side");
     roles.insert(Qt::UserRole + 4, "labelKey");
+    roles.insert(Qt::UserRole + 5, "component");
     return roles;
 }
 RightTabSlot::RightTabSlot(QObject* parent) : SlotModel(parent) {}

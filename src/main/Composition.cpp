@@ -1,3 +1,4 @@
+// [0.1.0 T10 T13 T17] specs/features/0.1.0-link.md
 // [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
 // [0.0.4 T1 T3 T4] specs/features/0.0.4-righttabs.md
 // [0.0.4 T33 T34] specs/features/0.0.4-righttabs.md
@@ -5,6 +6,11 @@
 // [0.0.3 T1 T13 T17 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 #include "Composition.h"
+#include <kgc/app/scheduler/Scheduler.h>
+#include <kgc/comm/links/LinkManager.h>
+#include <kgc/vehicle/registry/VehicleRegistry.h>
+#include <kgc/link/LinkService.h>
+#include <kgc/link/Ui.h>
 #include <kgc/ui/UiRegistry.h>
 #include <kgc/ui/ThemeSwitcher.h>
 #include <kgc/ui/UiSettingValues.h>
@@ -31,6 +37,7 @@
 #include <QQuickWindow>
 #include <QtQml/QQmlExtensionPlugin>
 
+Q_IMPORT_QML_PLUGIN(Kgc_LinkPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ShellPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_AppSettingsPlugin)
@@ -88,16 +95,12 @@ void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
     top("mission.select", 9, "centre", 5, QT_TRANSLATE_NOOP("Bar", "미션: —"), "", false, "dropdown");
     top("mission.start", 10, "centre", 5, QT_TRANSLATE_NOOP("Bar", "미션 시작"), "player-play");
     top("mission.progress", 11, "centre", 5, QT_TRANSLATE_NOOP("Bar", "WP"), "", false, "display");
-    top("link.port", 12, "right", 6, QT_TRANSLATE_NOOP("Bar", "포트: —"), "", false, "dropdown");
-    top("link.baud", 13, "right", 6, QT_TRANSLATE_NOOP("Bar", "속도: —"), "", false, "dropdown");
-    top("link.connect", 14, "right", 6, QT_TRANSLATE_NOOP("Bar", "연결"), "plug-connected");
     top("notify.bell", 15, "right", 7, QT_TRANSLATE_NOOP("Bar", "알림"), "bell", true);
     top("ai.panel", 16, "right", 7, QT_TRANSLATE_NOOP("Bar", "AI"), "sparkles", true);
     const auto chip = [chips](const char* id, int order, const char* side, const char* labelKey) {
         const auto result = chips->registerPlaceholder(id, order, side, labelKey);
         Q_ASSERT(result.has_value());
     };
-    chip("link.connection", 1, "left", QT_TRANSLATE_NOOP("Bar", "기체 연결"));
     chip("vehicleInfo.gps", 2, "left", QT_TRANSLATE_NOOP("Bar", "GPS"));
     chip("vehicleInfo.compass", 3, "left", QT_TRANSLATE_NOOP("Bar", "나침반"));
     chip("vehicleInfo.imu", 4, "left", QT_TRANSLATE_NOOP("Bar", "IMU"));
@@ -110,7 +113,7 @@ void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
 }
 }
 Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
-                         app::log::LogFeed& feed)
+                         app::log::LogFeed& feed, const QString& extraSerial)
     : QObject(&engine), engine_(engine)
 {
     initKgcResources();
@@ -146,7 +149,12 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* secondPanelService = new secondPanel::SecondPanelService(this);
     secondPanel::registerUi(registry, *secondPanelService);
     // 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
-    vehicleInfo::registerUi(registry);
+    auto* scheduler = new app::scheduler::Scheduler(this);
+    auto* links = new comm::links::LinkManager(*scheduler, extraSerial, this);
+    auto* vehicles = new vehicle::registry::VehicleRegistry(*links, *scheduler, this);
+    auto* linkService = new link::LinkService(*links, *vehicles, this);
+    link::registerUi(registry, *linkService);
+    vehicleInfo::registerUi(registry, *vehicles);
     auto* logsViewer = new logs::LogsViewer(this);
     logs::registerUi(registry, *logsViewer);
     preflight::registerUi(registry);

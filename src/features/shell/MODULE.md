@@ -8,3 +8,5 @@
 안 하는 것: 슬롯 내용과 지도는 각 기능이 맡아요.
 흐름(좌 메뉴 폭): 1. LeftMenu 손잡이를 놓으면 ShellController.setLeftMenuWidth → settings::setLeftMenuWidth로 저장해요. 2. leftMenuWidthChanged로 폭이 바뀌고 CenterArea 폭(유리 테마는 viewportLeft)이 따라 바뀌어요.
 흐름: 1. ShellController가 메뉴 동작을 받아요. 2. ShellService가 사건을 기록해요. 3. 등록된 패널을 표시해요.
+
+연결 기여: TopbarEntry·StatusChipEntry가 component 역할이 있으면 Loader로 기여 화면을 띄워요. 기여가 자기 objectName을 정하고 자리 표시의 모습은 유지해요.

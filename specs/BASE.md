@@ -353,7 +353,7 @@ k-groundcontrol/
 | 포트 손잡이 / 바이트 스트림 / 해제 핸들 | `RawPort` / `ByteStream` / `Releaser` | §9.1, §9.4 |
 | 상태 구조체 | `LinkBundle`·`ArmingBundle`·`AttitudeBundle`·`PositionBundle`·`GpsBundle`·`BatteryBundle`·`CapabilitiesBundle` | §5, 0.1.0 |
 | 연결 낱말 | `MavlinkParser` / `dropV1NonHeartbeat` / `LinkConfig` / `LinkError` / `UdpLink` / `SerialLink` / `LinkService` / `LinkController` | 0.1.0 |
-| 기체 낱말 | `StreamRequest` / `VehicleSelection` / `isLinkLost` | 0.1.0 |
+| 기체 낱말 | `StreamRequest` / `VehicleSelection` / `isLinkLost` / `VehicleInfoValues` | 0.1.0 |
 | 작업 | `Job` | §9.4 |
 | 서비스 / 컨트롤러 / 패널 / 메뉴 | `Service` / `Controller` / `Panel` / `Menu` | |
 | 파라미터 / 묶음(계열) / 작업 단위 묶음 | `Param` / `ParamGroup` / `TaskSet` | |

@@ -1,3 +1,4 @@
+// [0.1.0 T13] specs/features/0.1.0-link.md
 // [0.0.3 T7 T13] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
 // [0.0.2 T26 T27] specs/features/0.0.2-theme.md
@@ -50,7 +51,7 @@ int main(int argc, char* argv[])
     QQuickStyle::setStyle("Basic");
     QQmlApplicationEngine engine;
     auto* composition = new kgc::Composition(engine,
-        {KGC_VERSION, KGC_HOMEPAGE_URL, ":/kgc/LICENSE", app.applicationDirPath() + "/THIRD_PARTY_NOTICES.md"}, translator, feed);
+        {KGC_VERSION, KGC_HOMEPAGE_URL, ":/kgc/LICENSE", app.applicationDirPath() + "/THIRD_PARTY_NOTICES.md"}, translator, feed, boot.extraSerial);
     QGuiApplication::setWindowIcon(QIcon(":/kgc/icons/app-tile.svg"));
     const int result = composition->loadShell() ? app.exec() : 1;
     kgc::app::log::LogSink::attachFeed(nullptr);

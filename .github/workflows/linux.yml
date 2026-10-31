@@ -25,6 +25,10 @@ jobs:
         shell: bash
         run: QT_ROOT="$QT_ROOT_DIR" cmake --preset linux-release
       - run: cmake --build --preset linux-release
+      - name: QML 타입 검사
+        run: |
+          qmllint @build/linux-release/src/features/link/.rcc/qmllint/kgc_link.rsp --unqualified disable --max-warnings 0
+          qmllint @build/linux-release/src/features/vehicleInfo/.rcc/qmllint/kgc_vehicleInfo.rsp --unqualified disable --max-warnings 0
       - run: ctest --preset linux-release
       - run: cmake --build build/linux-release --target package
       - uses: actions/upload-artifact@v7

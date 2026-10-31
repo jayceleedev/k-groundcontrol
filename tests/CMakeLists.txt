@@ -48,3 +48,8 @@ add_test(NAME firmware COMMAND test_firmware)
 qt_add_executable(test_vehicle_selection test_vehicle_selection.cpp)
 target_link_libraries(test_vehicle_selection PRIVATE kgc_vehicle_registry Qt6::Test)
 add_test(NAME vehicle_selection COMMAND test_vehicle_selection)
+
+# [0.1.0 T7] specs/features/0.1.0-link.md
+qt_add_executable(test_link_slots test_link_slots.cpp)
+target_link_libraries(test_link_slots PRIVATE kgc_ui Qt6::Test)
+add_test(NAME link_slots COMMAND test_link_slots)

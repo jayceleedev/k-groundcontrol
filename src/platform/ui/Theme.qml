@@ -1,3 +1,4 @@
+// [0.1.0 T14] specs/features/0.1.0-link.md
 // [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.4 T8 T9 T9b T12] specs/features/0.0.4-righttabs.md
 // [0.0.4 T16 T19 T20 T23a T25a T29] specs/features/0.0.4-righttabs.md
@@ -45,6 +46,7 @@ QtObject {
     readonly property int frameButtonSize: Math.round(28 * uiScale)
     readonly property int frameIconSize: Math.round(18 * uiScale)
     // 텍스트·숫자·목록 입력란의 기본 너비예요.
+    readonly property int topbarFieldWidth: Math.round(150 * uiScale)
     readonly property int inputWidth: Math.round(240 * uiScale)
     // 입력란의 이름표와 오류 글에 한 줄을 확보해요.
     readonly property int inputLabelHeight: Math.round(36 * uiScale)

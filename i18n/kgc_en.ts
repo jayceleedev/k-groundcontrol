@@ -195,21 +195,6 @@
         <translation>Emergency Stop</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="87"/>
-        <source>포트: —</source>
-        <translation>Port: —</translation>
-    </message>
-    <message>
-        <location filename="../src/main/Composition.cpp" line="88"/>
-        <source>속도: —</source>
-        <translation>Baud: —</translation>
-    </message>
-    <message>
-        <location filename="../src/main/Composition.cpp" line="89"/>
-        <source>연결</source>
-        <translation>Connect</translation>
-    </message>
-    <message>
         <location filename="../src/main/Composition.cpp" line="85"/>
         <source>알림</source>
         <translation>Notifications</translation>
@@ -218,11 +203,6 @@
         <location filename="../src/main/Composition.cpp" line="86"/>
         <source>AI</source>
         <translation>AI</translation>
-    </message>
-    <message>
-        <location filename="../src/main/Composition.cpp" line="91"/>
-        <source>기체 연결</source>
-        <translation>Vehicle Link</translation>
     </message>
     <message>
         <location filename="../src/main/Composition.cpp" line="92"/>
@@ -286,6 +266,10 @@
         <location filename="../src/platform/app/boot/internal/BootOptions.cpp" line="23"/>
         <source>지원하지 않는 로그 수준: %1</source>
         <translation>Unsupported log level: %1</translation>
+    </message>
+    <message>
+        <source>추가 시리얼 경로</source>
+        <translation>Additional serial path</translation>
     </message>
 </context>
 <context>
@@ -1190,11 +1174,6 @@
         <translation>No vehicle</translation>
     </message>
     <message>
-        <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="16"/>
-        <source>하단 왼쪽 &quot;기체 연결&quot;에서 연결해요.</source>
-        <translation>Connect from &quot;Vehicle Link&quot; at the bottom left.</translation>
-    </message>
-    <message>
         <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="20"/>
         <source>상태</source>
         <translation>Status</translation>
@@ -1268,6 +1247,38 @@
         <location filename="../src/features/vehicleInfo/ui/OverviewTab.qml" line="46"/>
         <source>비행 시간 · 거리</source>
         <translation>Flight time · Distance</translation>
+    </message>
+    <message>
+        <source>상단바에서 포트를 고르고 연결해요.</source>
+        <translation>Choose a port in the top bar and connect.</translation>
+    </message>
+    <message>
+        <source>%1 · %2</source>
+        <translation>%1 · %2</translation>
+    </message>
+    <message>
+        <source>시동</source>
+        <translation>Armed</translation>
+    </message>
+    <message>
+        <source>해제</source>
+        <translation>Disarmed</translation>
+    </message>
+    <message>
+        <source>%1%</source>
+        <translation>%1%</translation>
+    </message>
+    <message>
+        <source>%1 · 위성 %2</source>
+        <translation>%1 · Satellites %2</translation>
+    </message>
+    <message>
+        <source>%1 @ %2</source>
+        <translation>%1 @ %2</translation>
+    </message>
+    <message>
+        <source>%1 / %2</source>
+        <translation>%1 / %2</translation>
     </message>
 </context>
 <context>
@@ -1481,6 +1492,108 @@
     <message>
         <source>바로가기</source>
         <translation>Open</translation>
+    </message>
+</context>
+<context>
+    <name>LinkPort</name>
+    <message>
+        <source>포트: %1</source>
+        <translation>Port: %1</translation>
+    </message>
+</context>
+<context>
+    <name>LinkBaud</name>
+    <message>
+        <source>속도: %1</source>
+        <translation>Baud: %1</translation>
+    </message>
+</context>
+<context>
+    <name>LinkConnect</name>
+    <message>
+        <source>연결</source>
+        <translation>Connect</translation>
+    </message>
+    <message>
+        <source>끊기</source>
+        <translation>Disconnect</translation>
+    </message>
+</context>
+<context>
+    <name>LinkConnection</name>
+    <message>
+        <source>기체 연결</source>
+        <translation>Connect vehicle</translation>
+    </message>
+    <message>
+        <source>기체 찾는 중</source>
+        <translation>Searching for vehicle</translation>
+    </message>
+    <message>
+        <source>기체 응답 없음</source>
+        <translation>Vehicle not responding</translation>
+    </message>
+    <message>
+        <source>연결 실패: %1</source>
+        <translation>Connection failed: %1</translation>
+    </message>
+    <message>
+        <source>%1 · 시스템 %2</source>
+        <translation>%1 · System %2</translation>
+    </message>
+</context>
+<context>
+    <name>VehicleInfoValues</name>
+    <message>
+        <source>모드 %1</source>
+        <translation>Mode %1</translation>
+    </message>
+    <message>
+        <source>없음</source>
+        <translation>None</translation>
+    </message>
+    <message>
+        <source>%1 V</source>
+        <translation>%1 V</translation>
+    </message>
+    <message>
+        <source>%1 A</source>
+        <translation>%1 A</translation>
+    </message>
+    <message>
+        <source>%1 m</source>
+        <translation>%1 m</translation>
+    </message>
+    <message>
+        <source>%1 m/s</source>
+        <translation>%1 m/s</translation>
+    </message>
+</context>
+<context>
+    <name>Link</name>
+    <message>
+        <source>이미 연결 중이에요.</source>
+        <translation>A connection is already in progress.</translation>
+    </message>
+    <message>
+        <source>포트를 열 수 없어요.</source>
+        <translation>Unable to open the port.</translation>
+    </message>
+    <message>
+        <source>포트를 열 권한이 없거나 다른 프로그램이 쓰고 있어요.</source>
+        <translation>Permission denied or the port is in use by another program.</translation>
+    </message>
+    <message>
+        <source>다른 프로그램이 포트를 쓰고 있어요.</source>
+        <translation>Another program is using the port.</translation>
+    </message>
+    <message>
+        <source>UDP 수신 포트를 열 수 없어요.</source>
+        <translation>Unable to open the UDP listening port.</translation>
+    </message>
+    <message>
+        <source>포트 연결이 끊어졌어요.</source>
+        <translation>The port connection was lost.</translation>
     </message>
 </context>
 </TS>

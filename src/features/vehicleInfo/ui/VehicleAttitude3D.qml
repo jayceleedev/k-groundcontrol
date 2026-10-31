@@ -1,3 +1,4 @@
+// [0.1.0 T10 T11 T12] specs/features/0.1.0-link.md
 // [0.0.4 T20 T24a T24b T24c T24d] specs/features/0.0.4-righttabs.md
 /** 기체 모형(쿼드콥터 또는 비행기)이 자세대로 도는 3D 계기예요.
  * 입력: available(기본 거짓), roll·pitch·heading(도; roll +는 오른쪽 날개 내려감, pitch +는 기수 듦, heading은 위에서 본 시계 방향 기수 방위),
@@ -22,7 +23,7 @@ Item {
     property bool hasCompass: false
     readonly property real shownRoll: available ? roll : 0
     readonly property real shownPitch: available ? Math.max(-90, Math.min(90, pitch)) : 0
-    readonly property real shownHeading: available ? heading : 0
+    readonly property real shownHeading: available && isFinite(heading) ? heading : 0
     readonly property bool showPlane: available && modelKind === "plane"
     readonly property bool showCompass: available && hasCompass
     readonly property string northLetter: "N"

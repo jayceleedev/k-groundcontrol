@@ -1,3 +1,4 @@
+// [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.0 T10 T13 T17] specs/features/0.1.0-link.md
 // [0.0.3 T13] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
@@ -23,7 +24,7 @@ public:
  * 실패: 없음.
  */
     Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
-                app::log::LogFeed& feed, const QString& extraSerial = {});
+                app::log::LogFeed& feed, const QStringList& extraSerial = {});
 /** 조립된 화면의 창을 만들고 표시해요.
  * 입력: 없음.
  * 출력: 창 포인터.

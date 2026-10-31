@@ -1,50 +1,71 @@
 // [0.2.0 T14 T19] specs/features/0.2.0-fcflash.md
 #include <kgc/comm/rawport/RawPort.h>
 #include <kgc/comm/rawport/Errors.h>
+#include <QSerialPort>
+#include <QElapsedTimer>
+#include <algorithm>
+#include <limits>
 namespace kgc::comm::rawport {
-struct RawPort::Private {};
+struct RawPort::Private { QSerialPort port; };
 RawPort::RawPort() : d_(std::make_unique<Private>()) {}
 RawPort::~RawPort() = default;
 kgc::app::errors::Result<std::unique_ptr<RawPort>> RawPort::open(QString portName, int baud)
 {
-    // WORKER-FILL: spec §5.5 — 이 스레드에서 QSerialPort를 8N1, 흐름 제어 없음으로 열어요. 실패는 OpenFailed예요.
-    Q_UNUSED(portName);
-    Q_UNUSED(baud);
-    return std::unexpected(make(PortError::OpenFailed));
+    auto raw = std::unique_ptr<RawPort>(new RawPort);
+    auto& port = raw->d_->port;
+    port.setPortName(portName);
+    if (!port.setBaudRate(baud) || !port.setDataBits(QSerialPort::Data8)
+        || !port.setParity(QSerialPort::NoParity) || !port.setStopBits(QSerialPort::OneStop)
+        || !port.setFlowControl(QSerialPort::NoFlowControl) || !port.open(QIODevice::ReadWrite))
+        return std::unexpected(make(PortError::OpenFailed));
+    return raw;
 }
 kgc::app::errors::Result<void> RawPort::write(QByteArray bytes)
 {
-    // WORKER-FILL: spec §5.5 — waitForBytesWritten으로 막아 보내요. 포트 오류는 Lost예요.
-    Q_UNUSED(bytes);
-    return std::unexpected(make(PortError::Lost));
+    auto& port = d_->port;
+    if (!port.isOpen()) return std::unexpected(make(PortError::Lost));
+    if (port.write(bytes) != bytes.size()) return std::unexpected(make(PortError::Lost));
+    while (port.bytesToWrite() > 0) {
+        if (!port.waitForBytesWritten())
+            return std::unexpected(make(port.error() == QSerialPort::TimeoutError ? PortError::Timeout : PortError::Lost));
+    }
+    return {};
 }
 kgc::app::errors::Result<QByteArray> RawPort::read(int count, std::chrono::milliseconds timeout)
 {
-    // WORKER-FILL: spec §5.5 — count를 채우거나 timeout까지 waitForReadyRead로 막아요. 한 바이트도 없으면 Timeout이에요.
-    Q_UNUSED(count);
-    Q_UNUSED(timeout);
-    return std::unexpected(make(PortError::Lost));
+    auto& port = d_->port;
+    QByteArray bytes;
+    QElapsedTimer clock;
+    clock.start();
+    if (!port.isOpen()) return std::unexpected(make(PortError::Lost));
+    while (bytes.size() < count) {
+        bytes += port.read(count - bytes.size());
+        if (port.error() != QSerialPort::NoError && port.error() != QSerialPort::TimeoutError)
+            return std::unexpected(make(PortError::Lost));
+        if (bytes.size() == count) break;
+        const auto remaining = timeout.count() - clock.elapsed();
+        if (remaining <= 0) break;
+        const auto wait = static_cast<int>(std::min<qint64>(remaining, std::numeric_limits<int>::max()));
+        if (!port.waitForReadyRead(wait)) {
+            if (port.error() != QSerialPort::TimeoutError && port.error() != QSerialPort::NoError)
+                return std::unexpected(make(PortError::Lost));
+            break;
+        }
+    }
+    if (bytes.isEmpty() && count > 0) return std::unexpected(make(PortError::Timeout));
+    return bytes;
 }
-void RawPort::clearInput()
-{
-    // WORKER-FILL: spec §5.5 — 포트와 Qt 버퍼의 받은 바이트를 버려요.
-}
-bool RawPort::canControlLine() const
-{
-    // WORKER-FILL: spec §5.5 — 실제 시리얼 포트이므로 참이에요.
-    return false;
-}
+void RawPort::clearInput() { d_->port.clear(QSerialPort::Input); }
+bool RawPort::canControlLine() const { return true; }
 kgc::app::errors::Result<void> RawPort::setBaud(int baud)
 {
-    // WORKER-FILL: spec §5.5 — QSerialPort::setBaudRate를 불러요.
-    Q_UNUSED(baud);
-    return std::unexpected(make(PortError::Lost));
+    if (!d_->port.setBaudRate(baud)) return std::unexpected(make(PortError::Lost));
+    return {};
 }
 kgc::app::errors::Result<void> RawPort::setDtrRts(bool dtr, bool rts)
 {
-    // WORKER-FILL: spec §5.5 — QSerialPort의 DTR·RTS를 바꿔요.
-    Q_UNUSED(dtr);
-    Q_UNUSED(rts);
-    return std::unexpected(make(PortError::Lost));
+    if (!d_->port.setDataTerminalReady(dtr) || !d_->port.setRequestToSend(rts))
+        return std::unexpected(make(PortError::Lost));
+    return {};
 }
 }

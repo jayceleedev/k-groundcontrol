@@ -1,3 +1,4 @@
+// [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.1 T1 T2 T3] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include <kgc/vehicle/states/VehicleStateOwner.h>
@@ -12,6 +13,7 @@
 #include "updaters/GpsUpdater.h"
 #include "updaters/BatteryUpdater.h"
 #include "updaters/CapabilitiesUpdater.h"
+#include "updaters/AutopilotVersionUpdater.h"
 namespace kgc::vehicle::states {
 VehicleStateOwner::VehicleStateOwner(VehicleStates& states, const kgc::vehicle::firmware::FirmwarePlugin& plugin,
                                    kgc::app::scheduler::Scheduler& scheduler, int sysid, QObject* parent)
@@ -35,10 +37,17 @@ void VehicleStateOwner::consume(const mavlink_message_t& message)
     if (message.msgid == MAVLINK_MSG_ID_HEARTBEAT || wasLost != states_.link_.lost)
         emit states_.linkChanged();
     switch (message.msgid) {
-    case MAVLINK_MSG_ID_HEARTBEAT:
+    case MAVLINK_MSG_ID_HEARTBEAT: {
+        const auto version = states_.capabilities_.firmwareVersion;
         states_.arming_ = updateArming(message, plugin_);
         states_.capabilities_ = updateCapabilities(message, plugin_);
+        states_.capabilities_.firmwareVersion = version;
         emit states_.armingChanged();
+        emit states_.capabilitiesChanged();
+        break;
+    }
+    case MAVLINK_MSG_ID_AUTOPILOT_VERSION:
+        states_.capabilities_ = updateAutopilotVersion(message, states_.capabilities_);
         emit states_.capabilitiesChanged();
         break;
     case MAVLINK_MSG_ID_ATTITUDE:

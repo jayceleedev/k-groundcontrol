@@ -1,3 +1,4 @@
+// [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.0 T8] specs/features/0.1.0-link.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #include <kgc/app/boot/BootOptions.h>
@@ -17,7 +18,7 @@ BootOptions BootOptions::parse(const QStringList& args)
     parser.addOption({"extra-serial", QT_TRANSLATE_NOOP("BootOptions", "추가 시리얼 경로"), "path"});
     parser.process(args);
     BootOptions options;
-    options.extraSerial = parser.value("extra-serial");
+    options.extraSerial = parser.values("extra-serial");
     const auto levelName = parser.isSet("log-level") ? parser.value("log-level")
         : ini.value("log/level", "info").toString();
     const auto level = kgc::app::log::parseLogLevel(levelName);

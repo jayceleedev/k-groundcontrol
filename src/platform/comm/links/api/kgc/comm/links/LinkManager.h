@@ -1,3 +1,4 @@
+// [0.2.0 5.5] specs/features/0.2.0-fcflash.md
 // [0.1.1 T4 T5 T13 T15 T16] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
@@ -9,7 +10,14 @@
 #include <memory>
 #include <optional>
 namespace kgc::app::scheduler { class Scheduler; }
+namespace kgc::comm::rawport { class PortRegistry; }
 namespace kgc::comm::links {
+/** 포트 목록의 제조사와 제품 설명을 묶어요.
+ * 입력: 운영체제가 알려 준 시리얼 포트 정보예요.
+ * 출력: manufacturer와 product이며, 모르면 빈 값이에요.
+ * 실패: 없어요.
+ */
+struct PortInfo { QString manufacturer; QString product; };
 /** 하나의 링크와 포트 목록을 GUI 스레드에서 관리해요.
  * 입력: 포트 조회용 스케줄러와 연결·해제 요청이에요.
  * 출력: 포트 목록과 링크의 열기·수신·종료 결과를 제공하며, 사용 중인 포트가 목록과 /dev/ 장치 파일 양쪽에서 사라지면 종료해요.
@@ -19,12 +27,13 @@ class LinkManager : public QObject {
     Q_OBJECT
 public:
 /** 포트 목록 갱신 작업과 큐드 전달 형식을 준비해요.
- * 입력: scheduler, 목록에 추가할 extraSerial 경로, 선택적인 parent예요.
+ * 입력: scheduler, 포트 소유자를 기록하는 registry, 목록에 추가할 extraSerial 경로 목록, 선택적인 parent예요.
  * 출력: 초기 포트 목록과 1Hz 갱신·포트 유실 확인 작업을 준비해요.
  * 실패: 같은 스케줄러에 serialPorts 이름이 이미 있으면 프로그래밍 오류예요.
  */
     explicit LinkManager(kgc::app::scheduler::Scheduler& scheduler,
-                         QString extraSerial = {}, QObject* parent = nullptr);
+                         kgc::comm::rawport::PortRegistry& registry,
+                         QStringList extraSerial = {}, QObject* parent = nullptr);
 /** 워커가 끝난 뒤 링크 자원을 정리해요.
  * 입력: 없어요.
  * 출력: 이벤트 루프를 멈추고 워커 스레드의 종료를 기다려요.
@@ -34,11 +43,11 @@ public:
 /** 워커에서 링크 열기를 시작해요.
  * 입력: UDP 또는 시리얼 연결 값 config예요.
  * 출력: 시작을 접수하면 성공을 반환하며, 이후 linkClosed 또는 linkFailed가 정확히 한 번 나와요.
- * 실패: 워커가 이미 있으면 AlreadyConnected를 반환하고, 실제 열기 실패는 linkFailed로 알려요.
+ * 실패: 워커가 이미 있으면 AlreadyConnected, 시리얼 포트에 주인이 있으면 PortBusy를 바로 반환해요. 실제 열기 실패는 linkFailed로 알려요.
  * 흐름:
- * 1. LinkManager::connectLink — 기존 워커 유무를 확인하고 연결 번호와 값을 준비해요.
+ * 1. LinkManager::connectLink — 기존 워커 유무를 확인하고 PortRegistry::claim으로 시리얼 포트를 점유해요.
  * 2. QThread::start → Link::open — 새 워커에서 통로를 열고 결과를 GUI 스레드로 받아요.
- * 3. QThread::finished — 워커를 정리한 뒤 취소·종료는 linkClosed, 취소 없는 열기 실패는 linkFailed로 알려요.
+ * 3. QThread::finished — 워커를 정리하고 PortRegistry::release로 점유를 놓은 뒤 linkClosed 또는 linkFailed로 알려요.
  */
     kgc::app::errors::Result<void> connectLink(const LinkConfig& config);
 /** 워커에 닫기를 요청하고 열기 중인 요청도 취소해요.
@@ -77,10 +86,22 @@ public:
     std::uint8_t channel() const;
 /** 포트 이름과 설명의 쌍을 읽어요.
  * 입력: 없어요.
- * 출력: 마지막 조회에서 얻은 포트 목록이며, extraSerial이 있으면 끝에 포함해요.
+ * 출력: 마지막 조회에서 얻은 포트 목록이며, extraSerial의 각 경로는 파일이 있을 때만 끝에 포함해요.
  * 실패: 없어요.
  */
     QList<QPair<QString, QString>> ports() const;
+/** 목록을 즉시 갱신해 포트의 등장과 유실을 확인해요.
+ * 입력: 없어요.
+ * 출력: 목록이 바뀌면 portsChanged를 내요.
+ * 실패: 사용 중인 포트가 사라지면 닫기를 예약해요.
+ */
+    void refreshPorts();
+/** 포트의 제조사와 제품 설명을 읽어요.
+ * 입력: 포트 이름 name이에요.
+ * 출력: 운영체제가 알려 준 PortInfo이며, 없으면 빈 값이에요.
+ * 실패: 없어요.
+ */
+    PortInfo portInfo(QString name);
 signals:
 /** 취소되지 않은 링크가 열렸음을 알려요.
  * 입력: 열린 연결의 linkId예요.
@@ -113,7 +134,6 @@ signals:
  */
     void portsChanged();
 private:
-    void refreshPorts();
     struct Private;
     std::unique_ptr<Private> d_;
 };

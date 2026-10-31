@@ -2,6 +2,11 @@
 #include <kgc/app/job/Job.h>
 #include <kgc/app/job/Errors.h>
 #include "Constants.h"
+#include <QElapsedTimer>
+#include <algorithm>
+#include <cmath>
+#include <limits>
+#include <vector>
 namespace kgc::app::job {
 struct Job::Private {
     OperationKind kind;
@@ -12,15 +17,34 @@ struct Job::Private {
     bool cancellable = false;
     std::optional<kgc::app::errors::ErrorCode> errorCode;
     QString errorText;
+    QElapsedTimer clock;
+    std::vector<Releaser> releasers;
+    bool ended() const { return state != State::Pending && state != State::Running; }
+    void releaseAll()
+    {
+        while (!releasers.empty()) {
+            auto release = std::move(releasers.back());
+            releasers.pop_back();
+            if (release) release();
+        }
+    }
+    void finish(Job& job, State terminal, kgc::app::errors::Result<void> result)
+    {
+        state = terminal;
+        releaseAll();
+        if (cancellable) {
+            cancellable = false;
+            emit job.cancellableChanged();
+        }
+        emit job.stateChanged();
+        emit job.finished(result);
+    }
 };
 Job::Job(OperationKind kind, QObject* parent) : QObject(parent), d_(std::make_unique<Private>())
 {
     d_->kind = kind;
 }
-Job::~Job()
-{
-    // WORKER-FILL: spec §5.3 — 남은 해제 핸들을 역순으로 불러요.
-}
+Job::~Job() { d_->releaseAll(); }
 OperationKind Job::kind() const { return d_->kind; }
 Job::State Job::state() const { return d_->state; }
 QString Job::stepName() const { return d_->stepName; }
@@ -31,40 +55,58 @@ std::optional<kgc::app::errors::ErrorCode> Job::errorCode() const { return d_->e
 QString Job::errorText() const { return d_->errorText; }
 void Job::setStep(const QString& key)
 {
-    // WORKER-FILL: spec §5.3 — stepName을 바꾸고, 첫 호출이면 Running으로 바꾸며 경과 시계를 시작해요.
-    Q_UNUSED(key);
+    if (d_->ended()) return;
+    if (d_->state == State::Pending) {
+        d_->clock.start();
+        d_->state = State::Running;
+        emit stateChanged();
+    }
+    if (d_->stepName == key) return;
+    d_->stepName = key;
+    emit stepNameChanged();
 }
 void Job::setProgress(double value)
 {
-    // WORKER-FILL: spec §5.3 — progress를 바꾸고 etaSeconds를 경과와 진행률로 셈해요. 1% 미만이면 -1이에요.
-    Q_UNUSED(value);
+    if (d_->ended()) return;
+    d_->progress = std::isfinite(value) && value >= 0 ? std::clamp(value, 0.0, 1.0) : kUnknownProgress;
+    d_->etaSeconds = kUnknownEta;
+    if (d_->clock.isValid() && d_->progress >= kMinProgressForEta) {
+        const double elapsed = d_->clock.elapsed() / 1000.0;
+        const double remaining = elapsed * (1.0 - d_->progress) / d_->progress;
+        d_->etaSeconds = static_cast<int>(std::min(std::ceil(remaining), double(std::numeric_limits<int>::max())));
+    }
+    emit progressChanged();
 }
 void Job::setCancellable(bool value)
 {
-    // WORKER-FILL: spec §5.3 — cancellable을 바꾸고 cancellableChanged를 내요.
-    Q_UNUSED(value);
+    if (d_->ended() || d_->cancellable == value) return;
+    d_->cancellable = value;
+    emit cancellableChanged();
 }
 void Job::succeed()
 {
-    // WORKER-FILL: spec §5.3 — Succeeded로 끝내고, 해제 핸들을 역순으로 부른 뒤 finished를 한 번 내요.
+    if (d_->ended()) return;
+    d_->finish(*this, State::Succeeded, {});
 }
 void Job::fail(kgc::app::errors::ErrorCode code, const QString& text)
 {
-    // WORKER-FILL: spec §5.3 — Failed로 끝내고 code·text를 남기며, 해제 뒤 finished를 한 번 내요.
-    Q_UNUSED(code);
-    Q_UNUSED(text);
+    if (d_->ended()) return;
+    d_->errorCode = code;
+    d_->errorText = text;
+    d_->finish(*this, State::Failed, std::unexpected(code));
 }
-void Job::cancel()
-{
-    // WORKER-FILL: spec §5.3 — cancelRequested만 내요. 상태는 바꾸지 않아요.
-}
+void Job::cancel() { if (!d_->ended()) emit cancelRequested(); }
 void Job::finishCancelled()
 {
-    // WORKER-FILL: spec §5.3 — Cancelled로 끝내고, 해제 뒤 finished(make(JobError::Cancelled))를 한 번 내요.
+    if (d_->ended()) return;
+    const auto code = make(JobError::Cancelled);
+    d_->errorCode = code;
+    d_->errorText = kgc::app::job::errorText(code);
+    d_->finish(*this, State::Cancelled, std::unexpected(code));
 }
 void Job::hold(Releaser releaser)
 {
-    // WORKER-FILL: spec §5.3 — 해제 핸들을 쥐어 두고, 끝날 때 맡긴 순서의 역순으로 불러요.
-    Q_UNUSED(releaser);
+    if (d_->ended()) { if (releaser) releaser(); }
+    else d_->releasers.push_back(std::move(releaser));
 }
 }

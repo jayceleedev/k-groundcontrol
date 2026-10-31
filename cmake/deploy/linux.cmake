@@ -23,7 +23,7 @@ find_library(XCB_CURSOR NAMES xcb-cursor libxcb-cursor.so.0
     PATHS "/usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}" "/lib/${CMAKE_LIBRARY_ARCHITECTURE}" REQUIRED)
 execute_process(COMMAND ${CMAKE_COMMAND} -E env
     "PATH=${tools}:$ENV{PATH}" "QMAKE=${QT_ROOT}/bin/qmake" "QML_SOURCES_PATHS=${PROJECT_SOURCE_DIR}/src"
-    "EXTRA_QT_PLUGINS=svg;iconengines" "VERSION=${PROJECT_VERSION}" "ARCH=x86_64"
+    "EXTRA_QT_PLUGINS=tls;svg;iconengines" "VERSION=${PROJECT_VERSION}" "ARCH=x86_64"
     "OUTPUT=${PROJECT_BINARY_DIR}/K-GroundControl-${PROJECT_VERSION}-linux-x86_64.AppImage"
     "${tools}/linuxdeploy-x86_64.AppImage" --appdir "${stage}"
     --executable "${EXECUTABLE}" --library "${XCB_CURSOR}" --plugin qt

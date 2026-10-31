@@ -27,7 +27,7 @@ public:
     ~Timeout() override;
 /** 시간 재기를 처음부터 시작해요.
  * 입력: 기다릴 duration이에요.
- * 출력: duration 뒤 expired를 한 번 내요. 이미 재는 중이면 처음부터 다시 재요.
+ * 출력: duration 뒤 expired를 한 번 내요. 이미 재는 중이면 이전 대기를 대체하고 처음부터 다시 재요.
  * 실패: 없어요.
  */
     void start(std::chrono::milliseconds duration);

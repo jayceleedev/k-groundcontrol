@@ -1,3 +1,4 @@
+// [0.2.0 5.7] specs/features/0.2.0-fcflash.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
 #include <kgc/comm/links/LinkConfig.h>
@@ -8,6 +9,7 @@
 struct __mavlink_message;
 namespace kgc::app::scheduler { class Scheduler; }
 namespace kgc::comm::links { class LinkManager; }
+namespace kgc::vehicle::command { class CommandQueue; }
 namespace kgc::vehicle::registry {
 class VehicleRegistry;
 /** 발견한 기체의 상태와 생성 당시 연결 값을 소유해요.
@@ -22,7 +24,7 @@ class Vehicle : public QObject {
 public:
 /** 반복 작업을 먼저 끝내고 기체 자원을 정리해요.
  * 입력: 없어요.
- * 출력: 송신·상태 소유자와 자식 객체를 해제해요.
+ * 출력: 명령 큐를 Gone으로 끝낸 뒤 송신·상태 소유자와 자식 객체를 해제해요.
  * 실패: 없어요.
  */
     ~Vehicle() override;
@@ -44,6 +46,12 @@ public:
  * 실패: 없어요.
  */
     kgc::comm::links::LinkConfig linkConfig() const;
+/** 이 기체의 명령 큐를 읽어요.
+ * 입력: 없어요.
+ * 출력: 기체가 소유하는 CommandQueue의 비소유 포인터예요.
+ * 실패: 없어요.
+ */
+    kgc::vehicle::command::CommandQueue* commands() const;
 private:
     friend class VehicleRegistry;
     Vehicle(int sysid, std::uint8_t autopilot, kgc::comm::links::LinkManager& links,

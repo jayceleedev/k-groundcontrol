@@ -1,3 +1,4 @@
+// [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.1 T8 T9 T14] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T10 T13 T17] specs/features/0.1.0-link.md
 // [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
@@ -9,6 +10,7 @@
 #include "Composition.h"
 #include <kgc/app/scheduler/Scheduler.h>
 #include <kgc/comm/links/LinkManager.h>
+#include <kgc/comm/rawport/PortRegistry.h>
 #include <kgc/vehicle/registry/VehicleRegistry.h>
 #include <kgc/vehicle/outbound/LinkHeartbeat.h>
 #include <kgc/link/LinkService.h>
@@ -115,7 +117,7 @@ void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
 }
 }
 Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
-                         app::log::LogFeed& feed, const QString& extraSerial)
+                         app::log::LogFeed& feed, const QStringList& extraSerial)
     : QObject(&engine), engine_(engine)
 {
     initKgcResources();
@@ -152,7 +154,8 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     secondPanel::registerUi(registry, *secondPanelService);
     // 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
     auto* scheduler = new app::scheduler::Scheduler(this);
-    auto* links = new comm::links::LinkManager(*scheduler, extraSerial, this);
+    auto* ports = new comm::rawport::PortRegistry(this);
+    auto* links = new comm::links::LinkManager(*scheduler, *ports, extraSerial, this);
     new vehicle::outbound::LinkHeartbeat(*links, *scheduler, this);
     auto* vehicles = new vehicle::registry::VehicleRegistry(*links, *scheduler, this);
     auto* linkService = new link::LinkService(*links, *vehicles, *scheduler, this);

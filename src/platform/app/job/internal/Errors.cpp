@@ -1,10 +1,13 @@
-// [0.2.0 T2] specs/features/0.2.0-fcflash.md
+// [0.2.0 7] specs/features/0.2.0-fcflash.md
 #include <kgc/app/job/Errors.h>
+#include <QCoreApplication>
 namespace kgc::app::job {
 QString errorText(kgc::app::errors::ErrorCode error)
 {
-    // WORKER-FILL: spec §5.3 — 스펙 §7에 Cancelled 문구가 없어요. 화면에 안 나오면 빈 문자열로 둬요.
-    Q_UNUSED(error);
+    if (error.module != kModuleId) return {};
+    switch (static_cast<JobError>(error.code)) {
+    case JobError::Cancelled: return QCoreApplication::translate("Job", QT_TRANSLATE_NOOP("Job", "취소했어요."));
+    }
     return {};
 }
 }

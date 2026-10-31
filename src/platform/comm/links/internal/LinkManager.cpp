@@ -1,3 +1,4 @@
+// [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include <kgc/comm/links/LinkManager.h>
 #include <kgc/comm/links/UdpLink.h>
@@ -9,12 +10,14 @@
 #include "Constants.h"
 #include "Events.h"
 namespace kgc::comm::links {
-LinkManager::LinkManager(kgc::app::scheduler::Scheduler& scheduler, QString extraSerial, QObject* parent)
+LinkManager::LinkManager(kgc::app::scheduler::Scheduler& scheduler,
+                         kgc::comm::rawport::PortRegistry& registry, QStringList extraSerial, QObject* parent)
     : QObject(parent), d_(std::make_unique<Private>())
 {
     qRegisterMetaType<mavlink_message_t>();
     qRegisterMetaType<kgc::app::errors::ErrorCode>();
     qRegisterMetaType<std::optional<kgc::app::errors::ErrorCode>>();
+    d_->registry = &registry;
     d_->extraSerial = std::move(extraSerial);
     refreshPorts();
     scheduler.registerTask("serialPorts", kPortListPeriod, this, this, [this] { refreshPorts(); });
@@ -28,10 +31,16 @@ LinkManager::~LinkManager()
         d_->thread->quit();
         d_->thread->wait();
     }
+    if (d_->registry) d_->registry->release(d_->token);
 }
 kgc::app::errors::Result<void> LinkManager::connectLink(const LinkConfig& config)
 {
     if (d_->thread) return std::unexpected(make(LinkError::AlreadyConnected));
+    if (config.kind == LinkConfig::Kind::Serial) {
+        auto token = d_->registry->claim(config.portName, kgc::comm::rawport::PortRegistry::Owner::Link);
+        if (!token) return std::unexpected(make(LinkError::PortBusy));
+        d_->token = *token;
+    }
     d_->config = config;
     d_->id = ++d_->nextId;
     d_->open = d_->failed = d_->closing = d_->cancelled = false;
@@ -69,6 +78,8 @@ kgc::app::errors::Result<void> LinkManager::connectLink(const LinkConfig& config
         const auto id = d_->id;
         const auto error = d_->error;
         const auto failed = d_->failed;
+        if (d_->registry) d_->registry->release(d_->token);
+        d_->token = {};
         d_->thread->deleteLater();
         d_->thread = nullptr;
         d_->worker = nullptr;

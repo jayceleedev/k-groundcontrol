@@ -11,8 +11,11 @@ namespace kgc::app::crc {
  */
 inline std::uint32_t crc32Bootloader(QByteArrayView bytes, std::uint32_t state = kBootloaderCrcInitial)
 {
-    // WORKER-FILL: spec §5.1 — 반사형 표 또는 비트 단위로 계산해요. 초기값 0, 마지막 XOR 없음.
-    (void)bytes;
+    for (const auto byte : bytes) {
+        state ^= static_cast<unsigned char>(byte);
+        for (int bit = 0; bit < 8; ++bit)
+            state = (state >> 1) ^ ((state & 1) ? kBootloaderCrcPolynomial : 0);
+    }
     return state;
 }
 }

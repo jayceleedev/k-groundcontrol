@@ -1,0 +1,9 @@
+[
+ {"boardId":53,"prefix":"auterion_fmu-v6x"},
+ {"boardId":53,"prefix":"px4_fmu-v6x"},
+ {"boardId":1013,"prefix":"hkust_nxt-dual"},
+ {"boardId":1013,"prefix":"hkust_nxt-v1"},
+ {"boardId":1013,"prefix":"matek_h743"},
+ {"boardId":1013,"prefix":"matek_h743-mini"},
+ {"boardId":1013,"prefix":"matek_h743-slim"}
+]

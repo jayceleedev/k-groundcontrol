@@ -7,4 +7,6 @@ inline constexpr std::chrono::milliseconds kGcsHeartbeatPeriod{1000};
 inline constexpr std::chrono::milliseconds kLinkLossTimeout{3500};
 inline constexpr std::uint8_t kGcsSysid = 255;
 inline constexpr std::uint8_t kGcsCompid = 190;
+inline constexpr std::chrono::milliseconds kAckTimeout{1200};
+inline constexpr int kAckRetries = 3;
 }

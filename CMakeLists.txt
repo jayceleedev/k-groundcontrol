@@ -1,3 +1,4 @@
+# [0.2.0 T1–T12] specs/features/0.2.0-fcflash.md
 # [0.1.1 T7] specs/features/0.1.1-link-hardening.md
 # [0.1.0 T1–T6] specs/features/0.1.0-link.md
 # [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
@@ -19,11 +20,12 @@ set(KGC_EXTRA_TESTS_DIR "" CACHE PATH "외부 시험 폴더")
 include(cmake/gen/SettingsGen.cmake)
 include(cmake/CPM.cmake)
 include(cmake/icons/Icons.cmake)
-foreach(module app/errors app/log app/paths app/boot app/settings app/i18n app/constants app/scheduler comm/mavlink comm/links
-    vehicle/firmware vehicle/states vehicle/outbound vehicle/registry ui)
+foreach(module app/errors app/log app/paths app/boot app/settings app/i18n app/constants app/scheduler app/crc app/job app/net
+    comm/mavlink comm/rawport comm/links
+    vehicle/firmware vehicle/states vehicle/outbound vehicle/command vehicle/registry vehicle/safety ui)
     add_subdirectory(src/platform/${module})
 endforeach()
-foreach(module shell link reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight)
+foreach(module shell link reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight fcFlash)
     add_subdirectory(src/features/${module})
 endforeach()
 add_subdirectory(src/main)

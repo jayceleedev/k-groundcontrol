@@ -1,3 +1,4 @@
+# [0.1.0 T1–T6] specs/features/0.1.0-link.md
 # [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
 # [0.0.4 T1] specs/features/0.0.4-righttabs.md
 # [0.0.3 T1 T14] specs/features/0.0.3-windows.md
@@ -8,7 +9,7 @@ project(KGroundControl VERSION 0.0.4 LANGUAGES CXX
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-find_package(Qt6 6.12 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 LinguistTools Test QuickTest QuickEffects Graphs Svg)
+find_package(Qt6 6.12 REQUIRED COMPONENTS Core Network SerialPort Gui Qml Quick QuickControls2 LinguistTools Test QuickTest QuickEffects Graphs Svg)
 qt_standard_project_setup(REQUIRES 6.5)
 # 부품과 테마 하위 폴더도 같은 QML 모듈을 찾도록 qmldir를 만들어요.
 qt_policy(SET QTP0004 NEW)
@@ -17,7 +18,8 @@ set(KGC_EXTRA_TESTS_DIR "" CACHE PATH "외부 시험 폴더")
 include(cmake/gen/SettingsGen.cmake)
 include(cmake/CPM.cmake)
 include(cmake/icons/Icons.cmake)
-foreach(module app/errors app/log app/paths app/boot app/settings app/i18n ui)
+foreach(module app/errors app/log app/paths app/boot app/settings app/i18n app/constants app/scheduler comm/mavlink comm/links
+    vehicle/firmware vehicle/states vehicle/outbound vehicle/registry ui)
     add_subdirectory(src/platform/${module})
 endforeach()
 foreach(module shell reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight)

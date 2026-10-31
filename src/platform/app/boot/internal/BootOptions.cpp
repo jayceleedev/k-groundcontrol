@@ -1,3 +1,4 @@
+// [0.1.0 T8] specs/features/0.1.0-link.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #include <kgc/app/boot/BootOptions.h>
 #include <QCommandLineParser>
@@ -13,8 +14,10 @@ BootOptions BootOptions::parse(const QStringList& args)
     // 번역 목록에는 넣되, 번역기가 없는 부팅 단계에서는 한국어 원문을 보여 줘요.
     parser.addOption({"log-level", QT_TRANSLATE_NOOP("BootOptions", "로그 수준"), "level"});
     parser.addOption({"data-dir", QT_TRANSLATE_NOOP("BootOptions", "데이터 폴더"), "path"});
+    parser.addOption({"extra-serial", QT_TRANSLATE_NOOP("BootOptions", "추가 시리얼 경로"), "path"});
     parser.process(args);
     BootOptions options;
+    options.extraSerial = parser.value("extra-serial");
     const auto levelName = parser.isSet("log-level") ? parser.value("log-level")
         : ini.value("log/level", "info").toString();
     const auto level = kgc::app::log::parseLogLevel(levelName);

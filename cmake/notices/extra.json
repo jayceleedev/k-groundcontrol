@@ -33,5 +33,12 @@
     "license": "MIT",
     "url": "https://github.com/tabler/tabler-icons",
     "platform": "all"
+  },
+  {
+    "name": "MAVLink c_library_v2",
+    "version": "a2d0ecf011a4aaa7840480e43f4e38d8c9e79d29",
+    "license": "MIT",
+    "url": "https://github.com/mavlink/c_library_v2/tree/a2d0ecf011a4aaa7840480e43f4e38d8c9e79d29",
+    "platform": "all"
   }
 ]

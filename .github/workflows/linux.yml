@@ -19,7 +19,7 @@ jobs:
           version: '6.12.0'
           arch: linux_gcc_64
           # 0.0.2 차트(Qt Graphs)는 추가 모듈이고, Graphs 라이브러리가 Quick3D·ShaderTools에 기대요.
-          modules: 'qtgraphs qtquick3d qtshadertools'
+          modules: 'qtgraphs qtquick3d qtshadertools qtserialport'
           cache: true
       - name: 구성
         shell: bash

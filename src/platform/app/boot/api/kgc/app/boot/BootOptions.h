@@ -1,3 +1,4 @@
+// [0.1.0 T8] specs/features/0.1.0-link.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #pragma once
 #include <kgc/app/log/LogLevel.h>
@@ -14,6 +15,7 @@ struct BootOptions {
     int maxFileMB;
     int maxFiles;
     QString dataDir;
+    QString extraSerial;
 /** 명령줄을 부팅 파일보다 우선해서 읽어요.
  * 입력: 프로그램 이름을 첫 항목으로 둔 인자 목록.
  * 출력: 부팅 값 묶음. 파일의 로그 수준이 잘못되면 Info를 사용해요.

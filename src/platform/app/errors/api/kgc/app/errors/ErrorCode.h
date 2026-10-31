@@ -1,6 +1,8 @@
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #pragma once
 #include <cstdint>
+#include <optional>
+#include <QMetaType>
 
 namespace kgc::app::errors {
 /** 모듈의 고유 번호를 담아요.
@@ -23,3 +25,7 @@ struct ErrorCode {
     constexpr bool operator==(const ErrorCode&) const = default;
 };
 }
+
+// [BASE 9.4] specs/BASE.md
+Q_DECLARE_METATYPE(kgc::app::errors::ErrorCode)
+Q_DECLARE_METATYPE(std::optional<kgc::app::errors::ErrorCode>)

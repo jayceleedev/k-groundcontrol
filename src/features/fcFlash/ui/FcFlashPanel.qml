@@ -1,4 +1,4 @@
-// [0.2.0 T14–T23] specs/features/0.2.0-fcflash.md
+// [0.2.0 T14–T23 T26] specs/features/0.2.0-fcflash.md
 /** 보드 확인부터 재연결 결과까지 네 단계를 보여요.
  * 입력: 서비스의 단계와 유리 바탕이에요.
  * 출력: 현재 단계의 화면이에요.
@@ -22,19 +22,7 @@ Basic.ScrollView {
     Column {
         width: Math.min(panel.availableWidth, 760 * Theme.uiScale)
         spacing: Theme.panelInset
-        Flow {
-            width: parent.width
-            spacing: Theme.inset
-            Repeater {
-                model: [qsTr("1 보드 확인"), qsTr("2 펌웨어 선택"), qsTr("3 확인"), qsTr("4 굽기")]
-                Chip {
-                    required property string modelData
-                    required property int index
-                    text: modelData
-                    level: FcFlashController.step === index ? "info" : "neutral"
-                }
-            }
-        }
+        FlashStepBar { width: parent.width; currentStep: FcFlashController.step }
         StepBoard { width: parent.width; visible: FcFlashController.step === FlashStates.Board }
         StepFirmware { width: parent.width; visible: FcFlashController.step === FlashStates.Firmware }
         StepConfirm { width: parent.width; visible: FcFlashController.step === FlashStates.Confirm }

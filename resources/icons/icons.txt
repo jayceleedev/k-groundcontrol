@@ -39,3 +39,14 @@ device-desktop-analytics outline/device-desktop-analytics
 focus-2 outline/focus-2
 cube-3d-sphere outline/cube-3d-sphere
 plug-connected outline/plug-connected
+rocket outline/rocket
+drone outline/drone
+file-upload outline/file-upload
+helicopter outline/helicopter
+plane outline/plane
+car outline/car
+submarine outline/submarine
+circle-check outline/circle-check
+circle-x outline/circle-x
+alert-triangle outline/alert-triangle
+arrow-right outline/arrow-right

@@ -1,4 +1,4 @@
-// [0.2.0 T19 T23 T24] specs/features/0.2.0-fcflash.md
+// [0.2.0 T19 T23 T24 T27] specs/features/0.2.0-fcflash.md
 /** 확인한 보드에 맞는 공식 펌웨어나 파일을 골라요.
  * 입력: 보드 정보, 목록과 파일 해석 결과예요.
  * 출력: 출처·버전·후보 선택과 다음 단계 요청이에요.
@@ -22,34 +22,56 @@ Column {
         const loading = FcFlashController.listLoading; const ready = FcFlashController.canContinue
         return FcFlashController.failureText()
     }
-    Text {
-        width: parent.width
-        wrapMode: Text.Wrap
-        text: qsTr("%1 %2 · 보드 ID %3 · 플래시 %4 KB · 부트로더 %5")
-            .arg(FcFlashController.boardManufacturer || "—").arg(FcFlashController.boardProduct || "—")
-            .arg(FcFlashController.boardId).arg(FcFlashController.flashKb).arg(FcFlashController.bootloaderRevision)
-        color: Theme.inkMuted
-        font.family: Theme.fontFamily
-        font.pixelSize: Theme.fontSize
-    }
-    PillGroup {
+    BoardCard { width: parent.width }
+    Row {
         id: sources
         objectName: "fcFlashSources"
-        model: [qsTr("PX4"), qsTr("ArduPilot"), qsTr("파일 선택")]
-        currentIndex: root.source
-        onActivated: index => FcFlashController.chooseSource(index)
-        Connections {
-            target: FcFlashController
-            function onChanged() { sources.currentIndex = FcFlashController.source }
+        width: parent.width
+        spacing: Theme.inset
+        Repeater {
+            id: sourceCards
+            // 순서는 FirmwareSource 값과 같아서 index를 그대로 서비스에 넘겨요.
+            model: [
+                {icon: "rocket", title: qsTr("PX4"), subtitle: qsTr("공식 릴리스")},
+                {icon: "drone", title: qsTr("ArduPilot"), subtitle: qsTr("공식 릴리스")},
+                {icon: "file-upload", title: qsTr("파일 선택"), subtitle: qsTr(".px4 · .apj")}
+            ]
+            ChoiceCard {
+                required property var modelData
+                required property int index
+                objectName: "fcFlashSource_" + index
+                width: (sources.width - sources.spacing * (sourceCards.count - 1)) / sourceCards.count
+                icon.name: modelData.icon
+                title: modelData.title
+                subtitle: modelData.subtitle
+                selected: root.source === index
+                onClicked: FcFlashController.chooseSource(index)
+            }
         }
     }
-    ComboField {
+    Row {
+        id: vehicles
+        width: parent.width
         visible: root.source === FlashStates.ArduPilotOfficial
-        label: qsTr("기체")
-        model: ["Copter", "Heli", "Plane", "Rover", "Sub"]
-        currentIndex: model.indexOf(FcFlashController.vehicle)
-        enabled: !FcFlashController.listLoading
-        onActivated: FcFlashController.chooseVehicle(currentText)
+        spacing: Theme.inset
+        Repeater {
+            id: vehicleCards
+            model: [
+                {name: "Copter", icon: "drone"}, {name: "Heli", icon: "helicopter"}, {name: "Plane", icon: "plane"},
+                {name: "Rover", icon: "car"}, {name: "Sub", icon: "submarine"}
+            ]
+            ChoiceCard {
+                required property var modelData
+                objectName: "fcFlashVehicle_" + modelData.name
+                width: (vehicles.width - vehicles.spacing * (vehicleCards.count - 1)) / vehicleCards.count
+                compact: true
+                icon.name: modelData.icon
+                subtitle: modelData.name
+                selected: FcFlashController.vehicle === modelData.name
+                enabled: !FcFlashController.listLoading
+                onClicked: FcFlashController.chooseVehicle(modelData.name)
+            }
+        }
     }
     ComboField {
         objectName: "fcFlashVersions"

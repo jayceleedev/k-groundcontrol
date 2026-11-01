@@ -1683,26 +1683,39 @@
     </message>
 </context>
 <context>
-    <name>FcFlashPanel</name>
+    <name>FlashStepBar</name>
     <message>
-        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
-        <source>1 보드 확인</source>
-        <translation>1 Identify board</translation>
+        <location filename="../src/features/fcFlash/ui/FlashStepBar.qml" line="17"/>
+        <source>보드 확인</source>
+        <translation>Identify board</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
-        <source>2 펌웨어 선택</source>
-        <translation>2 Select firmware</translation>
+        <location filename="../src/features/fcFlash/ui/FlashStepBar.qml" line="17"/>
+        <source>펌웨어 선택</source>
+        <translation>Select firmware</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
-        <source>3 확인</source>
-        <translation>3 Confirm</translation>
+        <location filename="../src/features/fcFlash/ui/FlashStepBar.qml" line="17"/>
+        <source>확인</source>
+        <translation>Confirm</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/FcFlashPanel.qml" line="29" />
-        <source>4 굽기</source>
-        <translation>4 Flash</translation>
+        <location filename="../src/features/fcFlash/ui/FlashStepBar.qml" line="17"/>
+        <source>굽기</source>
+        <translation>Flash</translation>
+    </message>
+</context>
+<context>
+    <name>BoardCard</name>
+    <message>
+        <location filename="../src/features/fcFlash/ui/BoardCard.qml" line="44"/>
+        <source>보드 ID %1 · 플래시 %2 KB · 부트로더 %3</source>
+        <translation>Board ID %1 · Flash %2 KB · Bootloader %3</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/BoardCard.qml" line="52"/>
+        <source>부트로더</source>
+        <translation>Bootloader</translation>
     </message>
 </context>
 <context>
@@ -1736,12 +1749,12 @@
 <context>
     <name>JobView</name>
     <message>
-        <location filename="../src/platform/ui/components/JobView.qml" line="32" />
+        <location filename="../src/platform/ui/components/JobView.qml" line="48"/>
         <source>약 %1초 남음</source>
         <translation>About %1 seconds remaining</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/components/JobView.qml" line="39" />
+        <location filename="../src/platform/ui/components/JobView.qml" line="56"/>
         <source>취소</source>
         <translation>Cancel</translation>
     </message>
@@ -1797,42 +1810,37 @@
 <context>
     <name>StepConfirm</name>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="17" />
-        <source>FC 이름</source>
-        <translation>FC name</translation>
-    </message>
-    <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="22" />
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="82"/>
         <source>올릴 펌웨어</source>
         <translation>Firmware to install</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="27" />
-        <source>출처</source>
-        <translation>Source</translation>
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="71"/>
+        <source>FC</source>
+        <translation>FC</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="28" />
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="85"/>
         <source>PX4 공식</source>
         <translation>PX4 official</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="29" />
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="86"/>
         <source>ArduPilot 공식</source>
         <translation>ArduPilot official</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="29" />
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="86"/>
         <source>내 PC 파일</source>
         <translation>Local file</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="34" />
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="93"/>
         <source>뒤로</source>
         <translation>Back</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="37" />
+        <location filename="../src/features/fcFlash/ui/StepConfirm.qml" line="97"/>
         <source>길게 눌러 굽기</source>
         <translation>Hold to flash</translation>
     </message>
@@ -1840,77 +1848,78 @@
 <context>
     <name>StepFirmware</name>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="27" />
-        <source>%1 %2 · 보드 ID %3 · 플래시 %4 KB · 부트로더 %5</source>
-        <translation>%1 %2 · Board ID %3 · Flash %4 KB · Bootloader %5</translation>
-    </message>
-    <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="35"/>
         <source>PX4</source>
         <translation>PX4</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="35"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36"/>
+        <source>공식 릴리스</source>
+        <translation>Official release</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36"/>
         <source>ArduPilot</source>
         <translation>ArduPilot</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="37"/>
         <source>파일 선택</source>
         <translation>Select file</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="43" />
-        <source>기체</source>
-        <translation>Vehicle</translation>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="37"/>
+        <source>.px4 · .apj</source>
+        <translation>.px4 · .apj</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="52" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="79"/>
         <source>버전</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="61" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="88"/>
         <source>맞는 펌웨어 %1개. 직접 골라요.</source>
         <translation>%1 matching firmware candidates. Select one.</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="70" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="97"/>
         <source>펌웨어</source>
         <translation>Firmware</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="84" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="111"/>
         <source>목록을 받지 못했어요. 인터넷을 확인하거나 파일을 직접 골라요.</source>
         <translation>Could not retrieve the list. Check your internet connection or select a local file.</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="85" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="112"/>
         <source>공식 목록에 이 보드용 펌웨어가 없어요. 파일을 직접 골라요.</source>
         <translation>No official firmware matches this board. Select a local file.</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="92" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="118"/>
         <source>.px4 또는 .apj 파일</source>
         <translation>.px4 or .apj file</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="98" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="124"/>
         <source>펌웨어 파일 선택</source>
         <translation>Select firmware file</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="99" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="125"/>
         <source>펌웨어 파일 (*.px4 *.apj)</source>
         <translation>Firmware files (*.px4 *.apj)</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="114" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="145"/>
         <source>취소하고 FC 부팅</source>
         <translation>Cancel and boot FC</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="121" />
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="152"/>
         <source>다음</source>
         <translation>Next</translation>
     </message>
@@ -1918,67 +1927,67 @@
 <context>
     <name>StepFlash</name>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="27"/>
+        <source>올라갔어요</source>
+        <translation>Installed</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="29"/>
+        <source>올린 펌웨어와 달라요</source>
+        <translation>The firmware differs from the selected image</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="31"/>
+        <source>펌웨어를 올렸어요</source>
+        <translation>Firmware uploaded</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="32"/>
+        <source>FC가 다시 켜지지 않았어요. USB 케이블을 뽑았다 꽂거나 리셋 버튼을 누른 뒤 연결해 주세요.</source>
+        <translation>The FC did not restart. Unplug and replug the USB cable or press reset, then connect.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53"/>
         <source>내려받기</source>
         <translation>Download</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53"/>
         <source>지우기</source>
         <translation>Erase</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53"/>
         <source>쓰기</source>
         <translation>Program</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53"/>
         <source>검증</source>
         <translation>Verify</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53"/>
         <source>재부팅</source>
         <translation>Reboot</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="21" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53"/>
         <source>재연결</source>
         <translation>Reconnect</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="52" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="72"/>
         <source>FC가 돌아오길 기다리고 있어요</source>
         <translation>Waiting for the FC to return</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53" />
-        <source>올라갔어요: %1 %2</source>
-        <translation>Installed: %1 %2</translation>
-    </message>
-    <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53" />
-        <source>올라갔어요: %1</source>
-        <translation>Installed: %1</translation>
-    </message>
-    <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="54" />
-        <source>올린 펌웨어와 달라요: %1 %2</source>
-        <translation>The firmware differs from the selected image: %1 %2</translation>
-    </message>
-    <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="55" />
-        <source>펌웨어를 올렸어요. FC가 다시 켜지지 않았어요. USB 케이블을 뽑았다 꽂거나 리셋 버튼을 누른 뒤 연결해 주세요.</source>
-        <translation>Firmware uploaded, but the FC did not restart. Unplug and replug the USB cable or press reset, then connect.</translation>
-    </message>
-    <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="66" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="90"/>
         <source>다시 굽기</source>
         <translation>Flash again</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="71" />
+        <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="95"/>
         <source>처음으로</source>
         <translation>Start over</translation>
     </message>

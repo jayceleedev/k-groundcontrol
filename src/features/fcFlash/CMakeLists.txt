@@ -1,7 +1,8 @@
-# [0.2.0 T7–T10 T12 T14–T23] specs/features/0.2.0-fcflash.md
+# [0.2.0 T7–T10 T12 T14–T23 T26–T30] specs/features/0.2.0-fcflash.md
 file(GLOB headers CONFIGURE_DEPENDS api/kgc/fcFlash/*.h)
 file(GLOB_RECURSE internal_sources CONFIGURE_DEPENDS internal/*.h internal/*.cpp)
-set(qml_files ui/FcFlashPanel.qml ui/StepBoard.qml ui/StepFirmware.qml ui/StepConfirm.qml ui/StepFlash.qml)
+set(qml_files ui/FcFlashPanel.qml ui/StepBoard.qml ui/StepFirmware.qml ui/StepConfirm.qml ui/StepFlash.qml
+    ui/FlashStepBar.qml ui/ChoiceCard.qml ui/BoardCard.qml ui/ResultCard.qml)
 foreach(file IN LISTS qml_files)
     get_filename_component(name "${file}" NAME)
     set_source_files_properties("${file}" PROPERTIES QT_RESOURCE_ALIAS "${name}")

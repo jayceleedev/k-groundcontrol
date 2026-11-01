@@ -71,19 +71,22 @@ Result<BoardInfo> Bootloader::identify()
     if (*revision < kMinBootloaderRev || *revision > kMaxBootloaderRev)
         return std::unexpected(make(FcFlashError::BadBootloaderRevision));
     board_ = {};
-    board_.bootloaderRev = *revision;
-    for (const char arg : {kInfoBoardId, kInfoBoardRev, kInfoFlashSize}) {
-        const auto value = device(arg);
-        if (!value) return std::unexpected(value.error());
-        if (arg == kInfoBoardId) board_.boardId = *value;
-        else if (arg == kInfoBoardRev) board_.boardRev = *value;
-        else board_.flashSize = *value;
-    }
     if (*revision >= kMinExtfBootloaderRev) {
         const auto value = device(kInfoExtfSize);
         if (value) board_.extfSize = *value;
         else if (value.error() == make(FcFlashError::Aborted) || value.error() == make(FcFlashError::PortLost))
             return std::unexpected(value.error());
+    }
+    // 외부 플래시 질문이 거절되면 지우기 허가가 사라질 수 있어 다시 준비해요.
+    const auto synced = sync();
+    if (!synced) return std::unexpected(synced.error());
+    for (const char arg : {kInfoBootloaderRev, kInfoBoardId, kInfoBoardRev, kInfoFlashSize}) {
+        const auto value = device(arg);
+        if (!value) return std::unexpected(value.error());
+        if (arg == kInfoBootloaderRev) board_.bootloaderRev = *value;
+        else if (arg == kInfoBoardId) board_.boardId = *value;
+        else if (arg == kInfoBoardRev) board_.boardRev = *value;
+        else board_.flashSize = *value;
     }
     return board_;
 }

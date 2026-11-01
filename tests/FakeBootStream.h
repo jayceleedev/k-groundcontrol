@@ -126,6 +126,7 @@ private:
     }
     void reply(const QByteArray& bytes = {}, char status = kOk)
     {
+        if (status == kInvalid) synced_ = deviceRead_ = false;
         if (silent) return;
         pending_ += bytes;
         pending_.append(kInSync);
@@ -158,9 +159,9 @@ private:
     void handle(const QByteArray& command)
     {
         switch (static_cast<quint8>(command[0])) {
-        case 0x21: ops << Op::Sync; reply(); break;
+        case 0x21: ops << Op::Sync; synced_ = true; reply(); break;
         case 0x22: getDevice(static_cast<quint8>(command[1])); break;
-        case 0x23: ops << Op::Erase; flash.clear(); if (!eraseSilent) reply(); break;
+        case 0x23: chipErase(); break;
         case 0x27: program(command); break;
         case 0x29: ops << Op::Crc; reply(word(flashCrc() ^ (corruptCrc ? 1U : 0U))); break;
         case 0x30: ops << Op::Boot; break;
@@ -175,8 +176,17 @@ private:
         ops << Op::GetDevice;
         deviceArgs << arg;
         const QHash<int, quint32> values{{1, revision}, {2, boardId}, {3, boardRevision}, {4, flashSize}, {6, extfSize}};
-        if (!values.contains(arg) || (arg == 6 && extfInfoFails)) reply({}, kInvalid);
-        else reply(word(values[arg]));
+        if (!values.contains(arg) || (arg == 6 && extfInfoFails)) { reply({}, kInvalid); return; }
+        deviceRead_ = true;
+        reply(word(values[arg]));
+    }
+    /** PX4 부트로더처럼 sync와 정보 읽기가 둘 다 살아 있을 때만 지워요. INVALID를 한 번 답하면 둘 다 지워져요. */
+    void chipErase()
+    {
+        ops << Op::Erase;
+        if (!synced_ || !deviceRead_) { reply({}, kInvalid); return; }
+        flash.clear();
+        if (!eraseSilent) reply();
     }
     void program(const QByteArray& command)
     {
@@ -215,4 +225,6 @@ private:
     }
     QByteArray inbox_;
     QByteArray pending_;
+    bool synced_ = false;
+    bool deviceRead_ = false;
 };

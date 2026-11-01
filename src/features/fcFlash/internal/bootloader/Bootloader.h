@@ -49,9 +49,9 @@ public:
     kgc::app::errors::Result<void> sync();
 /** 보드 정보를 읽어요.
  * 입력: 없어요.
- * 출력: GET_DEVICE 1, 2, 3, 4와, 판이 5 이상이면 6을 읽은 BoardInfo예요. 6이 실패하면 외부 플래시는 0이에요.
- *       값을 기억해 두고 verify와 flashImage가 써요.
- * 실패: 판이 3~20 밖이면 BadBootloaderRevision, 응답이 없으면 BootloaderNotFound예요.
+ * 출력: GET_DEVICE 1로 판을 확인하고, 판이 5 이상이면 6을 읽어요. 그 뒤 sync와 1, 2, 3, 4를 다시 읽은 BoardInfo예요.
+ *       6이 실패하면 외부 플래시는 0이에요. 값을 기억해 두고 verify와 flashImage가 써요.
+ * 실패: 판이 3~20 밖이면 BadBootloaderRevision, 응답이 없으면 BootloaderNotFound예요. 중단과 포트 유실은 6에서도 그대로 돌려줘요.
  */
     kgc::app::errors::Result<BoardInfo> identify();
 /** 내부 플래시를 지워요.

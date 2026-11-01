@@ -59,7 +59,7 @@ private slots:
         QVERIFY(result.error() == make(FcFlashError::BootloaderNotFound));
         QCOMPARE(fake.count(Op::Sync), 3);
     }
-    /** T7: identify는 1, 2, 3, 4, 6 순서로 묻고 값을 풀어요. */
+    /** T7: identify는 1, 6을 물은 뒤 sync를 다시 하고 1, 2, 3, 4를 물어 값을 풀어요. */
     void test_T7_identify_bytes_and_values()
     {
         FakeBootStream fake;
@@ -70,7 +70,7 @@ private slots:
         Bootloader loader(fake, abort_);
         const auto info = loader.identify();
         QVERIFY(info.has_value());
-        QCOMPARE(fake.sent, QByteArray::fromHex("220120220220220320220420220620"));
+        QCOMPARE(fake.sent, QByteArray::fromHex("2201202206202120220120220220220320220420"));
         QCOMPARE(info->bootloaderRev, 5);
         QCOMPARE(info->boardId, 1013);
         QCOMPARE(info->boardRev, 2);
@@ -86,7 +86,7 @@ private slots:
         Bootloader loader(fake, abort_);
         const auto info = loader.identify();
         QVERIFY(info.has_value());
-        QCOMPARE(fake.deviceArgs, QList<int>({1, 2, 3, 4}));
+        QCOMPARE(fake.deviceArgs, QList<int>({1, 1, 2, 3, 4}));
         QCOMPARE(info->extfSize, qint64(0));
     }
     /** T7: 외부 플래시 질문이 실패해도 identify는 성공하고 크기는 0이에요. */
@@ -98,6 +98,17 @@ private slots:
         const auto info = loader.identify();
         QVERIFY(info.has_value());
         QCOMPARE(info->extfSize, qint64(0));
+    }
+    /** T7: 부트로더가 외부 플래시 질문을 거부해도 지우기부터 검증까지 끝까지 구워져요. 실제 FC에서 이 거부 뒤 지우기가 막혔어요. */
+    void test_T7_extf_refused_then_erase_allowed()
+    {
+        FakeBootStream fake;
+        fake.extfInfoFails = true;
+        Bootloader loader(fake, abort_);
+        QVERIFY(identified(loader));
+        const auto image = patterned(1000);
+        QVERIFY(loader.flashImage(imageOf(image), kNoStage, kNoProgress).has_value());
+        QCOMPARE(fake.flash.first(image.size()), image);
     }
     /** T7: 판이 3~20 밖이면 거부해요(2와 21). */
     void test_T7_rejects_bootloader_revision()

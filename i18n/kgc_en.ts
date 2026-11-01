@@ -1969,8 +1969,8 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="55" />
-        <source>굽기는 끝났지만 FC가 돌아오지 않았어요. 포트를 골라 직접 연결해요.</source>
-        <translation>Flashing finished, but the FC did not return. Select a port and connect manually.</translation>
+        <source>펌웨어를 올렸어요. FC가 다시 켜지지 않았어요. USB 케이블을 뽑았다 꽂거나 리셋 버튼을 누른 뒤 연결해 주세요.</source>
+        <translation>Firmware uploaded, but the FC did not restart. Unplug and replug the USB cable or press reset, then connect.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="66" />

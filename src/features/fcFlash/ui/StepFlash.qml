@@ -25,7 +25,7 @@ Column {
             for (let i = first; i < labels.length; ++i) {
                 let state = i < current ? "done" : i === current ? "current" : "pending"
                 if (i === current && root.phase === FlashStates.Failed) state = "failed"
-                if (i === 5 && root.phase === FlashStates.NoReturn) state = "failed"
+                if (i === 5 && root.phase === FlashStates.NoReturn) state = "pending"
                 rows.push({text: labels[i], state: state})
             }
             return rows
@@ -52,7 +52,7 @@ Column {
             case FlashStates.Reconnecting: return qsTr("FC가 돌아오길 기다리고 있어요")
             case FlashStates.Done: return version ? qsTr("올라갔어요: %1 %2").arg(name).arg(version) : qsTr("올라갔어요: %1").arg(name)
             case FlashStates.Mismatch: return qsTr("올린 펌웨어와 달라요: %1 %2").arg(name).arg(version)
-            case FlashStates.NoReturn: return qsTr("굽기는 끝났지만 FC가 돌아오지 않았어요. 포트를 골라 직접 연결해요.")
+            case FlashStates.NoReturn: return qsTr("펌웨어를 올렸어요. FC가 다시 켜지지 않았어요. USB 케이블을 뽑았다 꽂거나 리셋 버튼을 누른 뒤 연결해 주세요.")
             case FlashStates.Failed: return FcFlashController.failureText()
             default: return ""
             }

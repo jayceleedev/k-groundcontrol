@@ -111,7 +111,7 @@ k-groundcontrol/
 | `video` | 영상 | 전역 | 지도 PiP 레이어 | B11 |
 | `terrain` | 지형 | 전역 조회 + 기체별 응답(TERRAIN_REQUEST) | 지도 단면 레이어 | C6, F-56 |
 | `gcsposition` | GCS GPS | 전역 | 하단 칩 | R-Q3, C-47 |
-| `params` | 수동 기체 설정(파라미터) | 기체별 | 좌 메뉴 14 | R-D1·D2, S-10~14 |
+| `params` | 수동 기체 설정(파라미터) | 전역 재연결 + 기체별 `ParamService` | 좌 메뉴 14 | R-D1·D2, S-10~14 |
 | `extras` | GeoTag·ADS-B·Remote ID·Flight Review·RTK/NTRIP·포워딩·서명·카메라·짐벌·사용자 동작·SiK | 기능 스펙 때 **각각 모듈로** 쪼갬 | — | E5, R-Q3·Q6·Q10 |
 
 - **수명 규칙**: 전역 모듈은 `Composition`이 하나 만든다(앱 수명). 기체별 모듈은 Vehicle이 생길 때 `Composition`이 만들고 **부모를 Vehicle로** 둔다. **혼합 수명** 모듈은 전역 서비스와 기체별 서비스를 **따로** 두고(`LogsViewer` 전역 / `LogDownloadService::of(vehicle)`), 이름으로 구분한다.
@@ -215,7 +215,7 @@ k-groundcontrol/
 
 - 자리 `platform/vehicle/firmware/`: `api/kgc/vehicle/firmware/FirmwarePlugin.h`, `internal/{px4,ardupilot,generic}/`.
 - **선택**: **compid 1이고 `autopilot ≠ MAV_AUTOPILOT_INVALID`인 첫 HEARTBEAT**로 `FirmwarePluginFactory`가 고른다(짐벌·컴패니언 하트비트는 거른다). 모르는 autopilot이면 `generic`. 그 뒤 바꾸지 않으며, 값이 바뀌면 기체를 새로 만든다.
-- **내놓는 것**: 기능 비트마스크 초기값과 단계별 보강 규칙; 모드 표(id ↔ 표시 이름); 이륙·일시정지·고도 변경·속도 변경의 **`CommandStep` 목록**(어떤 메시지를 어떤 순서로, 어떤 ACK를 기다리는지 — 실행은 기능 모듈); 시동 불가 사유 해석 함수(PX4 events / AP PreArm 텍스트 → 사유 목록); 파라미터 메타데이터 출처와 이름 바꿈표; 미션 번호 규칙(PX4 홈 없음); 보정 방식 기술자(STATUSTEXT 파싱 / 역방향 명령); 구성도 대응표(R-D33); AI 거부 목록(R-D5 ⑥); 지원 버전 범위(D17); 고도 틀 값(`AltitudeFrame` — `app/geo/Altitude`는 펌웨어를 모르고 frame을 인자로 받는다, R-N11).
+- **내놓는 것**: 기능 비트마스크 초기값과 단계별 보강 규칙; 모드 표(id ↔ 표시 이름); 이륙·일시정지·고도 변경·속도 변경의 **`CommandStep` 목록**(어떤 메시지를 어떤 순서로, 어떤 ACK를 기다리는지 — 실행은 기능 모듈); 시동 불가 사유 해석 함수(PX4 events / AP PreArm 텍스트 → 사유 목록); 파라미터 메타데이터 출처와 이름 바꿈표, 값 인코딩(`ParamEncoding`), 묶음 이름(`paramGroup`·`paramGroupTitle`), 파일 건너뛰기 목록(`paramFileSkip`); 미션 번호 규칙(PX4 홈 없음); 보정 방식 기술자(STATUSTEXT 파싱 / 역방향 명령); 구성도 대응표(R-D33); AI 거부 목록(R-D5 ⑥); 지원 버전 범위(D17); 고도 틀 값(`AltitudeFrame` — `app/geo/Altitude`는 펌웨어를 모르고 frame을 인자로 받는다, R-N11).
 - 플러그인은 **실행하지 않는다**(기체에 보내지 않고 상태를 쓰지 않는다). 기능 모듈이 `plugin.takeoffSteps()`를 받아 §9.2의 VehicleSender로 보낸다.
 - 검사: `vehicle/firmware/` 밖에서 `MAV_AUTOPILOT_PX4`·`MAV_AUTOPILOT_ARDUPILOTMEGA` 비교, `"PX4"`·`"ArduPilot"`·`"APM"` 문자열 비교를 잡되 **허용 목록**: `features/fcFlash`(펌웨어 선택 화면), `features/logs`(.ulg/.bin), `features/params`(메타데이터 출처 표시), 번역 파일. 기능 모듈 안에 펌웨어 이름의 하위 폴더는 금지.
 
@@ -360,6 +360,7 @@ k-groundcontrol/
 | 작업 | `Job` | §9.4 |
 | 서비스 / 컨트롤러 / 패널 / 메뉴 | `Service` / `Controller` / `Panel` / `Menu` | |
 | 파라미터 / 묶음(계열) / 작업 단위 묶음 | `Param` / `ParamGroup` / `TaskSet` | |
+| 대기값 / 파라미터 설명 데이터 / 파일 비교 | `pending` / `ParamMeta` / `FileDiff` | |
 | 미션 / 미션 편집기 / 유도 명령 | `Mission` / `MissionEditor` / `GuidedAction` | |
 | 시동 / 해제 / 비상 정지 / 길게 눌러 확인 | `Arm` / `Disarm` / `EmergencyStop` / `HoldToConfirm` | |
 | 기체 구성도 / 부품 표식 | `Layout` / `LayoutMarker` | 5.5절 |
@@ -463,3 +464,4 @@ k-groundcontrol/
 | 2026-10-31 | 사용자 | 0.1.0 스펙 초안 2와 함께 승인(§10): §2·§9.7 `registerUi(uiRegistry, VehicleRegistry&)`, 새 컨트롤러는 QML 싱글턴; §4 `--extra-serial`; §5 `<이름>Bundle`과 0.1.0 부분집합; §6 GCS id; §9.1·§9.2 등록부·안전 검사는 뒤 버전; §9.5 `registerTask`의 `fn`, GCS 하트비트는 Sender; §13 낱말; §14 고정값·이름 중복 범위와 qmllint |
 | 2026-10-31 | 사용자 | 0.1.1 스펙 초안 2와 함께 승인(§8): §5 `Link` 마지막 수신 시각, §9.2·§9.5 링크 유지 하트비트는 `LinkHeartbeat`, §9.5 스트림 요청 반복·기체 없음 검사, §13 낱말 |
 | 2026-11-01 | 사용자 | 0.2.0 스펙 초안 2와 함께 승인(§10): §3 `vehicle/command`·`vehicle/safety` 자리, `PortLease`는 `comm/rawport`, §4 `--extra-serial` 반복, §7 `px4-boards.json`, §9.1 `ByteStream`은 막아서 쓰는 인터페이스, §9.2 `ArmedPolicy`부터, §9.3 캐시는 뒤 버전, §9.4 굽기 임대 예외, §13 낱말 |
+| 2026-11-03 | 사용자 | 0.3.0 스펙과 함께 승인(§10): §3.1 `params` 혼합 수명, §8 플러그인 파라미터 항목, §13 용어 |

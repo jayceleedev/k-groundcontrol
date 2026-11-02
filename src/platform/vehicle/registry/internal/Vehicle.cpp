@@ -1,3 +1,4 @@
+// [0.3.0 5.1] specs/features/0.3.0-params.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include <kgc/vehicle/registry/Vehicle.h>
@@ -34,7 +35,8 @@ Vehicle::Vehicle(int sysid, std::uint8_t autopilot, kgc::comm::links::LinkManage
     kgc::vehicle::command::CommandLong request;
     request.command = MAV_CMD_REQUEST_MESSAGE;
     request.param1 = MAVLINK_MSG_ID_AUTOPILOT_VERSION;
-    d_->commands->send(request, {.retries = 0}, [](auto) {}, this);
+    // 응답을 한 번 잃어도 버전을 알 수 있게 기본 횟수만큼 다시 보내요.
+    d_->commands->send(request, {}, [](auto) {}, this);
 }
 Vehicle::~Vehicle() { stop(); }
 void Vehicle::stop()
@@ -56,8 +58,11 @@ void Vehicle::consume(const __mavlink_message& message)
     const bool lost = d_->states->link().lost;
     d_->owner->consume(message);
     if (lost && !d_->states->link().lost) d_->sender->sendStreamRequests();
+    emit messageReceived(message);
 }
 kgc::vehicle::command::CommandQueue* Vehicle::commands() const { return d_->commands; }
+kgc::vehicle::outbound::VehicleSender* Vehicle::sender() const { return d_->sender; }
+const kgc::vehicle::firmware::FirmwarePlugin& Vehicle::plugin() const { return *d_->plugin; }
 int Vehicle::sysid() const { return d_->sysid; }
 std::uint8_t Vehicle::autopilot() const { return d_->autopilot; }
 kgc::vehicle::states::VehicleStates* Vehicle::states() const { return d_->states; }

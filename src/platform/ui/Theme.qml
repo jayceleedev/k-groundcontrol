@@ -1,3 +1,4 @@
+// [0.3.0 6.8 6.8-1] specs/features/0.3.0-params.md
 // [0.1.0 T14] specs/features/0.1.0-link.md
 // [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.4 T8 T9 T9b T12] specs/features/0.0.4-righttabs.md
@@ -123,6 +124,18 @@ QtObject {
     readonly property int attitudeHeadingTapeHeight: Math.round(20 * uiScale)
     // 띠 가운데 숫자 상자의 높이예요.
     readonly property int attitudeReadoutHeight: Math.round(18 * uiScale)
+    // 수동 기체 설정 패널의 묶음 목록·단추 칸 너비와 표 행 높이예요. 행 높이는 값 편집기가 들어갈 만큼이에요.
+    readonly property int paramGroupWidth: Math.round(190 * uiScale)
+    readonly property int paramActionsWidth: Math.round(130 * uiScale)
+    readonly property int paramRowHeight: Math.round(34 * uiScale)
+    // 수동 기체 설정 표의 열 너비예요. 남는 폭은 설명 열이 써요.
+    readonly property int paramNameWidth: Math.round(220 * uiScale)
+    readonly property int paramValueWidth: Math.round(130 * uiScale)
+    readonly property int paramDefaultWidth: Math.round(100 * uiScale)
+    readonly property int paramUnitWidth: Math.round(56 * uiScale)
+    readonly property int paramRangeWidth: Math.round(190 * uiScale)
+    // 수동 기체 설정 패널의 토스트를 보여 주는 시간이에요(밀리초).
+    readonly property int paramToastMs: 4000
     // ThemeSwitcher만 current를 바꿔요. 부품은 Theme의 토큰만 읽어요.
     property ThemeBase current: Light {}
     readonly property color series1: current.series1

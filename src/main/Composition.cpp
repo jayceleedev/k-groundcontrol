@@ -1,3 +1,4 @@
+// [0.3.0 6.1 6.8] specs/features/0.3.0-params.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.1 T8 T9 T14] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T10 T13 T17] specs/features/0.1.0-link.md
@@ -17,6 +18,9 @@
 #include <kgc/link/Ui.h>
 #include <kgc/fcFlash/FcFlashService.h>
 #include <kgc/fcFlash/Ui.h>
+#include <kgc/params/ParamRebootReconnect.h>
+#include <kgc/params/ParamService.h>
+#include <kgc/params/Ui.h>
 #include <kgc/app/net/Http.h>
 #include <kgc/vehicle/safety/ArmedPolicy.h>
 #include <kgc/ui/UiRegistry.h>
@@ -46,6 +50,7 @@
 #include <QtQml/QQmlExtensionPlugin>
 
 Q_IMPORT_QML_PLUGIN(Kgc_FcFlashPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_ParamsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_LinkPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ShellPlugin)
@@ -82,7 +87,6 @@ void registerPlaceholders(ui::PanelRegistry* panels)
     registerPlaceholder("esc", 11, 3, QT_TRANSLATE_NOOP("Menu", "ESC 설정"), QUrl("qrc:/kgc/icons/menu/esc.svg"));
     registerPlaceholder("elrs", 12, 3, QT_TRANSLATE_NOOP("Menu", "ELRS 설정"), QUrl("qrc:/kgc/icons/menu/elrs.svg"));
     registerPlaceholder("tracker", 13, 3, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
-    registerPlaceholder("params", 14, 4, QT_TRANSLATE_NOOP("Menu", "수동 기체 설정"), QUrl("qrc:/kgc/icons/menu/params.svg"));
 }
 // 시안(specs/ui/main-screen.html)의 순서대로 상단바·하단바 자리를 잡아 두고, 기능이 생기면 같은 id·순서로 바꿔 넣어요.
 void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
@@ -118,6 +122,16 @@ void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
     chip("vehicleInfo.battery", 8, "left", QT_TRANSLATE_NOOP("Bar", "배터리"));
     chip("tracker.status", 9, "right", QT_TRANSLATE_NOOP("Bar", "트래커"));
     chip("gcsposition.gps", 10, "right", QT_TRANSLATE_NOOP("Bar", "GCS GPS"));
+}
+// 기체가 생길 때마다 기체별 서비스를 만들고, 화면 기여는 앱 시작 때 한 번 등록해요.
+void registerParams(QObject* owner, ui::UiRegistry& registry, comm::links::LinkManager* links, vehicle::registry::VehicleRegistry* vehicles,
+                    vehicle::safety::ArmedPolicy* policy, app::net::Http* http)
+{
+    auto* reconnect = new params::ParamRebootReconnect(*links, *vehicles, owner);
+    QObject::connect(vehicles, &vehicle::registry::VehicleRegistry::vehicleAdded, owner, [policy, http, reconnect](vehicle::registry::Vehicle* added) {
+        new params::ParamService(*added, *policy, *http, *reconnect, added);
+    });
+    params::registerUi(registry, *vehicles);
 }
 }
 Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
@@ -171,6 +185,7 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* flashService = new fcFlash::FcFlashService(*links, *vehicles, *policy, *ports, *http, *scheduler, flashLifetime);
     connect(flashService, &QObject::destroyed, this, [policy] { delete policy; });
     fcFlash::registerUi(registry, *flashService);
+    registerParams(this, registry, links, vehicles, policy, http);
     vehicleInfo::registerUi(registry, *vehicles);
     auto* logsViewer = new logs::LogsViewer(this);
     logs::registerUi(registry, *logsViewer);

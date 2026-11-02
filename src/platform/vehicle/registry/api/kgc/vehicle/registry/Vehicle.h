@@ -1,3 +1,4 @@
+// [0.3.0 5.1] specs/features/0.3.0-params.md
 // [0.2.0 5.7] specs/features/0.2.0-fcflash.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
@@ -10,6 +11,8 @@ struct __mavlink_message;
 namespace kgc::app::scheduler { class Scheduler; }
 namespace kgc::comm::links { class LinkManager; }
 namespace kgc::vehicle::command { class CommandQueue; }
+namespace kgc::vehicle::firmware { class FirmwarePlugin; }
+namespace kgc::vehicle::outbound { class VehicleSender; }
 namespace kgc::vehicle::registry {
 class VehicleRegistry;
 /** 발견한 기체의 상태와 생성 당시 연결 값을 소유해요.
@@ -52,6 +55,25 @@ public:
  * 실패: 없어요.
  */
     kgc::vehicle::command::CommandQueue* commands() const;
+/** 이 기체의 송신 문을 읽어요.
+ * 입력: 없어요.
+ * 출력: 기체가 소유하는 VehicleSender의 비소유 포인터이며, stop 뒤에는 nullptr예요.
+ * 실패: 없어요.
+ */
+    kgc::vehicle::outbound::VehicleSender* sender() const;
+/** 이 기체의 펌웨어 플러그인을 읽어요.
+ * 입력: 없어요.
+ * 출력: 기체가 소유하는 플러그인의 읽기 전용 참조예요. 기체가 살아 있는 동안만 쓸 수 있어요.
+ * 실패: 없어요.
+ */
+    const kgc::vehicle::firmware::FirmwarePlugin& plugin() const;
+signals:
+/** 이 기체의 자동조종기에서 온 메시지를 알려요.
+ * 입력: 받은 MAVLink 메시지예요.
+ * 출력: consume 끝에서 나와요. 같은 스레드의 직접 호출로 이어요.
+ * 실패: 없어요.
+ */
+    void messageReceived(const __mavlink_message& message);
 private:
     friend class VehicleRegistry;
     Vehicle(int sysid, std::uint8_t autopilot, kgc::comm::links::LinkManager& links,

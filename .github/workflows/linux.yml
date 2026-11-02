@@ -30,6 +30,7 @@ jobs:
           qmllint @build/linux-release/src/features/link/.rcc/qmllint/kgc_link.rsp --unqualified disable --max-warnings 0
           qmllint @build/linux-release/src/features/vehicleInfo/.rcc/qmllint/kgc_vehicleInfo.rsp --unqualified disable --max-warnings 0
           qmllint @build/linux-release/src/features/fcFlash/.rcc/qmllint/kgc_fcFlash.rsp --unqualified disable --max-warnings 0
+          qmllint @build/linux-release/src/features/params/.rcc/qmllint/kgc_params.rsp --unqualified disable --max-warnings 0
       - run: ctest --preset linux-release
       - run: cmake --build build/linux-release --target package
       - uses: actions/upload-artifact@v7

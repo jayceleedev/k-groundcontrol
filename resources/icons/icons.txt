@@ -50,3 +50,4 @@ circle-check outline/circle-check
 circle-x outline/circle-x
 alert-triangle outline/alert-triangle
 arrow-right outline/arrow-right
+refresh outline/refresh

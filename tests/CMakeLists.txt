@@ -112,3 +112,20 @@ qt_add_executable(test_pick_candidate test_pick_candidate.cpp)
 target_include_directories(test_pick_candidate PRIVATE "${PROJECT_SOURCE_DIR}/src/features/fcFlash/internal")
 target_link_libraries(test_pick_candidate PRIVATE kgc_fcFlash Qt6::Test)
 add_test(NAME pick_candidate COMMAND test_pick_candidate)
+
+# [0.3.0 T1–T8] specs/features/0.3.0-params.md
+foreach(name T1_param_codec T2_param_value T3_param_file T4_param_metadata T5_param_gap T6_param_search T7_param_group)
+    qt_add_executable(test_${name} test_${name}.cpp)
+    target_include_directories(test_${name} PRIVATE "${PROJECT_SOURCE_DIR}/src/features/params/internal")
+    target_link_libraries(test_${name} PRIVATE kgc_params kgc_comm_mavlink Qt6::Test)
+    add_test(NAME ${name} COMMAND test_${name})
+endforeach()
+qt_add_executable(test_T8_param_source test_T8_param_source.cpp)
+target_link_libraries(test_T8_param_source PRIVATE kgc_vehicle_firmware Qt6::Test)
+add_test(NAME T8_param_source COMMAND test_T8_param_source)
+
+# [0.3.0 F5] specs/features/0.3.0-params.md
+qt_add_executable(test_serial_eagain_keeps_link test_serial_eagain_keeps_link.cpp)
+target_include_directories(test_serial_eagain_keeps_link PRIVATE "${PROJECT_SOURCE_DIR}/src/platform/comm/links/serial")
+target_link_libraries(test_serial_eagain_keeps_link PRIVATE kgc_comm_links Qt6::Test)
+add_test(NAME serial_eagain_keeps_link COMMAND test_serial_eagain_keeps_link)

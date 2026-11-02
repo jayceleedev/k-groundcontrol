@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko">
+<!-- [0.3.0 T14-T24] specs/features/0.3.0-params.md 수동 기체 설정 패널, Mission Planner Full Parameter List 참고 -->
+<meta charset="utf-8"><title>수동 기체 설정 시안</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--line:#d8dce3;--ink:#1f2530;--sub:#667085;--accent:#2563eb;--soft:#e4edfc;--ok:#1f8a4c;--oksoft:#e3f4ea;--warn:#b7791f;--warnsoft:#fbf1dd;--danger:#c0392b}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font:13px/1.5 system-ui,sans-serif}
+.panel{max-width:1040px;margin:0 auto 24px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px}
+.top{display:flex;gap:8px;align-items:center;margin-bottom:10px}.search{flex:1;border:1px solid var(--line);border-radius:6px;padding:5px 10px;color:var(--sub)}
+.tog{border:1px solid var(--line);border-radius:6px;padding:4px 10px;color:var(--sub)}.tog.on{background:var(--soft);border-color:var(--accent);color:var(--accent)}
+.grid{display:grid;grid-template-columns:190px minmax(0,1fr) 130px;gap:12px}
+.groups{border-right:1px solid var(--line);padding-right:8px;line-height:2}.g{display:flex;justify-content:space-between;padding:0 6px;border-radius:5px;color:var(--sub)}.g.on{background:var(--soft);color:var(--accent)}
+table{width:100%;border-collapse:collapse;table-layout:fixed}th{font-weight:500;color:var(--sub);text-align:left;padding:4px 6px}td{padding:5px 6px;border-top:1px solid var(--line);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mono{font-family:ui-monospace,monospace;font-size:12px}.pend{background:var(--oksoft);color:var(--ok)}.sel{background:#f6f7f9}.sub{color:var(--sub)}.warn{color:var(--warn)}.danger{color:var(--danger)}
+.detail{margin-top:8px;padding:10px;background:#f6f7f9;border-radius:6px}.side{display:flex;flex-direction:column;gap:6px}.btn{border:1px solid var(--line);border-radius:6px;padding:6px 8px;text-align:center}.btn.main{background:var(--accent);color:#fff;border-color:var(--accent)}
+.banner{padding:6px 10px;background:var(--warnsoft);color:var(--warn);border-radius:6px;margin-bottom:10px}
+.dlg{max-width:620px;margin:0 auto 24px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 20px}.bits div{padding:2px 0}
+</style>
+<body>
+<section class="panel" id="main">
+<div class="banner">재부팅해야 적용되는 값이 있어요. <b>FC 재부팅</b></div>
+<div class="top"><span class="search">이름이나 설명 검색</span><span class="tog on">바꾼 값만 (2)</span><span class="tog">기본값과 다른 값</span><span class="sub">931개</span></div>
+<div class="grid">
+<div class="groups"><div class="g"><span>전체</span><span>931</span></div><div class="g on"><span>배터리 (BATT)</span><span>24</span></div><div class="g"><span>자세 제어 (ATC)</span><span>46</span></div><div class="g"><span>나침반 (COMPASS)</span><span>58</span></div><div class="g"><span>페일세이프 (FS)</span><span>9</span></div><div class="g"><span>조종기 (RC)</span><span>96</span></div><div class="g"><span>서보 출력 (SERVO)</span><span>124</span></div></div>
+<div>
+<table><colgroup><col style="width:24%"><col style="width:15%"><col style="width:12%"><col style="width:7%"><col style="width:20%"><col></colgroup>
+<tr><th>이름</th><th>값</th><th>기본값</th><th>단위</th><th>범위·선택지</th><th>설명</th></tr>
+<tr><td class="mono">BAT1_CAPACITY</td><td>5200</td><td class="sub">-1</td><td>mAh</td><td class="sub">-1 ~ 100000</td><td class="sub">Battery capacity</td></tr>
+<tr><td class="mono">COM_LOW_BAT_ACT</td><td class="pend">Land</td><td class="sub">Warning</td><td></td><td class="sub">0 Warning, 2 Land, 3 Return</td><td class="sub">Battery failsafe mode</td></tr>
+<tr class="sel"><td class="mono">BAT1_V_CHARGED</td><td class="pend"><input value="4.15" style="width:90%;font:inherit"></td><td class="sub">4.05</td><td>V</td><td class="sub">0 ~ 5</td><td class="sub">Voltage of full cell</td></tr>
+<tr><td class="mono">BAT1_SOURCE</td><td>Power Module ↻</td><td class="sub">Power Module</td><td></td><td class="sub">0 Power Module, 1 External</td><td class="sub">Battery monitoring source</td></tr>
+<tr><td class="mono">COM_ARM_CHK_ESCS</td><td class="sub">3 · 비트 고르기</td><td class="sub">3</td><td></td><td class="sub">비트 2개</td><td class="sub">Bitmask</td></tr>
+</table>
+<div class="detail"><b class="mono">BAT1_V_CHARGED</b> <span class="sub">FC 값 4.05 · 새 값 4.15</span><div class="sub">Defines the voltage where a single cell of battery 1 counts as full.</div><span class="btn" style="display:inline-block;margin-top:6px">기본값으로</span></div>
+</div>
+<div class="side"><span class="btn main">값 쓰기 (2)</span><span class="btn">새로고침</span><span class="btn">파일 불러오기</span><span class="btn">파일로 저장</span><span class="btn">FC 재부팅</span></div>
+</div>
+</section>
+<section class="dlg" id="writeConfirm"><b>값 2개를 쓸까요?</b><table><tr><th>이름</th><th>지금</th><th>새 값</th></tr><tr><td class="mono">BAT1_V_CHARGED</td><td>4.05</td><td>4.15</td></tr><tr><td class="mono">COM_LOW_BAT_ACT</td><td>0</td><td>2</td></tr></table><p class="sub">쓰기 전에 전체 값을 백업해요.</p><span class="btn">취소</span> <span class="btn main">쓰기</span></section>
+<section class="dlg" id="fileCompare"><b>파일과 FC 비교</b><div class="sub">바뀌는 값 3 · 같은 값 925 · FC에 없음 4 · 읽기 전용 1 · 건너뜀 2</div><table><colgroup><col style="width:32px"><col><col><col></colgroup><tr><th></th><th>이름</th><th>FC 값</th><th>파일 값</th></tr><tr><td>☑</td><td class="mono">MPC_XY_VEL_MAX</td><td>12</td><td>8</td></tr><tr><td>☑</td><td class="mono">BAT1_N_CELLS</td><td>4</td><td>6</td></tr><tr><td>☐</td><td class="mono">SENS_BOARD_ROT</td><td>0</td><td>2</td></tr></table><br><span class="btn">취소</span> <span class="btn main">고른 값 올리기</span></section>
+<section class="dlg bits" id="bitmask"><b>COM_ARM_CHK_ESCS 비트 고르기</b><div>☑ 0 Require ESC telemetry</div><div>☑ 1 Require all ESCs online</div><br><span class="btn">취소</span> <span class="btn main">확인</span></section>
+<section class="dlg" id="result"><b>2개를 썼어요</b><div class="danger">1개는 쓰지 못했어요: BAT1_N_CELLS</div><div class="sub">쓰지 못한 값은 초록색으로 남아 있어요.</div></section>
+</body></html>

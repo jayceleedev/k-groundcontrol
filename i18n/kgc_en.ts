@@ -1745,6 +1745,10 @@
         <source>취소했어요.</source>
         <translation>Cancelled.</translation>
     </message>
+    <message>
+        <source>값 쓰기</source>
+        <translation>Write values</translation>
+    </message>
 </context>
 <context>
     <name>JobView</name>
@@ -2020,6 +2024,507 @@
     <message>
         <source>포트가 응답하지 않아요.</source>
         <translation>The port is not responding.</translation>
+    </message>
+</context>
+<context>
+    <name>BitmaskDialog</name>
+    <message>
+        <source>%1 비트 고르기</source>
+        <translation>Choose bits of %1</translation>
+    </message>
+    <message>
+        <source>확인</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>취소</source>
+        <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>FileCompareDialog</name>
+    <message>
+        <source>파일과 FC 비교</source>
+        <translation>Compare file with FC</translation>
+    </message>
+    <message>
+        <source>이름</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <source>FC 값</source>
+        <translation>FC value</translation>
+    </message>
+    <message>
+        <source>파일 값</source>
+        <translation>File value</translation>
+    </message>
+    <message>
+        <source>고른 값 올리기</source>
+        <translation>Load selected values</translation>
+    </message>
+    <message>
+        <source>취소</source>
+        <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>ParamActions</name>
+    <message>
+        <source>값 쓰기 (%1)</source>
+        <translation>Write values (%1)</translation>
+    </message>
+    <message>
+        <source>새로고침</source>
+        <translation>Refresh</translation>
+    </message>
+    <message>
+        <source>파일 불러오기</source>
+        <translation>Load file</translation>
+    </message>
+    <message>
+        <source>파일로 저장</source>
+        <translation>Save to file</translation>
+    </message>
+    <message>
+        <source>FC 재부팅</source>
+        <translation>Reboot FC</translation>
+    </message>
+</context>
+<context>
+    <name>ParamDetail</name>
+    <message>
+        <source>FC 값 %1 · 새 값 %2</source>
+        <translation>FC value %1 · New value %2</translation>
+    </message>
+    <message>
+        <source>FC 값 %1</source>
+        <translation>FC value %1</translation>
+    </message>
+    <message>
+        <source>기본값으로</source>
+        <translation>Use default</translation>
+    </message>
+    <message>
+        <source>되돌리기</source>
+        <translation>Revert</translation>
+    </message>
+</context>
+<context>
+    <name>ParamGroup</name>
+    <message>
+        <source>아크로 모드</source>
+        <translation>Acro mode</translation>
+    </message>
+    <message>
+        <source>ADS-B</source>
+        <translation>ADS-B</translation>
+    </message>
+    <message>
+        <source>자세 추정</source>
+        <translation>Attitude estimation</translation>
+    </message>
+    <message>
+        <source>시동 검사</source>
+        <translation>Arming checks</translation>
+    </message>
+    <message>
+        <source>자세 제어</source>
+        <translation>Attitude control</translation>
+    </message>
+    <message>
+        <source>자동 튜닝</source>
+        <translation>Autotune</translation>
+    </message>
+    <message>
+        <source>기압계</source>
+        <translation>Barometer</translation>
+    </message>
+    <message>
+        <source>배터리</source>
+        <translation>Battery</translation>
+    </message>
+    <message>
+        <source>보드</source>
+        <translation>Board</translation>
+    </message>
+    <message>
+        <source>카메라</source>
+        <translation>Camera</translation>
+    </message>
+    <message>
+        <source>CAN 버스</source>
+        <translation>CAN bus</translation>
+    </message>
+    <message>
+        <source>서클 모드</source>
+        <translation>Circle mode</translation>
+    </message>
+    <message>
+        <source>나침반</source>
+        <translation>Compass</translation>
+    </message>
+    <message>
+        <source>위치 추정 필터</source>
+        <translation>EKF</translation>
+    </message>
+    <message>
+        <source>지오펜스</source>
+        <translation>Geofence</translation>
+    </message>
+    <message>
+        <source>옵티컬 플로</source>
+        <translation>Optical flow</translation>
+    </message>
+    <message>
+        <source>비행 모드</source>
+        <translation>Flight modes</translation>
+    </message>
+    <message>
+        <source>기체 구성</source>
+        <translation>Frame</translation>
+    </message>
+    <message>
+        <source>페일세이프</source>
+        <translation>Failsafe</translation>
+    </message>
+    <message>
+        <source>GPS</source>
+        <translation>GPS</translation>
+    </message>
+    <message>
+        <source>관성 센서</source>
+        <translation>Inertial sensors</translation>
+    </message>
+    <message>
+        <source>착륙</source>
+        <translation>Landing</translation>
+    </message>
+    <message>
+        <source>로그</source>
+        <translation>Logging</translation>
+    </message>
+    <message>
+        <source>짐벌</source>
+        <translation>Gimbal</translation>
+    </message>
+    <message>
+        <source>모터</source>
+        <translation>Motors</translation>
+    </message>
+    <message>
+        <source>알림 장치</source>
+        <translation>Notification</translation>
+    </message>
+    <message>
+        <source>OSD</source>
+        <translation>OSD</translation>
+    </message>
+    <message>
+        <source>조종 입력</source>
+        <translation>Pilot input</translation>
+    </message>
+    <message>
+        <source>위치 제어</source>
+        <translation>Position control</translation>
+    </message>
+    <message>
+        <source>조종기</source>
+        <translation>Radio control</translation>
+    </message>
+    <message>
+        <source>조종기 채널 배정</source>
+        <translation>RC mapping</translation>
+    </message>
+    <message>
+        <source>릴레이</source>
+        <translation>Relay</translation>
+    </message>
+    <message>
+        <source>거리 센서</source>
+        <translation>Rangefinder</translation>
+    </message>
+    <message>
+        <source>복귀</source>
+        <translation>Return to launch</translation>
+    </message>
+    <message>
+        <source>스케줄러</source>
+        <translation>Scheduler</translation>
+    </message>
+    <message>
+        <source>시리얼 포트</source>
+        <translation>Serial ports</translation>
+    </message>
+    <message>
+        <source>서보 출력</source>
+        <translation>Servo outputs</translation>
+    </message>
+    <message>
+        <source>텔레메트리 속도</source>
+        <translation>Telemetry rates</translation>
+    </message>
+    <message>
+        <source>시스템 번호</source>
+        <translation>System ID</translation>
+    </message>
+    <message>
+        <source>지형</source>
+        <translation>Terrain</translation>
+    </message>
+    <message>
+        <source>웨이포인트 비행</source>
+        <translation>Waypoint navigation</translation>
+    </message>
+</context>
+<context>
+    <name>ParamGroups</name>
+    <message>
+        <source>전체</source>
+        <translation>All</translation>
+    </message>
+    <message>
+        <source>기타</source>
+        <translation>Other</translation>
+    </message>
+</context>
+<context>
+    <name>ParamRow</name>
+    <message>
+        <source>비트 고르기</source>
+        <translation>Bits</translation>
+    </message>
+</context>
+<context>
+    <name>ParamTable</name>
+    <message>
+        <source>이름</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <source>값</source>
+        <translation>Value</translation>
+    </message>
+    <message>
+        <source>기본값</source>
+        <translation>Default</translation>
+    </message>
+    <message>
+        <source>단위</source>
+        <translation>Unit</translation>
+    </message>
+    <message>
+        <source>범위·선택지</source>
+        <translation>Range · Options</translation>
+    </message>
+    <message>
+        <source>설명</source>
+        <translation>Description</translation>
+    </message>
+    <message>
+        <source>범위를 벗어났어요</source>
+        <translation>Value out of range</translation>
+    </message>
+    <message>
+        <source>%1의 범위는 %2예요. 이 값으로 둘까요?</source>
+        <translation>The range of %1 is %2. Keep this value?</translation>
+    </message>
+</context>
+<context>
+    <name>Params</name>
+    <message>
+        <source>FC가 응답하지 않아요</source>
+        <translation>The FC is not responding</translation>
+    </message>
+    <message>
+        <source>FC가 파라미터를 다 보내지 않았어요</source>
+        <translation>The FC did not send all parameters</translation>
+    </message>
+    <message>
+        <source>백업을 저장하지 못해 쓰지 않았어요</source>
+        <translation>Nothing was written because the backup could not be saved</translation>
+    </message>
+    <message>
+        <source>시동 중에는 쓸 수 없어요</source>
+        <translation>Cannot write while armed</translation>
+    </message>
+    <message>
+        <source>이 파라미터는 FC에 없어요</source>
+        <translation>This parameter is not on the FC</translation>
+    </message>
+    <message>
+        <source>숫자를 넣어 주세요</source>
+        <translation>Enter a number</translation>
+    </message>
+    <message>
+        <source>정수를 넣어 주세요</source>
+        <translation>Enter a whole number</translation>
+    </message>
+    <message>
+        <source>이 파라미터가 담을 수 없는 값이에요</source>
+        <translation>This parameter cannot hold that value</translation>
+    </message>
+    <message>
+        <source>읽기 전용이에요</source>
+        <translation>This parameter is read-only</translation>
+    </message>
+    <message>
+        <source>파일을 열지 못했어요</source>
+        <translation>Could not open the file</translation>
+    </message>
+    <message>
+        <source>파일에 읽을 값이 없어요</source>
+        <translation>The file has no values to read</translation>
+    </message>
+    <message>
+        <source>파일을 저장하지 못했어요</source>
+        <translation>Could not save the file</translation>
+    </message>
+    <message>
+        <source>다른 작업이 끝난 뒤 다시 해 주세요</source>
+        <translation>Try again after the current task finishes</translation>
+    </message>
+    <message>
+        <source>FC가 재부팅을 거부했어요</source>
+        <translation>The FC refused to reboot</translation>
+    </message>
+    <message>
+        <source>재부팅을 보냈어요</source>
+        <translation>Reboot sent</translation>
+    </message>
+    <message>
+        <source>%1개를 썼어요</source>
+        <translation>Wrote %1 values</translation>
+    </message>
+    <message>
+        <source> 외 %1개</source>
+        <translation> and %1 more</translation>
+    </message>
+    <message>
+        <source>%1개를 썼어요. %2개는 쓰지 못했어요: %3</source>
+        <translation>Wrote %1 values. Could not write %2: %3</translation>
+    </message>
+    <message>
+        <source>바뀌는 값 %1 · 같은 값 %2 · FC에 없음 %3 · 읽기 전용 %4 · 건너뜀 %5</source>
+        <translation>Changed %1 · Same %2 · Not on FC %3 · Read-only %4 · Skipped %5</translation>
+    </message>
+    <message>
+        <source> · 읽지 못한 줄 %1</source>
+        <translation> · Unreadable lines %1</translation>
+    </message>
+    <message>
+        <source>파일로 저장했어요</source>
+        <translation>Saved to file</translation>
+    </message>
+    <message>
+        <source>%1개를 썼어요. 시동이 걸려 멈췄어요.</source>
+        <translation>Wrote %1 values. Stopped because the vehicle was armed.</translation>
+    </message>
+    <message>
+        <source>%1 이상</source>
+        <translation>%1 or more</translation>
+    </message>
+    <message>
+        <source>%1 이하</source>
+        <translation>%1 or less</translation>
+    </message>
+    <message>
+        <source>비트 %1개</source>
+        <translation>%1 bits</translation>
+    </message>
+</context>
+<context>
+    <name>ParamsPanel</name>
+    <message>
+        <source>기체를 연결하면 파라미터가 보여요</source>
+        <translation>Connect a vehicle to see its parameters</translation>
+    </message>
+    <message>
+        <source>FC가 파라미터를 다 보내지 않았어요</source>
+        <translation>The FC did not send all parameters</translation>
+    </message>
+    <message>
+        <source>FC가 파라미터를 다 보내지 않았어요 (%1/%2)</source>
+        <translation>The FC did not send all parameters (%1/%2)</translation>
+    </message>
+    <message>
+        <source>시동 중이라 파라미터를 받지 않았어요. 새로고침을 누르면 받아요.</source>
+        <translation>Parameters were not downloaded while armed. Press Refresh to download them.</translation>
+    </message>
+    <message>
+        <source>재부팅해야 적용되는 값이 있어요</source>
+        <translation>Some values need a reboot to take effect</translation>
+    </message>
+    <message>
+        <source>이름이나 설명 검색</source>
+        <translation>Search name or description</translation>
+    </message>
+    <message>
+        <source>바꾼 값만 (%1)</source>
+        <translation>Changed only (%1)</translation>
+    </message>
+    <message>
+        <source>기본값과 다른 값</source>
+        <translation>Different from default</translation>
+    </message>
+    <message>
+        <source>설명을 받지 못했어요</source>
+        <translation>Could not download descriptions</translation>
+    </message>
+    <message>
+        <source>%1개</source>
+        <translation>%1 items</translation>
+    </message>
+    <message>
+        <source>FC를 재부팅할까요?</source>
+        <translation>Reboot the FC?</translation>
+    </message>
+    <message>
+        <source>파라미터 파일 불러오기</source>
+        <translation>Load parameter file</translation>
+    </message>
+    <message>
+        <source>파라미터 파일 (*.params *.param *.parm)</source>
+        <translation>Parameter files (*.params *.param *.parm)</translation>
+    </message>
+    <message>
+        <source>파라미터 파일로 저장</source>
+        <translation>Save parameter file</translation>
+    </message>
+    <message>
+        <source>파라미터 파일 (*.params)</source>
+        <translation>Parameter files (*.params)</translation>
+    </message>
+</context>
+<context>
+    <name>WriteConfirmDialog</name>
+    <message>
+        <source>값 %1개를 쓸까요?</source>
+        <translation>Write %1 values?</translation>
+    </message>
+    <message>
+        <source>이름</source>
+        <translation>Name</translation>
+    </message>
+    <message>
+        <source>지금</source>
+        <translation>Current</translation>
+    </message>
+    <message>
+        <source>새 값</source>
+        <translation>New value</translation>
+    </message>
+    <message>
+        <source>쓰기 전에 전체 값을 백업해요.</source>
+        <translation>All values are backed up before writing.</translation>
+    </message>
+    <message>
+        <source>쓰기</source>
+        <translation>Write</translation>
+    </message>
+    <message>
+        <source>취소</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 </TS>

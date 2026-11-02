@@ -8,5 +8,5 @@
 안 하는 것: 화면 표시와 사용자 명령은 기능 모듈이 맡아요.
 흐름: 1. connectLink가 시리얼 포트를 PortRegistry.claim으로 점유한 뒤 워커에서 열어요. 2. disconnectLink가 열기 중에도 취소해요. 3. 워커 종료 뒤 PortRegistry.release로 점유를 놓고 linkClosed 또는 linkFailed를 정확히 한 번 알려요.
 포트 조회: refreshPorts는 파일이 존재하는 추가 경로만 목록에 넣어요. portInfo는 운영체제의 제조사·제품 설명을 돌려주며, 없으면 빈 값이에요.
-오류 전달: ErrorCode와 선택적 오류를 등록해 워커 시그널로 받아요. 시리얼이 열린 뒤 NoError·TimeoutError는 무시하고, 나머지 오류와 음수 쓰기 결과는 PortLost로 닫아요.
+오류 전달: ErrorCode와 선택적 오류를 등록해 워커 시그널로 받아요. 시리얼이 열린 뒤 NoError·TimeoutError는 무시하고, ResourceError 중 EAGAIN(쓰기가 잠깐 바쁨)은 오류를 지우고 링크를 유지해요. 남은 바이트는 Qt의 쓰기 알림이 스스로 다시 보내고, 로그는 링크마다 한 번이에요. 나머지 오류와 음수 쓰기 결과는 PortLost로 닫고 SerialPortLost 경고를 남겨요.
 통로 유지: 시리얼의 DTR·RTS를 켜되 실패하면 오류를 지우고 연결을 계속해요. 미지원은 조용히 넘기고 다른 제어선 실패는 매번 경고해요. UDP는 최근 10초 안에 수신한 모든 주소에 회신해요.

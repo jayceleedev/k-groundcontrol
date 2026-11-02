@@ -4,5 +4,5 @@
 #include <cstdint>
 namespace kgc::comm::links {
 inline constexpr auto kCategory = "kgc.comm.links";
-enum class LinksEvent : std::uint16_t { LinkWorkerStopped = 1, SerialErrorIgnored = 2 };
+enum class LinksEvent : std::uint16_t { LinkWorkerStopped = 1, SerialErrorIgnored = 2, SerialPortLost = 3, SerialWriteBusy = 4 };
 }

@@ -3,6 +3,8 @@
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include <kgc/comm/links/LinkManager.h>
 #include <kgc/comm/links/Errors.h>
+#include <kgc/app/log/Log.h>
+#include "Events.h"
 #include "LinkManagerPrivate.h"
 #include <QFile>
 #include <QSerialPortInfo>
@@ -27,6 +29,7 @@ void LinkManager::refreshPorts()
         // 독점으로 연 8250 포트는 목록에서 빠질 수 있어서 장치 파일도 확인해요.
         if (!present && !QFile::exists(d_->config.portName.startsWith('/')
                 ? d_->config.portName : QStringLiteral("/dev/") + d_->config.portName)) {
+            KGC_LOG_WARN(kCategory, LinksEvent::SerialPortLost, "Serial port lost: port list, port: %1", d_->config.portName);
             d_->error = make(LinkError::PortLost);
             d_->closing = true;
             QMetaObject::invokeMethod(d_->worker, [worker = d_->worker] {

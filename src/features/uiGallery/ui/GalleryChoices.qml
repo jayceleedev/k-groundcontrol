@@ -1,3 +1,4 @@
+// [0.4.0 5.3] specs/features/0.4.0-sitl.md
 // [0.0.2 T1 T10 T17] specs/features/0.0.2-theme.md
 import QtQuick
 import Kgc.Ui
@@ -17,6 +18,7 @@ Card {
         CheckRow { text: qsTr("안 고름") }
         RadioRow { objectName: "gallery_RadioRow"; text: qsTr("첫째"); checked: true }
         RadioRow { text: qsTr("둘째") }
+        ChoiceCard { objectName: "gallery_ChoiceCard"; icon.name: "drone"; title: qsTr("선택 카드"); subtitle: qsTr("아이콘과 글자"); selected: true }
         ComboField { objectName: "gallery_ComboField"; label: qsTr("연결 포트"); model: [qsTr("자동"), qsTr("직접 선택")] }
     }
 }

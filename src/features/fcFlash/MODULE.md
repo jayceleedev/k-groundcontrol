@@ -6,7 +6,7 @@
 기여: 좌 메뉴 1번 펌웨어 세팅 패널(묶음 1).
 의존: app/errors, app/log, app/crc, app/job, app/net, app/paths, app/scheduler, app/constants, comm/rawport, comm/links, vehicle/registry, vehicle/safety, vehicle/command, ui.
 안 하는 것: DFU, Betaflight, SiK, 부트로더 업데이트, 파라미터 백업과 복원, 다운로드 캐시 재사용, 자동 연결은 하지 않아요.
-화면: FcFlashController가 서비스의 읽기 값과 요청을 형이 있는 싱글턴으로 전달해요.
+화면: FcFlashController가 서비스의 읽기 값과 요청을 형이 있는 싱글턴으로 전달해요. 고르기 카드는 Kgc.Ui의 ChoiceCard를 써요.
 스레드: FlashWorker가 자기 스레드에서 RawPort와 Bootloader를 쥐어요. 임대는 GUI 스레드의 서비스가 쥐어요.
 흐름(보드 확인):
 1. FcFlashController → FcFlashService::beginProbe — 시동·연결 조건을 보고 고른 포트를 확인해요.

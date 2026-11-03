@@ -1,3 +1,4 @@
+// [0.4.0 5.1] specs/features/0.4.0-sitl.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #pragma once
 #include <QString>
@@ -100,6 +101,18 @@ public:
  * 실패: 만들 수 없으면 빈 문자열.
  */
     static QString cacheTerrain();
+/** 필요한 데이터 폴더를 만들고 경로를 돌려줘요.
+ * 입력: 없음.
+ * 출력: SITL 실행 파일을 받아 두는 폴더 경로.
+ * 실패: 만들 수 없으면 빈 문자열.
+ */
+    static QString cacheSitl();
+/** 필요한 데이터 폴더를 만들고 경로를 돌려줘요.
+ * 입력: 없음.
+ * 출력: SITL을 실행하는 폴더 경로.
+ * 실패: 만들 수 없으면 빈 문자열.
+ */
+    static QString sitl();
 private:
     static QString directory(const QString& relative);
 };

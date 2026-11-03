@@ -1,3 +1,4 @@
+// [0.4.0 5.3] specs/features/0.4.0-sitl.md
 // [0.2.0 T27] specs/features/0.2.0-fcflash.md
 /** 아이콘과 글자로 하나를 고르는 카드예요.
  * 입력: icon.name(icons.txt의 이름), title, subtitle(비면 숨겨요), selected, compact, enabled를 받아요.

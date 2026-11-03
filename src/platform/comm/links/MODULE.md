@@ -2,7 +2,7 @@
 역할: 하나의 링크를 워커에서 열고 GUI 스레드로 수신을 전달해요.
 수명: 전역 LinkManager와 연결마다 만드는 워커.
 받는 것: LinkConfig, Scheduler, PortRegistry, BootOptions.extraSerial 경로 목록.
-주는 것: 포트가 목록과 /dev/ 장치 파일 양쪽에서 사라지면 PortLost로 알리는 LinkManager의 연결·수신·종료 시그널과 포트 목록, Link·UdpLink·SerialLink, LinkError.
+주는 것: 포트가 목록과 /dev/ 장치 파일 양쪽에서 사라지면 PortLost로 알리는 LinkManager의 연결·수신·종료 시그널과 포트 목록, Link·UdpLink·SerialLink, LinkError, LinkConfig.h로 함께 보이는 UDP 포트 kUdpPort(api Constants.h).
 기여: 없음.
 의존: app/errors, app/log, app/scheduler, comm/mavlink, comm/rawport(PortRegistry), Qt Core·Network·SerialPort.
 안 하는 것: 화면 표시와 사용자 명령은 기능 모듈이 맡아요.

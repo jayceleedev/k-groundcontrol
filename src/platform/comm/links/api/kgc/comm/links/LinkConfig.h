@@ -1,5 +1,7 @@
+// [0.4.0 5.2] specs/features/0.4.0-sitl.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
+#include <kgc/comm/links/Constants.h>
 #include <QString>
 namespace kgc::comm::links {
 /** 링크를 열 때 필요한 값을 복사해서 전달해요.

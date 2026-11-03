@@ -1,3 +1,4 @@
+// [0.4.0 5.1] specs/features/0.4.0-sitl.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
 #include <kgc/app/paths/Paths.h>
 #include <QDir>
@@ -26,4 +27,6 @@ QString Paths::cacheFirmware() { return directory(QStringLiteral("cache/firmware
 QString Paths::cacheTiles() { return directory(QStringLiteral("cache/tiles")); }
 QString Paths::cacheMetadata() { return directory(QStringLiteral("cache/metadata")); }
 QString Paths::cacheTerrain() { return directory(QStringLiteral("cache/terrain")); }
+QString Paths::cacheSitl() { return directory(QStringLiteral("cache/sitl")); }
+QString Paths::sitl() { return directory(QStringLiteral("sitl")); }
 }

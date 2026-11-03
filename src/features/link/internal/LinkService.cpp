@@ -1,3 +1,4 @@
+// [0.4.0 5.2-2] specs/features/0.4.0-sitl.md
 // [0.2.0 T22] specs/features/0.2.0-fcflash.md
 // [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
@@ -41,7 +42,8 @@ void LinkService::finish(std::optional<kgc::app::errors::ErrorCode> error)
 }
 bool LinkService::canConnect() const
 {
-    return state_ == ConnectionState::Idle || state_ == ConnectionState::Failed;
+    // 다른 모듈이 연 링크가 아직 열리는 중이어도 연결 단추가 끊기로 동작하게 해요.
+    return (state_ == ConnectionState::Idle || state_ == ConnectionState::Failed) && links_.linkId() < 0;
 }
 void LinkService::connectLink(const kgc::comm::links::LinkConfig& config)
 {

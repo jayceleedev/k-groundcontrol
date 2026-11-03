@@ -1,3 +1,4 @@
+// [0.4.0 5.2-2] specs/features/0.4.0-sitl.md
 // [0.2.0 T22] specs/features/0.2.0-fcflash.md
 // [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
@@ -11,9 +12,9 @@ LinkController::LinkController(LinkService& service)
     instance_ = this;
     connect(&service_, &LinkService::noVehicleChanged, this, &LinkController::noVehicleChanged);
     connect(&service_, &LinkService::connectionStateChanged, this, [this] {
-        const auto name = service_.linkPortName();
-        if (service_.connectionState() == LinkService::ConnectionState::Open && !name.isEmpty()) {
-            portName_ = name;
+        if (service_.connectionState() == LinkService::ConnectionState::Open) {
+            // 열린 링크가 UDP면 고른 시리얼 포트와 상관없이 UDP 14550으로 보여요.
+            portName_ = service_.serialLink() ? service_.linkPortName() : QString{};
             emit portsChanged();
         }
         emit connectionStateChanged();

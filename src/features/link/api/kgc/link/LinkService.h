@@ -1,3 +1,4 @@
+// [0.4.0 5.2-2] specs/features/0.4.0-sitl.md
 // [0.2.0 T22] specs/features/0.2.0-fcflash.md
 // [0.1.1 T6 T14 T17] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T9 T14 T15 T16 T17 T20] specs/features/0.1.0-link.md
@@ -51,7 +52,7 @@ public:
     ConnectionState connectionState() const { return state_; }
 /** 연결 설정을 바꾸거나 새 연결을 시작할 수 있는지 판단해요.
  * 입력: 없어요.
- * 출력: Idle 또는 Failed 상태이면 참이에요.
+ * 출력: Idle 또는 Failed 상태이고 다른 모듈이 연 링크도 없으면(LinkManager::linkId() < 0) 참이에요.
  * 실패: 없어요.
  */
     bool canConnect() const;

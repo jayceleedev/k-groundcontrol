@@ -1,3 +1,4 @@
+// [0.4.0 5.4 10] specs/features/0.4.0-sitl.md
 // [0.3.0 6.1 6.8] specs/features/0.3.0-params.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.1 T8 T9 T14] specs/features/0.1.1-link-hardening.md
@@ -18,6 +19,8 @@
 #include <kgc/link/Ui.h>
 #include <kgc/fcFlash/FcFlashService.h>
 #include <kgc/fcFlash/Ui.h>
+#include <kgc/sitl/SitlService.h>
+#include <kgc/sitl/Ui.h>
 #include <kgc/params/ParamRebootReconnect.h>
 #include <kgc/params/ParamService.h>
 #include <kgc/params/Ui.h>
@@ -50,6 +53,7 @@
 #include <QtQml/QQmlExtensionPlugin>
 
 Q_IMPORT_QML_PLUGIN(Kgc_FcFlashPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_SitlPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ParamsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_LinkPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
@@ -75,18 +79,18 @@ void registerPlaceholders(ui::PanelRegistry* panels)
         const auto result = panels->registerPlaceholder(id, order, group, titleKey, icon);
         Q_ASSERT(result.has_value());
     };
-    registerPlaceholder("layout", 2, 2, QT_TRANSLATE_NOOP("Menu", "기체 구성도"), QUrl("qrc:/kgc/icons/menu/layout.svg"));
-    registerPlaceholder("sensors", 3, 2, QT_TRANSLATE_NOOP("Menu", "센서 보정"), QUrl("qrc:/kgc/icons/menu/sensors.svg"));
-    registerPlaceholder("radio", 4, 2, QT_TRANSLATE_NOOP("Menu", "조종기"), QUrl("qrc:/kgc/icons/menu/radio.svg"));
-    registerPlaceholder("flightModes", 5, 2, QT_TRANSLATE_NOOP("Menu", "비행 모드"), QUrl("qrc:/kgc/icons/menu/flightModes.svg"));
-    registerPlaceholder("power", 6, 2, QT_TRANSLATE_NOOP("Menu", "배터리 · 전원"), QUrl("qrc:/kgc/icons/menu/power.svg"));
-    registerPlaceholder("failsafe", 7, 2, QT_TRANSLATE_NOOP("Menu", "안전 · 페일세이프"), QUrl("qrc:/kgc/icons/menu/failsafe.svg"));
-    registerPlaceholder("motors", 8, 2, QT_TRANSLATE_NOOP("Menu", "모터 시험"), QUrl("qrc:/kgc/icons/menu/motors.svg"));
-    registerPlaceholder("tuning", 9, 2, QT_TRANSLATE_NOOP("Menu", "튜닝"), QUrl("qrc:/kgc/icons/menu/tuning.svg"));
-    registerPlaceholder("logs", 10, 2, QT_TRANSLATE_NOOP("Menu", "로그 분석"), QUrl("qrc:/kgc/icons/menu/logs.svg"));
-    registerPlaceholder("esc", 11, 3, QT_TRANSLATE_NOOP("Menu", "ESC 설정"), QUrl("qrc:/kgc/icons/menu/esc.svg"));
-    registerPlaceholder("elrs", 12, 3, QT_TRANSLATE_NOOP("Menu", "ELRS 설정"), QUrl("qrc:/kgc/icons/menu/elrs.svg"));
-    registerPlaceholder("tracker", 13, 3, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
+    registerPlaceholder("layout", 3, 2, QT_TRANSLATE_NOOP("Menu", "기체 구성도"), QUrl("qrc:/kgc/icons/menu/layout.svg"));
+    registerPlaceholder("sensors", 4, 2, QT_TRANSLATE_NOOP("Menu", "센서 보정"), QUrl("qrc:/kgc/icons/menu/sensors.svg"));
+    registerPlaceholder("radio", 5, 2, QT_TRANSLATE_NOOP("Menu", "조종기"), QUrl("qrc:/kgc/icons/menu/radio.svg"));
+    registerPlaceholder("flightModes", 6, 2, QT_TRANSLATE_NOOP("Menu", "비행 모드"), QUrl("qrc:/kgc/icons/menu/flightModes.svg"));
+    registerPlaceholder("power", 7, 2, QT_TRANSLATE_NOOP("Menu", "배터리 · 전원"), QUrl("qrc:/kgc/icons/menu/power.svg"));
+    registerPlaceholder("failsafe", 8, 2, QT_TRANSLATE_NOOP("Menu", "안전 · 페일세이프"), QUrl("qrc:/kgc/icons/menu/failsafe.svg"));
+    registerPlaceholder("motors", 9, 2, QT_TRANSLATE_NOOP("Menu", "모터 시험"), QUrl("qrc:/kgc/icons/menu/motors.svg"));
+    registerPlaceholder("tuning", 10, 2, QT_TRANSLATE_NOOP("Menu", "튜닝"), QUrl("qrc:/kgc/icons/menu/tuning.svg"));
+    registerPlaceholder("logs", 11, 2, QT_TRANSLATE_NOOP("Menu", "로그 분석"), QUrl("qrc:/kgc/icons/menu/logs.svg"));
+    registerPlaceholder("esc", 12, 3, QT_TRANSLATE_NOOP("Menu", "ESC 설정"), QUrl("qrc:/kgc/icons/menu/esc.svg"));
+    registerPlaceholder("elrs", 13, 3, QT_TRANSLATE_NOOP("Menu", "ELRS 설정"), QUrl("qrc:/kgc/icons/menu/elrs.svg"));
+    registerPlaceholder("tracker", 14, 3, QT_TRANSLATE_NOOP("Menu", "안테나 트래커"), QUrl("qrc:/kgc/icons/menu/tracker.svg"));
 }
 // 시안(specs/ui/main-screen.html)의 순서대로 상단바·하단바 자리를 잡아 두고, 기능이 생기면 같은 id·순서로 바꿔 넣어요.
 void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
@@ -133,6 +137,13 @@ void registerParams(QObject* owner, ui::UiRegistry& registry, comm::links::LinkM
     });
     params::registerUi(registry, *vehicles);
 }
+// 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
+void registerVehicleViews(QObject* owner, ui::UiRegistry& registry, vehicle::registry::VehicleRegistry& vehicles)
+{
+    vehicleInfo::registerUi(registry, vehicles);
+    logs::registerUi(registry, *new logs::LogsViewer(owner));
+    preflight::registerUi(registry);
+}
 }
 Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
                          app::log::LogFeed& feed, const QStringList& extraSerial)
@@ -170,9 +181,9 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     analyze::registerUi(registry, *appLogService);
     auto* secondPanelService = new secondPanel::SecondPanelService(this);
     secondPanel::registerUi(registry, *secondPanelService);
-    // 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
-    // 서비스가 포트와 HTTP보다 먼저 정리되어 임대 해제 때도 의존 객체가 살아 있게 해요.
+    // 서비스가 포트·링크·HTTP보다 먼저 정리되어 임대 해제와 프로세스 정지 때도 의존 객체가 살아 있게 해요.
     auto* flashLifetime = new QObject(this);
+    auto* sitlLifetime = new QObject(this);
     auto* scheduler = new app::scheduler::Scheduler(this);
     auto* ports = new comm::rawport::PortRegistry(this);
     auto* links = new comm::links::LinkManager(*scheduler, *ports, extraSerial, this);
@@ -185,11 +196,9 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     auto* flashService = new fcFlash::FcFlashService(*links, *vehicles, *policy, *ports, *http, *scheduler, flashLifetime);
     connect(flashService, &QObject::destroyed, this, [policy] { delete policy; });
     fcFlash::registerUi(registry, *flashService);
+    sitl::registerUi(registry, *new sitl::SitlService(*links, *http, sitlLifetime));
     registerParams(this, registry, links, vehicles, policy, http);
-    vehicleInfo::registerUi(registry, *vehicles);
-    auto* logsViewer = new logs::LogsViewer(this);
-    logs::registerUi(registry, *logsViewer);
-    preflight::registerUi(registry);
+    registerVehicleViews(this, registry, *vehicles);
     registerPlaceholders(panels);
     registerBarPlaceholders(topbar, statusChips);
     connect(&translator, &app::i18n::Translator::languageChanged, &engine, &QQmlEngine::retranslate);

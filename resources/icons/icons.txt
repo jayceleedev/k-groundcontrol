@@ -1,4 +1,5 @@
 menu/fcFlash outline/cpu
+menu/sitl outline/device-desktop
 menu/layout outline/drone
 menu/sensors outline/compass
 menu/radio outline/device-gamepad-2

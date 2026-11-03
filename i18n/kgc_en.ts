@@ -592,6 +592,14 @@
         <source>직접 선택</source>
         <translation>Choose manually</translation>
     </message>
+    <message>
+        <source>선택 카드</source>
+        <translation>Choice card</translation>
+    </message>
+    <message>
+        <source>아이콘과 글자</source>
+        <translation>Icon and text</translation>
+    </message>
 </context>
 <context>
     <name>GalleryContainers</name>
@@ -1108,6 +1116,10 @@
         <location filename="../src/features/uiGallery/ui/register.cpp" line="11"/>
         <source>UI 부품 목록</source>
         <translation>UI Components</translation>
+    </message>
+    <message>
+        <source>시뮬레이션</source>
+        <translation>Simulation</translation>
     </message>
 </context>
 <context>
@@ -2525,6 +2537,204 @@
     <message>
         <source>취소</source>
         <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>Sitl</name>
+    <message>
+        <source>연결을 끊은 뒤 시작할 수 있어요</source>
+        <translation>Disconnect first, then you can start</translation>
+    </message>
+    <message>
+        <source>UDP 14550을 열지 못했어요. 다른 프로그램이 쓰고 있는지 확인해 주세요</source>
+        <translation>Could not open UDP 14550. Check whether another program is using it</translation>
+    </message>
+    <message>
+        <source>SITL 파일을 받지 못했어요. 인터넷 연결을 확인해 주세요</source>
+        <translation>Could not download the SITL files. Check your internet connection</translation>
+    </message>
+    <message>
+        <source>시뮬레이터를 실행하지 못했어요</source>
+        <translation>Could not run the simulator</translation>
+    </message>
+    <message>
+        <source>시뮬레이터가 멈췄어요</source>
+        <translation>The simulator stopped</translation>
+    </message>
+    <message>
+        <source>홈 위치가 범위를 벗어났어요</source>
+        <translation>The home location is out of range</translation>
+    </message>
+    <message>
+        <source>다른 작업이 끝난 뒤 다시 해 주세요</source>
+        <translation>Try again after the other task finishes</translation>
+    </message>
+    <message>
+        <source>종료 코드 %1</source>
+        <translation>exit code %1</translation>
+    </message>
+</context>
+<context>
+    <name>SitlPanel</name>
+    <message>
+        <source>시뮬레이션</source>
+        <translation>Simulation</translation>
+    </message>
+    <message>
+        <source>ArduPilot SITL을 내려받아 이 PC에서 실행해요.</source>
+        <translation>Downloads ArduPilot SITL and runs it on this PC.</translation>
+    </message>
+    <message>
+        <source>실행</source>
+        <translation>Run</translation>
+    </message>
+    <message>
+        <source>속도 배수</source>
+        <translation>Speed-up</translation>
+    </message>
+    <message>
+        <source>저장된 파라미터를 지우고 시작</source>
+        <translation>Wipe saved parameters on start</translation>
+    </message>
+    <message>
+        <source>기본 파라미터로 처음부터 시작해요</source>
+        <translation>Starts fresh with the default parameters</translation>
+    </message>
+</context>
+<context>
+    <name>SitlChoices</name>
+    <message>
+        <source>기체</source>
+        <translation>Vehicle</translation>
+    </message>
+    <message>
+        <source>멀티콥터</source>
+        <translation>Multicopter</translation>
+    </message>
+    <message>
+        <source>헬리콥터</source>
+        <translation>Helicopter</translation>
+    </message>
+    <message>
+        <source>비행기</source>
+        <translation>Plane</translation>
+    </message>
+    <message>
+        <source>로버</source>
+        <translation>Rover</translation>
+    </message>
+    <message>
+        <source>배포판</source>
+        <translation>Release</translation>
+    </message>
+    <message>
+        <source>안정판</source>
+        <translation>Stable</translation>
+    </message>
+    <message>
+        <source>베타</source>
+        <translation>Beta</translation>
+    </message>
+    <message>
+        <source>최신 개발판</source>
+        <translation>Latest dev</translation>
+    </message>
+</context>
+<context>
+    <name>SitlHomeFields</name>
+    <message>
+        <source>홈 위치</source>
+        <translation>Home location</translation>
+    </message>
+    <message>
+        <source>위도</source>
+        <translation>Latitude</translation>
+    </message>
+    <message>
+        <source>경도</source>
+        <translation>Longitude</translation>
+    </message>
+    <message>
+        <source>고도 (m)</source>
+        <translation>Altitude (m)</translation>
+    </message>
+    <message>
+        <source>기수 (°)</source>
+        <translation>Heading (°)</translation>
+    </message>
+    <message>
+        <source>해운대로 되돌리기</source>
+        <translation>Reset to Haeundae</translation>
+    </message>
+</context>
+<context>
+    <name>SitlStatus</name>
+    <message>
+        <source>다른 연결이 열려 있어요. 연결을 끊은 뒤 시작할 수 있어요.</source>
+        <translation>Another connection is open. Disconnect it to start.</translation>
+    </message>
+    <message>
+        <source>받는 중</source>
+        <translation>Downloading</translation>
+    </message>
+    <message>
+        <source>시작하는 중</source>
+        <translation>Starting</translation>
+    </message>
+    <message>
+        <source>실행 중</source>
+        <translation>Running</translation>
+    </message>
+    <message>
+        <source>멈췄어요</source>
+        <translation>Stopped unexpectedly</translation>
+    </message>
+    <message>
+        <source>멈춤</source>
+        <translation>Stopped</translation>
+    </message>
+    <message>
+        <source>UDP 14550으로 연결했어요</source>
+        <translation>Connected over UDP 14550</translation>
+    </message>
+    <message>
+        <source>연결이 끊겼어요</source>
+        <translation>Disconnected</translation>
+    </message>
+    <message>
+        <source>받은 파일: %1</source>
+        <translation>Downloaded: %1</translation>
+    </message>
+    <message>
+        <source>처음 시작하면 파일을 내려받아요 (약 15 MB)</source>
+        <translation>Files are downloaded on the first start (about 15 MB)</translation>
+    </message>
+    <message>
+        <source>다시 연결</source>
+        <translation>Reconnect</translation>
+    </message>
+    <message>
+        <source>다시 받기</source>
+        <translation>Download again</translation>
+    </message>
+    <message>
+        <source>정지</source>
+        <translation>Stop</translation>
+    </message>
+    <message>
+        <source>시작</source>
+        <translation>Start</translation>
+    </message>
+</context>
+<context>
+    <name>SitlOutput</name>
+    <message>
+        <source>시뮬레이터 출력</source>
+        <translation>Simulator output</translation>
+    </message>
+    <message>
+        <source>시작하면 여기에 시뮬레이터 출력이 보여요.</source>
+        <translation>Simulator output appears here after you start.</translation>
     </message>
 </context>
 </TS>

@@ -129,3 +129,13 @@ qt_add_executable(test_serial_eagain_keeps_link test_serial_eagain_keeps_link.cp
 target_include_directories(test_serial_eagain_keeps_link PRIVATE "${PROJECT_SOURCE_DIR}/src/platform/comm/links/serial")
 target_link_libraries(test_serial_eagain_keeps_link PRIVATE kgc_comm_links Qt6::Test)
 add_test(NAME serial_eagain_keeps_link COMMAND test_serial_eagain_keeps_link)
+
+# [0.4.0 T1–T3] specs/features/0.4.0-sitl.md
+foreach(name T1_sitl_files T2_sitl_arguments T3_sitl_home)
+    qt_add_executable(test_${name} test_${name}.cpp)
+    target_include_directories(test_${name} PRIVATE "${PROJECT_SOURCE_DIR}/src/features/sitl/internal")
+    target_link_libraries(test_${name} PRIVATE kgc_sitl Qt6::Test)
+    add_test(NAME ${name} COMMAND test_${name})
+endforeach()
+target_compile_definitions(test_T3_sitl_home PRIVATE
+    KGC_SITL_SETTINGS="${PROJECT_SOURCE_DIR}/src/features/sitl/internal/settings/sitl.settings.json")

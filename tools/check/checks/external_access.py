@@ -1,3 +1,4 @@
+# [0.4.0 T4] specs/features/0.4.0-sitl.md
 # [0.2.0 T13] specs/features/0.2.0-fcflash.md
 # [0.1.0 T8] specs/features/0.1.0-link.md
 import re
@@ -5,7 +6,7 @@ from checks._cpp import sources, clean, line
 
 
 def check(ctx):
-    """HTTPS·시리얼 입출력과 환경 설정을 소유 모듈 안에 유지해요.
+    """HTTPS·시리얼 입출력, 다른 프로그램 실행과 환경 설정을 소유 모듈 안에 유지해요.
 
     입력: 검사 문맥.
     출력: 위반 위치.
@@ -24,3 +25,7 @@ def check(ctx):
         if not path.startswith('src/platform/app/net/'):
             for match in re.finditer(r'\bQNetworkAccessManager\b', code):
                 yield path, line(text, match.start()), 'HTTPS 소유 모듈 밖 네트워크 사용 금지'
+        # 다른 프로그램 실행은 시뮬레이터를 띄우는 sitl 내부 한 곳에만 둬요(BASE §9.3).
+        if not path.startswith('src/features/sitl/internal/'):
+            for match in re.finditer(r'\bQProcess\b', code):
+                yield path, line(text, match.start()), '다른 프로그램 실행은 sitl 내부 밖 금지'

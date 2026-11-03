@@ -1,3 +1,4 @@
+// [0.4.0 10] specs/features/0.4.0-sitl.md
 // [0.0.4 T41 T42 T43] specs/features/0.0.4-righttabs.md
 // [0.0.3 T17] specs/features/0.0.3-windows.md
 // [0.0.1 T4–T10] specs/features/0.0.1-shell.md
@@ -9,7 +10,7 @@
 namespace kgc::appSettings {
 void registerUi(kgc::ui::UiRegistry& registry, AppSettingsService& service)
 {
-    const auto result = registry.panels.registerPanel({"appSettings", 16, 4,
+    const auto result = registry.panels.registerPanel({"appSettings", 17, 4,
         QT_TRANSLATE_NOOP("Menu", "앱 설정"), QUrl("qrc:/kgc/icons/menu/appSettings.svg"),
         QUrl("qrc:/qt/qml/Kgc/AppSettings/AppSettingsPanel.qml")});
     Q_ASSERT(result.has_value());

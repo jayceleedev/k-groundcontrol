@@ -3,7 +3,7 @@
 수명: 혼합(전역 ParamRebootReconnect + 기체별 ParamService). Composition이 전역 하나를 만들고, vehicleAdded에서 ParamService를 만들어요. 서비스의 부모는 Vehicle이에요. 컨트롤러는 전역이고 activeChanged로 다시 묶어요.
 받는 것: LinkManager의 linkClosed·linkFailed, VehicleRegistry.vehicleAdded, Vehicle.messageReceived의 PARAM_VALUE, VehicleStates의 link·arming·capabilities, FirmwarePlugin의 paramEncoding·paramMetadataSource·paramGroup·paramGroupTitle·paramFileSkip, ArmedPolicy 판정.
 주는 것: ParamRebootReconnect(watch), ParamService(of·params·downloadState·metadataState·job·rebootNeeded·receivedCount·totalCount·refresh·setPending·clearPending·writeDecision·writePending·saveFile·compareFile·applyFile·reboot), Params 묶음, ParamMeta, Param, FileDiff, ParamStates(DownloadState·MetadataState), ParamError, errorText, registerUi.
-기여: 좌 메뉴 14번 수동 기체 설정 패널(묶음 4).
+기여: 좌 메뉴 15번 수동 기체 설정 패널(묶음 4).
 의존: app/errors, app/job, app/log, app/net, app/paths, app/scheduler, comm/links, comm/mavlink, vehicle/registry, vehicle/firmware, vehicle/safety, vehicle/command, vehicle/outbound, ui.
 안 하는 것: MAVLink FTP, PX4 해시 캐시, 즐겨찾기, 공장 초기화, RC 연결, 다른 컴포넌트의 파라미터, 기체 없이 파일 보기, 백업 자동 삭제는 하지 않아요. 범위 밖 값을 물어보는 일은 화면이 해요. 토스트는 notify 모듈이 생길 때까지 패널 안에 있어요.
 흐름(내려받기):

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # [0.0.1 T11] specs/features/0.0.1-shell.md
+# [0.4.0 T4] specs/features/0.4.0-sitl.md
 """작업 트리와 커밋의 모듈 경계를 같은 규칙으로 확인해요."""
 import argparse
 import importlib.util
@@ -12,7 +13,7 @@ sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[2]
 RANKS = {name: rank for rank, names in enumerate([
     "shell", "notify ai appSettings reference analyze link uiGallery secondPanel", "fly mission vehicleInfo preflight logs",
-    "layout", "sensors radio flightModes power failsafe motors tuning fcFlash esc elrs tracker",
+    "layout", "sensors radio flightModes power failsafe motors tuning fcFlash sitl esc elrs tracker",
     "map", "video terrain gcsposition", "params", "extras"], 1) for name in names.split()}
 
 

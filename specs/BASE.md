@@ -84,9 +84,9 @@ k-groundcontrol/
 | `shell` | 틀 | 전역 | 메인 창(기준 1920×900, 최소는 화면 가용 영역과 작은 쪽, 그 아래선 축소 배치), 상단·좌·우·하단 바의 틀, 슬롯 배치. 앱 아이콘 → `Navigator.open("appSettings","about")` | R-N24 |
 | `notify` | 알림 화면 | 전역 | 상단 벨·목록·토스트·TTS 호출 | §10 |
 | `ai` | AI 세팅 | 전역 패널 + 기체별 서비스 | 상단 오른쪽 아이콘·패널, 첫 사용 동의 | R-D4~D8, R-N23 |
-| `reference` | 참고 | 전역 | 좌 메뉴 15, 사이트 소개와 바로가기(0.0.4 §16) | 사용자 지시 2026-10-30 |
-| `appSettings` | 앱 설정 | 전역 | 좌 메뉴 16, **정보 창**(버전·라이선스·고지·소스) | R-N16·17·22 |
-| `uiGallery` | UI 부품 목록(개발 단계) | 전역 | 좌 메뉴 17(appSettings 뒤 구분선 다음) | R-N25 |
+| `reference` | 참고 | 전역 | 좌 메뉴 16, 사이트 소개와 바로가기(0.0.4 §16) | 사용자 지시 2026-10-30 |
+| `appSettings` | 앱 설정 | 전역 | 좌 메뉴 17, **정보 창**(버전·라이선스·고지·소스) | R-N16·17·22 |
+| `uiGallery` | UI 부품 목록(개발 단계) | 전역 | 좌 메뉴 18(appSettings 뒤 구분선 다음) | R-N25 |
 | `secondPanel` | 세컨드 패널 | 전역 | 하단바 오른쪽 단추, 별도 창(칸 배치 최대 6) | R-N26 |
 | `analyze` | 인스펙터·콘솔·앱 로그 뷰어·진동 | 기체별 + 전역(앱 로그) | 좌 메뉴(나중 순서), 하단바 오른쪽 단추(앱 로그 창) | E3, C-55·57 |
 | `link` | 연결 | 전역 | 상단 연결 옵션(포트·속도·연결) + 하단 기체 칩(링크 상태) + 연결 팝업. 저장된 링크 목록의 편집 화면은 `appSettings`가 갖고, 둘 다 바탕 `comm/links/LinkManager` api를 직접 쓴다(같은 순위라 서로 부르지 않음) | R-Q1, C-1~C-8 |
@@ -94,24 +94,25 @@ k-groundcontrol/
 | `mission` | 미션 | **전역 편집기**(`MissionEditor`: .plan 편집·저장, 기체 없이도) + **기체별** `MissionService`(전송·동기·현재 항목) | 지도 패널 편집 레이어, 상단바 미션 선택·시작 슬롯 | R-Q7·R-Q8, R-N13 |
 | `vehicleInfo` | 기체 정보 | 기체별 | 우 사이드바 계기 + 개요·상세·메시지 탭, 하단 센서 ✓/✕·배터리·RSSI 칩 | B2~B5, F-7, F-9 |
 | `preflight` | 비행 전 점검 | 기체별 | 우 사이드바 점검 탭; 점검표 정의 `resources/data/preflight/` | F-46·47 |
-| `logs` | 로그 분석 | 전역 뷰어 + 기체별 내려받기 | 좌 메뉴 10, 우 사이드바 로그 탭, tlog 재생 | E1·E2, C-12 |
-| `layout` | 기체 구성도(+기체 종류) | 기체별 | 좌 메뉴 2 | 5.5절, S-34~37 |
-| `sensors` | 센서 보정 | 기체별 | 좌 메뉴 3 | S-38~48 |
-| `radio` | 조종기(+조이스틱 설정) | 기체별 | 좌 메뉴 4 | S-49~52 |
-| `flightModes` | 비행 모드 | 기체별 | 좌 메뉴 5 | S-53·54 |
-| `power` | 배터리·전원 | 기체별 | 좌 메뉴 6 | S-55~57 |
-| `failsafe` | 안전·페일세이프 | 기체별 | 좌 메뉴 7 | S-62~64 |
-| `motors` | 모터 시험 | 기체별 | 좌 메뉴 8 | S-58·59 |
-| `tuning` | 튜닝 | 기체별 | 좌 메뉴 9 | S-65~68 |
-| `fcFlash` | 펌웨어 세팅 | 전역 | 좌 메뉴 1(뒤에 구분선) | R-Q10 |
-| `esc` | ESC 설정 | 전역 | 좌 메뉴 11 | 5.2절 |
-| `elrs` | ELRS 설정 | 전역 | 좌 메뉴 12 | 5.3절 |
-| `tracker` | 안테나 트래커 | 전역 | 좌 메뉴 13, 하단 칩, 지도 부채꼴 레이어 | 5.4절 |
+| `logs` | 로그 분석 | 전역 뷰어 + 기체별 내려받기 | 좌 메뉴 11, 우 사이드바 로그 탭, tlog 재생 | E1·E2, C-12 |
+| `layout` | 기체 구성도(+기체 종류) | 기체별 | 좌 메뉴 3 | 5.5절, S-34~37 |
+| `sensors` | 센서 보정 | 기체별 | 좌 메뉴 4 | S-38~48 |
+| `radio` | 조종기(+조이스틱 설정) | 기체별 | 좌 메뉴 5 | S-49~52 |
+| `flightModes` | 비행 모드 | 기체별 | 좌 메뉴 6 | S-53·54 |
+| `power` | 배터리·전원 | 기체별 | 좌 메뉴 7 | S-55~57 |
+| `failsafe` | 안전·페일세이프 | 기체별 | 좌 메뉴 8 | S-62~64 |
+| `motors` | 모터 시험 | 기체별 | 좌 메뉴 9 | S-58·59 |
+| `tuning` | 튜닝 | 기체별 | 좌 메뉴 10 | S-65~68 |
+| `fcFlash` | 펌웨어 세팅 | 전역 | 좌 메뉴 1 | R-Q10 |
+| `sitl` | 시뮬레이션(ArduPilot SITL 받기·실행·연결) | 전역 | 좌 메뉴 2(fcFlash와 같은 묶음, 뒤에 구분선) | 사용자 지시 2026-11-03 |
+| `esc` | ESC 설정 | 전역 | 좌 메뉴 12 | 5.2절 |
+| `elrs` | ELRS 설정 | 전역 | 좌 메뉴 13 | 5.3절 |
+| `tracker` | 안테나 트래커 | 전역 | 좌 메뉴 14, 하단 칩, 지도 부채꼴 레이어 | 5.4절 |
 | `map` | 지도 | 전역 | 가운데 바탕(타일·축척·기체 아이콘·궤적·홈), 레이어 슬롯의 그릇. 펜스·랠리·ADS-B는 그리지 않는다(기여 레이어) | B10 |
 | `video` | 영상 | 전역 | 지도 PiP 레이어 | B11 |
 | `terrain` | 지형 | 전역 조회 + 기체별 응답(TERRAIN_REQUEST) | 지도 단면 레이어 | C6, F-56 |
 | `gcsposition` | GCS GPS | 전역 | 하단 칩 | R-Q3, C-47 |
-| `params` | 수동 기체 설정(파라미터) | 전역 재연결 + 기체별 `ParamService` | 좌 메뉴 14 | R-D1·D2, S-10~14 |
+| `params` | 수동 기체 설정(파라미터) | 전역 재연결 + 기체별 `ParamService` | 좌 메뉴 15 | R-D1·D2, S-10~14 |
 | `extras` | GeoTag·ADS-B·Remote ID·Flight Review·RTK/NTRIP·포워딩·서명·카메라·짐벌·사용자 동작·SiK | 기능 스펙 때 **각각 모듈로** 쪼갬 | — | E5, R-Q3·Q6·Q10 |
 
 - **수명 규칙**: 전역 모듈은 `Composition`이 하나 만든다(앱 수명). 기체별 모듈은 Vehicle이 생길 때 `Composition`이 만들고 **부모를 Vehicle로** 둔다. **혼합 수명** 모듈은 전역 서비스와 기체별 서비스를 **따로** 두고(`LogsViewer` 전역 / `LogDownloadService::of(vehicle)`), 이름으로 구분한다.
@@ -125,7 +126,7 @@ k-groundcontrol/
 | 2 | `notify` `ai` `appSettings` `reference` `analyze` `link` `uiGallery` `secondPanel` |
 | 3 | `fly` `mission` `vehicleInfo` `preflight` `logs` |
 | 4 | `layout` |
-| 5 | `sensors` `radio` `flightModes` `power` `failsafe` `motors` `tuning` `fcFlash` `esc` `elrs` `tracker` |
+| 5 | `sensors` `radio` `flightModes` `power` `failsafe` `motors` `tuning` `fcFlash` `sitl` `esc` `elrs` `tracker` |
 | 6 | `map` |
 | 7 | `video` `terrain` `gcsposition` |
 | 8 | `params` |
@@ -150,7 +151,7 @@ k-groundcontrol/
 - **다른 모듈의 설정을 읽을 때**는 그 모듈 `api/`의 접근자를 순위표 방향으로만. 여러 기능이 함께 쓰는 안전 설정은 바탕에 둔다: 길게 누르기 시간 → `platform/ui`(`ui.holdToConfirmMs`; 같은 자리에 테마 `ui.theme`, 배경 `ui.backgroundKind`·`ui.backgroundImage`, 계기 모양 `ui.instrumentStyle` — 우 사이드바와 세컨드 패널이 함께 씀, 0.0.4 §12), 유도 거리·고도 한계·강제 시동 보이기 → `platform/vehicle/safety`.
 - 설정 기본값은 JSON에만(코드 상수와 두 곳 금지).
 - **비밀값**(API 키·서명 키·바인드 문구·WiFi 비밀번호): `platform/app/secrets/SecretStore`(QtKeychain, §17-4). 값은 `Secret` 형으로만: `QString` 암시 변환 없음, `QDebug <<` 없음, `reveal()`은 허용 파일에서만(검사). 설정 JSON에는 "있음/없음"만.
-- **파일 자리**(`platform/app/paths/Paths`, 데이터 폴더 아래 — 데이터 폴더 기본값은 `QStandardPaths::AppLocalDataLocation`(organizationName이 비어 있으므로 Linux `~/.local/share/K-GroundControl`, Windows `%LOCALAPPDATA%\K-GroundControl`), 부팅 설정 `--data-dir`/`[paths] dataDir`로 바꿀 수 있음; `kgc.ini`는 `QStandardPaths::AppConfigLocation`(Linux `~/.config/K-GroundControl/kgc.ini`, Windows `%LOCALAPPDATA%\K-GroundControl\kgc.ini`)): `logs/app`, `logs/tlog`, `logs/onboard`, `missions`, `layouts`, `params/backups`(쓰기 전 전체 백업), `params/cache`(PX4 해시 캐시), `ai/changes`(AI·구성도 변경 사유), `video`, `cache/firmware`(해시 기록), `cache/tiles`, `cache/metadata`, `cache/terrain`.
+- **파일 자리**(`platform/app/paths/Paths`, 데이터 폴더 아래 — 데이터 폴더 기본값은 `QStandardPaths::AppLocalDataLocation`(organizationName이 비어 있으므로 Linux `~/.local/share/K-GroundControl`, Windows `%LOCALAPPDATA%\K-GroundControl`), 부팅 설정 `--data-dir`/`[paths] dataDir`로 바꿀 수 있음; `kgc.ini`는 `QStandardPaths::AppConfigLocation`(Linux `~/.config/K-GroundControl/kgc.ini`, Windows `%LOCALAPPDATA%\K-GroundControl\kgc.ini`)): `logs/app`, `logs/tlog`, `logs/onboard`, `missions`, `layouts`, `params/backups`(쓰기 전 전체 백업), `params/cache`(PX4 해시 캐시), `ai/changes`(AI·구성도 변경 사유), `video`, `cache/firmware`(해시 기록), `cache/tiles`, `cache/metadata`, `cache/terrain`, `cache/sitl`(SITL 실행 파일), `sitl`(SITL 실행 폴더, 기체별 `eeprom.bin`).
 
 ## 5. 상태(states) — 묶음마다 주인 하나
 
@@ -261,6 +262,7 @@ k-groundcontrol/
 | 조이스틱(SDL3) | `platform/comm/joystick` | SDL include 위치 |
 | SQL(SQLite: 타일·메타데이터·펌웨어 캐시) | `platform/app/store` | QtSql include·`QSqlQuery` 위치 |
 | TTS | `platform/app/notify/Speech` | — |
+| 다른 프로그램 실행 | `features/sitl/internal`(`QProcess`) | `QProcess` 위치 |
 
 ### 9.4 오래 걸리는 작업과 오류
 - `platform/app/job/Job`(QObject): `OperationKind`, 상태(대기·진행·성공·실패·취소), 단계 이름, 진행률, 남은 시간, `cancel()`, 끝날 때 `finished(Result<void>)` 한 번, `errorCode`·`errorText` 프로퍼티. **Job은 상위 층을 모른다**: 임대·잠금·ArmGuard 토큰은 상위 층이 `job.hold(Releaser)`로 넘긴 **형을 지운 해제 핸들**(이동만 되는 호출 가능 객체)로 쥐고, 끝날 때 역순으로 부른다(RAII). 시동 감시는 2층 `vehicle/safety/JobArmWatch`가 `attach(job, scope)`로 붙여서 `Arming.armed` 변화에 Job을 중단·경고한다(§9.2). `OperationKind` 열거는 0층 `<kgc/app/job/OperationKind.h>`에 두는데 기능 이름(`EscFlash`, `LayoutWrite`…)이 들어 있다 — **"바탕은 기능을 모른다"의 명시적 예외 하나**(이름표 열거일 뿐 코드 의존이 아니다). 화면은 `platform/ui/components/JobView.qml`로 보여 준다. FC·ESC·ELRS·트래커 굽기, 미션 전송, 파라미터 내려받기, 보정, 로그 내려받기가 전부 Job이다. **예외 하나**: FC 굽기의 포트 임대는 재시도와 재연결 때문에 Job보다 오래 살아서 `hold`가 아니라 `FcFlashService`가 쥔다.
@@ -370,7 +372,9 @@ k-groundcontrol/
 | 로그 사건 / 기체 이벤트 | `LogEvent` / `VehicleEvent` | 우리 로그 / PX4 events |
 | 로그 수준 | `LogLevel`(Debug·Info·Warn·Error), `parseLogLevel` | `app/log` api의 enum과 이름 변환, 부팅 설정이 넘김 |
 | 운영 설정 / 부팅 설정 / 고정값 / 비밀값 / 모듈 id | `Setting` / `BootOption` / `Constant` / `Secret` / `ModuleId` | |
-| 펌웨어 세팅 모듈 / 안전·페일세이프 모듈 / 연결 모듈 / 참고 모듈 | `fcFlash` / `failsafe` / `link` / `reference` | 기능 id |
+| 펌웨어 세팅 모듈 / 안전·페일세이프 모듈 / 연결 모듈 / 참고 모듈 / 시뮬레이션 모듈 | `fcFlash` / `failsafe` / `link` / `reference` / `sitl` | 기능 id |
+| 시뮬레이터 / 시뮬레이션 기체 종류 / 배포판 / 홈 위치 / 속도 배수 / 값 초기화 | `Simulator` / `SitlVehicle` / `SitlRelease` / `SitlHome` / `speedup` / `wipe` | 0.4.0 |
+| 시뮬레이션 낱말 | `SitlService` / `SitlController` / `SitlState` / `SitlPlatform` / `SitlFile` / `SitlError` / `SitlDownload` / `SitlHomeField` / `sitlFiles` / `sitlFolderName` / `sitlModel` / `sitlRunFolderName` / `sitlArguments` / `checkHome` / `ChoiceCard` / `cacheSitl` / `kUdpPort` / `<이름>Default`(설정 기본값 접근자) | 0.4.0 |
 
 ## 14. 자동 검사 `tools/check/` (R-N21; §17-7 확정)
 
@@ -465,3 +469,4 @@ k-groundcontrol/
 | 2026-10-31 | 사용자 | 0.1.1 스펙 초안 2와 함께 승인(§8): §5 `Link` 마지막 수신 시각, §9.2·§9.5 링크 유지 하트비트는 `LinkHeartbeat`, §9.5 스트림 요청 반복·기체 없음 검사, §13 낱말 |
 | 2026-11-01 | 사용자 | 0.2.0 스펙 초안 2와 함께 승인(§10): §3 `vehicle/command`·`vehicle/safety` 자리, `PortLease`는 `comm/rawport`, §4 `--extra-serial` 반복, §7 `px4-boards.json`, §9.1 `ByteStream`은 막아서 쓰는 인터페이스, §9.2 `ArmedPolicy`부터, §9.3 캐시는 뒤 버전, §9.4 굽기 임대 예외, §13 낱말 |
 | 2026-11-03 | 사용자 | 0.3.0 스펙과 함께 승인(§10): §3.1 `params` 혼합 수명, §8 플러그인 파라미터 항목, §13 용어 |
+| 2026-11-03 | 사용자 | 0.4.0 스펙과 함께 승인(§10): §3.1·§3.2 기능 `sitl`(순위 5, 좌 메뉴 2, 뒤 메뉴 번호 하나씩 밀림), §4 파일 자리 `cache/sitl`·`sitl`, §9.3 다른 프로그램 실행, §13 용어 |

@@ -11,6 +11,7 @@ body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font:13px/1.5 s
 .row{display:flex;align-items:center;gap:10px;margin:10px 0}.sp{justify-content:space-between}.sub{color:var(--sub)}.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}.g5{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:10px 0}.mid{text-align:center}
 .chip{padding:2px 8px;border-radius:6px;background:var(--oksoft);color:var(--ok);margin-left:auto}.field,.btn{border:1px solid var(--line);border-radius:6px;padding:5px 10px}.btn.main{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.hold{color:var(--danger)}
 .ring{width:110px;height:110px;border-radius:50%;background:conic-gradient(var(--accent) 64%,var(--line) 0);display:flex;align-items:center;justify-content:center;flex:none}.ring b{width:92px;height:92px;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:20px}
+.tag{padding:2px 8px;border-radius:6px;background:var(--bg);color:var(--sub);margin-left:8px}.tag.ok2{background:var(--oksoft);color:var(--ok)}.list{border:1px solid var(--line);border-radius:10px}.li{display:flex;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line)}.li:last-child{border-bottom:0}.li .tag:first-of-type{margin-left:auto}.li.off{color:var(--sub)}.banner{background:#fdf3e1;color:var(--warn);border-radius:6px;padding:8px 12px;margin:10px 0}
 .ok{color:var(--ok)}.warn{color:var(--warn)}.danger{color:var(--danger)}
 </style>
 <body>
@@ -21,6 +22,21 @@ body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font:13px/1.5 s
 <div class="g5"><div class="card mid sel">[drone]<br>Copter</div><div class="card mid">[helicopter]<br>Heli</div><div class="card mid">[plane]<br>Plane</div><div class="card mid">[car]<br>Rover</div><div class="card mid">[submarine]<br>Sub</div></div>
 <div class="row"><span class="sub">버전</span><span class="field">4.7.1 (안정판) ▾</span></div>
 <div class="row sp"><span class="btn">취소하고 FC 부팅</span><span class="btn main">다음</span></div></section>
+<!-- [0.4.1] specs/features/0.4.1-board-match.md 보드 이름 인식과 검색 (버전 콤보 아래만 바뀜) -->
+<section class="panel" id="stepFirmwareMatched">
+<div class="card row">[cpu] <div><b>MatekH743-BL</b><div class="sub">보드 ID 1013 · 플래시 1792 KB · 부트로더 5</div></div><span class="chip">부트로더</span></div>
+<div class="row"><span class="sub">버전</span><span class="field">4.7.1 (안정판) ▾</span></div>
+<div class="row"><span class="tag ok2">인식됨</span>보드 이름 MatekH743-BL에 맞는 빌드: MatekH743</div>
+<div class="row"><span class="field" style="flex:1">[search] 보드 이름 검색</span><span>☐ 다른 보드 ID도 보기</span></div>
+<div class="list"><div class="li">◉ MatekH743<span class="tag ok2">인식됨</span><span class="tag ok2">보드 ID 1013</span></div><div class="li">○ MatekH743-bdshot<span class="tag ok2">보드 ID 1013</span></div></div>
+<div class="row sp"><span class="btn">취소하고 FC 부팅</span><span class="btn main">다음</span></div></section>
+<section class="panel" id="stepFirmwareNoMatch">
+<div class="card row">[cpu] <div><b>KoaFC</b><div class="sub">보드 ID 1013 · 플래시 1792 KB · 부트로더 5</div></div><span class="chip">부트로더</span></div>
+<div class="row"><span class="sub">버전</span><span class="field">4.7.1 (안정판) ▾</span></div>
+<div class="banner">공식 목록에 KoaFC 빌드가 없어요. 아래에서 직접 고르거나 파일을 골라요.</div>
+<div class="row"><span class="field" style="flex:1">[search] mat</span><span>☑ 다른 보드 ID도 보기</span></div>
+<div class="list"><div class="li">○ MatekH743<span class="tag ok2">보드 ID 1013</span></div><div class="li">○ MatekH743-bdshot<span class="tag ok2">보드 ID 1013</span></div><div class="li off">○ MatekF405<span class="tag">보드 ID 125 · 구울 수 없음</span></div><div class="li off">○ MatekH7A3<span class="tag">보드 ID 1150 · 구울 수 없음</span></div></div>
+<div class="row sp"><span class="btn">취소하고 FC 부팅</span><span class="btn" style="color:var(--sub)">다음</span></div></section>
 <section class="panel" id="stepConfirm">
 <div class="row"><div class="card" style="flex:1"><div class="sub">FC</div><b>Koadrone KoaFC</b></div>→<div class="card sel" style="flex:1"><div class="sub">올릴 펌웨어</div><b>ArduPilot 4.7.1 · koafc</b><div class="sub">ArduPilot 공식</div></div></div>
 <div class="row sp"><span class="btn">뒤로</span><span class="btn hold">길게 눌러 굽기</span></div></section>

@@ -200,7 +200,7 @@ k-groundcontrol/
 | 앱 로그(한 줄 = 시각·수준·카테고리·사건·메시지) | `platform/app/log` | `specs/formats/applog.md` |
 | 미션 `.plan`(QGC v1 호환), `.waypoints` 읽기, KML 내보내기, KML/SHP 가져오기, 명령 카탈로그 JSON | `features/mission`, `resources/data/mission/` | `specs/formats/plan.md`, `mission-commands.md` |
 | 기체 구성도 `.kgclayout.json` + `.params` 묶음, 실루엣 | `features/layout`, `resources/silhouettes/` | `specs/formats/layout.md` |
-| PX4 보드 ID 표 `px4-boards.json`(출처 PX4 `firmware.prototype`, BSD-3) | `features/fcFlash`, `resources/data/fcflash/` | 0.2.0 스펙 |
+| PX4 보드 ID 표 `px4-boards.json`(출처 PX4 `firmware.prototype`, BSD-3; 항목의 `names`는 PX4 v1.17.0 `CONFIG_CDCACM_PRODUCTSTR`, BSD-3) | `features/fcFlash`, `resources/data/fcflash/` | 0.2.0, 0.4.1 스펙 |
 | 파라미터 파일(QGC 형식 + MP 2열 읽기), 묶음 이름·작업 단위 묶음 정의(펌웨어·버전별), PX4 해시 캐시 | `features/params`, `resources/data/params/` | `specs/formats/params.md`, `taskset.md` |
 | 비행 전 점검표 정의 | `features/preflight`, `resources/data/preflight/` | `specs/formats/preflight.md` |
 | 텔레메트리 로그 `.tlog`(8바이트 BE µs + 패킷), CSV 텔레메트리 | `platform/comm/tlog` | `specs/formats/tlog.md` |
@@ -259,6 +259,7 @@ k-groundcontrol/
 | HTTP(S) | `platform/app/net/Http`: HTTPS만, 타임아웃·재시도, 다운로드 캐시+해시 기록(0.2.0에는 없고 뒤 버전), `onlineChanged`(R-N13) | `QNetworkAccessManager`가 밖에 있으면 |
 | 환경 변수 | `platform/app/boot/BootOptions` | `qEnvironmentVariable`·`getenv` 위치 |
 | 시리얼 포트 | `platform/comm/links/serial`, `platform/comm/rawport`(그 밖은 `RawPort`/`ByteStream` 인터페이스만; `comm/lease`·`comm/espflash` 포함) | `QSerialPort` 생성 위치 |
+| Windows 장치 조회(SetupAPI, USB 이름) | `platform/comm/links/serial` | — |
 | 조이스틱(SDL3) | `platform/comm/joystick` | SDL include 위치 |
 | SQL(SQLite: 타일·메타데이터·펌웨어 캐시) | `platform/app/store` | QtSql include·`QSqlQuery` 위치 |
 | TTS | `platform/app/notify/Speech` | — |
@@ -357,6 +358,7 @@ k-groundcontrol/
 | 상태 구조체 | `LinkBundle`·`ArmingBundle`·`AttitudeBundle`·`PositionBundle`·`GpsBundle`·`BatteryBundle`·`CapabilitiesBundle` | §5, 0.1.0 |
 | 연결 낱말 | `MavlinkParser` / `dropV1NonHeartbeat` / `LinkConfig` / `LinkError` / `UdpLink` / `SerialLink` / `LinkService` / `LinkController` / `UdpPeers` / `serialErrorClosesLink` / `noVehicleTooLong` / `PortInfo` | 0.1.0, 0.1.1, 0.2.0 |
 | 굽기 낱말 | `Bootloader` / `FirmwareImage` / `FlashWorker` / `crc32Bootloader` / `scanManifest` / `pickCandidate` | 0.2.0 |
+| 보드 이름 맞추기 낱말 | `usbName` / `usbNameFromSysfs` / `usbNameWindows` / `BoardMatch` / `nameMatches` / `recognize` / `preselect` / `MatchResult` / `OtherBoard` / `ManifestBoard` / `ManifestScan` / `Px4Board` / `px4Boards` / `manifestOtherBoards` / `px4OtherBoards` / `otherBoards` / `showOtherBoards` | 0.4.1 |
 | 명령·HTTP 낱말 | `CommandLong` / `CommandOptions` / `CommandResult` / `HttpRequest` / `HttpOptions` / `gunzip` | 0.2.0 |
 | 기체 낱말 | `StreamRequest` / `VehicleSelection` / `isLinkLost` / `VehicleInfoValues` | 0.1.0 |
 | 작업 | `Job` | §9.4 |
@@ -470,3 +472,4 @@ k-groundcontrol/
 | 2026-11-01 | 사용자 | 0.2.0 스펙 초안 2와 함께 승인(§10): §3 `vehicle/command`·`vehicle/safety` 자리, `PortLease`는 `comm/rawport`, §4 `--extra-serial` 반복, §7 `px4-boards.json`, §9.1 `ByteStream`은 막아서 쓰는 인터페이스, §9.2 `ArmedPolicy`부터, §9.3 캐시는 뒤 버전, §9.4 굽기 임대 예외, §13 낱말 |
 | 2026-11-03 | 사용자 | 0.3.0 스펙과 함께 승인(§10): §3.1 `params` 혼합 수명, §8 플러그인 파라미터 항목, §13 용어 |
 | 2026-11-03 | 사용자 | 0.4.0 스펙과 함께 승인(§10): §3.1·§3.2 기능 `sitl`(순위 5, 좌 메뉴 2, 뒤 메뉴 번호 하나씩 밀림), §4 파일 자리 `cache/sitl`·`sitl`, §9.3 다른 프로그램 실행, §13 용어 |
+| 2026-11-05 | 사용자 | 0.4.1 스펙 초안 2와 함께 승인(§10): §7 `px4-boards.json`의 `names`, §9.3 Windows SetupAPI는 `comm/links/serial`만, §13 보드 이름 맞추기 낱말 |

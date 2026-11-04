@@ -1,3 +1,4 @@
+// [0.4.1 5.5] specs/features/0.4.1-board-match.md
 // [0.2.0 6.2–6.9] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <kgc/fcFlash/FcFlashService.h>
@@ -7,11 +8,13 @@
 #include <kgc/app/scheduler/Timeout.h>
 #include <kgc/vehicle/registry/VehicleRegistry.h>
 #include "FlashWorker.h"
+#include "sources/BoardMatch.h"
 #include "sources/Px4Releases.h"
 #include <QElapsedTimer>
 #include <QPointer>
 #include <QSet>
 #include <QThread>
+#include <QVariantList>
 #include <functional>
 #include <map>
 namespace kgc::fcFlash {
@@ -67,7 +70,7 @@ struct FcFlashService::Private {
     bool versionWaiting = false;
     QList<Px4Release> releases;
     QByteArray manifestGzip;
-    QHash<int, QList<ManifestEntry>> manifests;
+    QHash<int, ManifestScan> manifests;
     QList<ManifestVersion> manifestVersionList;
     QList<ManifestEntry> manifestCandidateList;
     QList<Px4Candidate> px4CandidateList;
@@ -77,6 +80,11 @@ struct FcFlashService::Private {
     QStringList candidateNames;
     int version = -1;
     int candidate = -1;
+    MatchResult match;
+    QVariantList otherBoardList;
+    bool matchLogged = false;
+    MatchResult loggedMatch;
+    QString loggedName;
     bool loading = false;
     bool listError = false;
     bool imageBusy = false;
@@ -119,6 +127,7 @@ struct FcFlashService::Private {
     void finishReturn();
     void rebuildVersions();
     void rebuildCandidates();
+    void updateMatch(const QList<QStringList>& names, const QList<OtherBoard>& others);
     void fetchList();
     void cancelPending();
     void clearSelection();

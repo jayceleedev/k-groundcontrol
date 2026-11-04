@@ -1,3 +1,4 @@
+// [0.4.1 5.5] specs/features/0.4.1-board-match.md
 // [0.2.0 T14–T23] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <kgc/fcFlash/FcFlashService.h>
@@ -30,6 +31,11 @@ class FcFlashController : public QObject {
     Q_PROPERTY(int versionIndex READ versionIndex NOTIFY changed)
     Q_PROPERTY(QStringList candidates READ candidates NOTIFY changed)
     Q_PROPERTY(int candidateIndex READ candidateIndex NOTIFY changed)
+    Q_PROPERTY(QString usbName READ usbName NOTIFY changed)
+    Q_PROPERTY(kgc::fcFlash::BoardMatch matchKind READ matchKind NOTIFY changed)
+    Q_PROPERTY(QList<int> matchedCandidates READ matchedCandidates NOTIFY changed)
+    Q_PROPERTY(QVariantList otherBoards READ otherBoards NOTIFY changed)
+    Q_PROPERTY(bool showOtherBoards READ showOtherBoards WRITE setShowOtherBoards NOTIFY showOtherBoardsChanged)
     Q_PROPERTY(bool listLoading READ listLoading NOTIFY changed)
     Q_PROPERTY(bool listFailed READ listFailed NOTIFY changed)
     Q_PROPERTY(bool canContinue READ canContinue NOTIFY changed)
@@ -93,6 +99,22 @@ public:
     QStringList candidates() const { return service_.candidates(); }
     /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 candidateIndex 값이에요. 실패: 없어요. */
     int candidateIndex() const { return service_.candidateIndex(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 usbName 값이에요. 실패: 없어요. */
+    QString usbName() const { return service_.usbName(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 matchKind 값이에요. 실패: 없어요. */
+    BoardMatch matchKind() const { return service_.matchKind(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 matchedCandidates 값이에요. 실패: 없어요. */
+    QList<int> matchedCandidates() const { return service_.matchedCandidates(); }
+    /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 otherBoards 값이에요. 실패: 없어요. */
+    QVariantList otherBoards() const { return service_.otherBoards(); }
+    /** 화면 상태를 읽어요. 입력: 없어요. 출력: "다른 보드 ID도 보기"가 켜졌으면 참이에요. 기본은 거짓이에요. 실패: 없어요. */
+    bool showOtherBoards() const { return showOtherBoards_; }
+/** "다른 보드 ID도 보기"를 켜거나 꺼요.
+ * 입력: 새 값 value예요.
+ * 출력: 값이 바뀌면 showOtherBoardsChanged를 내요. 컨트롤러가 앱 끝까지 살아 있어서 패널을 닫았다 열어도 값이 남아요.
+ * 실패: 없어요.
+ */
+    void setShowOtherBoards(bool value);
     /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 listLoading 값이에요. 실패: 없어요. */
     bool listLoading() const { return service_.listLoading(); }
     /** 화면 값을 전달해요. 입력: 없어요. 출력: 서비스의 listFailed 값이에요. 실패: 없어요. */
@@ -246,8 +268,11 @@ signals:
     void changed();
     /** 포트 목록 갱신을 알려요. 입력: 없어요. 출력: 목록 변경 알림이에요. 실패: 없어요. */
     void portsChanged();
+    /** 화면 상태 변경을 알려요. 입력: 없어요. 출력: showOtherBoards 변경 알림이에요. 실패: 없어요. */
+    void showOtherBoardsChanged();
 private:
     FcFlashService& service_;
+    bool showOtherBoards_ = false;
     inline static QPointer<FcFlashController> instance_;
 };
 }

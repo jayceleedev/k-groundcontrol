@@ -1,3 +1,4 @@
+// [0.4.1 5.5] specs/features/0.4.1-board-match.md
 // [0.2.0 T14–T22] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <kgc/app/job/Job.h>
@@ -5,6 +6,7 @@
 #include <QObject>
 #include <QString>
 #include <QStringList>
+#include <QVariantList>
 #include <memory>
 namespace kgc::app::net { class Http; }
 namespace kgc::app::scheduler { class Scheduler; }
@@ -36,6 +38,10 @@ class FcFlashService : public QObject {
     Q_PROPERTY(int versionIndex READ versionIndex NOTIFY changed)
     Q_PROPERTY(QStringList candidates READ candidates NOTIFY changed)
     Q_PROPERTY(int candidateIndex READ candidateIndex NOTIFY changed)
+    Q_PROPERTY(QString usbName READ usbName NOTIFY changed)
+    Q_PROPERTY(kgc::fcFlash::BoardMatch matchKind READ matchKind NOTIFY changed)
+    Q_PROPERTY(QList<int> matchedCandidates READ matchedCandidates NOTIFY changed)
+    Q_PROPERTY(QVariantList otherBoards READ otherBoards NOTIFY changed)
     Q_PROPERTY(bool listLoading READ listLoading NOTIFY changed)
     Q_PROPERTY(bool listFailed READ listFailed NOTIFY changed)
     Q_PROPERTY(bool canContinue READ canContinue NOTIFY changed)
@@ -100,6 +106,18 @@ public:
     QStringList candidates() const;
     /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 고른 후보 위치이며, 없으면 -1이에요. 실패: 없어요. */
     int candidateIndex() const;
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 보드 확인 때 읽은 USB 장치 이름(PortInfo::usbName)이며, 모르면 빈 값이에요. 실패: 없어요. */
+    QString usbName() const;
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 후보를 만들 때마다 recognize로 낸 이름 맞추기 종류예요. 실패: 없어요. */
+    BoardMatch matchKind() const;
+    /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 이름이 맞은 후보의 위치(candidates 순서)이며, 없으면 빈 목록이에요. 실패: 없어요. */
+    QList<int> matchedCandidates() const;
+/** 지금 출처·기체·버전에서 보드 ID가 다른 보드 목록을 읽어요.
+ * 입력: 없어요.
+ * 출력: 항목 {name, boardId}의 목록이며, 이름을 대소문자 무시로, 같으면 보드 ID 작은 순으로 정렬해요. 고를 수 없는 행이에요.
+ * 실패: 목록이 없거나 파일 선택이면 빈 목록이에요.
+ */
+    QVariantList otherBoards() const;
     /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 목록을 받거나 해석하는 중이면 참이에요. 실패: 없어요. */
     bool listLoading() const;
     /** 현재 화면 값을 읽어요. 입력: 없어요. 출력: 목록을 받지 못했으면 참이에요. 실패: 없어요. */
@@ -162,7 +180,7 @@ public:
  * 1. HttpRequest::abort — 앞선 요청을 멈추고 이전 선택의 해석 결과를 버려요.
  * 2. Http::get — 메모리에 없으면 PX4 릴리스 또는 ArduPilot 목록을 받아요.
  * 3. FlashWorker::parseReleases·parseManifest — 목록을 작업 스레드에서 해석해요.
- * 4. pickCandidate — 후보가 하나면 자동으로 골라요.
+ * 4. recognize → preselect — USB 이름이 하나의 후보와 맞으면 그 후보를, 이름을 모르고 후보가 하나면 그 후보를 골라요.
  */
     void chooseSource(FirmwareSource source);
 /** ArduPilot 기체를 골라요.
@@ -172,7 +190,8 @@ public:
  * 흐름:
  * 1. HttpRequest::abort — 앞선 요청과 선택을 비워요.
  * 2. Http::get → FlashWorker::parseManifest — 메모리에 없는 목록을 받아 해석해요.
- * 3. manifestVersions·manifestCandidates — 고른 기체의 목록을 다시 만들어요.
+ * 3. manifestVersions·manifestCandidates·manifestOtherBoards — 고른 기체의 목록을 다시 만들어요.
+ * 4. recognize → preselect — 이름 맞추기 결과를 내고 처음 선택을 정해요.
  */
     void chooseVehicle(const QString& name);
 /** 버전을 골라요.
@@ -182,7 +201,8 @@ public:
  * 흐름:
  * 1. HttpRequest::abort — 앞선 요청과 선택을 비워요.
  * 2. px4Candidates·manifestCandidates — 고른 버전의 후보를 이름순으로 만들어요.
- * 3. pickCandidate — 후보 하나만 있으면 자동으로 골라요.
+ * 3. px4OtherBoards·manifestOtherBoards — 보드 ID가 다른 보드 목록을 만들어요.
+ * 4. recognize → preselect — 이름 맞추기 결과를 내고 처음 선택을 정해요.
  */
     void chooseVersion(int index);
 /** 후보를 골라요.

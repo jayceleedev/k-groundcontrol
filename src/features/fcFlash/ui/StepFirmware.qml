@@ -1,11 +1,13 @@
+// [0.4.1 6.1–6.4] specs/features/0.4.1-board-match.md
 // [0.2.0 T19 T23 T24 T27] specs/features/0.2.0-fcflash.md
 /** 확인한 보드에 맞는 공식 펌웨어나 파일을 골라요.
- * 입력: 보드 정보, 목록과 파일 해석 결과예요.
- * 출력: 출처·버전·후보 선택과 다음 단계 요청이에요.
+ * 입력: 보드 정보, USB 보드 이름 맞추기 결과, 목록과 파일 해석 결과예요.
+ * 출력: 출처·버전·후보 선택과 다음 단계 요청이에요. 인식 결과 줄과, 검색으로 거르는 후보 목록(다른 보드 ID는 회색, 고를 수 없음)을 보여요.
  * 실패: 목록 오류와 파일의 호환 오류를 보여요.
  * 흐름:
  * 1. FcFlashController.chooseSource·chooseVehicle·chooseVersion·chooseCandidate·chooseFile — 선택을 서비스에 넘겨요.
- * 2. FcFlashController.toConfirm·bootAndReset — 확인 단계로 가거나 부팅하고 돌아가요.
+ * 2. FcFlashController.showOtherBoards — "다른 보드 ID도 보기"를 컨트롤러에 남겨요.
+ * 3. FcFlashController.toConfirm·bootAndReset — 확인 단계로 가거나 부팅하고 돌아가요.
  */
 import QtQuick
 import QtQuick.Layouts
@@ -17,6 +19,44 @@ Column {
     id: root
     spacing: Theme.panelInset
     readonly property int source: FcFlashController.source
+    // 같은 보드 ID 후보 표가 보이는 때예요(0.2.0의 후보 표와 같은 조건).
+    readonly property bool listShown: root.source !== FlashStates.LocalFile && !FcFlashController.listLoading
+        && !FcFlashController.listFailed && FcFlashController.candidates.length > 0
+    readonly property int visibleRows: 8
+    readonly property int step: FcFlashController.step
+    property var rows: []
+    property string rowsKey: ""
+    onStepChanged: if (step === FlashStates.Firmware) search.clear()
+    /** 맞은 후보 → 나머지 후보 → 다른 보드 순서로 행을 만들고 검색어로 걸러요.
+     * 입력: 컨트롤러의 후보·맞은 위치·다른 보드, showOtherBoards, 검색어예요.
+     * 출력: rows이며, 값이 같으면 다시 만들지 않아 목록의 스크롤 위치를 지켜요.
+     * 실패: 없어요.
+     */
+    function refreshRows() {
+        const candidates = Array.from(FcFlashController.candidates)
+        const matched = Array.from(FcFlashController.matchedCandidates)
+        const others = FcFlashController.showOtherBoards ? FcFlashController.otherBoards : []
+        const query = search.text.trim().toLowerCase()
+        const key = JSON.stringify([candidates, matched, others, query, FcFlashController.boardId])
+        if (key === rowsKey) return
+        rowsKey = key
+        const keep = name => query === "" || name.toLowerCase().indexOf(query) >= 0
+        const list = []
+        const add = index => {
+            if (keep(candidates[index])) list.push({name: candidates[index], index: index, boardId: FcFlashController.boardId,
+                matched: matched.indexOf(index) >= 0, other: false})
+        }
+        matched.forEach(add)
+        for (let i = 0; i < candidates.length; ++i) if (matched.indexOf(i) < 0) add(i)
+        for (const item of others) if (keep(item.name)) list.push({name: item.name, index: -1, boardId: item.boardId, matched: false, other: true})
+        rows = list
+    }
+    Component.onCompleted: refreshRows()
+    Connections {
+        target: FcFlashController
+        function onChanged() { root.refreshRows() }
+        function onShowOtherBoardsChanged() { root.refreshRows() }
+    }
     readonly property string failure: {
         const language = translator.language; const file = FcFlashController.filePath
         const loading = FcFlashController.listLoading; const ready = FcFlashController.canContinue
@@ -83,24 +123,41 @@ Column {
         onActivated: index => FcFlashController.chooseVersion(index)
     }
     BusySpinner { visible: FcFlashController.listLoading }
-    Text {
-        visible: FcFlashController.candidates.length > 1 && root.source !== FlashStates.LocalFile
-        text: qsTr("맞는 펌웨어 %1개. 직접 골라요.").arg(FcFlashController.candidates.length)
-        color: Theme.inkMuted
-        font.pixelSize: Theme.fontSize
-    }
-    DataTable {
-        id: table
-        objectName: "fcFlashCandidates"
+    Column {
+        id: matchInfo
+        objectName: "fcFlashMatch"
         width: parent.width
-        visible: root.source !== FlashStates.LocalFile && FcFlashController.candidates.length > 0
-        columns: [qsTr("펌웨어")]
-        rows: FcFlashController.candidates.map(value => [value])
-        currentIndex: FcFlashController.candidateIndex
-        onCurrentIndexChanged: if (currentIndex >= 0 && currentIndex !== FcFlashController.candidateIndex) FcFlashController.chooseCandidate(currentIndex)
-        Connections {
-            target: FcFlashController
-            function onChanged() { if (root.visible) table.currentIndex = FcFlashController.candidateIndex }
+        spacing: Theme.inset
+        readonly property var matched: FcFlashController.matchedCandidates
+        visible: root.listShown && (FcFlashController.matchKind !== FlashStates.NoName || FcFlashController.candidates.length > 1)
+        RowLayout {
+            width: parent.width
+            spacing: Theme.inset
+            visible: FcFlashController.matchKind === FlashStates.Matched
+            Chip { text: qsTr("인식됨"); level: "ok" }
+            Text {
+                Layout.fillWidth: true
+                wrapMode: Text.Wrap
+                text: matchInfo.matched.length === 1
+                    ? qsTr("보드 이름 %1에 맞는 빌드: %2").arg(FcFlashController.usbName)
+                        .arg(FcFlashController.candidates[matchInfo.matched[0]] ?? "")
+                    : qsTr("보드 이름 %1에 맞는 빌드가 %2개예요. 하나를 골라요.").arg(FcFlashController.usbName).arg(matchInfo.matched.length)
+                color: Theme.ink
+                font.family: Theme.fontFamily
+                font.pixelSize: Theme.fontSize
+            }
+        }
+        Banner {
+            width: parent.width
+            visible: FcFlashController.matchKind === FlashStates.NoMatch
+            closable: false; level: "warn"
+            text: qsTr("공식 목록에 %1 빌드가 없어요. 아래에서 직접 고르거나 파일을 골라요.").arg(FcFlashController.usbName)
+        }
+        Text {
+            visible: FcFlashController.matchKind === FlashStates.NoName && FcFlashController.candidates.length > 1
+            text: qsTr("맞는 펌웨어 %1개. 직접 골라요.").arg(FcFlashController.candidates.length)
+            color: Theme.inkMuted
+            font.pixelSize: Theme.fontSize
         }
     }
     Banner {
@@ -110,6 +167,36 @@ Column {
         text: FcFlashController.listFailed
             ? qsTr("목록을 받지 못했어요. 인터넷을 확인하거나 파일을 직접 골라요.")
             : qsTr("공식 목록에 이 보드용 펌웨어가 없어요. 파일을 직접 골라요.")
+    }
+    RowLayout {
+        width: parent.width
+        visible: root.listShown
+        spacing: Theme.inset
+        SearchBox {
+            id: search
+            objectName: "fcFlashBoardSearch"
+            Layout.fillWidth: true
+            placeholderText: qsTr("보드 이름 검색")
+            onTextChanged: root.refreshRows()
+        }
+        CheckRow {
+            objectName: "fcFlashOtherBoards"
+            tristate: false
+            text: qsTr("다른 보드 ID도 보기")
+            checked: FcFlashController.showOtherBoards
+            onClicked: FcFlashController.showOtherBoards = checked
+        }
+    }
+    BoardList {
+        width: parent.width
+        visible: root.listShown && root.rows.length > 0
+        rows: root.rows
+        visibleRows: root.visibleRows
+    }
+    EmptyState {
+        width: parent.width
+        visible: root.listShown && root.rows.length === 0
+        title: qsTr("검색어와 맞는 보드가 없어요")
     }
     FileField {
         objectName: "fcFlashFile"

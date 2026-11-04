@@ -1718,6 +1718,24 @@
     </message>
 </context>
 <context>
+    <name>BoardList</name>
+    <message>
+        <location filename="../src/features/fcFlash/ui/BoardList.qml" line="68"/>
+        <source>인식됨</source>
+        <translation>Recognized</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/BoardList.qml" line="70"/>
+        <source>보드 ID %1 · 구울 수 없음</source>
+        <translation>Board ID %1 · cannot flash</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/BoardList.qml" line="71"/>
+        <source>보드 ID %1</source>
+        <translation>Board ID %1</translation>
+    </message>
+</context>
+<context>
     <name>BoardCard</name>
     <message>
         <location filename="../src/features/fcFlash/ui/BoardCard.qml" line="44"/>
@@ -1864,80 +1882,110 @@
 <context>
     <name>StepFirmware</name>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="35"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="75"/>
         <source>PX4</source>
         <translation>PX4</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="35"/>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="75"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="76"/>
         <source>공식 릴리스</source>
         <translation>Official release</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="36"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="76"/>
         <source>ArduPilot</source>
         <translation>ArduPilot</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="37"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="77"/>
         <source>파일 선택</source>
         <translation>Select file</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="37"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="77"/>
         <source>.px4 · .apj</source>
         <translation>.px4 · .apj</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="79"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="119"/>
         <source>버전</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="88"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="158"/>
         <source>맞는 펌웨어 %1개. 직접 골라요.</source>
         <translation>%1 matching firmware candidates. Select one.</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="97"/>
-        <source>펌웨어</source>
-        <translation>Firmware</translation>
-    </message>
-    <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="111"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="168"/>
         <source>목록을 받지 못했어요. 인터넷을 확인하거나 파일을 직접 골라요.</source>
         <translation>Could not retrieve the list. Check your internet connection or select a local file.</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="112"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="169"/>
         <source>공식 목록에 이 보드용 펌웨어가 없어요. 파일을 직접 골라요.</source>
         <translation>No official firmware matches this board. Select a local file.</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="118"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="205"/>
         <source>.px4 또는 .apj 파일</source>
         <translation>.px4 or .apj file</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="124"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="211"/>
         <source>펌웨어 파일 선택</source>
         <translation>Select firmware file</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="125"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="212"/>
         <source>펌웨어 파일 (*.px4 *.apj)</source>
         <translation>Firmware files (*.px4 *.apj)</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="145"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="232"/>
         <source>취소하고 FC 부팅</source>
         <translation>Cancel and boot FC</translation>
     </message>
     <message>
-        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="152"/>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="239"/>
         <source>다음</source>
         <translation>Next</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="137"/>
+        <source>인식됨</source>
+        <translation>Recognized</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="142"/>
+        <source>보드 이름 %1에 맞는 빌드: %2</source>
+        <translation>Build matching board name %1: %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="144"/>
+        <source>보드 이름 %1에 맞는 빌드가 %2개예요. 하나를 골라요.</source>
+        <translation>%2 builds match board name %1. Select one.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="154"/>
+        <source>공식 목록에 %1 빌드가 없어요. 아래에서 직접 고르거나 파일을 골라요.</source>
+        <translation>The official list has no %1 build. Select one below or select a local file.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="179"/>
+        <source>보드 이름 검색</source>
+        <translation>Search board name</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="185"/>
+        <source>다른 보드 ID도 보기</source>
+        <translation>Show other board IDs</translation>
+    </message>
+    <message>
+        <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="199"/>
+        <source>검색어와 맞는 보드가 없어요</source>
+        <translation>No boards match the search</translation>
     </message>
 </context>
 <context>

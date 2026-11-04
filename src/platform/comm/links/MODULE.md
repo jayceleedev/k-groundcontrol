@@ -4,9 +4,10 @@
 받는 것: LinkConfig, Scheduler, PortRegistry, BootOptions.extraSerial 경로 목록.
 주는 것: 포트가 목록과 /dev/ 장치 파일 양쪽에서 사라지면 PortLost로 알리는 LinkManager의 연결·수신·종료 시그널과 포트 목록, Link·UdpLink·SerialLink, LinkError, LinkConfig.h로 함께 보이는 UDP 포트 kUdpPort(api Constants.h).
 기여: 없음.
-의존: app/errors, app/log, app/scheduler, comm/mavlink, comm/rawport(PortRegistry), Qt Core·Network·SerialPort.
+의존: app/errors, app/log, app/scheduler, comm/mavlink, comm/rawport(PortRegistry), Qt Core·Network·SerialPort, Windows에서만 setupapi·cfgmgr32(PRIVATE).
 안 하는 것: 화면 표시와 사용자 명령은 기능 모듈이 맡아요.
 흐름: 1. connectLink가 시리얼 포트를 PortRegistry.claim으로 점유한 뒤 워커에서 열어요. 2. disconnectLink가 열기 중에도 취소해요. 3. 워커 종료 뒤 PortRegistry.release로 점유를 놓고 linkClosed 또는 linkFailed를 정확히 한 번 알려요.
-포트 조회: refreshPorts는 파일이 존재하는 추가 경로만 목록에 넣어요. portInfo는 운영체제의 제조사·제품 설명을 돌려주며, 없으면 빈 값이에요.
+포트 조회: refreshPorts는 파일이 존재하는 추가 경로만 목록에 넣어요. portInfo는 운영체제의 제조사·제품 설명과 USB 장치가 스스로 알린 이름 usbName을 돌려주며, 없으면 빈 값이에요.
+USB 이름: serial/UsbName의 usbNameFromSysfs(Linux sysfs, 모든 운영체제에서 빌드)와 usbNameWindows(SetupAPI·cfgmgr32, Windows만)가 읽어요. 앞뒤 공백만 지우고 -BL 같은 꼬리는 그대로 둬요. Windows SetupAPI는 이 serial 폴더 안에서만 써요.
 오류 전달: ErrorCode와 선택적 오류를 등록해 워커 시그널로 받아요. 시리얼이 열린 뒤 NoError·TimeoutError는 무시하고, ResourceError 중 EAGAIN(쓰기가 잠깐 바쁨)은 오류를 지우고 링크를 유지해요. 남은 바이트는 Qt의 쓰기 알림이 스스로 다시 보내고, 로그는 링크마다 한 번이에요. 나머지 오류와 음수 쓰기 결과는 PortLost로 닫고 SerialPortLost 경고를 남겨요.
 통로 유지: 시리얼의 DTR·RTS를 켜되 실패하면 오류를 지우고 연결을 계속해요. 미지원은 조용히 넘기고 다른 제어선 실패는 매번 경고해요. UDP는 최근 10초 안에 수신한 모든 주소에 회신해요.

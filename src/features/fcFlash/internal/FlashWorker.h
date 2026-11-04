@@ -1,3 +1,4 @@
+// [0.4.1 5.4] specs/features/0.4.1-board-match.md
 // [0.2.0 T14–T23] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <kgc/app/errors/Result.h>
@@ -75,7 +76,7 @@ public slots:
     void parseImage(const QString& path, quint64 generation, bool temporary = false);
 /** gzip 목록을 풀고 보드에 맞는 항목을 골라요.
  * 입력: 받은 바이트 gzipped, 보드 ID boardId, 선택 번호 generation이에요.
- * 출력: manifestScanned 시그널이에요.
+ * 출력: scanManifest 결과(같은 보드의 항목과 다른 보드 목록)를 실은 manifestScanned 시그널이에요.
  * 실패: 풀 수 없으면 manifestFailed로 선택 번호와 함께 알려요.
  */
     void parseManifest(const QByteArray& gzipped, int boardId, quint64 generation);
@@ -106,8 +107,8 @@ signals:
     void portLost();
     /** 입력: 해석 결과. 출력: parseImage마다 한 번 나와요. 실패: 없어요. */
     void imageParsed(kgc::app::errors::Result<kgc::fcFlash::FirmwareImage> image, quint64 generation);
-    /** 입력: 맞는 항목들. 출력: parseManifest마다 한 번 나와요. 실패: 없어요. */
-    void manifestScanned(const QList<kgc::fcFlash::ManifestEntry>& entries, int boardId, quint64 generation);
+    /** 입력: 이 보드의 항목과 다른 보드의 항목을 담은 scan. 출력: parseManifest마다 한 번 나와요. 실패: 없어요. */
+    void manifestScanned(const kgc::fcFlash::ManifestScan& scan, int boardId, quint64 generation);
     /** 목록의 압축 오류를 알려요. 입력: 없어요. 출력: 실패 알림이에요. 실패: 없어요. */
     void manifestFailed(quint64 generation);
     /** 입력: 릴리스와 선택 번호예요. 출력: 목록 해석 결과예요. 실패: 없어요. */

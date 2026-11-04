@@ -1,6 +1,17 @@
 [
  {"tag_name":"v1.15.4","draft":false,"prerelease":false,"published_at":"2025-03-01T00:00:00Z",
-  "assets":[{"name":"px4_fmu-v6x_default.px4","browser_download_url":"https://github.com/PX4/PX4-Autopilot/releases/download/v1.15.4/px4_fmu-v6x_default.px4"}]},
+  "assets":[
+   {"name":"px4_fmu-v6x_default.px4","browser_download_url":"https://example.invalid/v1.15.4/px4_fmu-v6x_default.px4"},
+   {"name":"px4_fmu-v6x_bootloader.px4","browser_download_url":"https://example.invalid/v1.15.4/px4_fmu-v6x_bootloader.px4"},
+   {"name":"px4_fmu-v6x_default.bin","browser_download_url":"https://example.invalid/v1.15.4/px4_fmu-v6x_default.bin"},
+   {"name":"auterion_fmu-v6x_default.px4","browser_download_url":"https://example.invalid/v1.15.4/auterion_fmu-v6x_default.px4"},
+   {"name":"cubepilot_cubeorange_default.px4","browser_download_url":"https://example.invalid/v1.15.4/cubepilot_cubeorange_default.px4"},
+   {"name":"cubepilot_cubeorange_bootloader.px4","browser_download_url":"https://example.invalid/v1.15.4/cubepilot_cubeorange_bootloader.px4"},
+   {"name":"ark_fmu-v6x_default.px4","browser_download_url":"https://example.invalid/v1.15.4/ark_fmu-v6x_default.px4"},
+   {"name":"px4_fmu-v2_default.px4","browser_download_url":"https://example.invalid/v1.15.4/px4_fmu-v2_default.px4"},
+   {"name":"px4_fmu-v3_default.px4","browser_download_url":"https://example.invalid/v1.15.4/px4_fmu-v3_default.px4"},
+   {"name":"matek_h743_default.px4","browser_download_url":"https://example.invalid/v1.15.4/matek_h743_default.px4"}
+  ]},
  {"tag_name":"v1.18.0-rc1","draft":false,"prerelease":true,"published_at":"2026-09-10T00:00:00Z","assets":[]},
  {"tag_name":"v1.17.0","draft":false,"prerelease":false,"published_at":"2026-05-13T00:00:00Z",
   "assets":[

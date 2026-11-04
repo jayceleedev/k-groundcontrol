@@ -1,3 +1,4 @@
+// [0.4.1 5.1] specs/features/0.4.1-board-match.md
 // [0.2.0 5.5] specs/features/0.2.0-fcflash.md
 // [0.1.1 T4 T5 T13 T15 T16] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
@@ -12,12 +13,12 @@
 namespace kgc::app::scheduler { class Scheduler; }
 namespace kgc::comm::rawport { class PortRegistry; }
 namespace kgc::comm::links {
-/** 포트 목록의 제조사와 제품 설명을 묶어요.
+/** 포트 목록의 제조사와 제품 설명, USB 장치가 알린 이름을 묶어요.
  * 입력: 운영체제가 알려 준 시리얼 포트 정보예요.
- * 출력: manufacturer와 product이며, 모르면 빈 값이에요.
- * 실패: 없어요.
+ * 출력: manufacturer와 product, 그리고 USB 장치가 스스로 알린 제품 이름 usbName(앞뒤 공백만 지우고 그대로)이며, 모르면 빈 값이에요.
+ * 실패: 없어요. USB가 아닌 포트의 usbName은 빈 값이에요.
  */
-struct PortInfo { QString manufacturer; QString product; };
+struct PortInfo { QString manufacturer; QString product; QString usbName; };
 /** 하나의 링크와 포트 목록을 GUI 스레드에서 관리해요.
  * 입력: 포트 조회용 스케줄러와 연결·해제 요청이에요.
  * 출력: 포트 목록과 링크의 열기·수신·종료 결과를 제공하며, 사용 중인 포트가 목록과 /dev/ 장치 파일 양쪽에서 사라지면 종료해요.
@@ -96,9 +97,10 @@ public:
  * 실패: 사용 중인 포트가 사라지면 닫기를 예약해요.
  */
     void refreshPorts();
-/** 포트의 제조사와 제품 설명을 읽어요.
+/** 포트의 제조사와 제품 설명, USB 장치 이름을 읽어요.
  * 입력: 포트 이름 name이에요.
- * 출력: 운영체제가 알려 준 PortInfo이며, 없으면 빈 값이에요.
+ * 출력: 운영체제가 알려 준 PortInfo이며, 없으면 빈 값이에요. usbName은 Linux는 usbNameFromSysfs("/sys", 포트 이름),
+ *       Windows는 usbNameWindows(COM 이름)로 읽고, 그 밖의 운영체제는 빈 값이에요.
  * 실패: 없어요.
  */
     PortInfo portInfo(QString name);

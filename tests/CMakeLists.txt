@@ -139,3 +139,16 @@ foreach(name T1_sitl_files T2_sitl_arguments T3_sitl_home)
 endforeach()
 target_compile_definitions(test_T3_sitl_home PRIVATE
     KGC_SITL_SETTINGS="${PROJECT_SOURCE_DIR}/src/features/sitl/internal/settings/sitl.settings.json")
+
+# [0.4.1 T1–T5] specs/features/0.4.1-board-match.md
+foreach(name T1_board_name_matches T2_board_preselect T3_manifest_other_boards T4_px4_other_boards)
+    qt_add_executable(test_${name} test_${name}.cpp)
+    target_include_directories(test_${name} PRIVATE "${PROJECT_SOURCE_DIR}/src/features/fcFlash/internal")
+    target_link_libraries(test_${name} PRIVATE kgc_fcFlash Qt6::Test)
+    target_compile_definitions(test_${name} PRIVATE KGC_TEST_DATA="${CMAKE_CURRENT_SOURCE_DIR}/data/fcflash")
+    add_test(NAME ${name} COMMAND test_${name})
+endforeach()
+qt_add_executable(test_T5_usb_name_sysfs test_T5_usb_name_sysfs.cpp)
+target_include_directories(test_T5_usb_name_sysfs PRIVATE "${PROJECT_SOURCE_DIR}/src/platform/comm/links/serial")
+target_link_libraries(test_T5_usb_name_sysfs PRIVATE kgc_comm_links Qt6::Test)
+add_test(NAME T5_usb_name_sysfs COMMAND test_T5_usb_name_sysfs)

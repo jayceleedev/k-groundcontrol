@@ -1,3 +1,4 @@
+// [0.4.1 5.3 5.5 6.4] specs/features/0.4.1-board-match.md
 // [0.2.0 T19 T23 T24] specs/features/0.2.0-fcflash.md
 #include "FcFlashServicePrivate.h"
 #include "Constants.h"
@@ -23,6 +24,8 @@ void FcFlashService::chooseSource(FirmwareSource source)
     d_->candidate = -1;
     d_->versionNames.clear();
     d_->candidateNames.clear();
+    d_->match = {};
+    d_->otherBoardList.clear();
     d_->listError = false;
     d_->firmware = source == FirmwareSource::Px4Official ? "PX4" : source == FirmwareSource::ArduPilotOfficial ? "ArduPilot" : "";
     if (source != FirmwareSource::LocalFile) d_->fetchList();
@@ -60,7 +63,7 @@ void FcFlashService::Private::rebuildVersions()
     if (source == FirmwareSource::Px4Official) {
         for (const auto& release : releases) versionNames.append(release.tag);
     } else {
-        manifestVersionList = manifestVersions(manifests.value(board.boardId), vehicleKind);
+        manifestVersionList = manifestVersions(manifests.value(board.boardId).entries, vehicleKind);
         for (const auto& item : manifestVersionList) versionNames.append(item.version);
     }
     version = versionNames.isEmpty() ? -1 : 0;
@@ -71,25 +74,55 @@ void FcFlashService::Private::rebuildCandidates()
     candidateNames.clear();
     candidate = -1;
     clearSelection();
-    if (version < 0) { emit q->changed(); return; }
+    QList<QStringList> names;
+    QList<OtherBoard> others;
+    if (version < 0) { updateMatch(names, others); emit q->changed(); return; }
     if (source == FirmwareSource::Px4Official) {
-        QFile boards(kPx4BoardsResource);
-        if (!boards.open(QIODevice::ReadOnly)) { listError = true; emit q->changed(); return; }
-        px4CandidateList = px4Candidates(releases.at(version), px4Prefixes(boards.readAll(), board.boardId));
+        QFile file(kPx4BoardsResource);
+        if (!file.open(QIODevice::ReadOnly)) { listError = true; updateMatch(names, others); emit q->changed(); return; }
+        const auto json = file.readAll();
+        const auto boards = px4Boards(json);
+        px4CandidateList = px4Candidates(releases.at(version), px4Prefixes(json, board.boardId));
         std::sort(px4CandidateList.begin(), px4CandidateList.end(), [](const auto& a, const auto& b) {
             return a.prefix + " · " + a.label < b.prefix + " · " + b.label;
         });
-        for (const auto& item : px4CandidateList) candidateNames.append(item.prefix + " · " + item.label);
+        for (const auto& item : px4CandidateList) {
+            candidateNames.append(item.prefix + " · " + item.label);
+            const auto found = std::find_if(boards.cbegin(), boards.cend(), [&item](const auto& value) { return value.prefix == item.prefix; });
+            names.append(found == boards.cend() ? QStringList() : found->names);
+        }
+        others = px4OtherBoards(releases.at(version), boards, board.boardId);
     } else {
-        manifestCandidateList = manifestCandidates(manifests.value(board.boardId), vehicleKind, manifestVersionList.at(version).buildType);
+        const auto scan = manifests.value(board.boardId);
+        const auto buildType = manifestVersionList.at(version).buildType;
+        manifestCandidateList = manifestCandidates(scan.entries, vehicleKind, buildType);
         std::sort(manifestCandidateList.begin(), manifestCandidateList.end(), [](const auto& a, const auto& b) {
             return a.platform < b.platform;
         });
-        for (const auto& item : manifestCandidateList) candidateNames.append(item.platform);
+        for (const auto& item : manifestCandidateList) {
+            candidateNames.append(item.platform);
+            names.append(QStringList{item.platform} + item.bootloaderNames);
+        }
+        others = manifestOtherBoards(scan, vehicleKind, buildType);
     }
-    if (pickCandidate(candidateNames.size()) == CandidatePick::Auto
-        && !(source == FirmwareSource::Px4Official && board.boardId == kBoardFmuV3)) q->chooseCandidate(0);
+    updateMatch(names, others);
+    // 보드 255(fmu-v3)는 0.2.0처럼 PX4에서 미리 고르지 않아요. 이름이 하나 맞아도 마찬가지예요.
+    const auto pick = preselect(match, candidateNames.size());
+    if (pick >= 0 && !(source == FirmwareSource::Px4Official && board.boardId == kBoardFmuV3)) q->chooseCandidate(pick);
     emit q->changed();
+}
+void FcFlashService::Private::updateMatch(const QList<QStringList>& names, const QList<OtherBoard>& others)
+{
+    match = recognize(usb.usbName, names);
+    otherBoardList.clear();
+    for (const auto& item : others) otherBoardList.append(QVariantMap{{"name", item.name}, {"boardId", item.boardId}});
+    if (matchLogged && loggedMatch.kind == match.kind && loggedMatch.matched.size() == match.matched.size() && loggedName == usb.usbName) return;
+    matchLogged = true;
+    loggedMatch = match;
+    loggedName = usb.usbName;
+    const QString kind = match.kind == BoardMatch::Matched ? QStringLiteral("Matched")
+        : match.kind == BoardMatch::NoMatch ? QStringLiteral("NoMatch") : QStringLiteral("NoName");
+    KGC_LOG_INFO(kCategory, FcFlashEvent::BoardMatched, "Board match: %1, usb name: %2, matched: %3", kind, usb.usbName, match.matched.size());
 }
 void FcFlashService::chooseVehicle(const QString& name)
 {

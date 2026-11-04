@@ -1,3 +1,4 @@
+// [0.4.1 5.5] specs/features/0.4.1-board-match.md
 // [0.2.0 T19–T22] specs/features/0.2.0-fcflash.md
 #include "FcFlashServicePrivate.h"
 #include "Constants.h"
@@ -137,6 +138,8 @@ void FcFlashService::Private::clearSession()
     image.reset();
     file.clear();
     candidateNames.clear();
+    match = {};
+    otherBoardList.clear();
     versionNames.clear();
     candidate = version = -1;
     flashStage = -1;

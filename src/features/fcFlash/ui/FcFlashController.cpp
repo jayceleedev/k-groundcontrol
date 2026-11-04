@@ -1,3 +1,4 @@
+// [0.4.1 5.5] specs/features/0.4.1-board-match.md
 // [0.2.0 T14–T23] specs/features/0.2.0-fcflash.md
 #include "FcFlashController.h"
 namespace kgc::fcFlash {
@@ -14,6 +15,12 @@ QVariantList FcFlashController::ports() const
     for (const auto& [name, description] : service_.ports())
         result.append(QVariantMap{{"name", name}, {"label", description.isEmpty() ? name : name + " (" + description + ")"}});
     return result;
+}
+void FcFlashController::setShowOtherBoards(bool value)
+{
+    if (showOtherBoards_ == value) return;
+    showOtherBoards_ = value;
+    emit showOtherBoardsChanged();
 }
 FcFlashController* FcFlashController::create(QQmlEngine* engine, QJSEngine*)
 {

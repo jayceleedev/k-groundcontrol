@@ -1,3 +1,4 @@
+// [0.4.1 5.3] specs/features/0.4.1-board-match.md
 // [0.2.0 T14–T22] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <QObject>
@@ -29,4 +30,11 @@ Q_ENUM_NS(Phase)
  */
 enum class FirmwareSource { Px4Official, ArduPilotOfficial, LocalFile };
 Q_ENUM_NS(FirmwareSource)
+/** USB 보드 이름과 같은 보드 ID 후보의 이름을 맞춰 본 결과예요.
+ * 입력: 없어요.
+ * 출력: NoName(USB 이름을 모름), Matched(하나 이상 맞음), NoMatch(이름은 있지만 맞는 후보가 없음) 중 하나예요.
+ * 실패: 없어요.
+ */
+enum class BoardMatch { NoName, Matched, NoMatch };
+Q_ENUM_NS(BoardMatch)
 }

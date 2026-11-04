@@ -1,3 +1,4 @@
+// [0.4.1 5.4] specs/features/0.4.1-board-match.md
 // [0.2.0 6.8 6.9] specs/features/0.2.0-fcflash.md
 #include "FcFlashServicePrivate.h"
 #include <QFile>
@@ -25,9 +26,9 @@ void FcFlashService::Private::clearSelection()
 void FcFlashService::Private::wireParsing()
 {
     qRegisterMetaType<QList<Px4Release>>();
-    QObject::connect(worker, &FlashWorker::manifestScanned, q, [this](const auto& entries, int id, quint64 generation) {
+    QObject::connect(worker, &FlashWorker::manifestScanned, q, [this](const auto& scan, int id, quint64 generation) {
         if (generation != selectionGeneration) return;
-        manifests.insert(id, entries);
+        manifests.insert(id, scan);
         loading = false;
         if (source == FirmwareSource::ArduPilotOfficial && phase == Phase::Ready) rebuildVersions();
         emit q->changed();

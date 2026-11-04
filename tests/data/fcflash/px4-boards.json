@@ -1,9 +1,12 @@
 [
- {"boardId":53,"prefix":"auterion_fmu-v6x"},
- {"boardId":53,"prefix":"px4_fmu-v6x"},
- {"boardId":1013,"prefix":"hkust_nxt-dual"},
- {"boardId":1013,"prefix":"hkust_nxt-v1"},
- {"boardId":1013,"prefix":"matek_h743"},
- {"boardId":1013,"prefix":"matek_h743-mini"},
- {"boardId":1013,"prefix":"matek_h743-slim"}
+ {"boardId":9,"prefix":"px4_fmu-v2","names":["PX4 FMU v2.x"]},
+ {"boardId":9,"prefix":"px4_fmu-v3","names":["PX4 FMU v2.x"]},
+ {"boardId":53,"prefix":"auterion_fmu-v6x","names":[]},
+ {"boardId":53,"prefix":"px4_fmu-v6x","names":["PX4 FMU v6X.x"]},
+ {"boardId":140,"prefix":"cubepilot_cubeorange","names":["CubeOrange"]},
+ {"boardId":1013,"prefix":"hkust_nxt-dual","names":["HKUST UAV NxtPX4"]},
+ {"boardId":1013,"prefix":"hkust_nxt-v1","names":["HKUST UAV NxtPX4"]},
+ {"boardId":1013,"prefix":"matek_h743","names":["Matek H743-slim","MatekH743"]},
+ {"boardId":1013,"prefix":"matek_h743-mini","names":["Matek H743-mini","MatekH743-mini"]},
+ {"boardId":1013,"prefix":"matek_h743-slim","names":["MatekH743"]}
 ]

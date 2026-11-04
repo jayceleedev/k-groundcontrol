@@ -1,3 +1,4 @@
+// [0.4.1 5.5] specs/features/0.4.1-board-match.md
 // [0.2.0 T14–T23] specs/features/0.2.0-fcflash.md
 #include "FcFlashServicePrivate.h"
 #include "Constants.h"
@@ -52,7 +53,7 @@ void FcFlashService::Private::wireWorker()
     qRegisterMetaType<kgc::app::errors::Result<void>>();
     qRegisterMetaType<kgc::app::errors::Result<FirmwareImage>>();
     qRegisterMetaType<QList<ProbeResult>>();
-    qRegisterMetaType<QList<ManifestEntry>>();
+    qRegisterMetaType<ManifestScan>();
     QObject::connect(worker, &FlashWorker::probed, q, [this](const auto& value) { found = value; }, Qt::QueuedConnection);
     QObject::connect(worker, &FlashWorker::portClosed, q, [this] { portClosed(); }, Qt::QueuedConnection);
     QObject::connect(worker, &FlashWorker::portLost, q, [this] {
@@ -120,6 +121,10 @@ QStringList FcFlashService::versions() const
 int FcFlashService::versionIndex() const { return d_->version; }
 QStringList FcFlashService::candidates() const { return d_->candidateNames; }
 int FcFlashService::candidateIndex() const { return d_->candidate; }
+QString FcFlashService::usbName() const { return d_->usb.usbName; }
+BoardMatch FcFlashService::matchKind() const { return d_->match.kind; }
+QList<int> FcFlashService::matchedCandidates() const { return d_->match.matched; }
+QVariantList FcFlashService::otherBoards() const { return d_->otherBoardList; }
 bool FcFlashService::listLoading() const { return d_->loading || d_->imageBusy || !d_->download.isNull(); }
 bool FcFlashService::listFailed() const { return d_->listError; }
 bool FcFlashService::canContinue() const

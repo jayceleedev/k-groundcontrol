@@ -1,3 +1,4 @@
+// [0.4.1 5.1] specs/features/0.4.1-board-match.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.1 T4 T5 T13 T15 T16] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
@@ -6,6 +7,7 @@
 #include <kgc/app/log/Log.h>
 #include "Events.h"
 #include "LinkManagerPrivate.h"
+#include "UsbName.h"
 #include <QFile>
 #include <QSerialPortInfo>
 #include <algorithm>
@@ -43,9 +45,17 @@ void LinkManager::refreshPorts()
 }
 PortInfo LinkManager::portInfo(QString name)
 {
-    for (const auto& port : QSerialPortInfo::availablePorts())
-        if (port.portName() == name || port.systemLocation() == name)
-            return {port.manufacturer(), port.description()};
+    for (const auto& port : QSerialPortInfo::availablePorts()) {
+        if (port.portName() != name && port.systemLocation() != name) continue;
+#ifdef Q_OS_WIN
+        const auto usbName = usbNameWindows(port.portName());
+#elif defined(Q_OS_LINUX)
+        const auto usbName = usbNameFromSysfs(QStringLiteral("/sys"), port.portName());
+#else
+        const QString usbName;
+#endif
+        return {port.manufacturer(), port.description(), usbName};
+    }
     return {};
 }
 }

@@ -1,3 +1,4 @@
+// [0.4.1 6.4 T13] specs/features/0.4.1-board-match.md
 // [0.4.0 6.8] specs/features/0.4.0-sitl.md
 /** 시뮬레이션할 기체·배포판·홈·실행 값을 고르고 상태와 출력을 보여요.
  * 입력: SitlController의 상태와 입력값이에요.
@@ -30,6 +31,8 @@ Basic.ScrollView {
     }
     Column {
         width: Math.min(panel.availableWidth, 960 * Theme.uiScale)
+        // 패널 전체 폭의 가운데에 두되, 오른쪽 스크롤 여백 때문에 가로 스크롤이 생기지 않게 안쪽 폭에서 멈춰요.
+        x: Math.max(0, Math.min((panel.width - width) / 2 - panel.leftPadding, panel.availableWidth - width))
         spacing: Theme.panelInset
         Column {
             width: parent.width

@@ -27,7 +27,7 @@ jobs:
         shell: bash
         run: QT_ROOT="$QT_ROOT_DIR" cmake --preset windows-release
       - run: cmake --build --preset windows-release
-      - run: ctest --preset windows-release
+      - run: ctest --preset windows-release --output-on-failure
       - run: cmake --build build/windows-release --target package
       - uses: actions/upload-artifact@v7
         with:

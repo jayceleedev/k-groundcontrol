@@ -22,13 +22,21 @@ QString usbNameFromSysfs(const QString& sysRoot, const QString& ttyName)
     if (root.isEmpty() || ttyName.isEmpty()) return {};
     // device는 USB 인터페이스 폴더를 가리키는 링크라서 풀린 실제 경로에서 부모로 올라가요.
     auto folder = QFileInfo(sysRoot + QStringLiteral("/class/tty/") + ttyName + QStringLiteral("/device")).canonicalFilePath();
-    while (!folder.isEmpty() && folder.startsWith(root + '/')) {
+    // Windows 경로는 대소문자를 가리지 않아서 sysRoot 안인지도 대소문자 없이 봐요.
+#ifdef Q_OS_WIN
+    constexpr auto sensitivity = Qt::CaseInsensitive;
+#else
+    constexpr auto sensitivity = Qt::CaseSensitive;
+#endif
+    while (!folder.isEmpty() && folder.startsWith(root + '/', sensitivity)) {
         if (QFile::exists(folder + QStringLiteral("/idVendor"))) {
             QFile product(folder + QStringLiteral("/product"));
             if (!product.open(QIODevice::ReadOnly)) return {};
             return QString::fromUtf8(product.readAll()).trimmed();
         }
-        folder = QFileInfo(folder).path();
+        const auto parent = QFileInfo(folder).path();
+        if (parent == folder) break;
+        folder = parent;
     }
     return {};
 }

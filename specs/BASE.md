@@ -201,7 +201,7 @@ k-groundcontrol/
 | 미션 `.plan`(QGC v1 호환), `.waypoints` 읽기, KML 내보내기, KML/SHP 가져오기, 명령 카탈로그 JSON | `features/mission`, `resources/data/mission/` | `specs/formats/plan.md`, `mission-commands.md` |
 | 기체 구성도 `.kgclayout.json` + `.params` 묶음, 실루엣 | `features/layout`, `resources/silhouettes/` | `specs/formats/layout.md` |
 | PX4 보드 ID 표 `px4-boards.json`(출처 PX4 `firmware.prototype`, BSD-3; 항목의 `names`는 PX4 v1.17.0 `CONFIG_CDCACM_PRODUCTSTR`, BSD-3) | `features/fcFlash`, `resources/data/fcflash/` | 0.2.0, 0.4.1 스펙 |
-| 파라미터 파일(QGC 형식 + MP 2열 읽기), 묶음 이름·작업 단위 묶음 정의(펌웨어·버전별), PX4 해시 캐시 | `features/params`, `resources/data/params/` | `specs/formats/params.md`, `taskset.md` |
+| 파라미터 파일(QGC 형식 + MP 2열 읽기), 작업 단위 묶음 정의(펌웨어·버전별), PX4 해시 캐시(묶음 제목은 플러그인의 표, §8) | `features/params`, `resources/data/params/` | `specs/formats/params.md`, `taskset.md` |
 | 비행 전 점검표 정의 | `features/preflight`, `resources/data/preflight/` | `specs/formats/preflight.md` |
 | 텔레메트리 로그 `.tlog`(8바이트 BE µs + 패킷), CSV 텔레메트리 | `platform/comm/tlog` | `specs/formats/tlog.md` |
 | 기체 로그 `.ulg` `.bin` 읽기 | `features/logs` | `specs/formats/onboard-log.md` |
@@ -216,7 +216,7 @@ k-groundcontrol/
 
 - 자리 `platform/vehicle/firmware/`: `api/kgc/vehicle/firmware/FirmwarePlugin.h`, `internal/{px4,ardupilot,generic}/`.
 - **선택**: **compid 1이고 `autopilot ≠ MAV_AUTOPILOT_INVALID`인 첫 HEARTBEAT**로 `FirmwarePluginFactory`가 고른다(짐벌·컴패니언 하트비트는 거른다). 모르는 autopilot이면 `generic`. 그 뒤 바꾸지 않으며, 값이 바뀌면 기체를 새로 만든다.
-- **내놓는 것**: 기능 비트마스크 초기값과 단계별 보강 규칙; 모드 표(id ↔ 표시 이름); 이륙·일시정지·고도 변경·속도 변경의 **`CommandStep` 목록**(어떤 메시지를 어떤 순서로, 어떤 ACK를 기다리는지 — 실행은 기능 모듈); 시동 불가 사유 해석 함수(PX4 events / AP PreArm 텍스트 → 사유 목록); 파라미터 메타데이터 출처와 이름 바꿈표, 값 인코딩(`ParamEncoding`), 묶음 이름(`paramGroup`·`paramGroupTitle`), 파일 건너뛰기 목록(`paramFileSkip`); 미션 번호 규칙(PX4 홈 없음); 보정 방식 기술자(STATUSTEXT 파싱 / 역방향 명령); 구성도 대응표(R-D33); AI 거부 목록(R-D5 ⑥); 지원 버전 범위(D17); 고도 틀 값(`AltitudeFrame` — `app/geo/Altitude`는 펌웨어를 모르고 frame을 인자로 받는다, R-N11).
+- **내놓는 것**: 기능 비트마스크 초기값과 단계별 보강 규칙; 모드 표(id ↔ 표시 이름); 이륙·일시정지·고도 변경·속도 변경의 **`CommandStep` 목록**(어떤 메시지를 어떤 순서로, 어떤 ACK를 기다리는지 — 실행은 기능 모듈); 시동 불가 사유 해석 함수(PX4 events / AP PreArm 텍스트 → 사유 목록); 파라미터 메타데이터 출처와 이름 바꿈표, 값 인코딩(`ParamEncoding`), 묶음 제목(`paramGroupTitle`, 첫 단계 가지 접두어 → 제목), 파일 건너뛰기 목록(`paramFileSkip`); 미션 번호 규칙(PX4 홈 없음); 보정 방식 기술자(STATUSTEXT 파싱 / 역방향 명령); 구성도 대응표(R-D33); AI 거부 목록(R-D5 ⑥); 지원 버전 범위(D17); 고도 틀 값(`AltitudeFrame` — `app/geo/Altitude`는 펌웨어를 모르고 frame을 인자로 받는다, R-N11).
 - 플러그인은 **실행하지 않는다**(기체에 보내지 않고 상태를 쓰지 않는다). 기능 모듈이 `plugin.takeoffSteps()`를 받아 §9.2의 VehicleSender로 보낸다.
 - 검사: `vehicle/firmware/` 밖에서 `MAV_AUTOPILOT_PX4`·`MAV_AUTOPILOT_ARDUPILOTMEGA` 비교, `"PX4"`·`"ArduPilot"`·`"APM"` 문자열 비교를 잡되 **허용 목록**: `features/fcFlash`(펌웨어 선택 화면), `features/logs`(.ulg/.bin), `features/params`(메타데이터 출처 표시), 번역 파일. 기능 모듈 안에 펌웨어 이름의 하위 폴더는 금지.
 
@@ -364,6 +364,8 @@ k-groundcontrol/
 | 작업 | `Job` | §9.4 |
 | 서비스 / 컨트롤러 / 패널 / 메뉴 | `Service` / `Controller` / `Panel` / `Menu` | |
 | 파라미터 / 묶음(계열) / 작업 단위 묶음 | `Param` / `ParamGroup` / `TaskSet` | |
+| 파라미터 트리 / 마디 / 가지 / 잎 / 접두어 / 펼침 / 펼침 표시 / 첫 단계 / 전체(줄) / 묶음 제목 | `ParamTree` / `ParamNode` / `branch` / `leaf` / `prefix` / `expanded` / `paramsNodeToggle_`(objectName 접두) / `depth` 0 / `"*"` / `paramGroupTitle` | 0.4.2 |
+| 파라미터 트리 낱말 | `buildParamTree` / `underParamNode` / `visibleParamNodes` / `paramNodeText` / `ParamTreeModel` / `setNames` / `toggle` / `expandTo` / `collapseAll` / `contains` / `isExpanded` / `key`·`depth`·`count`(마디 필드·역할) / `tree` / `nodeKey` / `setNodeKey` / `toggleNode` / `nodeLabel` / `paramsNode_`(objectName 접두) / `paramTreeIndent` / `paramTreeRowHeight` | 0.4.2 |
 | 대기값 / 파라미터 설명 데이터 / 파일 비교 | `pending` / `ParamMeta` / `FileDiff` | |
 | 미션 / 미션 편집기 / 유도 명령 | `Mission` / `MissionEditor` / `GuidedAction` | |
 | 시동 / 해제 / 비상 정지 / 길게 눌러 확인 | `Arm` / `Disarm` / `EmergencyStop` / `HoldToConfirm` | |
@@ -473,3 +475,4 @@ k-groundcontrol/
 | 2026-11-03 | 사용자 | 0.3.0 스펙과 함께 승인(§10): §3.1 `params` 혼합 수명, §8 플러그인 파라미터 항목, §13 용어 |
 | 2026-11-03 | 사용자 | 0.4.0 스펙과 함께 승인(§10): §3.1·§3.2 기능 `sitl`(순위 5, 좌 메뉴 2, 뒤 메뉴 번호 하나씩 밀림), §4 파일 자리 `cache/sitl`·`sitl`, §9.3 다른 프로그램 실행, §13 용어 |
 | 2026-11-05 | 사용자 | 0.4.1 스펙 초안 2와 함께 승인(§10): §7 `px4-boards.json`의 `names`, §9.3 Windows SetupAPI는 `comm/links/serial`만, §13 보드 이름 맞추기 낱말 |
+| 2026-11-25 | 사용자 | 0.4.2 스펙 초안 2와 함께 승인(§10): §7 묶음 이름 데이터 파일 뺌, §8 `paramGroup` 뺌·`paramGroupTitle`은 첫 단계 접두어의 제목, §13 파라미터 트리 낱말 |

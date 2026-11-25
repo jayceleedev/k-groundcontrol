@@ -2343,10 +2343,6 @@
         <source>전체</source>
         <translation>All</translation>
     </message>
-    <message>
-        <source>기타</source>
-        <translation>Other</translation>
-    </message>
 </context>
 <context>
     <name>ParamRow</name>

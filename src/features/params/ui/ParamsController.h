@@ -1,3 +1,4 @@
+// [0.4.2 5.5] specs/features/0.4.2-param-tree.md
 // [0.3.0 6.8 6.8-1] specs/features/0.3.0-params.md
 #pragma once
 #include <kgc/params/ParamService.h>
@@ -10,9 +11,10 @@
 class QAbstractItemModel;
 namespace kgc::params {
 class ParamsFilterModel;
+class ParamTreeModel;
 /** 활성 기체의 파라미터를 QML에 옮기고 서비스를 불러요.
  * 입력: 기체 등록부이며, activeChanged마다 ParamService::of(active)에 다시 묶어요.
- * 출력: 표 모델과 표시값, 토스트 글자예요. 판정은 서비스가 맡아요.
+ * 출력: 표 모델과 왼쪽 파라미터 트리, 표시값, 토스트 글자예요. 판정은 서비스가 맡아요.
  * 실패: 실패는 toast로 알려요.
  * 흐름(쓰기):
  * 1. writeCheck — ParamService::writeDecision으로 쓸 수 있는지 봐요.
@@ -35,8 +37,8 @@ class ParamsController : public QObject {
     Q_PROPERTY(bool rebootNeeded READ rebootNeeded NOTIFY stateChanged)
     Q_PROPERTY(int receivedCount READ receivedCount NOTIFY stateChanged)
     Q_PROPERTY(int totalCount READ totalCount NOTIFY stateChanged)
-    Q_PROPERTY(QVariantList groups READ groups NOTIFY groupsChanged)
-    Q_PROPERTY(QString groupKey READ groupKey WRITE setGroupKey NOTIFY filterChanged)
+    Q_PROPERTY(QAbstractItemModel* tree READ tree CONSTANT)
+    Q_PROPERTY(QString nodeKey READ nodeKey WRITE setNodeKey NOTIFY filterChanged)
     Q_PROPERTY(QString searchText READ searchText WRITE setSearchText NOTIFY filterChanged)
     Q_PROPERTY(bool pendingOnly READ pendingOnly WRITE setPendingOnly NOTIFY filterChanged)
     Q_PROPERTY(bool nonDefaultOnly READ nonDefaultOnly WRITE setNonDefaultOnly NOTIFY filterChanged)
@@ -75,12 +77,19 @@ public:
     int receivedCount() const;
     /** 입력: 없어요. 출력: 전체 수예요. 실패: 없어요. */
     int totalCount() const;
-    /** 입력: 없어요. 출력: 전체·묶음·기타 순서의 {key, count} 목록이에요. 실패: 없어요. */
-    QVariantList groups() const;
-    /** 입력: 없어요. 출력: 고른 묶음 키예요. 실패: 없어요. */
-    QString groupKey() const;
-    /** 입력: 묶음 키 key예요. 출력: 표를 다시 걸러요. 실패: 없어요. */
-    void setGroupKey(const QString& key);
+    /** 입력: 없어요. 출력: 왼쪽 파라미터 트리의 보이는 줄 모델(ParamTreeModel)이에요. 실패: 없어요. */
+    QAbstractItemModel* tree() const;
+    /** 입력: 없어요. 출력: 고른 마디의 key이며 처음 값은 전체 "*"예요. 실패: 없어요. */
+    QString nodeKey() const;
+    /** 트리의 마디를 골라 표를 그 마디로 걸러요.
+     * 입력: 마디 key예요. "*"는 전체예요.
+     * 출력: 고른 줄과 표가 바뀌어요. 가지를 골라도 펼치지는 않아요.
+     * 실패: 같은 key면 아무것도 하지 않아요.
+     * 흐름:
+     * 1. ParamsFilterModel::setNodeKey — underParamNode가 거짓인 행을 숨기도록 표를 다시 걸러요.
+     * 2. filterChanged — 고른 줄의 바탕과 보이는 행 수를 다시 읽게 해요.
+     */
+    void setNodeKey(const QString& key);
     /** 입력: 없어요. 출력: 검색어예요. 실패: 없어요. */
     QString searchText() const;
     /** 입력: 검색어 text예요. 출력: 표를 다시 걸러요. 실패: 없어요. */
@@ -107,8 +116,22 @@ public:
     QUrl saveFolder() const;
     /** 입력: 없어요. 출력: 저장 대화상자의 기본 파일이에요. 실패: 없어요. */
     QUrl saveFileUrl() const;
-    /** 묶음 줄의 글자를 만들어요. 입력: 묶음 key예요. 출력: "제목 (묶음)" 또는 묶음 이름이에요. 실패: 없어요. */
-    Q_INVOKABLE QString groupLabel(const QString& key) const;
+    /** 가지의 펼침을 뒤집어요.
+     * 입력: 마디 key예요.
+     * 출력: 가지면 자식 줄이 나오거나 사라져요. 접은 가지 아래에 고른 마디가 있었으면 그 가지를 골라요.
+     * 실패: 가지가 아니면 아무것도 하지 않아요.
+     * 흐름:
+     * 1. ParamTreeModel::toggle — 펼침을 뒤집고 늘거나 준 줄을 목록에 알려요.
+     * 2. 접혔고 고른 마디가 그 가지 아래면 setNodeKey(key) — 고른 줄이 숨지 않도록 표를 그 가지로 걸러요.
+     */
+    Q_INVOKABLE void toggleNode(const QString& key);
+    /** 트리 줄의 글자를 만들어요.
+     * 입력: 마디 key와 깊이 depth예요.
+     * 출력: 첫 단계 가지는 FirmwarePlugin::paramGroupTitle이 있으면 "제목 (접두어)", 없으면 접두어예요.
+     *       그 밖의 가지는 접두어 전체, 잎은 이름 전체예요. 기체가 없으면 paramNodeText(key)예요.
+     * 실패: 없어요.
+     */
+    Q_INVOKABLE QString nodeLabel(const QString& key, int depth) const;
     /** 입력한 값을 검사해요.
      * 입력: 파라미터 이름 name과 글자 text예요.
      * 출력: {unchanged, error, ask, range, value}이에요. ask가 참이면 범위 밖이라 물어봐야 해요.
@@ -208,8 +231,6 @@ signals:
     void paramCountChanged();
     /** 입력: 없어요. 출력: 대기값 수를 다시 읽도록 알려요. 실패: 없어요. */
     void pendingChanged();
-    /** 입력: 없어요. 출력: 묶음 목록을 다시 읽도록 알려요. 실패: 없어요. */
-    void groupsChanged();
     /** 입력: 없어요. 출력: 거름 조건을 다시 읽도록 알려요. 실패: 없어요. */
     void filterChanged();
     /** 입력: 없어요. 출력: 고른 행을 다시 읽도록 알려요. 실패: 없어요. */
@@ -227,9 +248,10 @@ private:
     const ParamMeta* meta(const QString& name) const;
     kgc::vehicle::registry::VehicleRegistry& vehicles_;
     ParamsFilterModel* filter_;
+    ParamTreeModel* tree_;
     QPointer<kgc::vehicle::registry::Vehicle> vehicle_;
     QPointer<ParamService> service_;
-    QString groupKey_ = QStringLiteral("*");
+    QString nodeKey_ = QStringLiteral("*");
     QString searchText_;
     QString selectedName_;
     bool pendingOnly_ = false;

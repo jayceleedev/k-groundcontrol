@@ -1,3 +1,4 @@
+// [0.4.2 5.1] specs/features/0.4.2-param-tree.md
 // [0.3.0 5.2] specs/features/0.3.0-params.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
@@ -10,8 +11,7 @@ public:
     QList<StreamRequest> streamRequests() const override;
     ParamEncoding paramEncoding() const override;
     ParamMetadataSource paramMetadataSource(int mavType, const QString& version) const override;
-    QString paramGroup(const QString& name, const QString& metadataGroup) const override;
-    QString paramGroupTitle(const QString& group) const override;
+    QString paramGroupTitle(const QString& prefix) const override;
     QStringList paramFileSkip() const override;
 };
 }

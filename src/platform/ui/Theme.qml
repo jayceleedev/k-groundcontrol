@@ -1,3 +1,4 @@
+// [0.4.2 6.4] specs/features/0.4.2-param-tree.md
 // [0.3.0 6.8 6.8-1] specs/features/0.3.0-params.md
 // [0.1.0 T14] specs/features/0.1.0-link.md
 // [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
@@ -124,10 +125,13 @@ QtObject {
     readonly property int attitudeHeadingTapeHeight: Math.round(20 * uiScale)
     // 띠 가운데 숫자 상자의 높이예요.
     readonly property int attitudeReadoutHeight: Math.round(18 * uiScale)
-    // 수동 기체 설정 패널의 묶음 목록·단추 칸 너비와 표 행 높이예요. 행 높이는 값 편집기가 들어갈 만큼이에요.
-    readonly property int paramGroupWidth: Math.round(190 * uiScale)
+    // 수동 기체 설정 패널의 파라미터 트리·단추 칸 너비와 표 행 높이예요. 행 높이는 값 편집기가 들어갈 만큼이에요.
+    readonly property int paramGroupWidth: Math.round(240 * uiScale)
     readonly property int paramActionsWidth: Math.round(130 * uiScale)
     readonly property int paramRowHeight: Math.round(34 * uiScale)
+    // 파라미터 트리의 한 단계 들여쓰기와 줄 높이예요. 트리 줄은 표 행보다 낮아요.
+    readonly property int paramTreeIndent: Math.round(14 * uiScale)
+    readonly property int paramTreeRowHeight: Math.round(26 * uiScale)
     // 수동 기체 설정 표의 열 너비예요. 남는 폭은 설명 열이 써요.
     readonly property int paramNameWidth: Math.round(220 * uiScale)
     readonly property int paramValueWidth: Math.round(130 * uiScale)

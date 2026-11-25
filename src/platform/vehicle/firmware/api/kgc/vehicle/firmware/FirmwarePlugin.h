@@ -1,3 +1,4 @@
+// [0.4.2 5.1] specs/features/0.4.2-param-tree.md
 // [0.3.0 5.2] specs/features/0.3.0-params.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
@@ -32,8 +33,8 @@ enum class ParamMetadataFormat { None, Flat, Grouped };
  */
 struct ParamMetadataSource { ParamMetadataFormat format; QList<QUrl> urls; QString cacheName; };
 /** 펌웨어별 표시와 스트림 요청, 파라미터 규칙 데이터를 제공해요.
- * 입력: 모드 조회의 customMode·mavType과 파라미터 이름·기체 종류·버전이에요.
- * 출력: 공식 펌웨어·모드 이름, 초기 스트림 요청 목록, 파라미터 값 방식·메타데이터 출처·묶음 규칙이에요.
+ * 입력: 모드 조회의 customMode·mavType과 첫 단계 가지의 접두어·기체 종류·버전이에요.
+ * 출력: 공식 펌웨어·모드 이름, 초기 스트림 요청 목록, 파라미터 값 방식·메타데이터 출처·묶음 제목이에요.
  * 실패: 모르는 모드 이름은 빈 문자열로 돌려줘요.
  */
 class FirmwarePlugin {
@@ -74,18 +75,12 @@ public:
  * 실패: 모르는 기체 종류나 읽을 수 없는 버전은 None이에요.
  */
     virtual ParamMetadataSource paramMetadataSource(int mavType, const QString& version) const = 0;
-/** 파라미터가 속할 묶음 이름을 정해요.
- * 입력: 파라미터 이름 name과 메타데이터의 묶음 metadataGroup이에요.
- * 출력: 묶음 이름이며, 정할 수 없으면 빈 문자열이에요.
+/** 파라미터 트리 첫 단계 가지의 사람이 읽는 묶음 제목을 돌려줘요.
+ * 입력: 첫 단계 가지의 접두어 그대로인 prefix예요(BATT, BATT2, EK3, SERVO5).
+ * 출력: 현재 언어의 제목이며, 제목이 없으면 빈 문자열이에요. ArduPilot은 끝의 숫자를 모두 뗀 접두어로 표에서 찾아요.
  * 실패: 없어요.
  */
-    virtual QString paramGroup(const QString& name, const QString& metadataGroup) const = 0;
-/** 묶음의 사람이 읽는 제목을 돌려줘요.
- * 입력: 묶음 이름 group이에요.
- * 출력: 현재 언어의 제목이며, 제목이 없으면 빈 문자열이에요.
- * 실패: 없어요.
- */
-    virtual QString paramGroupTitle(const QString& group) const = 0;
+    virtual QString paramGroupTitle(const QString& prefix) const = 0;
 /** 파일 비교에서 건너뛸 파라미터 이름을 돌려줘요.
  * 입력: 없어요.
  * 출력: 기체 고유 값이나 계수처럼 파일에서 올리면 안 되는 이름 목록이에요.

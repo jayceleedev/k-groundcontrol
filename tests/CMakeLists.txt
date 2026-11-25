@@ -114,7 +114,7 @@ target_link_libraries(test_pick_candidate PRIVATE kgc_fcFlash Qt6::Test)
 add_test(NAME pick_candidate COMMAND test_pick_candidate)
 
 # [0.3.0 T1–T8] specs/features/0.3.0-params.md
-foreach(name T1_param_codec T2_param_value T3_param_file T4_param_metadata T5_param_gap T6_param_search T7_param_group)
+foreach(name T1_param_codec T2_param_value T3_param_file T4_param_metadata T5_param_gap T6_param_search)
     qt_add_executable(test_${name} test_${name}.cpp)
     target_include_directories(test_${name} PRIVATE "${PROJECT_SOURCE_DIR}/src/features/params/internal")
     target_link_libraries(test_${name} PRIVATE kgc_params kgc_comm_mavlink Qt6::Test)
@@ -152,3 +152,13 @@ qt_add_executable(test_T5_usb_name_sysfs test_T5_usb_name_sysfs.cpp)
 target_include_directories(test_T5_usb_name_sysfs PRIVATE "${PROJECT_SOURCE_DIR}/src/platform/comm/links/serial")
 target_link_libraries(test_T5_usb_name_sysfs PRIVATE kgc_comm_links Qt6::Test)
 add_test(NAME T5_usb_name_sysfs COMMAND test_T5_usb_name_sysfs)
+
+# [0.4.2 T1–T6] specs/features/0.4.2-param-tree.md
+qt_add_executable(test_T1_param_tree test_T1_param_tree.cpp)
+target_include_directories(test_T1_param_tree PRIVATE "${PROJECT_SOURCE_DIR}/src/features/params/internal")
+target_link_libraries(test_T1_param_tree PRIVATE kgc_params Qt6::Test)
+target_compile_definitions(test_T1_param_tree PRIVATE KGC_TEST_DATA="${CMAKE_CURRENT_SOURCE_DIR}/data/params")
+add_test(NAME T1_param_tree COMMAND test_T1_param_tree)
+qt_add_executable(test_T6_param_group_title test_T6_param_group_title.cpp)
+target_link_libraries(test_T6_param_group_title PRIVATE kgc_vehicle_firmware Qt6::Test)
+add_test(NAME T6_param_group_title COMMAND test_T6_param_group_title)

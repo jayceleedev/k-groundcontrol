@@ -1,3 +1,4 @@
+// [0.4.2 5.3] specs/features/0.4.2-param-tree.md
 // [0.3.0 5.5 6.8-1] specs/features/0.3.0-params.md
 #pragma once
 #include <kgc/params/ParamMeta.h>
@@ -10,8 +11,8 @@
 namespace kgc::params {
 class ParamService;
 /** 표의 한 행이에요.
- * 입력: PARAM_VALUE에서 온 이름·값·형과 사용자의 대기값, 계산한 묶음이에요.
- * 출력: 이름, FC 값 value, MAV_PARAM_TYPE 번호 type, 대기값 pending, 묶음 group이에요.
+ * 입력: PARAM_VALUE에서 온 이름·값·형과 사용자의 대기값이에요.
+ * 출력: 이름, FC 값 value, MAV_PARAM_TYPE 번호 type, 대기값 pending이에요. 왼쪽 트리는 이름만으로 만들어요.
  * 실패: 없어요.
  */
 struct Param {
@@ -19,7 +20,6 @@ struct Param {
     double value = 0.0;
     std::uint8_t type = 0;
     std::optional<double> pending;
-    QString group;
 };
 /** 기체의 파라미터 값 전체와 메타데이터를 드는 유일한 묶음이에요(BASE §5).
  * 입력: ParamService만 쓰는 쓰기 함수예요.
@@ -33,7 +33,7 @@ public:
     enum Role {
         NameRole = Qt::UserRole + 1, ValueRole, ValueTextRole, TypeRole, PendingRole, PendingTextRole,
         HasPendingRole, IsDefaultRole, HasDefaultRole, DefaultTextRole, UnitsRole, RangeTextRole,
-        OptionTextRole, TitleRole, DescriptionRole, GroupRole, ReadOnlyRole, RebootRequiredRole, KindRole
+        OptionTextRole, TitleRole, DescriptionRole, ReadOnlyRole, RebootRequiredRole, KindRole
     };
 /** 빈 표를 만들어요.
  * 입력: 수명을 함께할 parent예요.
@@ -96,9 +96,9 @@ signals:
  * 실패: 없어요.
  */
     void pendingCountChanged();
-/** 묶음 구성이 바뀌었음을 알려요.
- * 입력: 없어요.
- * 출력: 행의 group을 다시 읽도록 알려요.
+/** 이름 목록이 바뀌어 트리를 다시 만들 때가 됐음을 알려요.
+ * 입력: 없어요. ParamService가 내려받기가 끝났을 때와, 내려받기 밖에서 행이 늘고 잠시 지났을 때 내요.
+ * 출력: 화면이 all()의 이름으로 파라미터 트리를 다시 만들도록 알려요.
  * 실패: 없어요.
  */
     void groupsChanged();
@@ -113,10 +113,9 @@ private:
     friend class ParamService;
     int lowerBound(const QString& name) const;
     int rowOf(const QString& name) const;
-    bool store(const QString& name, double value, std::uint8_t type, const QString& group);
+    bool store(const QString& name, double value, std::uint8_t type);
     void setPending(const QString& name, std::optional<double> pending);
     void setMetadata(QHash<QString, ParamMeta> metadata);
-    void setGroups(const QStringList& groups);
     void removeExcept(const QSet<QString>& names);
     void touch(int row);
     QList<Param> rows_;

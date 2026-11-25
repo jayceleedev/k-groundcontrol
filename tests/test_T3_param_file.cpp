@@ -52,9 +52,9 @@ private slots:
     /** T3: 쓴 파일을 다시 읽으면 값이 같고, 대기값은 들어가지 않으며 이름은 자연순이에요. */
     void test_T3_round_trip()
     {
-        const QList<Param> rows{{"RC10_MIN", 1000, MAV_PARAM_TYPE_INT16, 5.0, {}},
-                                {"RC2_MIN", 1100, MAV_PARAM_TYPE_INT16, std::nullopt, {}},
-                                {"BAT1_V_CHARGED", 4.05F, MAV_PARAM_TYPE_REAL32, std::nullopt, {}}};
+        const QList<Param> rows{{"RC10_MIN", 1000, MAV_PARAM_TYPE_INT16, 5.0},
+                                {"RC2_MIN", 1100, MAV_PARAM_TYPE_INT16, std::nullopt},
+                                {"BAT1_V_CHARGED", 4.05F, MAV_PARAM_TYPE_REAL32, std::nullopt}};
         const auto bytes = writeParamFile({7, "PX4", 2, "1.15.2"}, rows);
         QVERIFY(bytes.startsWith("# Onboard parameters for Vehicle 7\n#\n# Stack: PX4\n# Vehicle: 2\n# Version: 1.15.2\n#\n"
                                  "# Vehicle-Id\tComponent-Id\tName\tValue\tType\n7\t1\tBAT1_V_CHARGED\t4.05\t9\n"));
@@ -68,7 +68,7 @@ private slots:
     /** T2: 파일에도 큰 실수가 지수 표기 없이 들어가요. */
     void test_T2_file_uses_fixed_notation()
     {
-        const auto bytes = writeParamFile({1, "ArduPilot", 2, "4.7.2"}, {{"ATC_ACCEL_MAX", 100000, MAV_PARAM_TYPE_REAL32, std::nullopt, {}}});
+        const auto bytes = writeParamFile({1, "ArduPilot", 2, "4.7.2"}, {{"ATC_ACCEL_MAX", 100000, MAV_PARAM_TYPE_REAL32, std::nullopt}});
         QVERIFY(bytes.endsWith("1\t1\tATC_ACCEL_MAX\t100000\t9\n"));
     }
 };

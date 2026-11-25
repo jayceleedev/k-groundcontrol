@@ -1,3 +1,4 @@
+# [0.4.2 6.4] specs/features/0.4.2-param-tree.md
 # [0.3.0 5.5] specs/features/0.3.0-params.md
 file(GLOB headers CONFIGURE_DEPENDS api/kgc/params/*.h)
 file(GLOB internal_sources CONFIGURE_DEPENDS internal/*.h internal/*.cpp)
@@ -11,7 +12,7 @@ qt_add_qml_module(kgc_params STATIC URI Kgc.Params
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qml/Kgc/Params"
     QML_FILES ${qml_files}
     SOURCES ${headers} ${internal_sources} ui/ParamsController.h ui/ParamsController.cpp
-        ui/ParamsFilterModel.h ui/ParamsFilterModel.cpp ui/register.cpp)
+        ui/ParamsFilterModel.h ui/ParamsFilterModel.cpp ui/ParamTreeModel.h ui/ParamTreeModel.cpp ui/register.cpp)
 target_include_directories(kgc_params PUBLIC api PRIVATE internal ui api/kgc/params)
 target_link_libraries(kgc_params PUBLIC kgc_app_errors kgc_app_job kgc_ui kgc_vehicle_registry kgc_vehicle_firmware
     kgc_vehicle_safety

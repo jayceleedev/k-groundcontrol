@@ -1,3 +1,4 @@
+// [0.4.2 T6] specs/features/0.4.2-param-tree.md
 // [0.3.0 5.2 6.3 7.1] specs/features/0.3.0-params.md
 #include "ArduPilotPlugin.h"
 #include <kgc/comm/mavlink/Mavlink.h>
@@ -85,19 +86,13 @@ ParamMetadataSource ArduPilotPlugin::paramMetadataSource(int mavType, const QStr
                              .arg(family, major).arg(candidate)));
     return {ParamMetadataFormat::Grouped, urls, QStringLiteral("%1-%2.%3").arg(family, major).arg(minor)};
 }
-QString ArduPilotPlugin::paramGroup(const QString& name, const QString& metadataGroup) const
+QString ArduPilotPlugin::paramGroupTitle(const QString& prefix) const
 {
-    if (metadataGroup == QStringLiteral("Lua Script")) return metadataGroup;
-    const auto end = name.indexOf('_');
-    if (end < 0) return {};
-    auto prefix = name.left(end);
-    while (!prefix.isEmpty() && prefix.back().isDigit()) prefix.chop(1);
-    return prefix;
-}
-QString ArduPilotPlugin::paramGroupTitle(const QString& group) const
-{
+    // 숫자 인스턴스(BATT2, EK3, SERVO5)도 같은 제목을 받도록 끝의 숫자를 모두 뗀 뒤 표에서 찾아요.
+    auto stem = prefix;
+    while (!stem.isEmpty() && stem.back().isDigit()) stem.chop(1);
     for (const auto& [key, title] : kGroupTitles)
-        if (group == QLatin1StringView(key)) return QCoreApplication::translate("ParamGroup", title);
+        if (stem == QLatin1StringView(key)) return QCoreApplication::translate("ParamGroup", title);
     return {};
 }
 QStringList ArduPilotPlugin::paramFileSkip() const

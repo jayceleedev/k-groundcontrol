@@ -1,3 +1,4 @@
+// [0.4.2 5.3] specs/features/0.4.2-param-tree.md
 // [0.3.0 5.5 6.3 6.4 6.8-1] specs/features/0.3.0-params.md
 #include <kgc/params/Params.h>
 #include "ParamSearch.h"
@@ -81,7 +82,6 @@ QVariant Params::data(const QModelIndex& index, int role) const
     case PendingRole: return row.pending ? QVariant(*row.pending) : QVariant{};
     case PendingTextRole: return row.pending ? formatValue(*row.pending, row.type) : QString{};
     case HasPendingRole: return row.pending.has_value();
-    case GroupRole: return row.group;
     default: return metaRole(row, meta(row.name), role);
     }
 }
@@ -91,7 +91,7 @@ QHash<int, QByteArray> Params::roleNames() const
             {PendingRole, "pending"}, {PendingTextRole, "pendingText"}, {HasPendingRole, "hasPending"},
             {IsDefaultRole, "isDefault"}, {HasDefaultRole, "hasDefault"}, {DefaultTextRole, "defaultText"},
             {UnitsRole, "units"}, {RangeTextRole, "rangeText"}, {OptionTextRole, "optionText"}, {TitleRole, "title"},
-            {DescriptionRole, "description"}, {GroupRole, "group"}, {ReadOnlyRole, "readOnly"},
+            {DescriptionRole, "description"}, {ReadOnlyRole, "readOnly"},
             {RebootRequiredRole, "rebootRequired"}, {KindRole, "kind"}};
 }
 int Params::lowerBound(const QString& name) const
@@ -125,7 +125,7 @@ bool Params::eventFilter(QObject* watched, QEvent* event)
     return false;
 }
 void Params::touch(int row) { emit dataChanged(index(row), index(row)); }
-bool Params::store(const QString& name, double value, std::uint8_t type, const QString& group)
+bool Params::store(const QString& name, double value, std::uint8_t type)
 {
     const int position = lowerBound(name);
     if (position < rows_.size() && rows_[position].name == name) {
@@ -142,7 +142,7 @@ bool Params::store(const QString& name, double value, std::uint8_t type, const Q
         return false;
     }
     beginInsertRows({}, position, position);
-    rows_.insert(position, Param{name, value, type, std::nullopt, group});
+    rows_.insert(position, Param{name, value, type, std::nullopt});
     endInsertRows();
     return true;
 }
@@ -163,13 +163,6 @@ void Params::setMetadata(QHash<QString, ParamMeta> metadata)
     metadata_ = std::move(metadata);
     hasDefaults_ = std::any_of(metadata_.cbegin(), metadata_.cend(), [](const ParamMeta& meta) { return meta.defaultValue.has_value(); });
     if (!rows_.isEmpty()) emit dataChanged(index(0), index(rows_.size() - 1));
-}
-void Params::setGroups(const QStringList& groups)
-{
-    Q_ASSERT(groups.size() == rows_.size());
-    for (qsizetype i = 0; i < rows_.size(); ++i) rows_[i].group = groups[i];
-    if (!rows_.isEmpty()) emit dataChanged(index(0), index(rows_.size() - 1), {GroupRole});
-    emit groupsChanged();
 }
 void Params::removeExcept(const QSet<QString>& names)
 {

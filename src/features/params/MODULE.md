@@ -1,11 +1,11 @@
 # params (기능 순위 8)
 역할: FC 파라미터 전체를 받아 보여 주고, 고쳐 쓰고, 파일로 옮겨요.
 수명: 혼합(전역 ParamRebootReconnect + 기체별 ParamService). Composition이 전역 하나를 만들고, vehicleAdded에서 ParamService를 만들어요. 서비스의 부모는 Vehicle이에요. 컨트롤러는 전역이고 activeChanged로 다시 묶어요.
-받는 것: LinkManager의 linkClosed·linkFailed, VehicleRegistry.vehicleAdded, Vehicle.messageReceived의 PARAM_VALUE, VehicleStates의 link·arming·capabilities, FirmwarePlugin의 paramEncoding·paramMetadataSource·paramGroup·paramGroupTitle·paramFileSkip, ArmedPolicy 판정.
+받는 것: LinkManager의 linkClosed·linkFailed, VehicleRegistry.vehicleAdded, Vehicle.messageReceived의 PARAM_VALUE, VehicleStates의 link·arming·capabilities, FirmwarePlugin의 paramEncoding·paramMetadataSource·paramGroupTitle(첫 단계 가지의 묶음 제목)·paramFileSkip, ArmedPolicy 판정.
 주는 것: ParamRebootReconnect(watch), ParamService(of·params·downloadState·metadataState·job·rebootNeeded·receivedCount·totalCount·refresh·setPending·clearPending·writeDecision·writePending·saveFile·compareFile·applyFile·reboot), Params 묶음, ParamMeta, Param, FileDiff, ParamStates(DownloadState·MetadataState), ParamError, errorText, registerUi.
 기여: 좌 메뉴 15번 수동 기체 설정 패널(묶음 4).
 의존: app/errors, app/job, app/log, app/net, app/paths, app/scheduler, comm/links, comm/mavlink, vehicle/registry, vehicle/firmware, vehicle/safety, vehicle/command, vehicle/outbound, ui.
-안 하는 것: MAVLink FTP, PX4 해시 캐시, 즐겨찾기, 공장 초기화, RC 연결, 다른 컴포넌트의 파라미터, 기체 없이 파일 보기, 백업 자동 삭제는 하지 않아요. 범위 밖 값을 물어보는 일은 화면이 해요. 토스트는 notify 모듈이 생길 때까지 패널 안에 있어요.
+안 하는 것: MAVLink FTP, PX4 해시 캐시, 즐겨찾기, 공장 초기화, RC 연결, 다른 컴포넌트의 파라미터, 기체 없이 파일 보기, 백업 자동 삭제는 하지 않아요. 트리의 펼침과 고른 마디는 앱을 다시 켜거나 기체가 새로 생기면 잊어요. 트리는 메타데이터 묶음을 쓰지 않아요. 범위 밖 값을 물어보는 일은 화면이 해요. 토스트는 notify 모듈이 생길 때까지 패널 안에 있어요.
 흐름(내려받기):
 1. ParamService 생성·링크 복귀 → autoRefresh — 시동 중이면 SkippedArmed로 두고 아니면 받아요.
 2. ParamDownload::start — PARAM_REQUEST_LIST를 보내요.
@@ -16,6 +16,11 @@
 2. ParamsController.write → ParamService::writePending — 전체 값을 백업해요.
 3. ParamWrite — 이름순으로 PARAM_SET을 보내고 돌아온 값을 확인해요.
 4. ParamService::writeFinished — 결과 토스트를 내요.
+흐름(트리):
+1. ParamService::regroup — 내려받기가 끝났을 때와 내려받기 밖에서 행이 늘고 잠시 지났을 때 Params::groupsChanged를 내요.
+2. ParamsController → ParamTreeModel::setNames — buildParamTree로 이름의 "_" 앞머리 트리를 다시 만들고 남은 가지의 펼침은 그대로 둬요.
+3. ParamGroups 줄 누름 → ParamsController.setNodeKey → ParamsFilterModel::setNodeKey — underParamNode로 표를 걸러요.
+4. 펼침 표시 누름 → ParamsController.toggleNode → ParamTreeModel::toggle — 자식 줄을 내거나 숨겨요.
 흐름(파일):
 1. ParamsController.openFile → ParamService::compareFile — 파일을 FC 값과 비교해요.
 2. ParamsController.applyFile → ParamService::applyFile — 고른 값을 대기값으로 올려요.

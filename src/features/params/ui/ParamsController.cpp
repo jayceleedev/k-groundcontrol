@@ -1,21 +1,32 @@
+// [0.4.2 5.5] specs/features/0.4.2-param-tree.md
 // [0.3.0 6.8 6.8-1] specs/features/0.3.0-params.md
 #include "ParamsController.h"
 #include "Constants.h"
 #include "ParamSearch.h"
+#include "ParamTree.h"
+#include "ParamTreeModel.h"
 #include "ParamValue.h"
 #include "ParamsFilterModel.h"
 #include <kgc/app/paths/Paths.h>
 #include <kgc/params/Errors.h>
 #include <kgc/vehicle/firmware/FirmwarePlugin.h>
 #include <QCoreApplication>
-#include <QHash>
 #include <algorithm>
 namespace kgc::params {
 namespace {
 QString text(const char* key) { return QCoreApplication::translate("Params", key); }
+// 트리는 Params가 드는 순서(자연순) 그대로의 이름으로 만들어요.
+QStringList paramNames(const Params* params)
+{
+    QStringList names;
+    if (!params) return names;
+    names.reserve(params->all().size());
+    for (const auto& entry : params->all()) names.append(entry.name);
+    return names;
+}
 }
 ParamsController::ParamsController(kgc::vehicle::registry::VehicleRegistry& vehicles)
-    : QObject(&vehicles), vehicles_(vehicles), filter_(new ParamsFilterModel(this))
+    : QObject(&vehicles), vehicles_(vehicles), filter_(new ParamsFilterModel(this)), tree_(new ParamTreeModel(this))
 {
     Q_ASSERT(!instance_);
     instance_ = this;
@@ -41,13 +52,15 @@ void ParamsController::rebind()
     vehicle_ = vehicles_.active();
     service_ = ParamService::of(vehicle_);
     filter_->setParams(service_ ? service_->params() : nullptr);
-    setGroupKey(QStringLiteral("*"));
+    // 기체가 바뀌면 같은 이름 목록이어도 처음 모습(모두 접힘, 전체 고름)으로 돌아가요.
+    tree_->collapseAll();
+    tree_->setNames(paramNames(service_ ? service_->params() : nullptr));
+    setNodeKey(QStringLiteral("*"));
     setSelectedName({});
     if (service_) bindService();
     watchJob();
     emit paramCountChanged();
     emit pendingChanged();
-    emit groupsChanged();
     emit selectedChanged();
 }
 void ParamsController::bindService()
@@ -63,7 +76,12 @@ void ParamsController::bindService()
     });
     auto* params = service_->params();
     connect(params, &Params::pendingCountChanged, this, &ParamsController::pendingChanged);
-    connect(params, &Params::groupsChanged, this, &ParamsController::groupsChanged);
+    connect(params, &Params::groupsChanged, this, [this, params] {
+        // 펼침은 남기고, 고른 마디가 없어졌으면 전체로, 남았으면 그 줄이 보이도록 조상을 펼쳐요.
+        tree_->setNames(paramNames(params));
+        if (!tree_->contains(nodeKey_)) setNodeKey(QStringLiteral("*"));
+        else tree_->expandTo(nodeKey_);
+    });
     connect(params, &QAbstractItemModel::dataChanged, this, &ParamsController::selectedChanged);
     connect(params, &QAbstractItemModel::rowsInserted, this, &ParamsController::paramCountChanged);
     connect(params, &QAbstractItemModel::rowsRemoved, this, &ParamsController::paramCountChanged);
@@ -108,26 +126,29 @@ kgc::app::job::Job* ParamsController::job() const { return service_ ? service_->
 bool ParamsController::rebootNeeded() const { return service_ && service_->rebootNeeded(); }
 int ParamsController::receivedCount() const { return service_ ? service_->receivedCount() : 0; }
 int ParamsController::totalCount() const { return service_ ? service_->totalCount() : 0; }
-QVariantList ParamsController::groups() const
+QAbstractItemModel* ParamsController::tree() const { return tree_; }
+QString ParamsController::nodeKey() const { return nodeKey_; }
+void ParamsController::setNodeKey(const QString& key)
 {
-    QHash<QString, int> counts;
-    if (service_)
-        for (const auto& entry : service_->params()->all()) ++counts[entry.group];
-    auto names = counts.keys();
-    names.removeAll(QString{});
-    std::sort(names.begin(), names.end(), naturalLess);
-    QVariantList result{QVariantMap{{"key", QStringLiteral("*")}, {"count", paramCount()}}};
-    for (const auto& name : names) result.append(QVariantMap{{"key", name}, {"count", counts.value(name)}});
-    result.append(QVariantMap{{"key", QString{}}, {"count", counts.value(QString{})}});
-    return result;
-}
-QString ParamsController::groupKey() const { return groupKey_; }
-void ParamsController::setGroupKey(const QString& key)
-{
-    if (groupKey_ == key) return;
-    groupKey_ = key;
-    filter_->setGroupKey(key);
+    if (nodeKey_ == key) return;
+    nodeKey_ = key;
+    filter_->setNodeKey(key);
     emit filterChanged();
+}
+void ParamsController::toggleNode(const QString& key)
+{
+    tree_->toggle(key);
+    const bool branch = key.endsWith(QStringLiteral("_*")) && tree_->contains(key);
+    // 고른 마디를 품은 가지를 접으면 고른 줄이 숨으니, 그 가지를 골라 표도 그 가지로 바꿔요.
+    if (branch && !tree_->isExpanded(key) && paramNodeText(nodeKey_).startsWith(paramNodeText(key) + u'_'))
+        setNodeKey(key);
+}
+QString ParamsController::nodeLabel(const QString& key, int depth) const
+{
+    const auto prefix = paramNodeText(key);
+    if (!vehicle_ || depth != 0 || !key.endsWith(QStringLiteral("_*"))) return prefix;
+    const auto title = vehicle_->plugin().paramGroupTitle(prefix);
+    return title.isEmpty() ? prefix : QStringLiteral("%1 (%2)").arg(title, prefix);
 }
 QString ParamsController::searchText() const { return searchText_; }
 void ParamsController::setSearchText(const QString& value)
@@ -198,11 +219,6 @@ QUrl ParamsController::saveFileUrl() const
     if (!vehicle_) return {};
     const auto name = QStringLiteral("%1-%2.params").arg(vehicle_->states()->capabilities().firmwareName).arg(vehicle_->sysid());
     return QUrl::fromLocalFile(kgc::app::paths::Paths::paramsBackups() + QLatin1Char('/') + name);
-}
-QString ParamsController::groupLabel(const QString& key) const
-{
-    const auto title = vehicle_ ? vehicle_->plugin().paramGroupTitle(key) : QString{};
-    return title.isEmpty() ? key : QStringLiteral("%1 (%2)").arg(title, key);
 }
 QVariantMap ParamsController::checkValue(const QString& name, const QString& value) const
 {

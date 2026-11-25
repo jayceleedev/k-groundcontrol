@@ -1,3 +1,4 @@
+// [0.4.2 5.3] specs/features/0.4.2-param-tree.md
 // [0.3.0 6.1–6.7 6.8-1] specs/features/0.3.0-params.md
 #include <kgc/params/ParamService.h>
 #include "Constants.h"
@@ -5,7 +6,6 @@
 #include "ParamCodec.h"
 #include "ParamDownload.h"
 #include "ParamFile.h"
-#include "ParamGrouping.h"
 #include "ParamMetadataLoader.h"
 #include <kgc/params/ParamRebootReconnect.h>
 #include "ParamSearch.h"
@@ -73,7 +73,6 @@ ParamService::ParamService(kgc::vehicle::registry::Vehicle& vehicle, kgc::vehicl
     });
     connect(metadata_, &ParamMetadataLoader::loaded, this, [this](const QHash<QString, ParamMeta>& metadata) {
         params_->setMetadata(metadata);
-        regroup();
         KGC_LOG_INFO(kCategory, ParamEvent::MetadataLoaded, "Param metadata loaded: %1", metadata.size());
         setMetadataState(MetadataState::Ready);
     });
@@ -151,9 +150,8 @@ void ParamService::receive(const mavlink_message_t& message)
     if (name == QStringLiteral("_HASH_CHECK")) return;
     const auto& plugin = vehicle_.plugin();
     const double value = decodeParam(decoded.param_value, decoded.param_type, plugin.paramEncoding());
-    const auto* meta = params_->meta(name);
-    const bool added = params_->store(name, value, decoded.param_type, plugin.paramGroup(name, meta ? meta->group : QString{}));
-    // 한 번에 여러 행이 늘어도 전체 묶음 계산은 한 번만 해요.
+    const bool added = params_->store(name, value, decoded.param_type);
+    // 한 번에 여러 행이 늘어도 트리는 한 번만 다시 만들어요.
     if (added && !download_->active() && !regroupPending_) {
         regroupPending_ = true;
         regroupTimer_->start(kParamRegroupDelay);
@@ -163,14 +161,8 @@ void ParamService::receive(const mavlink_message_t& message)
 }
 void ParamService::regroup()
 {
-    const auto& plugin = vehicle_.plugin();
-    QStringList groups;
-    groups.reserve(params_->rowCount());
-    for (const auto& row : params_->all()) {
-        const auto* meta = params_->meta(row.name);
-        groups.append(plugin.paramGroup(row.name, meta ? meta->group : QString{}));
-    }
-    params_->setGroups(mergeSingleGroups(groups));
+    // 트리는 화면이 이름만으로 만들어요. 여기서는 다시 만들 때라는 것만 알려요.
+    emit params_->groupsChanged();
 }
 void ParamService::startMetadata()
 {

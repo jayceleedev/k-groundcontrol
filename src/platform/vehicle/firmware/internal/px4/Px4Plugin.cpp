@@ -1,3 +1,4 @@
+// [0.4.2 5.1] specs/features/0.4.2-param-tree.md
 // [0.3.0 5.2 6.3] specs/features/0.3.0-params.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include "Px4Plugin.h"
@@ -37,12 +38,6 @@ ParamMetadataSource Px4Plugin::paramMetadataSource(int, const QString& version) 
     };
     return {ParamMetadataFormat::Flat, {address(QLatin1Char('v') + number), address(QStringLiteral("stable"))},
             QStringLiteral("PX4-") + number};
-}
-QString Px4Plugin::paramGroup(const QString& name, const QString& metadataGroup) const
-{
-    if (!metadataGroup.isEmpty()) return metadataGroup;
-    const auto end = name.indexOf('_');
-    return end < 0 ? QString{} : name.left(end);
 }
 QString Px4Plugin::paramGroupTitle(const QString&) const { return {}; }
 QStringList Px4Plugin::paramFileSkip() const { return {}; }

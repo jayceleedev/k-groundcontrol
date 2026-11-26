@@ -1,8 +1,8 @@
 # app/boot (바탕 0층)
 역할: 명령줄과 부팅 설정을 읽어요.
 수명: 전역.
-받는 것: 프로그램 이름을 포함한 명령줄 인자, AppConfigLocation의 kgc.ini 안 log·paths 항목.
-주는 것: 반복해서 지정할 수 있는 가상 시리얼 시험용 --extra-serial 경로 목록과 BootOptions::parse 값 묶음(logLevel은 app/log의 LogLevel). 잘못된 명령줄 수준은 종료하고 파일 수준 오타는 Info로 되돌려요.
+받는 것: 프로그램 이름을 포함한 명령줄 인자(시험용 --tile-host·--tile-ca 포함), AppConfigLocation의 kgc.ini 안 log·paths 항목.
+주는 것: 반복해서 지정할 수 있는 가상 시리얼 시험용 --extra-serial 경로 목록, 시험용 타일 서버 tileHost(parseTileHost로 https://호스트[:포트]만 받아 끝 "/" 없이 다듬음)와 그 인증서 PEM 파일 tileCa, BootOptions::parse 값 묶음(logLevel은 app/log의 LogLevel), 인증서를 읽지 못했을 때 터미널에 알리고 끝내는 exitBadCertificate. 잘못된 명령줄 수준과 꼴이 틀린 --tile-host는 종료하고 파일 수준 오타는 Info로 되돌려요.
 기여: 없음.
 의존: app/errors, app/log(LogLevel, parseLogLevel), Qt Core.
-안 하는 것: 다른 명령줄 옵션을 받거나 로그를 찍지 않아요. 운영 설정은 app/settings가 맡아요.
+안 하는 것: 다른 명령줄 옵션을 받거나 로그를 찍지 않아요. tileHost·tileCa는 kgc.ini에서 읽지 않고, 인증서를 읽는 일은 app/net의 trustCertificateFile이 맡아요. 운영 설정은 app/settings가 맡아요.

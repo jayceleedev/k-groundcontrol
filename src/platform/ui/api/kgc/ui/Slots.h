@@ -1,3 +1,4 @@
+// [0.5.0 S5 T7] specs/features/0.5.0-map.md
 // [0.1.0 T7] specs/features/0.1.0-link.md
 // [0.0.3 T2 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
@@ -119,10 +120,11 @@ public:
  */
     QHash<int, QByteArray> roleNames() const override;
 };
-/** 다음 기능이 기여할 빈 목록을 제공해요.
- * 입력: 없음.
- * 출력: 없음.
- * 실패: 없음.
+/** 지도 부품 위에 얹을 기능의 레이어를 순서대로 담아요.
+ * 입력: registerLayer로 등록한 식별자, 순서, 레이어 QML 주소예요. 주소의 뿌리는 MapItemGroup(QtLocation)이고
+ *       property var mapPane을 가져요. platform/ui는 QtLocation을 import하지 않고 주소만 들어요.
+ * 출력: order 순서의 목록과 공통 역할(id·order)·component 역할이에요. 지도 부품마다 모든 항목을 만들어 얹고 z = order(클수록 위)예요.
+ * 실패: 같은 식별자는 DuplicateId예요.
  */
 class MapLayerSlot : public SlotModel {
     Q_OBJECT
@@ -133,6 +135,18 @@ public:
  * 실패: 없음.
  */
     explicit MapLayerSlot(QObject* parent = nullptr);
+/** 지도 레이어 하나를 등록해요.
+ * 입력: 식별자 id, 쌓는 순서 order(클수록 위), 뿌리가 MapItemGroup인 QML 주소 component예요.
+ * 출력: 등록 결과예요. 목록은 order 순서로 정렬돼요.
+ * 실패: 같은 식별자는 DuplicateId이고 목록은 그대로예요. 빈 주소는 프로그래밍 오류로 종료해요.
+ */
+    kgc::app::errors::Result<void> registerLayer(const QString& id, int order, const QUrl& component);
+/** 지도 레이어의 표시 역할을 알려줘요.
+ * 입력: 없음.
+ * 출력: 공통 역할(id·order)과 component(QUrl)예요.
+ * 실패: 없음.
+ */
+    QHash<int, QByteArray> roleNames() const override;
 };
 /** 하단바 단추의 표시와 호출 대상을 함께 등록해요.
  * 입력: 단추 정보와 수신 객체.

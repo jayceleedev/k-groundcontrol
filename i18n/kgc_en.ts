@@ -271,6 +271,22 @@
         <source>추가 시리얼 경로</source>
         <translation>Additional serial path</translation>
     </message>
+    <message>
+        <source>타일 서버 주소(시험용)</source>
+        <translation>Tile server address (for testing)</translation>
+    </message>
+    <message>
+        <source>타일 서버 인증서 PEM 파일(시험용, 이번 실행의 모든 HTTPS 요청이 믿음)</source>
+        <translation>Tile server certificate PEM file (for testing; every HTTPS request in this run trusts it)</translation>
+    </message>
+    <message>
+        <source>타일 주소는 https://호스트[:포트] 꼴이어야 함: %1</source>
+        <translation>Tile address must have the form https://host[:port]: %1</translation>
+    </message>
+    <message>
+        <source>시험용 인증서를 읽을 수 없음: %1</source>
+        <translation>Cannot read the test certificate: %1</translation>
+    </message>
 </context>
 <context>
     <name>BottomAction</name>
@@ -2069,6 +2085,25 @@
     <message>
         <source>내려받지 못했어요.</source>
         <translation>The download failed.</translation>
+    </message>
+    <message>
+        <source>인증서 파일을 읽지 못했어요.</source>
+        <translation>Could not read the certificate file.</translation>
+    </message>
+    <message>
+        <source>서버가 요청을 받아 주지 않았어요.</source>
+        <translation>The server refused the request.</translation>
+    </message>
+</context>
+<context>
+    <name>Store</name>
+    <message>
+        <source>저장소를 열지 못했어요</source>
+        <translation>Could not open the store</translation>
+    </message>
+    <message>
+        <source>저장소를 읽거나 쓰지 못했어요</source>
+        <translation>Could not read or write the store</translation>
     </message>
 </context>
 <context>

@@ -1,3 +1,4 @@
+// [0.5.0 S4 T11] specs/features/0.5.0-map.md
 // [0.2.0 T5] specs/features/0.2.0-fcflash.md
 #include <kgc/vehicle/safety/ArmedPolicy.h>
 #include <kgc/vehicle/registry/VehicleRegistry.h>
@@ -26,7 +27,9 @@ Decision decide(kgc::app::job::OperationKind kind, bool armed)
     case OperationKind::TrackerManual:
     case OperationKind::FlyAction:
     case OperationKind::MissionStartStop:
-    case OperationKind::Read: return Decision::Allow;
+    case OperationKind::Read:
+    // 기체와 무관한 작업이라 check를 부르지 않지만, 표를 빠짐없이 두려고 허용으로 둬요(BASE §9.2).
+    case OperationKind::MapDownload: return Decision::Allow;
     }
     return Decision::Deny;
 }

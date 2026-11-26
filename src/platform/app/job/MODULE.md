@@ -6,4 +6,4 @@
 기여: 없음.
 의존: app/errors, app/log.
 안 하는 것: 실제 작업을 돌리지 않고, 시동 감시는 vehicle/safety가, 화면은 platform/ui의 JobView가 맡아요.
-예외: OperationKind는 기능 이름이 들어 있는 이름표 열거예요(BASE §9.4). 코드 의존은 아니에요.
+예외: OperationKind는 기능 이름이 들어 있는 이름표 열거예요(BASE §9.4). 코드 의존은 아니에요. 이름표에는 기체와 무관한 MapDownload(지도 영역 받기)도 있어요.

@@ -1,3 +1,4 @@
+// [0.5.0 S2] specs/features/0.5.0-map.md
 // [0.4.0 5.4 6.2 6.4 6.9] specs/features/0.4.0-sitl.md
 #include "SitlDownload.h"
 #include "Constants.h"
@@ -26,6 +27,8 @@ QString downloadErrorName(kgc::app::errors::ErrorCode error)
         case HttpError::WriteFailed: return QStringLiteral("WriteFailed");
         case HttpError::Aborted: return QStringLiteral("Aborted");
         case HttpError::BadGzip: return QStringLiteral("BadGzip");
+        case HttpError::BadCertificate: return QStringLiteral("BadCertificate");
+        case HttpError::HttpStatus: return QStringLiteral("HttpStatus");
         }
     }
     return QStringLiteral("%1:%2").arg(error.module.value).arg(error.code);

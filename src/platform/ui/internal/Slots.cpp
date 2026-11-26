@@ -1,3 +1,4 @@
+// [0.5.0 S5 T7] specs/features/0.5.0-map.md
 // [0.1.0 T7] specs/features/0.1.0-link.md
 // [0.0.3 T2 T15 T21] specs/features/0.0.3-windows.md
 // [0.0.1 T1] specs/features/0.0.1-shell.md
@@ -90,6 +91,17 @@ QHash<int, QByteArray> RightTabSlot::roleNames() const
     return roles;
 }
 MapLayerSlot::MapLayerSlot(QObject* parent) : SlotModel(parent) {}
+kgc::app::errors::Result<void> MapLayerSlot::registerLayer(const QString& id, int order, const QUrl& component)
+{
+    if (component.isEmpty()) qFatal("registerLayer: empty component");
+    return add({id, order, {{"component", component}}});
+}
+QHash<int, QByteArray> MapLayerSlot::roleNames() const
+{
+    auto roles = SlotModel::roleNames();
+    roles.insert(Qt::UserRole + 3, "component");
+    return roles;
+}
 kgc::app::errors::Result<void> SlotModel::add(SlotEntry entry)
 {
     for (const auto& current : entries_)

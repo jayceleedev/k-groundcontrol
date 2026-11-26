@@ -1,3 +1,4 @@
+// [0.5.0 T11] specs/features/0.5.0-map.md
 // [0.2.0 T5] specs/features/0.2.0-fcflash.md
 #include <kgc/vehicle/safety/ArmedPolicy.h>
 #include <QtTest>
@@ -22,11 +23,12 @@ private slots:
         for (const auto kind : {OperationKind::ParamSingle, OperationKind::Tuning, OperationKind::Autotune})
             QCOMPARE(decide(kind, true), Decision::AllowWithWarning);
     }
-    /** T5: BASE §9.2 표의 나머지 행은 시동 중에도 허용이에요. */
+    /** T5: BASE §9.2 표의 나머지 행은 시동 중에도 허용이에요. [0.5.0 T11] 지도 영역 받기(MapDownload)도 여기에 들어요. */
     void test_T5_allow_rows()
     {
         for (const auto kind : {OperationKind::TrackerConfig, OperationKind::TrackerCalib, OperationKind::TrackerManual,
-                                OperationKind::FlyAction, OperationKind::MissionStartStop, OperationKind::Read})
+                                OperationKind::FlyAction, OperationKind::MissionStartStop, OperationKind::Read,
+                                OperationKind::MapDownload})
             QCOMPARE(decide(kind, true), Decision::Allow);
     }
     /** T5: 시동이 아니면 어떤 작업도 허용이에요. Deny 행으로 판정이 armed를 보는지도 확인해요. */
@@ -38,7 +40,7 @@ private slots:
                                 OperationKind::LayoutWrite, OperationKind::MotorTest, OperationKind::ParamSingle,
                                 OperationKind::Tuning, OperationKind::Autotune, OperationKind::TrackerConfig,
                                 OperationKind::TrackerCalib, OperationKind::TrackerManual, OperationKind::FlyAction,
-                                OperationKind::MissionStartStop, OperationKind::Read})
+                                OperationKind::MissionStartStop, OperationKind::Read, OperationKind::MapDownload})
             QCOMPARE(decide(kind, false), Decision::Allow);
         QVERIFY(decide(OperationKind::FcFlash, true) != decide(OperationKind::FcFlash, false));
     }

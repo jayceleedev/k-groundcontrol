@@ -1,3 +1,4 @@
+// [0.5.0 S5] specs/features/0.5.0-map.md
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
 // [0.0.4 T9 T9a T16] specs/features/0.0.4-righttabs.md
 import QtQuick
@@ -60,6 +61,13 @@ ThemeBase {
     modelAccent: "#f97316"
     compassRing: "#a1a1aa"
     compassNorthColor: "#ef4444"
+    mapVehicle: "#2563eb"
+    mapVehicleOther: "#98a2b3"
+    mapVehicleOutline: "#ffffff"
+    mapTrail: "#e5484d"
+    mapHome: "#f59e0b"
+    mapHomeInk: "#1f2530"
+    mapSelection: "#2563eb"
     order: 30
     dark: false
     glass: true

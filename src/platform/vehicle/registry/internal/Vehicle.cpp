@@ -1,3 +1,4 @@
+// [0.5.0 S3] specs/features/0.5.0-map.md
 // [0.3.0 5.1] specs/features/0.3.0-params.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
@@ -36,6 +37,10 @@ Vehicle::Vehicle(int sysid, std::uint8_t autopilot, kgc::comm::links::LinkManage
     request.command = MAV_CMD_REQUEST_MESSAGE;
     request.param1 = MAVLINK_MSG_ID_AUTOPILOT_VERSION;
     // 응답을 한 번 잃어도 버전을 알 수 있게 기본 횟수만큼 다시 보내요.
+    d_->commands->send(request, {}, [](auto) {}, this);
+    // 홈 위치도 같은 방법으로 한 번 요청해요. 큐가 하나씩 보내므로 버전 요청이 응답을 받거나 시간을 다 쓴 뒤 나가요.
+    // 그 뒤 기체가 스스로 보내는 HOME_POSITION도 같은 길로 받아요.
+    request.param1 = MAVLINK_MSG_ID_HOME_POSITION;
     d_->commands->send(request, {}, [](auto) {}, this);
 }
 Vehicle::~Vehicle() { stop(); }

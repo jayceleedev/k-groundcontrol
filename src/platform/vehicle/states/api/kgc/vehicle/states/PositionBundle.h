@@ -1,3 +1,4 @@
+// [0.5.0 S3 T5] specs/features/0.5.0-map.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
 #include <QObject>
@@ -5,8 +6,8 @@
 #include <limits>
 namespace kgc::vehicle::states {
 /** 기체 위치와 속도를 화면에서 쓰는 단위로 전달해요.
- * 입력: GLOBAL_POSITION_INT에서 변환한 위치·고도·수평 속도·상승률·헤딩이에요.
- * 출력: 위경도와 헤딩은 도, 고도는 미터, 속도는 초당 미터이며 모르는 값은 NaN이에요.
+ * 입력: GLOBAL_POSITION_INT에서 변환한 위치·고도·수평 속도·상승률·헤딩이에요. 홈 세 필드는 HOME_POSITION에서 와요.
+ * 출력: 위경도와 헤딩은 도, 고도는 미터, 속도는 초당 미터이며 모르는 값은 NaN이에요. 홈 고도는 AMSL 미터예요.
  * 실패: 없어요.
  */
 struct PositionBundle {
@@ -18,6 +19,9 @@ struct PositionBundle {
     Q_PROPERTY(double groundSpeedMs MEMBER groundSpeedMs)
     Q_PROPERTY(double climbMs MEMBER climbMs)
     Q_PROPERTY(double headingDeg MEMBER headingDeg)
+    Q_PROPERTY(double homeLatDeg MEMBER homeLatDeg)
+    Q_PROPERTY(double homeLonDeg MEMBER homeLonDeg)
+    Q_PROPERTY(double homeAltAmslM MEMBER homeAltAmslM)
 public:
     double latDeg = std::numeric_limits<double>::quiet_NaN();
     double lonDeg = std::numeric_limits<double>::quiet_NaN();
@@ -26,6 +30,9 @@ public:
     double groundSpeedMs = std::numeric_limits<double>::quiet_NaN();
     double climbMs = std::numeric_limits<double>::quiet_NaN();
     double headingDeg = std::numeric_limits<double>::quiet_NaN();
+    double homeLatDeg = std::numeric_limits<double>::quiet_NaN();
+    double homeLonDeg = std::numeric_limits<double>::quiet_NaN();
+    double homeAltAmslM = std::numeric_limits<double>::quiet_NaN();
 };
 }
 Q_DECLARE_METATYPE(kgc::vehicle::states::PositionBundle)

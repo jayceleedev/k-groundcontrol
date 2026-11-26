@@ -1,3 +1,4 @@
+// [0.5.0 S5] specs/features/0.5.0-map.md
 // [0.4.2 6.4] specs/features/0.4.2-param-tree.md
 // [0.3.0 6.8 6.8-1] specs/features/0.3.0-params.md
 // [0.1.0 T14] specs/features/0.1.0-link.md
@@ -140,6 +141,17 @@ QtObject {
     readonly property int paramRangeWidth: Math.round(190 * uiScale)
     // 수동 기체 설정 패널의 토스트를 보여 주는 시간이에요(밀리초).
     readonly property int paramToastMs: 4000
+    // 지도 기체 화살표와 홈 표식의 크기, 궤적 선 두께예요.
+    readonly property int mapVehicleSize: Math.round(28 * uiScale)
+    readonly property int mapHomeSize: Math.round(22 * uiScale)
+    readonly property int mapTrailWidth: Math.round(3 * uiScale)
+    // 지도 축척 막대의 가장 긴 폭과 양 끝 눈금 높이예요.
+    readonly property int mapScaleMaxWidth: Math.round(120 * uiScale)
+    readonly property int mapScaleTickHeight: Math.round(6 * uiScale)
+    // 지도 제어 단추 사이와 단추·카드 사이 간격, 지도 저장 카드 폭, 영역 고르기 칸 테두리 두께예요.
+    readonly property int mapControlGap: Math.round(6 * uiScale)
+    readonly property int mapCardWidth: Math.round(300 * uiScale)
+    readonly property int mapSelectionWidth: Math.round(2 * uiScale)
     // ThemeSwitcher만 current를 바꿔요. 부품은 Theme의 토큰만 읽어요.
     property ThemeBase current: Light {}
     readonly property color series1: current.series1
@@ -201,6 +213,13 @@ QtObject {
     readonly property color modelAccent: current.modelAccent
     readonly property color compassRing: current.compassRing
     readonly property color compassNorthColor: current.compassNorthColor
+    readonly property color mapVehicle: current.mapVehicle
+    readonly property color mapVehicleOther: current.mapVehicleOther
+    readonly property color mapVehicleOutline: current.mapVehicleOutline
+    readonly property color mapTrail: current.mapTrail
+    readonly property color mapHome: current.mapHome
+    readonly property color mapHomeInk: current.mapHomeInk
+    readonly property color mapSelection: current.mapSelection
     readonly property int order: current.order
     readonly property bool dark: current.dark
     readonly property bool glass: current.glass

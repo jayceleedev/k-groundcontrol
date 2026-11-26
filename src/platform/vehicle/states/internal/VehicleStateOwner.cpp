@@ -1,3 +1,4 @@
+// [0.5.0 S3] specs/features/0.5.0-map.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.1 T1 T2 T3] specs/features/0.1.1-link-hardening.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
@@ -10,6 +11,7 @@
 #include "updaters/ArmingUpdater.h"
 #include "updaters/AttitudeUpdater.h"
 #include "updaters/PositionUpdater.h"
+#include "updaters/HomePositionUpdater.h"
 #include "updaters/GpsUpdater.h"
 #include "updaters/BatteryUpdater.h"
 #include "updaters/CapabilitiesUpdater.h"
@@ -55,7 +57,11 @@ void VehicleStateOwner::consume(const mavlink_message_t& message)
         emit states_.attitudeChanged();
         break;
     case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-        states_.position_ = updatePosition(message);
+        states_.position_ = updatePosition(message, states_.position_);
+        emit states_.positionChanged();
+        break;
+    case MAVLINK_MSG_ID_HOME_POSITION:
+        states_.position_ = updateHomePosition(message, states_.position_);
         emit states_.positionChanged();
         break;
     case MAVLINK_MSG_ID_GPS_RAW_INT:

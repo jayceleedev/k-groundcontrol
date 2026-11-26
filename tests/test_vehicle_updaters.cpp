@@ -1,8 +1,10 @@
+// [0.5.0 T5] specs/features/0.5.0-map.md
 // [0.1.0 T2] specs/features/0.1.0-link.md
 #include "updaters/LinkUpdater.h"
 #include "updaters/ArmingUpdater.h"
 #include "updaters/AttitudeUpdater.h"
 #include "updaters/PositionUpdater.h"
+#include "updaters/HomePositionUpdater.h"
 #include "updaters/GpsUpdater.h"
 #include "updaters/BatteryUpdater.h"
 #include "updaters/CapabilitiesUpdater.h"
@@ -96,7 +98,7 @@ private slots:
         input.hdg = 12345;
         mavlink_message_t message{};
         mavlink_msg_global_position_int_encode(1, 1, &message, &input);
-        const auto value = updatePosition(message);
+        const auto value = updatePosition(message, PositionBundle{});
         QCOMPARE(value.latDeg, 37.1234567);
         QCOMPARE(value.lonDeg, 127.1234567);
         QCOMPARE(value.altAmslM, 123.45);
@@ -106,7 +108,33 @@ private slots:
         QCOMPARE(value.headingDeg, 123.45);
         input.hdg = UINT16_MAX;
         mavlink_msg_global_position_int_encode(1, 1, &message, &input);
-        QVERIFY(std::isnan(updatePosition(message).headingDeg));
+        QVERIFY(std::isnan(updatePosition(message, value).headingDeg));
+    }
+    /** [0.5.0 T5] 홈 세 필드는 처음 NaN이고 HOME_POSITION만 바꾸며, GLOBAL_POSITION_INT는 홈을 건드리지 않아요. */
+    void test_T5_home_position()
+    {
+        PositionBundle start;
+        QVERIFY(std::isnan(start.homeLatDeg) && std::isnan(start.homeLonDeg) && std::isnan(start.homeAltAmslM));
+        start.latDeg = 37.0;
+        mavlink_home_position_t home{};
+        home.latitude = 351587000;
+        home.longitude = 1291604000;
+        home.altitude = 3000;
+        mavlink_message_t message{};
+        mavlink_msg_home_position_encode(1, 1, &message, &home);
+        const auto withHome = updateHomePosition(message, start);
+        QCOMPARE(withHome.homeLatDeg, 35.1587);
+        QCOMPARE(withHome.homeLonDeg, 129.1604);
+        QCOMPARE(withHome.homeAltAmslM, 3.0);
+        QCOMPARE(withHome.latDeg, 37.0);
+        mavlink_global_position_int_t position{};
+        position.lat = 351600000;
+        mavlink_msg_global_position_int_encode(1, 1, &message, &position);
+        const auto moved = updatePosition(message, withHome);
+        QCOMPARE(moved.latDeg, 35.16);
+        QCOMPARE(moved.homeLatDeg, 35.1587);
+        QCOMPARE(moved.homeLonDeg, 129.1604);
+        QCOMPARE(moved.homeAltAmslM, 3.0);
     }
     /** T2: GPS의 위성과 정밀도 미확인 값을 실제 값과 구분해요. */
     void test_T2_gps()

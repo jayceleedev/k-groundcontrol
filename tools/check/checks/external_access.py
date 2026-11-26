@@ -1,3 +1,4 @@
+# [0.5.0 T12] specs/features/0.5.0-map.md
 # [0.4.0 T4] specs/features/0.4.0-sitl.md
 # [0.2.0 T13] specs/features/0.2.0-fcflash.md
 # [0.1.0 T8] specs/features/0.1.0-link.md
@@ -6,7 +7,7 @@ from checks._cpp import sources, clean, line
 
 
 def check(ctx):
-    """HTTPS·시리얼 입출력, 다른 프로그램 실행과 환경 설정을 소유 모듈 안에 유지해요.
+    """HTTPS·시리얼 입출력, SQL, 다른 프로그램 실행과 환경 설정을 소유 모듈 안에 유지해요.
 
     입력: 검사 문맥.
     출력: 위반 위치.
@@ -29,3 +30,7 @@ def check(ctx):
         if not path.startswith('src/features/sitl/internal/'):
             for match in re.finditer(r'\bQProcess\b', code):
                 yield path, line(text, match.start()), '다른 프로그램 실행은 sitl 내부 밖 금지'
+        # SQL은 덩이 저장소 한 곳에서만 써요(BASE §9.3).
+        if not path.startswith('src/platform/app/store/'):
+            for match in re.finditer(r'\bQSql\w*|\bQtSql\b', code):
+                yield path, line(text, match.start()), 'SQL은 app/store 밖 금지'

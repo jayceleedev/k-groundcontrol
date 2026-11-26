@@ -1,11 +1,15 @@
+// [0.5.0 S2 T9] specs/features/0.5.0-map.md
 // [0.2.0 T3] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <kgc/app/errors/Result.h>
 #include <kgc/app/net/Constants.h>
+#include <kgc/app/net/Errors.h>
 #include <QByteArray>
 #include <QHash>
+#include <QNetworkReply>
 #include <QObject>
 #include <QUrl>
+#include <QVariant>
 #include <chrono>
 #include <memory>
 namespace kgc::app::net {
@@ -91,9 +95,9 @@ public:
  */
     HttpRequest* download(const QUrl& url, const QString& path, const HttpOptions& options = {});
 signals:
-/** 마지막 요청의 성공 여부가 바뀌었음을 알려요.
- * 입력: 마지막 요청이 성공했으면 참인 online이에요.
- * 출력: 값이 바뀔 때 나와요.
+/** 서버에 닿는지가 바뀌었음을 알려요.
+ * 입력: 마지막 요청이 성공했거나 서버가 HTTP 상태로 거절했으면(HttpStatus) 참인 online이에요.
+ * 출력: 값이 바뀔 때 나와요. 취소(Aborted)로 끝난 요청은 판정을 바꾸지 않아요.
  * 실패: 없어요.
  */
     void onlineChanged(bool online);
@@ -107,6 +111,19 @@ private:
  * 실패: 없어요.
  */
 bool redirectAllowed(const QUrl& from, const QUrl& to);
+/** 마지막 실패의 HTTP 오류를 정해요.
+ * 입력: 응답의 네트워크 오류 error와 응답 상태 속성 httpStatus(없으면 빈 QVariant)예요.
+ * 출력: httpStatus가 유효한 수이고 kHttpErrorStatusMin(400) 이상이면 HttpStatus, 아니고 error가 TimeoutError면 TimedOut,
+ *       그 밖은 NetworkFailed예요. 200 머리글 뒤 본문 중에 끊긴 것은 상태 오류가 아니에요.
+ * 실패: 없어요.
+ */
+HttpError failureOf(QNetworkReply::NetworkError error, const QVariant& httpStatus);
+/** 시험 서버 인증서를 이번 실행의 모든 HTTPS 요청이 믿게 해요.
+ * 입력: PEM 인증서 파일 경로 pemPath예요. 첫 HTTPS 요청 전에 한 번만 불러요(main이 --tile-ca로 불러요).
+ * 출력: 기본 SSL 설정에 그 인증서를 더해요. 시스템 루트 인증서도 계속 믿어요. 그 실행의 모든 HTTPS 요청에 적용돼요.
+ * 실패: 파일을 읽지 못하거나 인증서가 없으면 BadCertificate이고 설정은 그대로예요.
+ */
+kgc::app::errors::Result<void> trustCertificateFile(const QString& pemPath);
 /** gzip 묶음을 풀어요.
  * 입력: gzip 바이트 bytes예요.
  * 출력: 풀린 바이트예요.

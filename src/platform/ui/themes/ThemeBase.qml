@@ -1,3 +1,4 @@
+// [0.5.0 S5] specs/features/0.5.0-map.md
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
 // 테마는 이 파일의 required 토큰을 모두 채운 파일 하나로 더해요.
 // 식별자는 파일 이름의 첫 글자를 소문자로 바꾸고, order가 작을수록 먼저 나와요.
@@ -67,6 +68,14 @@ QtObject {
     required property color modelAccent
     required property color compassRing
     required property color compassNorthColor
+    // 지도 위 기체 화살표(활성·다른 기체·테두리), 궤적, 홈 표식과 그 글자, 영역 고르기 칸 색이에요. 네 테마가 같은 값을 줘요.
+    required property color mapVehicle
+    required property color mapVehicleOther
+    required property color mapVehicleOutline
+    required property color mapTrail
+    required property color mapHome
+    required property color mapHomeInk
+    required property color mapSelection
     required property int order
     required property bool dark
     required property bool glass

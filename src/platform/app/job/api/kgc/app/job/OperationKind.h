@@ -1,3 +1,4 @@
+// [0.5.0 S4] specs/features/0.5.0-map.md
 // [0.2.0 T2 T5] specs/features/0.2.0-fcflash.md
 #pragma once
 namespace kgc::app::job {
@@ -11,6 +12,6 @@ enum class OperationKind {
     LayoutWrite, MotorTest,
     ParamSingle, Tuning, Autotune,
     TrackerConfig, TrackerCalib, TrackerManual,
-    FlyAction, MissionStartStop, Read
+    FlyAction, MissionStartStop, Read, MapDownload
 };
 }

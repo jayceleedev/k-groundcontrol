@@ -1,9 +1,11 @@
+// [0.5.0 T9] specs/features/0.5.0-map.md
 // [0.2.0 T3] specs/features/0.2.0-fcflash.md
 #include <kgc/app/net/Http.h>
 #include <kgc/app/net/Errors.h>
 #include <QTemporaryDir>
 #include <QtTest>
 using kgc::app::errors::Result;
+using kgc::app::net::failureOf;
 using kgc::app::net::Http;
 using kgc::app::net::HttpError;
 using kgc::app::net::HttpOptions;
@@ -91,6 +93,23 @@ private slots:
             QVERIFY(!result.has_value());
             QVERIFY(result.error() == make(HttpError::BadGzip));
         }
+    }
+    /** T9: 최종 상태 400 이상은 HttpStatus, 상태 없이 시간 초과는 TimedOut, 그 밖(200 뒤 끊김 포함)은 NetworkFailed예요. */
+    void test_T9_failure_of()
+    {
+        QCOMPARE(failureOf(QNetworkReply::ContentNotFoundError, QVariant(404)), HttpError::HttpStatus);
+        QCOMPARE(failureOf(QNetworkReply::ServiceUnavailableError, QVariant(503)), HttpError::HttpStatus);
+        QCOMPARE(failureOf(QNetworkReply::TimeoutError, QVariant()), HttpError::TimedOut);
+        QCOMPARE(failureOf(QNetworkReply::TimeoutError, QVariant(200)), HttpError::TimedOut);
+        QCOMPARE(failureOf(QNetworkReply::RemoteHostClosedError, QVariant(200)), HttpError::NetworkFailed);
+        QCOMPARE(failureOf(QNetworkReply::ConnectionRefusedError, QVariant()), HttpError::NetworkFailed);
+        QCOMPARE(failureOf(QNetworkReply::HostNotFoundError, QVariant()), HttpError::NetworkFailed);
+    }
+    /** T9: 새 오류 둘(HttpStatus·BadCertificate)에도 화면 문구가 있어요. */
+    void test_T9_new_error_texts()
+    {
+        QVERIFY(!kgc::app::net::errorText(make(HttpError::HttpStatus)).isEmpty());
+        QVERIFY(!kgc::app::net::errorText(make(HttpError::BadCertificate)).isEmpty());
     }
 };
 QTEST_GUILESS_MAIN(HttpTest)

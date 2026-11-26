@@ -1,7 +1,8 @@
+// [0.5.0 S2] specs/features/0.5.0-map.md
 // [0.2.0 T3] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <cstdint>
 namespace kgc::app::net {
 inline constexpr auto kCategory = "kgc.app.net";
-enum class NetEvent : std::uint16_t { RequestFailed = 1, RedirectRefused = 2 };
+enum class NetEvent : std::uint16_t { RequestFailed = 1, RedirectRefused = 2, CertificateTrusted = 3 };
 }

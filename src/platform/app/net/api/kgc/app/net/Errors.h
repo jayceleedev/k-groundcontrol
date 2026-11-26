@@ -1,15 +1,18 @@
+// [0.5.0 S2 T9] specs/features/0.5.0-map.md
 // [0.2.0 T3] specs/features/0.2.0-fcflash.md
 #pragma once
 #include <kgc/app/net/ModuleId.h>
 #include <QString>
 namespace kgc::app::net {
 /** HTTP 요청이 실패한 까닭을 나타내요.
- * 입력: https가 아닌 주소, 허용되지 않은 리다이렉트, 네트워크·시간 초과, 파일 쓰기, 취소, 깨진 gzip 상황이에요.
+ * 입력: https가 아닌 주소, 허용되지 않은 리다이렉트, 네트워크·시간 초과, 파일 쓰기, 취소, 깨진 gzip,
+ *       읽지 못한 시험용 인증서 파일, 서버가 400 이상 상태로 거절한 상황이에요.
  * 출력: 각 상황에 대응하는 HttpError 값이에요.
  * 실패: 없어요.
  */
 enum class HttpError : std::uint16_t {
-    NotHttps = 1, RedirectRefused, NetworkFailed, TimedOut, WriteFailed, Aborted, BadGzip
+    NotHttps = 1, RedirectRefused, NetworkFailed, TimedOut, WriteFailed, Aborted, BadGzip,
+    BadCertificate = 8, HttpStatus = 9
 };
 /** HTTP 오류를 공통 코드로 바꿔요.
  * 입력: 변환할 HttpError인 error예요.

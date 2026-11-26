@@ -1,3 +1,4 @@
+// [0.5.0 S2 6] specs/features/0.5.0-map.md
 // [0.2.0 7] specs/features/0.2.0-fcflash.md
 #include <kgc/app/net/Errors.h>
 #include <QCoreApplication>
@@ -13,6 +14,10 @@ QString errorText(kgc::app::errors::ErrorCode error)
     case HttpError::WriteFailed: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
     case HttpError::Aborted: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
     case HttpError::BadGzip: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
+    case HttpError::BadCertificate:
+        return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "인증서 파일을 읽지 못했어요."));
+    case HttpError::HttpStatus:
+        return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "서버가 요청을 받아 주지 않았어요."));
     }
     return {};
 }

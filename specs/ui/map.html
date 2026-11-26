@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<!-- [0.5.0 T14-T24] specs/features/0.5.0-map.md 가운데 지도 부품, 컨트롤, 지도 저장 카드 -->
+<meta charset="utf-8"><title>지도 시안</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--line:#d8dce3;--ink:#1f2530;--sub:#667085;--accent:#2563eb;--soft:#e4edfc;
+--mapVehicle:#2563eb;--mapVehicleOther:#98a2b3;--mapVehicleOutline:#ffffff;--mapTrail:#e5484d;--mapHome:#f59e0b;--mapHomeInk:#1f2530;--mapSelection:#2563eb}
+body{margin:0;padding:24px;background:var(--bg);color:var(--ink);font:13px/1.5 system-ui,sans-serif}
+.app{width:1040px;margin:0 auto 24px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--card)}
+.top,.bottom{height:40px;display:flex;align-items:center;padding:0 12px;gap:10px;border-bottom:1px solid var(--line);color:var(--sub)}
+.bottom{border-top:1px solid var(--line);border-bottom:0;height:30px}
+.mid{display:grid;grid-template-columns:44px 1fr 200px;height:560px}
+.left{border-right:1px solid var(--line)}.left div{height:30px;margin:6px;border-radius:6px;background:#eef0f3}
+.right{border-left:1px solid var(--line);padding:8px;color:var(--sub)}.right .ins{height:150px;border-radius:8px;background:#eef0f3;margin-bottom:8px}
+.map{position:relative;overflow:hidden;background:
+ radial-gradient(circle at 30% 40%,#5d7a4a 0 12%,transparent 13%),radial-gradient(circle at 70% 65%,#3f6b8a 0 18%,transparent 19%),
+ radial-gradient(circle at 55% 20%,#8a7f5e 0 10%,transparent 11%),linear-gradient(135deg,#6b8452,#7d8c63 40%,#5f7a58 60%,#8b8466)}
+.map:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:128px 128px}
+.ctl{position:absolute;right:12px;bottom:40px;display:flex;flex-direction:column;gap:6px;z-index:3}
+.ib{width:36px;height:36px;border-radius:8px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;font-size:16px;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.ib.on{background:var(--soft);border-color:var(--accent);color:var(--accent)}
+.scale{position:absolute;left:12px;bottom:12px;z-index:3;color:#fff;font-size:12px;text-shadow:0 0 3px #000}
+.scale .bar{width:51px;height:6px;border:2px solid #fff;border-top:0;box-shadow:0 1px 2px #000}
+.attr{position:absolute;right:12px;bottom:8px;z-index:3;font-size:11px;color:#fff;text-shadow:0 0 3px #000}
+svg.ov{position:absolute;inset:0;z-index:2}
+.card{position:absolute;right:60px;bottom:40px;width:300px;z-index:4;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.btn{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:5px 10px;margin:6px 6px 0 0}.btn.main{background:var(--accent);border-color:var(--accent);color:#fff}
+.sub{color:var(--sub)}.row{display:flex;gap:8px;align-items:center;margin-top:6px}.nb{border:1px solid var(--line);border-radius:6px;padding:3px 8px;width:34px;text-align:center}
+.pop{position:absolute;right:56px;bottom:178px;z-index:4;background:var(--card);border:1px solid var(--line);border-radius:8px;padding:6px;display:flex;gap:4px}
+.pill{border:1px solid var(--line);border-radius:999px;padding:3px 10px}.pill.on{background:var(--soft);border-color:var(--accent);color:var(--accent)}
+.bar2{height:6px;border-radius:3px;background:#e5e7eb;margin-top:8px}.bar2 i{display:block;height:6px;width:42%;border-radius:3px;background:var(--accent)}
+h3{width:1040px;margin:0 auto 8px;font-size:14px}
+.states{width:1040px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.states .card{position:static;width:auto;box-shadow:none}
+</style>
+<body>
+<h3>가운데 지도 (위성, 따라가기 켬, 지도 종류 팝업 열림)</h3>
+<div class="app">
+<div class="top">K-GroundControl · 상단바</div>
+<div class="mid">
+<div class="left"><div></div><div></div><div></div><div></div></div>
+<div class="map" id="centerMap">
+<svg class="ov" viewBox="0 0 796 560">
+ <polyline points="210,420 260,400 300,350 360,330 420,300 470,260 520,250" fill="none" stroke="var(--mapTrail)" stroke-width="3" stroke-linejoin="round"/>
+ <circle cx="210" cy="420" r="11" fill="var(--mapHome)" stroke="#fff" stroke-width="2"/><text x="210" y="424.5" font-size="12" font-weight="700" text-anchor="middle" fill="var(--mapHomeInk)">H</text>
+ <g transform="translate(520,250) rotate(70) translate(-14,-14)"><polygon points="14,0 25.2,25.2 14,19.6 2.8,25.2" fill="var(--mapVehicle)" stroke="var(--mapVehicleOutline)" stroke-width="2" stroke-linejoin="round"/></g>
+ <g transform="translate(640,150) rotate(-30) translate(-14,-14)"><polygon points="14,0 25.2,25.2 14,19.6 2.8,25.2" fill="var(--mapVehicleOther)" stroke="var(--mapVehicleOutline)" stroke-width="2" stroke-linejoin="round"/></g>
+</svg>
+<div class="pop"><span class="pill on">위성</span><span class="pill">하이브리드</span><span class="pill">일반 지도</span></div>
+<div class="ctl"><span class="ib" title="지도 저장">⤓</span><span class="ib" title="궤적 지우기">⌫</span><span class="ib on" title="지도 종류">◫</span><span class="ib on" title="기체 따라가기">◎</span><span class="ib" title="축소">−</span><span class="ib" title="확대">+</span></div>
+<div class="scale">200 m<div class="bar"></div></div>
+<div class="attr">지도 데이터 © Google</div>
+</div>
+<div class="right"><div class="ins"></div>계기·탭</div>
+</div>
+<div class="bottom">하단바</div>
+</div>
+
+<h3>지도 저장 카드 (컨트롤 왼쪽에 뜸) — 보기 · 고르기 · 계획 · 받는 중</h3>
+<div class="states">
+<div class="card"><b>지도 저장</b><div class="sub">저장한 지도 1.2 GB · 미리 받은 것 820 MB</div><span class="btn main">영역 받기</span><span class="btn">비우기 (길게 누르기)</span></div>
+<div class="card"><b>영역 받기</b><div class="sub">지도에서 끌어서 영역을 고르세요</div><span class="btn">취소</span></div>
+<div class="card"><b>영역 받기</b><div class="row">확대 범위 <span class="nb">15</span> ~ <span class="nb">19</span></div><div class="sub">타일 1,893개 · 약 28 MB</div><div class="sub">지금 지도 종류(위성)로 받아요</div><span class="btn main">받기</span><span class="btn">다시 고르기</span><span class="btn">취소</span></div>
+<div class="card"><b>영역 받기</b><div>타일 받는 중</div><div class="bar2"><i></i></div><div class="sub">약 64초 남음</div><span class="btn">취소</span></div>
+</div>
+</body></html>

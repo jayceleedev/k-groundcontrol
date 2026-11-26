@@ -46,7 +46,7 @@
 ## 2. 기술 기반 (D3·D4·R-N18; §17-1~2 확정)
 
 - 언어 **C++23**(`std::expected`). GCC 13+, MSVC 2022 17.8+(CMake가 `/std:c++latest`로 넘긴다).
-- Qt 6.12 LTS. 층별로 쓸 수 있는 Qt 모듈: `app` Core·Network·Sql·Positioning·TextToSpeech / `comm` + SerialPort / `vehicle` 추가 없음 / `platform/ui` + Quick·Qml·QuickControls·QuickEffects·Graphs·Svg / 기능 모듈 + Location·Multimedia·Graphs·Quick3D(필요한 기능만). GPL-3.0이라 모듈 제한 없음.
+- Qt 6.12 LTS. 층별로 쓸 수 있는 Qt 모듈: `app` Core·Network·Sql·Positioning·TextToSpeech / `comm` + SerialPort / `vehicle` 추가 없음 / `platform/ui` + Quick·Qml·QuickControls·QuickEffects·Graphs·Svg / 기능 모듈 + Location·Multimedia·Graphs·Quick3D(필요한 기능만). Qt 비공개 API(`Qt6::LocationPrivate`, `*_p.h`)는 `features/map/internal/geoservice/`만(검사 `qt_private`). Qt를 올리면 지도를 다시 확인한다. GPL-3.0이라 모듈 제한 없음.
 - 빌드 CMake ≥ 3.28 + Ninja, `CMakePresets.json`(linux-debug·linux-release·windows-release). Qt는 aqtinstall 패치 버전 고정, C/C++ 의존과 자원 꾸러미(아이콘 Tabler Icons 3.49.0, npm 꾸러미 URL + SHA-256)는 CPM(태그·체크섬 고정), vcpkg 안 씀. 제3자 코드는 CPM 캐시에 두고 모든 검사에서 제외.
 - MAVLink: `mavlink/c_library_v2` CPM 커밋 고정, 방언 **ardupilotmega**(common 포함). include는 `<kgc/comm/mavlink/Mavlink.h>` **한 곳**을 통해서만(설정 매크로 뒤 include). 허용: `comm`·`vehicle`·기능 `internal/`. 금지: `app`, `platform/ui`, 모든 `ui/`. PX4 이벤트 해석은 libevents(CPM).
 - QML 모듈: 바탕 `Kgc.Ui`, 기능마다 `Kgc.<Id>`(`qt_add_qml_module`, STATIC). `src/main`이 `Q_IMPORT_QML_PLUGIN`으로 전부 링크하고 `Composition`이 기능마다 `registerUi(uiRegistry, <그 모듈의 전역 서비스>)`(전역 부분이 없는 기체별 모듈 — `vehicleInfo`·`preflight` — 은 `registerUi(uiRegistry)`, 활성 기체를 보는 모듈은 `registerUi(uiRegistry, VehicleRegistry&)`; 이것도 앱 시작 때 한 번 부르고, 컨트롤러는 그 안에서 만들어 활성 기체에 다시 묶는다 — §3.1 얻는 법. 혼합 모듈은 그 전역 서비스를 넘긴다; 선언은 그 모듈 `api/kgc/<id>/Ui.h`; `kgc::ui::UiRegistry`는 PanelRegistry·슬롯 넷·Navigator·QQmlEngine을 묶은 참조 묶음)를 **직접 호출**한다(정적 초기화 객체에 기대지 않는다 — 링커가 버린다).
@@ -108,7 +108,7 @@ k-groundcontrol/
 | `esc` | ESC 설정 | 전역 | 좌 메뉴 12 | 5.2절 |
 | `elrs` | ELRS 설정 | 전역 | 좌 메뉴 13 | 5.3절 |
 | `tracker` | 안테나 트래커 | 전역 | 좌 메뉴 14, 하단 칩, 지도 부채꼴 레이어 | 5.4절 |
-| `map` | 지도 | 전역 | 가운데 바탕(타일·축척·기체 아이콘·궤적·홈), 레이어 슬롯의 그릇. 펜스·랠리·ADS-B는 그리지 않는다(기여 레이어) | B10 |
+| `map` | 지도 | 전역 | 지도 부품 `MapPane`(타일·축척·기체 아이콘·궤적·홈), 타일 받기·저장(`TileSource`·`TileStore`)과 지도 종류는 전역 하나; `shell`이 가운데 영역에 하나 놓는다. 펜스·랠리·ADS-B는 그리지 않는다(기여 레이어) | B10 |
 | `video` | 영상 | 전역 | 지도 PiP 레이어 | B11 |
 | `terrain` | 지형 | 전역 조회 + 기체별 응답(TERRAIN_REQUEST) | 지도 단면 레이어 | C6, F-56 |
 | `gcsposition` | GCS GPS | 전역 | 하단 칩 | R-Q3, C-47 |
@@ -136,14 +136,14 @@ k-groundcontrol/
 - 위가 아래의 `api/`를 쓴다. **아래가 위를 쓰지 않는다** — 위에 보이려면 §9.8 기여 등록, 위를 열려면 `Navigator::open(id, arg)`, 위의 값이 필요하면 그 값을 더 아래 모듈이나 상태로 내린다.
 - 예: `layout`(4)이 `motors`(5)의 api를 불러 **그림 모터 시험**을 한다(주인은 layout, OperationKind `MotorTest`). R-D35의 "표식≠기체값이면 시험 잠금" 판정은 `motors`가 할 수 없으므로(위의 `LayoutStates`를 읽을 수 없다) **`layout`이 판정해 그 결과를 `motors` api 호출의 인자로 넘긴다**.
 - `esc`·`elrs`·`tracker`(5)가 파라미터(`SERVO_BLH_*`, `PASSTHRU_EN`)를 읽고 쓰는 것은 `params`(8)가 아래라서 허용.
-- `map`(6)은 레이어 슬롯의 그릇이고 `video`·`terrain`(7)·`tracker`·`mission`·`fly`·`extras`(ADS-B)는 `platform/ui`의 `MapLayerSlot`에 등록한다(§9.8). `map`은 그들을 모른다.
+- `map`(6)은 레이어 슬롯의 그릇이고 `video`·`terrain`(7)·`tracker`·`mission`·`fly`·`extras`(ADS-B)는 `platform/ui`의 `MapLayerSlot`에 등록한다(§9.8). `map`은 그들을 모른다. `map`도 자기 레이어(궤적·홈·기체)를 `MapLayerSlot`에 등록한다.
 - 순환은 `tools/check`가 각 모듈 `CMakeLists.txt`의 `target_link_libraries` 텍스트를 이 표와 대조해 잡는다(configure·Qt 불필요).
 
 ## 4. 설정 — 세 가지를 섞지 않는다 (§17-5 확정)
 
 | 종류 | 뜻 | 자리 | 바꾸는 사람 | 저장 |
 |---|---|---|---|---|
-| **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`, `--extra-serial <경로>`; 반복 가능, 파일이 있을 때만 목록에 든다) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
+| **부팅 설정** | 뜨기 전에 정해지는 것: 데이터 폴더, 로그 수준·회전, 개발 플래그(`--sitl`, `--display`, `--extra-serial <경로>`; 반복 가능, 파일이 있을 때만 목록에 든다; `--tile-host <https 주소>`, `--tile-ca <PEM 파일>`(시험용, 명령줄만, ini 아님)) | `platform/app/boot/BootOptions`: 명령줄 + `kgc.ini`(`QStandardPaths::AppConfigLocation`) | 개발자·고급 사용자 | ini |
 | **운영 설정** | 쓰면서 바꾸는 값 | 정의는 각 모듈 `internal/settings/<id>.settings.json`; 저장·검색은 `platform/app/settings/Settings`(QSettings) | 사용자 | QSettings **IniFormat** — `QSettings(IniFormat, UserScope, "K-GroundControl", "K-GroundControl")`로 명시 생성(`QCoreApplication`의 organizationName은 **비워 둠**, applicationName만 `K-GroundControl`); Linux `~/.config/K-GroundControl/K-GroundControl.ini`, Windows `%APPDATA%\K-GroundControl\K-GroundControl.ini`; 레지스트리 안 씀 |
 | **고정값** | 바꾸면 안 되는 수 | 모듈 `internal/Constants.h`; 여러 모듈이 쓰는 값만 `platform/app/constants/`(§6) | 코드 | 코드 |
 
@@ -165,7 +165,7 @@ k-groundcontrol/
 | `Link` | 연결 여부·주 링크·손실률·마지막 수신 시각·끊김·재부팅 중·**임대로 멈춤(`suspended`)** | 자동조종기(compid 1)의 모든 메시지, RADIO_STATUS, 시퀀스, RebootWindow, `LinkManager::suspended` | `VehicleStateOwner`(1Hz 끊김 검사도 여기; `suspended`·`rebooting`이면 끊김으로 판정하지 않음) | Q_GADGET |
 | `Arming` | armed, 모드(id+표시 이름), 준비 상태, **기체 쪽** 시동 불가 사유 | HEARTBEAT, SYS_STATUS, EVENT/STATUSTEXT(플러그인 해석 함수) | Owner | Q_GADGET |
 | `Attitude` | roll·pitch·yaw·각속도 | ATTITUDE | Owner | Q_GADGET |
-| `Position` | 위도·경도·AMSL·상대 고도·속도·헤딩·홈·GCS 거리 | GLOBAL_POSITION_INT, HOME_POSITION | Owner | Q_GADGET |
+| `Position` | 위도·경도·AMSL·상대 고도·속도·헤딩·홈(`homeLatDeg`·`homeLonDeg`·`homeAltAmslM`)·GCS 거리 | GLOBAL_POSITION_INT, HOME_POSITION(기체가 생길 때 REQUEST_MESSAGE로 한 번 요청) | Owner | Q_GADGET |
 | `Gps` | fix·위성·HDOP·인스턴스 | GPS_RAW_INT, GPS2_RAW | Owner | Q_GADGET |
 | `Battery[]` | 전압·전류·잔량·소모·셀 | BATTERY_STATUS, SYS_STATUS | Owner | ListModel |
 | `Sensors` | 센서별 켜짐·건강 | SYS_STATUS 비트 | Owner | Q_GADGET |
@@ -226,7 +226,7 @@ k-groundcontrol/
 ## 9. 조립·수명·송신·공통 틀
 
 ### 9.1 조립과 수명
-- `src/main/Composition`이 모든 `api/`를 include해 조립한다(로직 없음). `main.cpp`: BootOptions → Paths → LogSink(여기서부터 로그) → Settings → Translator → Composition → Shell 창.
+- `src/main/Composition`이 모든 `api/`를 include해 조립한다(로직 없음). `main.cpp`: BootOptions → Paths → LogSink(여기서부터 로그) → (`--tile-ca`가 있으면) `trustCertificateFile` → Settings → Translator → Composition → Shell 창.
 - `comm/links/LinkManager`(링크), `vehicle/registry/VehicleRegistry`(기체, sysid 키; compid 1이 자동조종기, 다른 compid는 그 기체의 `Component`). **활성 기체** `VehicleRegistry::active` 하나 — 상단바 기체 표시, 트래커 기본 대상, 구성도 편집 대상이 본다.
 - 수명은 §3.1 규칙. 기체 삭제: `vehicleRemoved` → `deleteLater`. 참조는 `QPointer`/활성 기체 프로퍼티.
 - **포트 소유 등록부** `comm/rawport/PortRegistry`: 모든 시리얼 포트의 현재 소유자 — MAVLink 링크 / `RawPort`(트래커·GCS GPS처럼 오래 쥐는 비-MAVLink 포트) / `PortLease`(굽기·패스스루, R-Q1a (가)형). **굽기·패스스루는 임대 없이 포트를 열 수 없다.** USB 자동 연결은 등록부에 있는 포트를 건드리지 않는다. 0.1.0은 포트 소유자가 시리얼 링크 하나뿐이라 등록부 없이 시리얼 링크를 먼저 만들고, 임대가 생기는 버전에 등록부를 더한다. 0.2.0의 임대는 빈 포트만 받고, `suspend`와 소유자 `RawPort`는 쓰는 버전에서 더한다. `PortLease`는 `comm/rawport` 안에 둔다.
@@ -244,7 +244,7 @@ k-groundcontrol/
     | `SetupPage`(보정·기체 종류·조종기 등 설정 페이지 열기), `FcFlash`, `EscFlash`, `ElrsFlash`, `TrackerFlash`(scope Any), `EscConfig`, `ElrsConfig`, `AiWrite`, `ParamBulk`(파일 일괄), `LayoutWrite`, `MotorTest` | Deny |
     | `ParamSingle`, `Tuning`, `Autotune` | AllowWithWarning |
     | `TrackerConfig`, `TrackerCalib`, `TrackerManual` | Allow(추적 중단 경고) |
-    | `FlyAction`(시동·이륙·착륙·RTL·일시정지·유도), `MissionStartStop`, `Read`(읽기·내려받기) | Allow(각자의 길게 누르기 규칙) |
+    | `FlyAction`(시동·이륙·착륙·RTL·일시정지·유도), `MissionStartStop`, `Read`(읽기·내려받기), `MapDownload`(기체와 무관, check 안 부름) | Allow(각자의 길게 누르기 규칙) |
   - ② **Sender에서**: `OperationKind`를 모르므로 **`WorkLock`과 `RebootWindow`만** 본다 — 잠금 중에는 `Arm`·`Motion`·`Command`·`Param`·`Mission` 송신을 **토큰을 쥔 작업의 것만 통과**시킨다(다른 작업·화면의 송신은 거부). `Command` 전부를 막는 것은 R-Q1a (나)의 목록보다 넓은데, 작업 중 다른 명령이 끼어드는 것을 막기 위한 **의도**다. **`Other`(GCS 하트비트·스트림 요청 등 링크 유지 송신)는 막지 않는다**(R-Q1a (나) 하트비트 유지). 재부팅 구간의 기체에는 `Arm`·`Motion`을 보내지 않는다. 시동 중의 `Param`·`Mission` 송신은 ②에서 막지 않는다(판정은 ①에서 끝남).
   - **작업 도중 시동이 걸리면**: `vehicle/safety/JobArmWatch`(Job에 붙은 도우미)가 `Arming.armed` 변화를 보고 Deny 종류는 Job을 **중단**(안전한 단계까지 끝낸 뒤), AllowWithWarning 종류는 경고만.
 - `vehicle/command/CommandQueue`는 Sender 위의 **재시도 계층**(COMMAND_LONG/INT·ACK·타임아웃·재시도). 보정 시작처럼 ACK가 늦는 명령은 `{retries=0, timeout=설정값}` 모드로 큐를 탄다 — 예외 목록 없음. AP 가속도 보정의 "다음"(COMMAND_ACK 송신)도 Sender를 지난다.
@@ -256,31 +256,32 @@ k-groundcontrol/
 
 | 무엇 | 유일한 자리 | 검사 |
 |---|---|---|
-| HTTP(S) | `platform/app/net/Http`: HTTPS만, 타임아웃·재시도, 다운로드 캐시+해시 기록(0.2.0에는 없고 뒤 버전), `onlineChanged`(R-N13) | `QNetworkAccessManager`가 밖에 있으면 |
+| HTTP(S) | `platform/app/net/Http`: HTTPS만, 타임아웃·재시도, 다운로드 캐시+해시 기록(0.2.0에는 없고 뒤 버전), `onlineChanged`(R-N13, `Aborted`는 무시), 시험용 인증서 `trustCertificateFile`(부팅 `--tile-ca`, 그 실행의 모든 HTTPS), 최종 HTTP 상태 400 이상 오류 `HttpStatus`(`kHttpErrorStatusMin`) | `QNetworkAccessManager`가 밖에 있으면 |
 | 환경 변수 | `platform/app/boot/BootOptions` | `qEnvironmentVariable`·`getenv` 위치 |
 | 시리얼 포트 | `platform/comm/links/serial`, `platform/comm/rawport`(그 밖은 `RawPort`/`ByteStream` 인터페이스만; `comm/lease`·`comm/espflash` 포함) | `QSerialPort` 생성 위치 |
 | Windows 장치 조회(SetupAPI, USB 이름) | `platform/comm/links/serial` | — |
 | 조이스틱(SDL3) | `platform/comm/joystick` | SDL include 위치 |
-| SQL(SQLite: 타일·메타데이터·펌웨어 캐시) | `platform/app/store` | QtSql include·`QSqlQuery` 위치 |
+| SQL(SQLite: 타일·메타데이터·펌웨어 캐시) | `platform/app/store`(`kgc_app_store`, ModuleId 21) | QtSql include·`QSqlQuery` 위치(0.5.0부터) |
 | TTS | `platform/app/notify/Speech` | — |
 | 다른 프로그램 실행 | `features/sitl/internal`(`QProcess`) | `QProcess` 위치 |
+| Qt 비공개 API | `features/map/internal/geoservice/` | `_p.h` include·`Qt6::*Private` 위치 |
 
 ### 9.4 오래 걸리는 작업과 오류
-- `platform/app/job/Job`(QObject): `OperationKind`, 상태(대기·진행·성공·실패·취소), 단계 이름, 진행률, 남은 시간, `cancel()`, 끝날 때 `finished(Result<void>)` 한 번, `errorCode`·`errorText` 프로퍼티. **Job은 상위 층을 모른다**: 임대·잠금·ArmGuard 토큰은 상위 층이 `job.hold(Releaser)`로 넘긴 **형을 지운 해제 핸들**(이동만 되는 호출 가능 객체)로 쥐고, 끝날 때 역순으로 부른다(RAII). 시동 감시는 2층 `vehicle/safety/JobArmWatch`가 `attach(job, scope)`로 붙여서 `Arming.armed` 변화에 Job을 중단·경고한다(§9.2). `OperationKind` 열거는 0층 `<kgc/app/job/OperationKind.h>`에 두는데 기능 이름(`EscFlash`, `LayoutWrite`…)이 들어 있다 — **"바탕은 기능을 모른다"의 명시적 예외 하나**(이름표 열거일 뿐 코드 의존이 아니다). 화면은 `platform/ui/components/JobView.qml`로 보여 준다. FC·ESC·ELRS·트래커 굽기, 미션 전송, 파라미터 내려받기, 보정, 로그 내려받기가 전부 Job이다. **예외 하나**: FC 굽기의 포트 임대는 재시도와 재연결 때문에 Job보다 오래 살아서 `hold`가 아니라 `FcFlashService`가 쥔다.
+- `platform/app/job/Job`(QObject): `OperationKind`, 상태(대기·진행·성공·실패·취소), 단계 이름, 진행률, 남은 시간, `cancel()`, 끝날 때 `finished(Result<void>)` 한 번, `errorCode`·`errorText` 프로퍼티. **Job은 상위 층을 모른다**: 임대·잠금·ArmGuard 토큰은 상위 층이 `job.hold(Releaser)`로 넘긴 **형을 지운 해제 핸들**(이동만 되는 호출 가능 객체)로 쥐고, 끝날 때 역순으로 부른다(RAII). 시동 감시는 2층 `vehicle/safety/JobArmWatch`가 `attach(job, scope)`로 붙여서 `Arming.armed` 변화에 Job을 중단·경고한다(§9.2). `OperationKind` 열거는 0층 `<kgc/app/job/OperationKind.h>`에 두는데 기능 이름(`EscFlash`, `LayoutWrite`…)이 들어 있다 — **"바탕은 기능을 모른다"의 명시적 예외 하나**(이름표 열거일 뿐 코드 의존이 아니다). 화면은 `platform/ui/components/JobView.qml`로 보여 준다. FC·ESC·ELRS·트래커 굽기, 미션 전송, 파라미터 내려받기, 보정, 로그 내려받기, 지도 영역 받기(`MapDownload`)가 전부 Job이다. **예외 하나**: FC 굽기의 포트 임대는 재시도와 재연결 때문에 Job보다 오래 살아서 `hold`가 아니라 `FcFlashService`가 쥔다.
 - `Result<T> = std::expected<T, ErrorCode>`. 함수는 예외 대신 Result. 예외·`Q_ASSERT`·`qFatal`은 프로그램 버그에만. 워커 스레드의 오류는 `ErrorCode`를 큐드 시그널로 소유 객체에 올리고, 알림은 소유 객체만 낸다.
 
 ### 9.5 주기 작업·타임아웃·스레드
 - `platform/app/scheduler/Scheduler`에 **이름 있는 반복 작업만** `registerTask(name, period, owner, context, fn)`(`register`는 C++ 예약어)(`fn`은 context 스레드에서 돌고 owner가 사라지면 끝난다; 이름이 겹치면 프로그래밍 오류): GCS 하트비트 1Hz(`LinkHeartbeat`가 GUI 스레드에서 만들고 링크 워커가 쓴다 — §9.2의 예외), AP 스트림 요청 반복 500ms(`VehicleSender`), 끊김 검사 1Hz, 기체 없음 검사 1Hz(`LinkService`), 시리얼 포트 목록 1Hz, tlog 플러시. 트래커 각도 송신은 반복이 아니라 **위치 수신에 따라**(최대 5Hz 제한은 `Timeout`).
 - 일회성 타임아웃은 이름 붙은 `app/scheduler/Timeout`. QML `Timer`는 `platform/ui/components/TimerBox`만. 검사 대상 `QTimer`·`singleShot`·`startTimer(`·`QBasicTimer`·QML `Timer {`.
-- 스레드: 링크 I/O·MAVLink 파싱은 링크마다 워커, **영상 디코드·타일 로드·지형 조회도 워커**(R-N15). 상태 갱신·기능 로직·화면은 GUI 스레드.
+- 스레드: 링크 I/O·MAVLink 파싱은 링크마다 워커, **영상 디코드·지형 조회와 타일 저장소(`TileStore`, SQLite)는 워커**(R-N15). 타일 내려받기는 `Http`(비동기, GUI 스레드에서 부름), 타일 그림(JPEG/PNG) 풀기는 Qt Location이 GUI 스레드에서 한다(바꿀 수 없음). 상태 갱신·기능 로직·화면은 GUI 스레드.
 
 ### 9.6 공통 함수
 `platform/app/geo/Altitude`(AMSL·상대·지형·타원체고↔MSL, frame 인자) **한 묶음**, `Geodesy`(방위·고각·거리 — R-D23의 한 함수), `app/units`(표시 단위), `app/crc`(CRC16-XMODEM, CRC-0xA001, CRC8-0xD5 — 시험 벡터는 `tests/`), `app/util`. 네임스페이스 범위의 자유 함수가 두 모듈에 같은 이름이면 검사가 잡는다.
 
 ### 9.7 화면 바탕 `platform/ui` (QML 모듈 `Kgc.Ui`)
-- `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정, 계기 모양과 그 목록), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5와 0.0.4 스펙 §3.3(`AttitudeIndicator`, 색 토큰 `attitudeSky`·`attitudeGround`)·§3.4(`EmptyState`)·§12(`PrimaryFlightDisplay`·`HeadUpDisplay`, 계기·OSD·HUD·3D 색 토큰); 기체 3D `VehicleAttitude3D`는 Quick3D를 쓰므로 기능 `vehicleInfo` 안; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 **기여**의 메뉴 자리를 `Composition`이 등록; 모듈이 있어도 그 기여가 아직 없으면 자리 표시), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽 — 둘 다 `registerPlaceholder`로 아직 없는 기능의 자리를 `Composition`이 잡아 둠(상단은 영역·묶음 번호·아이콘·아이콘만 여부·모양 `shape`(단추·드롭다운·표시; 0.0.4 §14), 하단은 쪽; 이름은 번역 문맥 "Bar"; 순서는 0.0.4 스펙 §15), `RightTabSlot`(`registerTab(id, order, titleKey, component, placement)`; `placement` = `Top`(탭 줄 위 계기 칸, 하나만 — 둘째는 `UiError::TopTaken`) | `Tab`; 이름 번역 문맥 "RightTab"; 0.0.4 §3.2), `MapLayerSlot`, 하단바 맨 오른쪽 단추 `BottomActionSlot`; 공통 바탕 `SlotModel` — `add(entry)`·order 정렬·같은 id 거부), `Navigator`(`open(panelId, arg)`).
+- `Theme.qml`(크기·색·글꼴 토큰; 색·모양 토큰은 `current` 테마 객체에서; 지도 토큰 색 7·크기 8은 0.5.0 스펙 §5.5), `themes/`(`ThemeBase.qml`이 토큰을 required로 정하고 테마 하나 = 파일 하나, QML 내부 형; 검사 `theme_tokens`), **`ThemeSwitcher`**(`Theme.current`의 유일한 주인; 고르는 판정은 순수 함수 `resolveTheme`), **`UiSettingValues`**(바탕 화면 설정값을 QML에 냄: 길게 누르기 시간과 범위, 배경 종류·사진과 그 판정, 계기 모양과 그 목록), `applyDefaultSurfaceFormat()`(창 전 MSAA 4), `components/`(버튼·고르기·입력·표시·묶음·알림·차트·아이콘 부품, 설정 화면 틀 `SettingsPage`(카테고리 1 : 항목 3)과 TimerBox — 목록은 0.0.2 스펙 §3.5와 0.0.4 스펙 §3.3(`AttitudeIndicator`, 색 토큰 `attitudeSky`·`attitudeGround`)·§3.4(`EmptyState`)·§12(`PrimaryFlightDisplay`·`HeadUpDisplay`, 계기·OSD·HUD·3D 색 토큰); 기체 3D `VehicleAttitude3D`는 Quick3D를 쓰므로 기능 `vehicleInfo` 안; JobView는 app/job과 함께; 차트 셋은 Qt Graphs를 감쌈; 아이콘은 Tabler, `IconGlyph`가 테마 색을 입힘). Controls 스타일은 **Basic** 고정(`main`이 `QQuickStyle::setStyle`), `Shell`의 `palette`는 Theme 토큰에 묶음. `PanelRegistry`(좌 메뉴 패널 항목: `id`, `order`, `group`(구분선 묶음 번호), `titleKey`(번역 문맥 "Menu"의 한국어 원문 — C++에서 `QT_TRANSLATE_NOOP("Menu", …)`로 적고 QML이 `qsTranslate("Menu", titleKey)`로 그리며 `Translator.language`가 바뀌면 다시 평가), `icon`(아이콘 자원 URL), `component`(QML 컴포넌트 URL 또는 비어 있음); **자리 표시(Placeholder)** `registerPlaceholder(id, order, group, titleKey, icon)` — 아직 없는 **기여**의 메뉴 자리를 `Composition`이 등록; 모듈이 있어도 그 기여가 아직 없으면 자리 표시), **슬롯**(`TopbarSlot` 왼쪽/가운데/오른쪽, `StatusChipSlot` 하단 왼쪽/오른쪽 — 둘 다 `registerPlaceholder`로 아직 없는 기능의 자리를 `Composition`이 잡아 둠(상단은 영역·묶음 번호·아이콘·아이콘만 여부·모양 `shape`(단추·드롭다운·표시; 0.0.4 §14), 하단은 쪽; 이름은 번역 문맥 "Bar"; 순서는 0.0.4 스펙 §15), `RightTabSlot`(`registerTab(id, order, titleKey, component, placement)`; `placement` = `Top`(탭 줄 위 계기 칸, 하나만 — 둘째는 `UiError::TopTaken`) | `Tab`; 이름 번역 문맥 "RightTab"; 0.0.4 §3.2), `MapLayerSlot`(`registerLayer(id, order, component)`; `component`는 뿌리가 `MapItemGroup`(QtLocation)이고 `property var mapPane`을 가진 QML 파일 주소 — 지도 부품마다 모든 항목을 만들어 얹고 `z = order`(클수록 위), `platform/ui`는 QtLocation을 import하지 않고 주소만 든다; 0.5.0 스펙 §5.5), 하단바 맨 오른쪽 단추 `BottomActionSlot`; 공통 바탕 `SlotModel` — `add(entry)`·order 정렬·같은 id 거부), `Navigator`(`open(panelId, arg)`).
 - **별도 창**: 기능 컨트롤러가 소유한 `SeparateWindow`가 창을 만든다(처음 열 때 같은 엔진의 루트 문맥에서, 창의 부모는 `SeparateWindow`, transientParent 없음, 닫으면 숨김). 자리는 `WindowPlacement`(화면 기준 좌표, 끌어오기 식)로 복원·저장하고, 창 일은 공용 도우미 `SeparateWindow`가 한다. `Composition`이 셸 창 닫기를 앱 종료에 잇는다.
-- 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`(전역 부분이 없는 기체별 모듈은 `registerUi(uiRegistry)`)에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만든다. **새 컨트롤러(0.1.0부터)는 형이 있는 QML 싱글턴**(`QML_ELEMENT`·`QML_SINGLETON`·`static create`, 객체는 `registerUi`가 만들어 C++가 소유, QML은 `Kgc.<Id>`를 명시해 import)으로 내서 qmllint가 이름을 검사하게 한다. 기존 컨텍스트 프로퍼티(`<id>Controller`)는 그 모듈을 고치는 버전에서 옮긴다. `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다.
+- 기능 모듈의 `ui/register.cpp`가 `registerUi(uiRegistry, service)`(전역 부분이 없는 기체별 모듈은 `registerUi(uiRegistry)`)에서 패널·슬롯 기여·레이어를 등록하고 자기 컨트롤러를 만든다. **새 컨트롤러(0.1.0부터)는 형이 있는 QML 싱글턴**(`QML_ELEMENT`·`QML_SINGLETON`·`static create`, 객체는 `registerUi`가 만들어 C++가 소유, QML은 `Kgc.<Id>`를 명시해 import)으로 내서 qmllint가 이름을 검사하게 한다. 기존 컨텍스트 프로퍼티(`<id>Controller`)는 그 모듈을 고치는 버전에서 옮긴다(예외 한 번: `shellController`·`appSettingsController`는 0.5.0에서 옮기지 않고 따로 하는 작은 일에서 옮긴다). `shell`은 **잎 모듈**: 틀을 그리고 등록부를 읽어 배치만 한다(예외: 가운데 지도 부품 `MapPane`은 `map`의 QML을 직접 놓는다, 0.5.0).
 - 컨트롤러(`<Id>Controller`)는 상태를 표시값으로 옮기고 서비스를 호출만. 판정은 서비스·ArmedPolicy.
 - QML `import` 허용: `QtQuick*`·`QtQml*`, §2의 Qt 모듈(Location·Positioning·Multimedia·Graphs·Quick3D), `Kgc.Ui`, 자기 `Kgc.<Id>`, **순위표에서 아래인** `Kgc.<Id>`. 그 밖은 검사가 잡는다.
 
@@ -298,7 +299,8 @@ k-groundcontrol/
 | 하단 트래커·GCS GPS 칩 | `tracker`, `gcsposition` | `StatusChipSlot(오른쪽)` |
 | 하단바 맨 오른쪽 단추(세컨드 패널, 앱 로그) | `secondPanel`, `analyze` | `BottomActionSlot` |
 | 우 사이드바 탭 | `vehicleInfo`(계기·개요·상세·메시지), `logs`(로그), `preflight`(점검) | `RightTabSlot` |
-| 지도 레이어 | `mission`(편집·경로·**펜스·랠리**), `fly`(유도 표식), `tracker`(부채꼴), `terrain`(단면), `video`(PiP), `extras`의 ADS-B 모듈(교통) | `MapLayerSlot` — `map`이 그릇 |
+| 지도 레이어 | `map`(궤적·홈·기체), `mission`(편집·경로·**펜스·랠리**), `fly`(유도 표식), `tracker`(부채꼴), `terrain`(단면), `video`(PiP), `extras`의 ADS-B 모듈(교통) | `MapLayerSlot` — `map`이 그릇 |
+| 가운데 지도 부품 `MapPane` | `map` | `shell`이 가운데에 놓음(순위 1 → 6) |
 | 좌 메뉴 패널 | §3.1 좌 메뉴 모듈 | `PanelRegistry` |
 | 정보 창 | `appSettings` | `Navigator.open("appSettings","about")` |
 
@@ -342,7 +344,7 @@ k-groundcontrol/
 | 화면 바탕 | `platform/ui` | 테마·부품·등록부·슬롯 |
 | 기여 지점 / 이름으로 열기 / 자리 표시 | `Slot` / `Navigator` / `Placeholder` | §9.7·9.8 |
 | 테마 / 테마 바탕 / 테마 판정 / 테마 바꾸개 / 유리 바탕 | `Theme` / `ThemeBase` / `resolveTheme`·`ThemeChoice`·`ThemeReason` / `ThemeSwitcher` / `GlassSurface` | §9.7 |
-| 화면 설정값 노출 / 슬롯 바탕 / 지도 바닥 / 가운데 안쪽 / UI 부품 목록 / 아이콘 그림 / 범위 판정 | `UiSettingValues` / `SlotModel` / `mapStage` / `centerViewport` / `uiGallery` / `IconGlyph` / `withinRange` | 부품 이름은 0.0.2 스펙 §3.5 |
+| 화면 설정값 노출 / 슬롯 바탕 / 배경·지도 바닥 / 가운데 안쪽 / UI 부품 목록 / 아이콘 그림 / 범위 판정 | `UiSettingValues` / `SlotModel` / `mapStage` / `centerViewport` / `uiGallery` / `IconGlyph` / `withinRange` | 부품 이름은 0.0.2 스펙 §3.5; `mapStage`는 배경과 가운데 지도를 담는 바닥(0.5.0) |
 | 계기(자세 표시) / 빈 상태 / 우 탭 자리 | `AttitudeIndicator` / `EmptyState` / `RightTabPlacement` | 0.0.4 |
 | 계기 모양 / PFD / HUD / OSD / 기체 3D / 자북 표시 | `ui.instrumentStyle` / `PrimaryFlightDisplay` / `HeadUpDisplay` / `osd*`(objectName 접두) / `VehicleAttitude3D` / `compassNorth` | 0.0.4 §12 |
 | 세컨드 패널 / 칸 배치 / 하단 단추 슬롯 / 로그 통로 / 로그 기록 / 창 자리 / 화면 정보 / 별도 창 도우미 / 수준 이름 | `secondPanel` / `CellArrangement` / `BottomActionSlot` / `LogFeed` / `LogRecord` / `WindowPlacement` / `ScreenInfo` / `SeparateWindow` / `logLevelName` | 0.0.3 |
@@ -379,6 +381,16 @@ k-groundcontrol/
 | 펌웨어 세팅 모듈 / 안전·페일세이프 모듈 / 연결 모듈 / 참고 모듈 / 시뮬레이션 모듈 | `fcFlash` / `failsafe` / `link` / `reference` / `sitl` | 기능 id |
 | 시뮬레이터 / 시뮬레이션 기체 종류 / 배포판 / 홈 위치 / 속도 배수 / 값 초기화 | `Simulator` / `SitlVehicle` / `SitlRelease` / `SitlHome` / `speedup` / `wipe` | 0.4.0 |
 | 시뮬레이션 낱말 | `SitlService` / `SitlController` / `SitlState` / `SitlPlatform` / `SitlFile` / `SitlError` / `SitlDownload` / `SitlHomeField` / `sitlFiles` / `sitlFolderName` / `sitlModel` / `sitlRunFolderName` / `sitlArguments` / `checkHome` / `ChoiceCard` / `cacheSitl` / `kUdpPort` / `<이름>Default`(설정 기본값 접근자) | 0.4.0 |
+| 지도 부품 / 지도 서비스 / 지도 종류(위성·하이브리드·일반) / 지도 제어 / 기체 표식 목록 / 보던 곳 / 따라가기 / 궤적 / 영역 받기 / 타일 공급 / 타일 저장소 / 덩이 저장소 / 기체 홈 위치 / 지도 위치 있음 / 타일 서버 바꾸기 / 시험용 인증서 | `MapPane` / `MapService` / `settings::MapType`(`Satellite`·`Hybrid`·`Road`) / `MapController` / `VehicleMarkerModel` / `SavedView`(`lat`·`lon`·`zoom`) / `follow` / `trail` / `MapDownload` / `TileSource` / `TileStore` / `BlobStore` / `homeLatDeg`·`homeLonDeg`·`homeAltAmslM`·`updateHomePosition`(`HomePositionUpdater`) / `isMapPosition` / `tileHost`(`--tile-host`, `parseTileHost`) / `tileCa`(`--tile-ca`, `trustCertificateFile`, `exitBadCertificate`) | 0.5.0 |
+| 타일 낱말 | `tileUrl` / `tileKey` / `TileXY`(`x`·`y`) / `TileRange`(`x`·`y`·`columns`·`rows`) / `tileOf` / `tileRange` / `tileCount` / `metersPerPixel` / `ScaleBarLength`(`meters`·`pixels`) / `scaleBar` / `scaleLabel` / `sizeText` / `tileImageFormat` / `tileErrorName` / `planDownload` / `appendTrailPoint` | 0.5.0 순수 함수 |
+| 지도 서비스 낱말 | `mapType` / `setMapType` / `mapTypeChanged` / `language` / `setLanguage` / `languageChanged` / `vehicles` / `startDownload` / `downloadJob` / `dismissDownload` / `downloadChanged` / `requestStoreSize` / `storeSizeReady` / `clearStore` / `storeCleared` / `storeFailed` / `trailOf` / `clearTrails` / `trailPointAdded` / `trailsCleared` / `lastView` / `saveView` / `TrailBook`(`pointAdded`·`cleared`) / `MapDownloadJob`(`job`·`start`) / `TileTicket` / `Pending`(단계 `Pin`·`Lookup`·`Http`) / `Waiter`(`ticket`·`done`; 깃발 `pin`은 덩이 저장소 낱말) / `fetch` / `cancel` / `onlineAgain` / TileStore 멤버 `lookup`·`found`·`missing`·`save`·`pinned`·`size`·`sized`·`failed` / `tileSource`(자유 함수) / `MapServicePrivate` / `storeThread`·`store`·`storeBroken`(`MapService::Private`) / `mapLifetime` / `createUiRegistry` | 0.5.0 |
+| 지도 화면 낱말 | `MapInput` / `MapControls` / `MapScaleBar` / `MapDownloadCard` / `TrailLayer` / `HomeLayer` / `VehicleLayer` / `MapControllerStore`(나눈 파일) / `mapPane`(레이어·제어·카드 속성) / `mapTrails`·`mapHomes`·`mapVehicles`(레이어 id) / `layer`(레이어 위임자 속성) / `showControls` / `rememberView` / `selecting` / `armPending` / `map`(MapPane 별칭·입력·축척 속성) / `layers` / `reportLayerFailed` / `mapTypeNames` / `activeSysid` / `activeSysidChanged` / `activeCoordinate` / `activeHasPosition` / `activePositionChanged` / `minZoom` / `maxZoom` / `saveViewDelayMs` / `scaleFor`(`pixels`·`label`) / `estimateText` / `planError` / `downloadRunning` / `downloadFailed` / `downloadResultText` / `downloadError` / `refreshStoreSize` / `storeTotalText` / `storePinnedText` / `storeError` / `storeChanged` / `step`(`view`·`select`·`plan`·`download`) / `area` / `zoomFrom` / `zoomTo` / `choose` / `zoomAround` / `areaBetween` / `lastArea` / `startCentroid` / `userPanned` / `selectionMoved` / `selectionDone` / `sysid`·`coordinate`·`heading`·`active`·`homeCoordinate`·`hasHome`·`hasPosition`(역할) / `registerLayer`·`component`(MapLayerSlot) / `downloadCard`(MapControls 속성) / QML id `pane`·`canvas`·`input`·`wheelHandler`·`saveViewTimer`·`card`·`popup`·`marker`·`zoomFromBox`·`zoomToBox`·`tilde` | 0.5.0 |
+| 지도 objectName | `centerMap` / `mapCanvas` / `mapInput` / `mapDrag` / `mapSelectDrag` / `mapWheel` / `mapPinch` / `mapSelectionRect` / `mapLayer_` / `mapTrail_` / `mapHome_` / `mapVehicle_`(접두) / `mapScaleBar` / `mapScaleLabel` / `mapScaleLine` / `mapAttribution` / `mapControls` / `mapZoomIn` / `mapZoomOut` / `mapFollow` / `mapTypeButton` / `mapTypePopup` / `mapTypeChoice` / `mapClearTrails` / `mapStoreButton` / `mapDownloadCard` / `mapCardInputBlock` / `mapCardTapBlock` / `mapStoreText` / `mapStoreError` / `mapDownloadArea` / `mapStoreClear` / `mapSelectHint` / `mapSelectCancel` / `mapZoomFrom` / `mapZoomTo` / `mapPlanCount` / `mapPlanType` / `mapPlanLimit` / `mapDownloadStart` / `mapReselect` / `mapPlanCancel` / `mapDownloadJob` / `mapDownloadResult` / `mapDownloadClose` / `panelInputBlock` / `panelTapBlock` / `mapStoreLimitField` / `mapTrailSpacingField` / `mapTrailLengthField` / `mapAutoFollowToggle` | 0.5.0 |
+| 본 타일 저장 한도 / 궤적 점 간격 / 궤적 최대 점 수 / 따라가기 자동 켜기 | `tileStoreLimitMb` / `trailMinMeters` / `trailMaxPoints` / `autoFollow`(설정과 `MapController` 속성; 바뀜 신호 `…Changed`, 범위 속성 `…Min`·`…Max`) / TileStore `setLimit` | 0.5.0 설정 |
+| 지도 플러그인 낱말 | provider `kgc` / `KgcGeoServiceFactory` / `KgcMappingEngine` / `KgcTileFetcher` / `KgcTileReply`(`deliver`) / `KgcTileCache` / `kgc_plugin.json` / `refreshVisible` / `Qt6::LocationPrivate` / `qt_private`(검사) | 0.5.0 |
+| 지도 고정값·설정·토큰 | `kMinZoom` / `kMaxZoom` / `kTileSize` / `kMaxMercatorLatitude` / `kMetersPerPixelAtZoom0` / `kBytesPerKilobyte` / `kMaxDownloadTiles` / `kEvictEverySaves` / `kAvgTileBytes` / `kDownloadParallel` / `kSaveViewDelayMs` / `kTileTimeout` / `kOnlineProbeInterval` / `kTileMemoryCacheBytes` / `kTileExtraTextureBytes` / `kTileSourceProperty` / Timeout `mapOnlineProbe` / 연결 이름 `mapTiles` / `map.mapType` / `map.lastLatitude` / `map.lastLongitude` / `map.lastZoom` / `map.tileStoreLimitMb` / `map.trailMinMeters` / `map.trailMaxPoints` / `map.autoFollow` / `mapVehicle`·`mapVehicleOther`·`mapVehicleOutline`·`mapTrail`·`mapHome`·`mapHomeInk`·`mapSelection`(색) / `mapVehicleSize`·`mapHomeSize`·`mapTrailWidth`·`mapScaleMaxWidth`·`mapScaleTickHeight`·`mapControlGap`·`mapCardWidth`·`mapSelectionWidth`(크기) | 0.5.0 |
+| 지도·저장소·HTTP 오류와 로그 | `MapError`(`TooManyTiles`·`BadZoomRange`·`DownloadBusy`·`TileFailed`·`StoreFailed`) / `MapEvent`(`StoreReset`·`StoreFailed`·`TileFailed`·`DownloadStarted`·`DownloadFinished`·`DownloadCancelled`·`LayerFailed`) / `StoreError`(`OpenFailed`·`QueryFailed`) / `StoreEvent`(`Opened`·`OpenFailed`·`QueryFailed`) / `HttpError::BadCertificate`·`HttpError::HttpStatus` / `failureOf` / `kHttpErrorStatusMin` / `NetEvent::CertificateTrusted` | 0.5.0 |
+| 덩이 저장소 낱말 | `app/store` / `open` / `get` / `put` / `pin` / `totalBytes` / `pinnedBytes` / `evictUnpinned` / `clear` / `blobs`(표: `data`·`bytes`·`pinned`·`used`; 열쇠 열은 있는 낱말 `key`) / `blobs_evict`(색인) | 0.5.0 |
 
 ## 14. 자동 검사 `tools/check/` (R-N21; §17-7 확정)
 
@@ -396,7 +408,7 @@ k-groundcontrol/
 | MAVLink include | `<kgc/comm/mavlink/Mavlink.h>` 밖의 `mavlink/*.h`, `ui/`의 MAVLink | 0.1.x |
 | 펌웨어 분기 | §8 규칙 + 허용 목록 | 0.1.x |
 | 송신 | §9.2 규칙 | 0.1.x |
-| 바깥 접점 | §9.3 표 | 각 자리가 처음 쓰일 때 |
+| 바깥 접점 | §9.3 표 | 각 자리가 처음 쓰일 때(SQL은 0.5.0부터) |
 | 타이머 | §9.5 | 0.1.x |
 | 고정값 | §6 범위. `src/`만 보고 `Constants.h`·`platform/app/constants/`·`ModuleId.h`·생성 코드는 제외 | 0.1.x |
 | 설정 키 | 설정 키 문자열 리터럴(생성 접근자 밖) | 0.1.x |
@@ -406,12 +418,14 @@ k-groundcontrol/
 | 비밀값 | `Secret::reveal()`이 허용 파일 밖 | 비밀값이 처음 쓰일 때 |
 | 이름 중복 | 자유 함수 이름이 두 모듈에. 모듈마다 있어야 하는 `registerUi`·`make`·`errorText`는 제외 | 0.1.x |
 | qmllint | `linux.yml`이 전체 빌드 뒤 형이 있는 컨트롤러를 쓰는 모듈을 `--unqualified disable --max-warnings 0`으로 검사 | 0.1.0 |
+| `qt_private` | Qt 비공개 헤더(`*_p.h`)와 `*Private` CMake 대상은 `features/map/internal/geoservice/`·map `CMakeLists.txt`만 | 0.5.0 |
 
 ## 15. 빌드·CI·배포 (R-N18~R-N22)
 
 - `.github/workflows/`: `check.yml`(구조 검사만, Qt 없음; `tests/`는 `linux.yml`·`windows.yml`의 ctest에서), `linux.yml`(Ubuntu 24.04 → AppImage), `windows.yml`(MSVC 2022, Qt 6.12.x aqtinstall → zip), `tracker.yml`(트래커 이미지). 태그에서 Release. 내려받는 산출물은 한 번만 압축한다: 파일 하나(zip·AppImage)를 `actions/upload-artifact@v7`의 `archive: false`로 올려 Actions 산출물이 그 파일 그대로다(산출물 이름 = 파일 이름), `retention-days: 2`로 이틀 뒤 지운다(저장 한도; 태그의 Release 파일은 그대로 남음).
 - 산출물에 `LICENSE`, `THIRD_PARTY_NOTICES.md`(CPM 목록 + `cmake/notices/extra.json`의 CPM 밖 의존 — Qt(LGPL-3.0)·GStreamer·MSVC 재배포 런타임·linuxdeploy·트래커 라이브러리 — 를 CI가 합쳐 생성; 소스 URL은 `project(HOMEPAGE_URL)`에서), 소스 위치. 정보 창(`appSettings`)이 이것을 읽어 보여 준다. SBOM은 0.1.x부터.
 - 0.0.1 산출물: Windows zip(windeployqt·MSVC 런타임) + AppImage. GStreamer·NSIS는 영상 기능이 들어오는 버전부터.
+- 0.5.0부터: CI Qt 모듈에 `qtlocation qtpositioning`, Linux apt에 `libxkbcommon-dev`(개발 PC도). 배포에서 Qt geoservices 플러그인을 빼고 SQL 드라이버는 SQLite만(AppImage는 걸러 낸 플러그인 사본, Windows는 `--skip-plugin-types`·`--exclude-plugins`).
 
 ## 16. 이 문서가 정하지 않는 것
 각 기능의 동작(기능 스펙), 화면의 모양(`specs/ui/`), 바이트 명세(규격 문서), 테스트 내용, 알림 승격 기준(B4), 트래커 빌드 도구(트래커 스펙), 성능 수치, `extras`의 모듈 분할(각 기능 스펙).
@@ -476,3 +490,5 @@ k-groundcontrol/
 | 2026-11-03 | 사용자 | 0.4.0 스펙과 함께 승인(§10): §3.1·§3.2 기능 `sitl`(순위 5, 좌 메뉴 2, 뒤 메뉴 번호 하나씩 밀림), §4 파일 자리 `cache/sitl`·`sitl`, §9.3 다른 프로그램 실행, §13 용어 |
 | 2026-11-05 | 사용자 | 0.4.1 스펙 초안 2와 함께 승인(§10): §7 `px4-boards.json`의 `names`, §9.3 Windows SetupAPI는 `comm/links/serial`만, §13 보드 이름 맞추기 낱말 |
 | 2026-11-25 | 사용자 | 0.4.2 스펙 초안 2와 함께 승인(§10): §7 묶음 이름 데이터 파일 뺌, §8 `paramGroup` 뺌·`paramGroupTitle`은 첫 단계 접두어의 제목, §13 파라미터 트리 낱말 |
+| 2026-11-26 | 사용자 | 0.5.0 스펙 초안 2와 함께 승인(§10): §2·§14 Qt 비공개 API는 지도 geoservice만(`qt_private`), §3.1·§3.2 `map`은 지도 부품 `MapPane`과 자기 레이어, §4 `--tile-host`·`--tile-ca`, §5 `Position` 홈, §9.1 main 순서에 `trustCertificateFile`, §9.2 `MapDownload` 허용, §9.3 HTTP 시험용 인증서·`HttpStatus`·`Aborted`, Qt 비공개 API 행, SQL 검사 0.5.0부터, §9.4 지도 영역 받기 Job, §9.5 타일 스레드, §9.7 `MapLayerSlot.registerLayer`·지도 토큰·`shellController` 예외, §9.8 `map` 레이어·`MapPane`, §13 배경·지도 바닥과 지도 낱말, §15 CI·배포 |
+| 2026-11-27 | 사용자 | 0.5.0 결정 5: 지도 설정 넷(`map.tileStoreLimitMb`·`trailMinMeters`·`trailMaxPoints`·`autoFollow`)과 앱 설정 "지도" 칸, §9.7 `appSettingsController`도 0.5.0에서 옮기지 않음과 `shell`의 `MapPane` 예외, §13 지도 설정 낱말(세 고정값은 설정으로) |

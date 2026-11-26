@@ -1,0 +1,7 @@
+{
+    "Keys": ["kgc"],
+    "Provider": "kgc",
+    "Version": 100,
+    "Experimental": false,
+    "Features": ["OnlineMappingFeature"]
+}

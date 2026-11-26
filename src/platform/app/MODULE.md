@@ -6,4 +6,4 @@
 기여: 없음.
 의존: 모든 하위 영역은 errors에 기대요. boot는 log의 LogLevel과 parseLogLevel로 부팅 수준을 검증해요.
 안 하는 것: 하위 영역 간 값 전달은 main이 맡아요.
-부팅 연결: BootOptions.extraSerial은 main이 LinkManager에 넘기며 운영 설정으로 저장하지 않아요. tileCa는 main이 net의 trustCertificateFile에 써요(첫 HTTPS 요청 전, 운영 설정으로 저장하지 않아요).
+부팅 연결: main이 BootOptions를 Composition에 넘기고, Composition이 `extraSerial`을 LinkManager에, `tileHost`를 MapService에 넘겨요. `tileCa`는 main이 `trustCertificateFile`에 써요. 어느 것도 운영 설정으로 저장하지 않아요.

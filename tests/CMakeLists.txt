@@ -173,3 +173,12 @@ add_test(NAME T8_tile_host COMMAND test_T8_tile_host)
 qt_add_executable(test_T10_blob_store test_T10_blob_store.cpp)
 target_link_libraries(test_T10_blob_store PRIVATE kgc_app_store Qt6::Test)
 add_test(NAME T10_blob_store COMMAND test_T10_blob_store)
+
+# [0.5.0 T1 T2 T3 T4 T6] specs/features/0.5.0-map.md
+foreach(test test_T1_tile_url test_T2_tile_math test_T3_scale_size test_T4_trail test_T6_download_plan)
+    qt_add_executable(${test} ${test}.cpp)
+    target_include_directories(${test} PRIVATE "${PROJECT_SOURCE_DIR}/src/features/map/internal")
+    target_link_libraries(${test} PRIVATE kgc_map Qt6::Test)
+    string(REGEX REPLACE "^test_" "" name "${test}")
+    add_test(NAME ${name} COMMAND ${test})
+endforeach()

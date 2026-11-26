@@ -53,3 +53,8 @@ alert-triangle outline/alert-triangle
 arrow-right outline/arrow-right
 refresh outline/refresh
 chevron-right outline/chevron-right
+plus outline/plus
+current-location outline/current-location
+stack-2 outline/stack-2
+eraser outline/eraser
+download outline/download

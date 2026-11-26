@@ -1,3 +1,4 @@
+// [0.5.0 5.7] specs/features/0.5.0-map.md
 // [0.0.3 T19] specs/features/0.0.3-windows.md
 // [0.0.2 T8 T14 T18] specs/features/0.0.2-theme.md
 // [0.0.2 T24] specs/features/0.0.2-theme.md
@@ -5,6 +6,7 @@ import QtQuick
 import QtQuick.Controls
 import QtQml.Models
 import Kgc.Ui
+import Kgc.Map
 Item {
     id: center
     objectName: "centerArea"
@@ -78,7 +80,17 @@ Item {
                 }
             }
         }
-        Repeater { model: mapLayerSlot; delegate: Item {} }
+        // 가운데 지도 부품이에요. 창 좌표·크기가 centerViewport와 같아 유리 테마에서도 바 밑에는 배경만 비쳐요.
+        MapPane {
+            objectName: "centerMap"
+            showControls: true
+            rememberView: true
+            anchors.fill: parent
+            anchors.leftMargin: center.viewportLeft
+            anchors.rightMargin: center.viewportRight
+            anchors.topMargin: center.viewportTop
+            anchors.bottomMargin: center.viewportBottom
+        }
     }
     Item {
         objectName: "centerViewport"
@@ -87,7 +99,6 @@ Item {
         anchors.rightMargin: center.viewportRight
         anchors.topMargin: center.viewportTop
         anchors.bottomMargin: center.viewportBottom
-        Text { anchors.centerIn: parent; text: qsTr("지도"); color: Theme.inkMuted; font.pixelSize: Theme.titleSize }
         GlassSurface {
             id: overlay
             source: stage
@@ -95,6 +106,10 @@ Item {
             anchors.fill: parent
             anchors.margins: Theme.panelInset
             visible: center.selectedPanel !== null
+            // 패널 안에서 시작한 누르기·끌기·휠이 아래 지도로 내려가지 않게 받아요.
+            MouseArea { objectName: "panelInputBlock"; anchors.fill: parent; acceptedButtons: Qt.AllButtons; onWheel: (wheel) => wheel.accepted = true }
+            // 내용의 TapHandler가 먼저 받아 MouseArea까지 오지 않은 누름도 독점으로 잡아 지도 끌기가 가져가지 못하게 해요.
+            TapHandler { objectName: "panelTapBlock"; gesturePolicy: TapHandler.DragWithinBounds }
             Item {
                 id: header
                 anchors.top: parent.top

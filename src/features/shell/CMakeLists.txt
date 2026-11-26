@@ -1,3 +1,4 @@
+# [0.5.0 5.7] specs/features/0.5.0-map.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 file(GLOB headers CONFIGURE_DEPENDS api/kgc/shell/*.h)
 set_source_files_properties(ui/Shell.qml PROPERTIES QT_RESOURCE_ALIAS Shell.qml)
@@ -16,5 +17,5 @@ qt_add_qml_module(kgc_shell STATIC URI Kgc.Shell
         ui/ShellController.h ui/ShellController.cpp ui/register.cpp)
 target_include_directories(kgc_shell PUBLIC api PRIVATE internal ui)
 target_link_libraries(kgc_shell PUBLIC kgc_app_errors kgc_app_i18n kgc_ui
-    PRIVATE kgc_app_log kgc_app_paths)
+    PRIVATE kgc_app_log kgc_app_paths kgc_map)
 kgc_use_settings(kgc_shell shell)

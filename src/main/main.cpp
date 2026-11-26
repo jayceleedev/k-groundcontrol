@@ -1,4 +1,4 @@
-// [0.5.0 S2] specs/features/0.5.0-map.md
+// [0.5.0 S2 5.8] specs/features/0.5.0-map.md
 // [0.1.0 T13] specs/features/0.1.0-link.md
 // [0.0.3 T7 T13] specs/features/0.0.3-windows.md
 // [0.0.1 T1–T10] specs/features/0.0.1-shell.md
@@ -31,7 +31,7 @@
  * 6. Settings::instance — 운영 설정을 준비해요.
  * 7. Translator::setLanguage — 저장된 언어를 적용해요.
  * 8. QQuickStyle::setStyle — 화면 부품의 바탕 스타일을 정해요.
- * 9. new Composition — 서비스와 등록부를 조립해요.
+ * 9. new Composition — 서비스와 등록부를 조립하고 부팅 값(시험용 시리얼·타일 서버)을 넘겨요.
  * 10. QGuiApplication::setWindowIcon — 등록된 자원에서 창 아이콘을 정해요.
  * 11. Composition::loadShell·app.exec — 조립한 창과 이벤트 처리를 시작해요.
  * 12. LogSink::attachFeed — 엔진 파괴 전에 화면 통로를 떼어요.
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
     QQuickStyle::setStyle("Basic");
     QQmlApplicationEngine engine;
     auto* composition = new kgc::Composition(engine,
-        {KGC_VERSION, KGC_HOMEPAGE_URL, ":/kgc/LICENSE", app.applicationDirPath() + "/THIRD_PARTY_NOTICES.md"}, translator, feed, boot.extraSerial);
+        {KGC_VERSION, KGC_HOMEPAGE_URL, ":/kgc/LICENSE", app.applicationDirPath() + "/THIRD_PARTY_NOTICES.md"}, translator, feed, boot);
     QGuiApplication::setWindowIcon(QIcon(":/kgc/icons/app-tile.svg"));
     const int result = composition->loadShell() ? app.exec() : 1;
     kgc::app::log::LogSink::attachFeed(nullptr);

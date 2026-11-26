@@ -1,3 +1,4 @@
+// [0.5.0 5.8] specs/features/0.5.0-map.md
 // [0.4.0 5.4 10] specs/features/0.4.0-sitl.md
 // [0.3.0 6.1 6.8] specs/features/0.3.0-params.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
@@ -21,6 +22,8 @@
 #include <kgc/fcFlash/Ui.h>
 #include <kgc/sitl/SitlService.h>
 #include <kgc/sitl/Ui.h>
+#include <kgc/map/MapService.h>
+#include <kgc/map/Ui.h>
 #include <kgc/params/ParamRebootReconnect.h>
 #include <kgc/params/ParamService.h>
 #include <kgc/params/Ui.h>
@@ -50,10 +53,12 @@
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQuickWindow>
+#include <QtPlugin>
 #include <QtQml/QQmlExtensionPlugin>
 
 Q_IMPORT_QML_PLUGIN(Kgc_FcFlashPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_SitlPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_MapPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ParamsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_LinkPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
@@ -66,12 +71,37 @@ Q_IMPORT_QML_PLUGIN(Kgc_SecondPanelPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_VehicleInfoPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_LogsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_PreflightPlugin)
+// 지도 부품이 쓰는 Qt Location 정적 플러그인(provider kgc)이에요. 이름공간 없는 클래스 이름으로 여기 한 번만 넣어요.
+Q_IMPORT_PLUGIN(KgcGeoServiceFactory)
 
 // 정적 라이브러리의 자원을 링커가 버리지 않도록 전역에서 참조해요.
 static void initKgcResources() { Q_INIT_RESOURCE(kgc); Q_INIT_RESOURCE(tabler_icons); }
 
 namespace kgc {
 namespace {
+// 슬롯·등록부를 만들어 QML 문맥에 내놓고, 기능이 등록할 묶음을 돌려줘요.
+ui::UiRegistry createUiRegistry(QObject* owner, QQmlEngine& engine, app::i18n::Translator& translator)
+{
+    auto* panels = new ui::PanelRegistry(owner);
+    auto* topbar = new ui::TopbarSlot(owner);
+    auto* statusChips = new ui::StatusChipSlot(owner);
+    auto* rightTabs = new ui::RightTabSlot(owner);
+    auto* mapLayers = new ui::MapLayerSlot(owner);
+    auto* bottomActions = new ui::BottomActionSlot(owner);
+    auto* navigator = new ui::Navigator(owner);
+    auto* context = engine.rootContext();
+    context->setContextProperty("panelRegistry", panels);
+    context->setContextProperty("topbarSlot", topbar);
+    context->setContextProperty("statusChipSlot", statusChips);
+    context->setContextProperty("rightTabSlot", rightTabs);
+    context->setContextProperty("mapLayerSlot", mapLayers);
+    context->setContextProperty("navigator", navigator);
+    context->setContextProperty("bottomActionSlot", bottomActions);
+    context->setContextProperty("translator", &translator);
+    context->setContextProperty("themeSwitcher", new ui::ThemeSwitcher(engine));
+    context->setContextProperty("uiSettingValues", new ui::UiSettingValues(owner));
+    return {*panels, *topbar, *statusChips, *rightTabs, *mapLayers, *bottomActions, *navigator, engine};
+}
 void registerPlaceholders(ui::PanelRegistry* panels)
 {
     const auto registerPlaceholder = [panels](const char* id, int order, int group,
@@ -146,29 +176,11 @@ void registerVehicleViews(QObject* owner, ui::UiRegistry& registry, vehicle::reg
 }
 }
 Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18n::Translator& translator,
-                         app::log::LogFeed& feed, const QStringList& extraSerial)
+                         app::log::LogFeed& feed, const app::boot::BootOptions& boot)
     : QObject(&engine), engine_(engine)
 {
     initKgcResources();
-    auto* panels = new ui::PanelRegistry(this);
-    auto* topbar = new ui::TopbarSlot(this);
-    auto* statusChips = new ui::StatusChipSlot(this);
-    auto* rightTabs = new ui::RightTabSlot(this);
-    auto* mapLayers = new ui::MapLayerSlot(this);
-    auto* bottomActions = new ui::BottomActionSlot(this);
-    auto* navigator = new ui::Navigator(this);
-    auto* context = engine.rootContext();
-    context->setContextProperty("panelRegistry", panels);
-    context->setContextProperty("topbarSlot", topbar);
-    context->setContextProperty("statusChipSlot", statusChips);
-    context->setContextProperty("rightTabSlot", rightTabs);
-    context->setContextProperty("mapLayerSlot", mapLayers);
-    context->setContextProperty("navigator", navigator);
-    context->setContextProperty("bottomActionSlot", bottomActions);
-    context->setContextProperty("translator", &translator);
-    context->setContextProperty("themeSwitcher", new ui::ThemeSwitcher(engine));
-    context->setContextProperty("uiSettingValues", new ui::UiSettingValues(this));
-    ui::UiRegistry registry{*panels, *topbar, *statusChips, *rightTabs, *mapLayers, *bottomActions, *navigator, engine};
+    auto registry = createUiRegistry(this, engine, translator);
     auto* shellService = new shell::ShellService(translator, this);
     auto* appSettingsService = new appSettings::AppSettingsService(std::move(info), translator, this);
     shell::registerUi(registry, *shellService);
@@ -184,9 +196,10 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     // 서비스가 포트·링크·HTTP보다 먼저 정리되어 임대 해제와 프로세스 정지 때도 의존 객체가 살아 있게 해요.
     auto* flashLifetime = new QObject(this);
     auto* sitlLifetime = new QObject(this);
+    auto* mapLifetime = new QObject(this);
     auto* scheduler = new app::scheduler::Scheduler(this);
     auto* ports = new comm::rawport::PortRegistry(this);
-    auto* links = new comm::links::LinkManager(*scheduler, *ports, extraSerial, this);
+    auto* links = new comm::links::LinkManager(*scheduler, *ports, boot.extraSerial, this);
     new vehicle::outbound::LinkHeartbeat(*links, *scheduler, this);
     auto* vehicles = new vehicle::registry::VehicleRegistry(*links, *scheduler, this);
     auto* linkService = new link::LinkService(*links, *vehicles, *scheduler, this);
@@ -197,10 +210,11 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     connect(flashService, &QObject::destroyed, this, [policy] { delete policy; });
     fcFlash::registerUi(registry, *flashService);
     sitl::registerUi(registry, *new sitl::SitlService(*links, *http, sitlLifetime));
+    map::registerUi(registry, *new map::MapService(*http, *vehicles, translator, boot.tileHost, mapLifetime));
     registerParams(this, registry, links, vehicles, policy, http);
     registerVehicleViews(this, registry, *vehicles);
-    registerPlaceholders(panels);
-    registerBarPlaceholders(topbar, statusChips);
+    registerPlaceholders(&registry.panels);
+    registerBarPlaceholders(&registry.topbar, &registry.statusChips);
     connect(&translator, &app::i18n::Translator::languageChanged, &engine, &QQmlEngine::retranslate);
 }
 QQuickWindow* Composition::loadShell()

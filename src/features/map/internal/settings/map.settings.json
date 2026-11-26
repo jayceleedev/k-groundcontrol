@@ -1,0 +1,13 @@
+{
+  "module": "map",
+  "settings": [
+    {"id": "map.mapType", "type": "enum", "enum": ["satellite", "hybrid", "road"], "default": "satellite", "labelKey": "지도 종류", "category": "map"},
+    {"id": "map.lastLatitude", "type": "double", "default": 36.5, "min": -85, "max": 85, "labelKey": "마지막 지도 위도", "category": "map"},
+    {"id": "map.lastLongitude", "type": "double", "default": 127.8, "min": -180, "max": 180, "labelKey": "마지막 지도 경도", "category": "map"},
+    {"id": "map.lastZoom", "type": "double", "default": 7, "min": 2, "max": 20, "labelKey": "마지막 지도 확대", "category": "map"},
+    {"id": "map.tileStoreLimitMb", "type": "int", "default": 2048, "min": 256, "max": 102400, "labelKey": "본 타일 저장 한도", "category": "map"},
+    {"id": "map.trailMinMeters", "type": "double", "default": 1, "min": 0.1, "max": 100, "labelKey": "궤적 점 간격", "category": "map"},
+    {"id": "map.trailMaxPoints", "type": "int", "default": 20000, "min": 1000, "max": 200000, "labelKey": "궤적 최대 점 수", "category": "map"},
+    {"id": "map.autoFollow", "type": "bool", "default": true, "labelKey": "따라가기 자동 켜기", "category": "map"}
+  ]
+}

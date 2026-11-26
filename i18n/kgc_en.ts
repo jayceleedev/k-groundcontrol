@@ -304,17 +304,12 @@
 <context>
     <name>CenterArea</name>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="90"/>
-        <source>지도</source>
-        <translation>Map</translation>
-    </message>
-    <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="126"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="141"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
     <message>
-        <location filename="../src/features/shell/ui/CenterArea.qml" line="134"/>
+        <location filename="../src/features/shell/ui/CenterArea.qml" line="149"/>
         <source>준비 중</source>
         <translation>Coming soon</translation>
     </message>
@@ -2814,6 +2809,70 @@
     <message>
         <source>시작하면 여기에 시뮬레이터 출력이 보여요.</source>
         <translation>Simulator output appears here after you start.</translation>
+    </message>
+</context>
+<context>
+    <name>Map</name>
+    <message>
+        <location filename="../src/features/map/ui/MapController.cpp" line="46"/>
+        <source>위성</source>
+        <translation>Satellite</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapController.cpp" line="46"/>
+        <source>하이브리드</source>
+        <translation>Hybrid</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapController.cpp" line="47"/>
+        <source>일반 지도</source>
+        <translation>Road</translation>
+    </message>
+    <message>
+        <source>한 번에 100,000개까지 받을 수 있어요. 영역이나 확대 범위를 줄여 주세요.</source>
+        <translation>Up to 100,000 tiles at a time. Make the area or zoom range smaller.</translation>
+    </message>
+    <message>
+        <source>확대 범위가 맞지 않아요</source>
+        <translation>The zoom range is not valid</translation>
+    </message>
+    <message>
+        <source>다른 영역을 받는 중이에요</source>
+        <translation>Another area is downloading</translation>
+    </message>
+    <message>
+        <source>타일을 받지 못했어요</source>
+        <translation>Could not download the tiles</translation>
+    </message>
+    <message>
+        <source>지도 저장소를 쓰지 못했어요</source>
+        <translation>Could not use the map store</translation>
+    </message>
+</context>
+<context>
+    <name>MapControls</name>
+    <message>
+        <location filename="../src/features/map/ui/MapControls.qml" line="22"/>
+        <source>지도 종류</source>
+        <translation>Map type</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapControls.qml" line="48"/>
+        <source>축소</source>
+        <translation>Zoom out</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapControls.qml" line="54"/>
+        <source>확대</source>
+        <translation>Zoom in</translation>
+    </message>
+</context>
+<context>
+    <name>MapPane</name>
+    <message>
+        <location filename="../src/features/map/ui/MapPane.qml" line="97"/>
+        <source>지도 데이터 © Google</source>
+        <translation>Map data © Google</translation>
     </message>
 </context>
 </TS>

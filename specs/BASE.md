@@ -419,6 +419,7 @@ k-groundcontrol/
 | 이름 중복 | 자유 함수 이름이 두 모듈에. 모듈마다 있어야 하는 `registerUi`·`make`·`errorText`는 제외 | 0.1.x |
 | qmllint | `linux.yml`이 전체 빌드 뒤 형이 있는 컨트롤러를 쓰는 모듈을 `--unqualified disable --max-warnings 0`으로 검사 | 0.1.0 |
 | `qt_private` | Qt 비공개 헤더(`*_p.h`)와 `*Private` CMake 대상은 `features/map/internal/geoservice/`·map `CMakeLists.txt`만 | 0.5.0 |
+| 정수 확대 / 휠 모음 / 잔 값 흐름 / 핀치 끝 맞춤 / 타일 화소 배수 / 다른 배수 대신 쓰기 | `ZoomStep`(파일) / `wheelStep` / `WheelStep`(`steps`·`sum`·`fine`) / `zoomStepTarget`(인자 `current`) / `pinchSnapTarget`(인자 `startZoom`·`endZoom`) / `wheelStep`의 인자 `sinceStepMs` / `tilePixelRatioFor`(인자 `screenRatio`) / `tilePixelRatio` / `setTilePixelRatio` / `tilePixelRatioChanged` / `fallbackStale` / `decideTileRatio`(인자 `logAlways`) / `startFallback` / `fallbackServed_` / 멤버 `tilePixelRatio_`(TileSource)·`ratio_`(MapDownloadJob)·`pixelRatio_`(KgcTileCache) / `Pending`의 단계 `Fallback`·필드 `ratio`·`fallbackError` / 인자 `ratio`(`tileUrl`·`tileKey`·`fetch`·`MapDownloadJob`) / `KgcTileCache` 생성자 인자 `pixelRatio` / `wheelGestureTimeout` / QML `wheelSum`·`wheelFine`·`lastStepTime`·`pinchStartZoom`·`pinchPoint`·지역 `wheel` / `kWheelNotch` / `kWheelStepIntervalMs` / `kWheelGestureTimeout` / `kPinchSnapMin` / `kZoomEpsilon` / `kHighDpiMinRatio` / `kHighDpiBytesFactor` / `MapEvent`의 `TileRatio`·`WheelInput` / 키 끝 `@2`·주소 끝 `&scale=2` | 0.5.1 |
 
 ## 15. 빌드·CI·배포 (R-N18~R-N22)
 
@@ -494,3 +495,4 @@ k-groundcontrol/
 | 2026-11-27 | 사용자 | 0.5.0 결정 5: 지도 설정 넷(`map.tileStoreLimitMb`·`trailMinMeters`·`trailMaxPoints`·`autoFollow`)과 앱 설정 "지도" 칸, §9.7 `appSettingsController`도 0.5.0에서 옮기지 않음과 `shell`의 `MapPane` 예외, §13 지도 설정 낱말(세 고정값은 설정으로) |
 | 2026-11-27 | PM | 0.5.0 구현 B단계 검수 고침: §13 지도 QML id `controls`·`attribution`(카드·컨트롤 앵커) |
 | 2026-11-27 | PM | 0.5.0 앱 시험 고침: §13 지도 낱말 `dragAnchor`, objectName `mapControlsInputBlock` |
+| 2026-11-27 | 사용자 | 0.5.1 스펙 초안 3과 함께 승인(§10): §13 정수 확대·타일 화소 배수 낱말(2배 문턱 1.15) |

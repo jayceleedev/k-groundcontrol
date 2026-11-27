@@ -28,9 +28,10 @@ struct SavedView { double lat; double lon; double zoom; };
 class MapService : public QObject {
     Q_OBJECT
 public:
-/** 타일 저장소 스레드와 타일 공급을 만들고 번역기 언어를 공급에 이어요.
+/** 타일 저장소 스레드·타일 공급·궤적 책(TrailBook)을 만들고 번역기 언어를 공급에 이어요.
  * 입력: http, vehicles, translator, 시험용 타일 서버 주소 tileHost(parseTileHost를 거친 값이나 빈 값), 부모 parent예요.
  * 출력: 저장소 스레드가 cache/tiles/tiles.sqlite를 본 타일 저장 한도로 여는 서비스예요.
+ *       TrailBook은 vehicles의 기체 위치를 모으고, 그 pointAdded·cleared를 trailPointAdded·trailsCleared로 넘겨요.
  * 실패: 저장소를 열지 못하면 storeFailed를 내요(열기는 워커에서 나중에 끝나요).
  */
     MapService(kgc::app::net::Http& http, kgc::vehicle::registry::VehicleRegistry& vehicles,
@@ -77,8 +78,14 @@ public:
     qint64 tileCount(const QGeoRectangle& area, int minZoom, int maxZoom) const;
 /** 영역 받기를 시작해요.
  * 입력: 영역 area와 확대 범위 minZoom~maxZoom이에요. 지금 지도 종류와 언어로 받아요.
- * 출력: 새 영역 받기 작업이에요. 시작하면 downloadChanged를 내요.
+ * 출력: 새 영역 받기 작업이에요. 시작하면 downloadChanged를 내고, 작업이 끝날 때도 downloadChanged를 내요.
  * 실패: 범위가 틀리면 BadZoomRange, 너무 많으면 TooManyTiles, 저장소 고장이면 StoreFailed, 받는 중이면 DownloadBusy예요.
+ * 흐름:
+ * 1. planDownload — 확대 범위와 타일 수(100,000개까지)를 확인해요.
+ * 2. 저장소 고장(storeBroken)이나 받는 중인 작업이 있으면 멈춰요.
+ * 3. 남은 MapDownloadJob을 deleteLater하고, 지금 지도 종류·언어로 새 MapDownloadJob을 만들어요.
+ * 4. MapDownloadJob::start — TileSource::fetch(pin)으로 타일을 저장소에 고정하거나 서버에서 받아 TileStore::save로 고정해요.
+ * 5. downloadChanged — 화면이 새 작업을 보게 알려요.
  */
     kgc::app::errors::Result<kgc::app::job::Job*> startDownload(const QGeoRectangle& area, int minZoom, int maxZoom);
 /** 마지막 영역 받기 작업을 내줘요.
@@ -91,6 +98,9 @@ public:
  * 입력: 없어요.
  * 출력: 작업을 지우고 downloadChanged를 내요.
  * 실패: 없어요.
+ * 흐름:
+ * 1. MapDownloadJob::deleteLater — 남은 작업을 지우고 downloadJob이 nullptr를 내게 해요.
+ * 2. downloadChanged — 화면이 작업이 없어졌음을 보게 알려요.
  */
     void dismissDownload();
 /** 저장소 크기를 물어요.
@@ -121,6 +131,9 @@ public:
  * 입력: 없어요.
  * 출력: 궤적을 비우고 trailsCleared를 내요.
  * 실패: 없어요.
+ * 흐름:
+ * 1. TrailBook::clear — 모든 기체의 궤적을 비워요. 다음 위치부터 다시 모아요.
+ * 2. TrailBook::cleared → trailsCleared — 화면이 궤적이 비었음을 보게 알려요.
  */
     void clearTrails();
 /** 지도 부품이 시작할 곳을 읽어요.

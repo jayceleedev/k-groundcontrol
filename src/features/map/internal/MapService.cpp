@@ -1,12 +1,16 @@
 // [0.5.0 5.6.5 5.6.8] specs/features/0.5.0-map.md
 #include "MapServicePrivate.h"
 #include "Constants.h"
+#include "DownloadPlan.h"
+#include "TileMath.h"
 #include "TileSource.h"
 #include "TileStore.h"
 #include <kgc/app/i18n/Translator.h>
 #include <kgc/app/paths/Paths.h>
+#include <kgc/map/Errors.h>
 #include <algorithm>
 namespace kgc::map {
+using kgc::app::job::Job;
 MapService::MapService(kgc::app::net::Http& http, kgc::vehicle::registry::VehicleRegistry& vehicles,
                        kgc::app::i18n::Translator& translator, const QString& tileHost, QObject* parent)
     : QObject(parent), d_(std::make_unique<Private>(vehicles))
@@ -19,6 +23,8 @@ MapService::MapService(kgc::app::net::Http& http, kgc::vehicle::registry::Vehicl
     connect(&translator, &kgc::app::i18n::Translator::languageChanged, this,
             [this, &translator] { d_->source->setLanguage(translator.language()); });
     connect(d_->source, &TileSource::languageChanged, this, &MapService::languageChanged);
+    connect(&d_->trails, &TrailBook::pointAdded, this, &MapService::trailPointAdded);
+    connect(&d_->trails, &TrailBook::cleared, this, &MapService::trailsCleared);
     connect(store, &TileStore::sized, this, [this](qint64 totalBytes, qint64 pinnedBytes) {
         d_->storeBroken = false;
         emit storeSizeReady(totalBytes, pinnedBytes);
@@ -54,6 +60,32 @@ void MapService::setMapType(settings::MapType type)
 }
 QString MapService::language() const { return d_->source->language(); }
 kgc::vehicle::registry::VehicleRegistry& MapService::vehicles() const { return d_->vehicles; }
+qint64 MapService::tileCount(const QGeoRectangle& area, int minZoom, int maxZoom) const
+{
+    return kgc::map::tileCount(area, minZoom, maxZoom);
+}
+kgc::app::errors::Result<Job*> MapService::startDownload(const QGeoRectangle& area, int minZoom, int maxZoom)
+{
+    const auto plan = planDownload(area, minZoom, maxZoom);
+    if (!plan) return std::unexpected(plan.error());
+    // 저장소가 고장이면 받아도 남지 않으므로 시작하지 않아요.
+    if (d_->storeBroken) return std::unexpected(make(MapError::StoreFailed));
+    if (const auto* job = downloadJob(); job && (job->state() == Job::State::Pending || job->state() == Job::State::Running))
+        return std::unexpected(make(MapError::DownloadBusy));
+    if (d_->download) d_->download->deleteLater();
+    d_->download = new MapDownloadJob(*d_->source, mapType(), language(), area, minZoom, maxZoom, *plan, this);
+    connect(d_->download->job(), &Job::finished, this, &MapService::downloadChanged);
+    d_->download->start();
+    emit downloadChanged();
+    return d_->download->job();
+}
+Job* MapService::downloadJob() const { return d_->download ? d_->download->job() : nullptr; }
+void MapService::dismissDownload()
+{
+    if (d_->download) d_->download->deleteLater();
+    d_->download = nullptr;
+    emit downloadChanged();
+}
 void MapService::requestStoreSize()
 {
     auto* store = d_->store;
@@ -64,6 +96,8 @@ void MapService::clearStore()
     auto* store = d_->store;
     QMetaObject::invokeMethod(store, [store] { store->clear(); });
 }
+QList<QGeoCoordinate> MapService::trailOf(int sysid) const { return d_->trails.trailOf(sysid); }
+void MapService::clearTrails() { d_->trails.clear(); }
 SavedView MapService::lastView() const
 {
     return {settings::lastLatitude(), settings::lastLongitude(), settings::lastZoom()};

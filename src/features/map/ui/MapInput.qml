@@ -53,7 +53,16 @@ Item {
             input.lastArea = input.areaBetween(centroid.pressPosition, centroid.position)
             input.selectionMoved(input.lastArea)
         }
-        onActiveChanged: if (!active) input.selectionDone(input.lastArea)
+        // 문턱을 넘긴 움직임은 translation을 바꾸지 않아요. 그래서 활성이 되는 순간에도 영역을 정해야
+        // 빠르게 끌어도 영역이 생기고, 지난 고르기의 영역이 selectionDone으로 나가지 않아요.
+        onActiveChanged: {
+            if (active) {
+                input.lastArea = input.areaBetween(centroid.pressPosition, centroid.position)
+                input.selectionMoved(input.lastArea)
+            } else {
+                input.selectionDone(input.lastArea)
+            }
+        }
     }
     WheelHandler {
         id: wheelHandler

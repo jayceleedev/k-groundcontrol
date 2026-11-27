@@ -1,10 +1,12 @@
-# [0.5.0 5.6.1] specs/features/0.5.0-map.md
+# [0.5.0 5.6.1 5.6.9] specs/features/0.5.0-map.md
 # Qt 비공개 API는 지도 geoservice만 써요(BASE §2, 검사 qt_private). 그래서 비공개 구성 요소는 이 파일에서만 찾아요.
-find_package(Qt6 6.12 REQUIRED COMPONENTS LocationPrivate)
+# GLOBAL이 없으면 이 폴더에서만 보이는 XKB::XKB를 src/main·tests의 실행 파일이 찾지 못해 구성 경고가 남아요.
+find_package(Qt6 6.12 REQUIRED COMPONENTS LocationPrivate GLOBAL)
 file(GLOB headers CONFIGURE_DEPENDS api/kgc/map/*.h)
 file(GLOB internal_sources CONFIGURE_DEPENDS internal/*.h internal/*.cpp)
 file(GLOB geoservice_sources CONFIGURE_DEPENDS internal/geoservice/*.h internal/geoservice/*.cpp)
-set(qml_files ui/MapPane.qml ui/MapInput.qml ui/MapControls.qml ui/MapScaleBar.qml)
+set(qml_files ui/MapPane.qml ui/MapInput.qml ui/MapControls.qml ui/MapScaleBar.qml ui/MapDownloadCard.qml
+    ui/TrailLayer.qml ui/HomeLayer.qml ui/VehicleLayer.qml)
 foreach(file IN LISTS qml_files)
     get_filename_component(name "${file}" NAME)
     set_source_files_properties("${file}" PROPERTIES QT_RESOURCE_ALIAS "${name}")
@@ -14,7 +16,8 @@ qt_add_qml_module(kgc_map STATIC URI Kgc.Map
     OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/qml/Kgc/Map"
     QML_FILES ${qml_files}
     SOURCES ${headers} ${internal_sources} ${geoservice_sources}
-        ui/MapController.h ui/MapController.cpp ui/register.cpp
+        ui/MapController.h ui/MapController.cpp
+        ui/VehicleMarkerModel.h ui/VehicleMarkerModel.cpp ui/register.cpp
     DEPENDENCIES QtPositioning)
 target_include_directories(kgc_map PUBLIC api PRIVATE internal ui api/kgc/map)
 # 지도 플러그인 팩토리의 moc 출력은 이 대상의 mocs_compilation.cpp에서 컴파일되므로 대상 전체에 둬요.

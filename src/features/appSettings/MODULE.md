@@ -1,11 +1,11 @@
 # appSettings (기능 순위 2)
-역할: 언어·테마·배경·길게 누르기 설정과 배포 정보를 제공해요.
+역할: 언어·테마·배경·길게 누르기·지도 설정과 배포 정보를 제공해요.
 수명: 전역.
-받는 것: Translator, AppInfo, appSettings.language, ThemeSwitcher(테마 목록과 currentIndex), UiSettingValues(배경 종류·사진 경로 포함).
+받는 것: Translator, AppInfo, appSettings.language, ThemeSwitcher(테마 목록과 currentIndex), UiSettingValues(배경 종류·사진 경로 포함), MapController(지도 설정 map.tileStoreLimitMb·map.trailMinMeters·map.trailMaxPoints·map.autoFollow와 범위).
 주는 것: AppSettingsService, AppInfo, registerUi.
-기여: 좌 메뉴 17번 앱 설정 패널과 컨트롤러. SettingsPage에서 일반·화면·조작·정보 카테고리를 제공하고 about 탐색 인자는 정보 카테고리를 열어요.
-의존: app/errors, app/i18n, app/log, app/settings(생성 접근자의 공개 의존), ui.
-안 하는 것: 창 배치는 shell이 맡고 테마 판정은 ui가 맡아요.
+기여: 좌 메뉴 17번 앱 설정 패널과 컨트롤러. SettingsPage에서 일반·화면·조작·지도·정보 카테고리를 제공하고 about 탐색 인자는 정보 카테고리를 열어요.
+의존: app/errors, app/i18n, app/log, app/settings(생성 접근자의 공개 의존), ui, map(지도 설정 칸, QML Kgc.Map의 MapController).
+안 하는 것: 창 배치는 shell이 맡고 테마 판정은 ui가 맡아요. 지도 저장 크기 보기·비우기는 지도의 지도 저장 카드가 맡아요.
 흐름(언어 선택):
 1. AppSettingsController.setLanguage → settings::setLanguage — 선택한 언어를 저장해요.
 2. AppSettingsService의 settings::onLanguageChanged → Translator.setLanguage — 언어를 적용하고 변경 사건을 기록해요.

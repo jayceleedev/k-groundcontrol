@@ -13,13 +13,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: sudo apt-get update && sudo apt-get install -y libxcb-cursor0 libxcb-cursor-dev libfuse2 libxkbcommon-x11-0 libgl1-mesa-dev ninja-build
+      # [0.5.0 5.8] specs/features/0.5.0-map.md
+      # 지도(Qt6::LocationPrivate → GuiPrivate)가 XKB 헤더를 찾으므로 libxkbcommon-dev가 필요해요.
+      - run: sudo apt-get update && sudo apt-get install -y libxcb-cursor0 libxcb-cursor-dev libfuse2 libxkbcommon-x11-0 libxkbcommon-dev libgl1-mesa-dev ninja-build
       - uses: jurplel/install-qt-action@v4
         with:
           version: '6.12.0'
           arch: linux_gcc_64
           # 0.0.2 차트(Qt Graphs)는 추가 모듈이고, Graphs 라이브러리가 Quick3D·ShaderTools에 기대요.
-          modules: 'qtgraphs qtquick3d qtshadertools qtserialport'
+          # 0.5.0 지도는 Qt Location·Positioning 추가 모듈을 써요.
+          modules: 'qtgraphs qtquick3d qtshadertools qtserialport qtlocation qtpositioning'
           cache: true
       - name: 구성
         shell: bash
@@ -32,6 +35,7 @@ jobs:
           qmllint @build/linux-release/src/features/fcFlash/.rcc/qmllint/kgc_fcFlash.rsp --unqualified disable --max-warnings 0
           qmllint @build/linux-release/src/features/params/.rcc/qmllint/kgc_params.rsp --unqualified disable --max-warnings 0
           qmllint @build/linux-release/src/features/sitl/.rcc/qmllint/kgc_sitl.rsp --unqualified disable --max-warnings 0
+          qmllint @build/linux-release/src/features/map/.rcc/qmllint/kgc_map.rsp --unqualified disable --max-warnings 0
       - run: ctest --preset linux-release --output-on-failure
       - run: cmake --build build/linux-release --target package
       - uses: actions/upload-artifact@v7

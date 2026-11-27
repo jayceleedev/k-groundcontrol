@@ -1,4 +1,4 @@
-# [0.5.0 S1 S7] specs/features/0.5.0-map.md
+# [0.5.0 S1 S7 S11] specs/features/0.5.0-map.md
 # [0.4.1 6.4] specs/features/0.4.1-board-match.md
 # [0.4.0 5.4] specs/features/0.4.0-sitl.md
 # [0.3.0 5.5 6.8-1] specs/features/0.3.0-params.md
@@ -10,7 +10,7 @@
 # [0.0.3 T1 T14] specs/features/0.0.3-windows.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 cmake_minimum_required(VERSION 3.28)
-project(KGroundControl VERSION 0.4.2 LANGUAGES CXX
+project(KGroundControl VERSION 0.5.0 LANGUAGES CXX
     HOMEPAGE_URL "https://github.com/jayceleedev/k-groundcontrol")
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)

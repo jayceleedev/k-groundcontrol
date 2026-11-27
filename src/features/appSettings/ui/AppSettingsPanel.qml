@@ -1,15 +1,18 @@
+// [0.5.0 5.9 T27] specs/features/0.5.0-map.md
 // [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T4 T14 T15 T20 T24 T25] specs/features/0.0.2-theme.md
 import QtQuick
 import QtQuick.Dialogs
 import QtQuick.Controls
 import Kgc.Ui
+import Kgc.Map
 SettingsPage {
     id: panel
     categories: [
         {id: "general", title: qsTr("일반")},
         {id: "display", title: qsTr("화면")},
         {id: "input", title: qsTr("조작")},
+        {id: "map", title: qsTr("지도")},
         {id: "about", title: qsTr("정보")}
     ]
     /** 탐색 인자에 맞는 설정 카테고리를 열어요.
@@ -77,6 +80,46 @@ SettingsPage {
             to: uiSettingValues.holdToConfirmMsMax
             unit: qsTr("ms")
             onValueModified: value => { uiSettingValues.holdToConfirmMs = value }
+        }
+    }
+    // 지도 설정은 지도 모듈의 설정이라 MapController를 거쳐 읽고 써요. 저장 크기 보기·비우기는 지도 저장 카드에 있어요.
+    Section {
+        width: parent.width
+        category: "map"
+        Label { text: qsTr("본 타일 저장 한도"); color: Theme.inkMuted }
+        NumberBox {
+            objectName: "mapStoreLimitField"
+            value: MapController.tileStoreLimitMb
+            from: MapController.tileStoreLimitMbMin
+            to: MapController.tileStoreLimitMbMax
+            unit: qsTr("MB")
+            onValueModified: value => { MapController.tileStoreLimitMb = value }
+        }
+        Label { text: qsTr("궤적 점 간격"); color: Theme.inkMuted }
+        NumberBox {
+            objectName: "mapTrailSpacingField"
+            value: MapController.trailMinMeters
+            from: MapController.trailMinMetersMin
+            to: MapController.trailMinMetersMax
+            decimals: 1
+            stepSize: 0.1
+            unit: qsTr("m")
+            onValueModified: value => { MapController.trailMinMeters = value }
+        }
+        Label { text: qsTr("궤적 최대 점 수"); color: Theme.inkMuted }
+        NumberBox {
+            objectName: "mapTrailLengthField"
+            value: MapController.trailMaxPoints
+            from: MapController.trailMaxPointsMin
+            to: MapController.trailMaxPointsMax
+            unit: qsTr("점")
+            onValueModified: value => { MapController.trailMaxPoints = value }
+        }
+        Toggle {
+            objectName: "mapAutoFollowToggle"
+            text: qsTr("따라가기 자동 켜기")
+            checked: MapController.autoFollow
+            onToggled: MapController.autoFollow = checked
         }
     }
     Section {

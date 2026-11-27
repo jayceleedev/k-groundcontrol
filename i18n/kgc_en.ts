@@ -17,106 +17,146 @@
 <context>
     <name>AppSettingsPanel</name>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="30"/>
-        <source>언어</source>
-        <translation>Language</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="31"/>
-        <source>시스템 따라감</source>
-        <translation>Follow system</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="42"/>
-        <source>테마</source>
-        <translation>Theme</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="50"/>
-        <source>배경</source>
-        <translation>Background</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="53"/>
-        <source>민무늬</source>
-        <translation>Plain</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="53"/>
-        <source>체크무늬</source>
-        <translation>Checker</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="53"/>
-        <source>사진</source>
-        <translation>Photo</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="60"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="103"/>
-        <source>배경 사진</source>
-        <translation>Background image</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="71"/>
-        <source>길게 눌러 확인 시간</source>
-        <translation>Hold-to-confirm time</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="77"/>
-        <source>ms</source>
-        <translation>ms</translation>
-    </message>
-    <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="12"/>
-        <source>정보</source>
-        <translation>About</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="9"/>
         <source>일반</source>
         <translation>General</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="10"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="13"/>
         <source>화면</source>
         <translation>Display</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="11"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="14"/>
         <source>조작</source>
         <translation>Controls</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="86"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="15"/>
+        <source>지도</source>
+        <translation>Map</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="16"/>
+        <source>정보</source>
+        <translation>About</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="34"/>
+        <source>언어</source>
+        <translation>Language</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="35"/>
+        <source>시스템 따라감</source>
+        <translation>Follow system</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="46"/>
+        <source>테마</source>
+        <translation>Theme</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="54"/>
+        <source>배경</source>
+        <translation>Background</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="57"/>
+        <source>민무늬</source>
+        <translation>Plain</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="57"/>
+        <source>체크무늬</source>
+        <translation>Checker</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="57"/>
+        <source>사진</source>
+        <translation>Photo</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="64"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="147"/>
+        <source>배경 사진</source>
+        <translation>Background image</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="75"/>
+        <source>길게 눌러 확인 시간</source>
+        <translation>Hold-to-confirm time</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="81"/>
+        <source>ms</source>
+        <translation>ms</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="89"/>
+        <source>본 타일 저장 한도</source>
+        <translation>Viewed tile storage limit</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="95"/>
+        <source>MB</source>
+        <translation>MB</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="98"/>
+        <source>궤적 점 간격</source>
+        <translation>Trail point spacing</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="106"/>
+        <source>m</source>
+        <translation>m</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="109"/>
+        <source>궤적 최대 점 수</source>
+        <translation>Trail maximum points</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="115"/>
+        <source>점</source>
+        <translation>points</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="120"/>
+        <source>따라가기 자동 켜기</source>
+        <translation>Follow vehicle automatically</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="130"/>
         <source>버전</source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="89"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="116"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="133"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="160"/>
         <source>라이선스 보기</source>
         <translation>View license</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="90"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="140"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="134"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="187"/>
         <source>고지 보기</source>
         <translation>View notices</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="91"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="135"/>
         <source>소스</source>
         <translation>Source</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="104"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="148"/>
         <source>사진 (*.png *.jpg *.jpeg)</source>
         <translation>Images (*.png *.jpg *.jpeg)</translation>
     </message>
     <message>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="117"/>
-        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="141"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="161"/>
+        <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="188"/>
         <source>닫기</source>
         <translation>Close</translation>
     </message>
@@ -1790,6 +1830,11 @@
         <source>값 쓰기</source>
         <translation>Write values</translation>
     </message>
+    <message>
+        <location filename="../src/features/map/internal/MapDownloadJob.cpp" line="34"/>
+        <source>타일 받는 중</source>
+        <translation>Downloading tiles</translation>
+    </message>
 </context>
 <context>
     <name>JobView</name>
@@ -2814,17 +2859,17 @@
 <context>
     <name>Map</name>
     <message>
-        <location filename="../src/features/map/ui/MapController.cpp" line="46"/>
+        <location filename="../src/features/map/ui/MapController.cpp" line="76"/>
         <source>위성</source>
         <translation>Satellite</translation>
     </message>
     <message>
-        <location filename="../src/features/map/ui/MapController.cpp" line="46"/>
+        <location filename="../src/features/map/ui/MapController.cpp" line="76"/>
         <source>하이브리드</source>
         <translation>Hybrid</translation>
     </message>
     <message>
-        <location filename="../src/features/map/ui/MapController.cpp" line="47"/>
+        <location filename="../src/features/map/ui/MapController.cpp" line="77"/>
         <source>일반 지도</source>
         <translation>Road</translation>
     </message>
@@ -2848,21 +2893,40 @@
         <source>지도 저장소를 쓰지 못했어요</source>
         <translation>Could not use the map store</translation>
     </message>
+    <message>
+        <source>타일 %1개를 받지 못했어요</source>
+        <translation>Could not download %1 tile(s)</translation>
+    </message>
 </context>
 <context>
     <name>MapControls</name>
     <message>
-        <location filename="../src/features/map/ui/MapControls.qml" line="22"/>
+        <location filename="../src/features/map/ui/MapControls.qml" line="28"/>
+        <source>지도 저장</source>
+        <translation>Saved maps</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapControls.qml" line="35"/>
+        <source>궤적 지우기</source>
+        <translation>Clear trails</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapControls.qml" line="41"/>
         <source>지도 종류</source>
         <translation>Map type</translation>
     </message>
     <message>
-        <location filename="../src/features/map/ui/MapControls.qml" line="48"/>
+        <location filename="../src/features/map/ui/MapControls.qml" line="68"/>
+        <source>기체 따라가기</source>
+        <translation>Follow vehicle</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapControls.qml" line="79"/>
         <source>축소</source>
         <translation>Zoom out</translation>
     </message>
     <message>
-        <location filename="../src/features/map/ui/MapControls.qml" line="54"/>
+        <location filename="../src/features/map/ui/MapControls.qml" line="85"/>
         <source>확대</source>
         <translation>Zoom in</translation>
     </message>
@@ -2870,9 +2934,95 @@
 <context>
     <name>MapPane</name>
     <message>
-        <location filename="../src/features/map/ui/MapPane.qml" line="97"/>
+        <location filename="../src/features/map/ui/MapPane.qml" line="149"/>
         <source>지도 데이터 © Google</source>
         <translation>Map data © Google</translation>
+    </message>
+</context>
+<context>
+    <name>MapDownloadCard</name>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="60"/>
+        <source>지도 저장</source>
+        <translation>Saved maps</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="60"/>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="90"/>
+        <source>영역 받기</source>
+        <translation>Download area</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="70"/>
+        <source>저장한 지도 %1 · 미리 받은 것 %2</source>
+        <translation>Saved maps %1 · Downloaded %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="97"/>
+        <source>비우기</source>
+        <translation>Clear</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="107"/>
+        <source>지도에서 끌어서 영역을 고르세요</source>
+        <translation>Drag on the map to choose an area</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="114"/>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="206"/>
+        <source>취소</source>
+        <translation>Cancel</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="126"/>
+        <source>확대 범위</source>
+        <translation>Zoom range</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="142"/>
+        <source>~</source>
+        <translation>~</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="164"/>
+        <source>타일 %1개 · 약 %2</source>
+        <translation>%1 tiles · about %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="173"/>
+        <source>지금 지도 종류(%1)로 받아요</source>
+        <translation>Downloads the current map type (%1)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="192"/>
+        <source>받기</source>
+        <translation>Download</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="198"/>
+        <source>다시 고르기</source>
+        <translation>Choose again</translation>
+    </message>
+    <message>
+        <location filename="../src/features/map/ui/MapDownloadCard.qml" line="232"/>
+        <source>닫기</source>
+        <translation>Close</translation>
+    </message>
+</context>
+<context>
+    <name>HomeLayer</name>
+    <message>
+        <location filename="../src/features/map/ui/HomeLayer.qml" line="32"/>
+        <source>H</source>
+        <translation>H</translation>
+    </message>
+</context>
+<context>
+    <name>kgc::map::MapController</name>
+    <message>
+        <location filename="../src/features/map/ui/MapController.cpp" line="152"/>
+        <source>다 받았어요</source>
+        <translation>Download complete</translation>
     </message>
 </context>
 </TS>

@@ -1,3 +1,4 @@
+// [0.5.1 5.6] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.2 5.6.5 5.6.8] specs/features/0.5.0-map.md
 #pragma once
 #include <kgc/app/errors/Result.h>
@@ -21,16 +22,18 @@ class TileSource;
  */
 struct SavedView { double lat; double lon; double zoom; };
 /** 모든 지도 부품이 같이 쓰는 타일 받기·저장·지도 종류·궤적·영역 받기를 맡는 전역 서비스예요.
- * 입력: Http, 기체 등록부, 번역기, 시험용 타일 서버 주소(비면 Google)예요. Composition이 하나 만들어요.
- * 출력: 지도 종류·언어·저장소 크기·궤적·영역 받기 작업과 그 바뀜 시그널이에요. 타일 저장소는 워커 스레드에서 돌아요.
+ * 입력: Http, 기체 등록부, 번역기, 시험용 타일 서버 주소(비면 Google), 연결된 화면들의 배율이에요. Composition이 하나 만들어요.
+ * 출력: 지도 종류·언어·타일 화소 배수·저장소 크기·궤적·영역 받기 작업과 그 바뀜 시그널이에요. 타일 저장소는 워커 스레드에서 돌아요.
  * 실패: 저장소를 쓰지 못하면 storeFailed를 내고 저장 없이 서버에서만 타일을 받아요.
  */
 class MapService : public QObject {
     Q_OBJECT
 public:
-/** 타일 저장소 스레드·타일 공급·궤적 책(TrailBook)을 만들고 번역기 언어를 공급에 이어요.
+/** 타일 저장소 스레드·타일 공급·궤적 책(TrailBook)을 만들고 번역기 언어와 화면 배율을 공급에 이어요.
  * 입력: http, vehicles, translator, 시험용 타일 서버 주소 tileHost(parseTileHost를 거친 값이나 빈 값), 부모 parent예요.
  * 출력: 저장소 스레드가 cache/tiles/tiles.sqlite를 본 타일 저장 한도로 여는 서비스예요.
+ *       공급을 만든 바로 뒤(지도 엔진이 생기기 전) 연결된 모든 화면의 가장 큰 devicePixelRatio로 타일 화소 배수를 정하고
+ *       "Map tile ratio" 로그를 남겨요. 화면마다 DPI 바뀜을, 그리고 화면 더하기·빼기를 이어 그때마다 다시 정해요.
  *       TrailBook은 vehicles의 기체 위치를 모으고, 그 pointAdded·cleared를 trailPointAdded·trailsCleared로 넘겨요.
  * 실패: 저장소를 열지 못하면 storeFailed를 내요(열기는 워커에서 나중에 끝나요).
  */
@@ -64,6 +67,12 @@ public:
  * 실패: 없어요.
  */
     QString language() const;
+/** 지금 타일 화소 배수를 읽어요.
+ * 입력: 없어요.
+ * 출력: 1(256 px 타일) 또는 2(512 px 타일, 화면 배율이 1.15 이상)이며, 타일 공급의 값 그대로예요.
+ * 실패: 없어요.
+ */
+    int tilePixelRatio() const;
 /** 기체 등록부를 내줘요.
  * 입력: 없어요.
  * 출력: 생성자에 받은 등록부예요.
@@ -77,13 +86,14 @@ public:
  */
     qint64 tileCount(const QGeoRectangle& area, int minZoom, int maxZoom) const;
 /** 영역 받기를 시작해요.
- * 입력: 영역 area와 확대 범위 minZoom~maxZoom이에요. 지금 지도 종류와 언어로 받아요.
+ * 입력: 영역 area와 확대 범위 minZoom~maxZoom이에요. 지금 지도 종류·언어·타일 화소 배수로 받아요.
  * 출력: 새 영역 받기 작업이에요. 시작하면 downloadChanged를 내고, 작업이 끝날 때도 downloadChanged를 내요.
  * 실패: 범위가 틀리면 BadZoomRange, 너무 많으면 TooManyTiles, 저장소 고장이면 StoreFailed, 받는 중이면 DownloadBusy예요.
  * 흐름:
  * 1. planDownload — 확대 범위와 타일 수(100,000개까지)를 확인해요.
  * 2. 저장소 고장(storeBroken)이나 받는 중인 작업이 있으면 멈춰요.
- * 3. 남은 MapDownloadJob을 deleteLater하고, 지금 지도 종류·언어로 새 MapDownloadJob을 만들어요.
+ * 3. 남은 MapDownloadJob을 deleteLater하고, 지금 지도 종류·언어·타일 화소 배수(tilePixelRatio)로 새 MapDownloadJob을 만들어요.
+ *    받는 동안 배수가 바뀌어도 이 배수로 끝까지 받아요.
  * 4. MapDownloadJob::start — TileSource::fetch(pin)으로 타일을 저장소에 고정하거나 서버에서 받아 TileStore::save로 고정해요.
  * 5. downloadChanged — 화면이 새 작업을 보게 알려요.
  */
@@ -139,6 +149,7 @@ public:
 /** 지도 부품이 시작할 곳을 읽어요.
  * 입력: 없어요.
  * 출력: 가운데 지도를 마지막으로 본 곳이며, 처음이면 설정 기본값(36.5, 127.8, 확대 7)이에요.
+ *       확대는 저장된 값을 반올림한 정수 층이에요(0.5.0이 남긴 14.6도 15로 열어요).
  * 실패: 없어요.
  */
     SavedView lastView() const;
@@ -153,6 +164,8 @@ signals:
     void mapTypeChanged();
 /** 타일 지명 언어가 바뀌었음을 알려요. 입력: 없어요. 출력: 없어요. 실패: 없어요. */
     void languageChanged();
+/** 타일 화소 배수가 바뀌었음을 알려요(타일 공급의 시그널을 그대로 넘겨요). 입력: 없어요. 출력: 없어요. 실패: 없어요. */
+    void tilePixelRatioChanged();
 /** 영역 받기 작업이 생기거나 끝나거나 치워졌음을 알려요. 입력: 없어요. 출력: 없어요. 실패: 없어요. */
     void downloadChanged();
 /** 저장소 크기를 알려요.

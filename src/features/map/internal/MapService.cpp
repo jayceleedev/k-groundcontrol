@@ -1,16 +1,37 @@
+// [0.5.1 5.6] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.5 5.6.8] specs/features/0.5.0-map.md
 #include "MapServicePrivate.h"
 #include "Constants.h"
 #include "DownloadPlan.h"
+#include "Events.h"
 #include "TileMath.h"
 #include "TileSource.h"
 #include "TileStore.h"
+#include "ZoomStep.h"
 #include <kgc/app/i18n/Translator.h>
+#include <kgc/app/log/Log.h>
 #include <kgc/app/paths/Paths.h>
 #include <kgc/map/Errors.h>
+#include <kgc/map/ModuleId.h>
+#include <QGuiApplication>
+#include <QScreen>
 #include <algorithm>
+#include <cmath>
 namespace kgc::map {
 using kgc::app::job::Job;
+void MapService::Private::decideTileRatio(bool logAlways)
+{
+    // 창이 놓인 화면이 아니라 연결된 화면 가운데 가장 큰 배율로 정해요(창을 옮겨도 바뀌지 않게).
+    // QGuiApplication::devicePixelRatio()는 화면 신호를 다 낸 뒤에야 갱신되어 신호 안에서는 예전 값을 줘요.
+    const auto screens = QGuiApplication::screens();
+    double screenRatio = screens.isEmpty() ? 1.0 : 0.0;
+    for (const auto* screen : screens) screenRatio = std::max(screenRatio, screen->devicePixelRatio());
+    const int previous = source->tilePixelRatio();
+    source->setTilePixelRatio(tilePixelRatioFor(screenRatio));
+    if (logAlways || source->tilePixelRatio() != previous)
+        KGC_LOG_INFO(kCategory, MapEvent::TileRatio, "Map tile ratio: %1, screen ratio: %2", source->tilePixelRatio(),
+                     QString::number(screenRatio, 'g', 3));
+}
 MapService::MapService(kgc::app::net::Http& http, kgc::vehicle::registry::VehicleRegistry& vehicles,
                        kgc::app::i18n::Translator& translator, const QString& tileHost, QObject* parent)
     : QObject(parent), d_(std::make_unique<Private>(vehicles))
@@ -19,6 +40,21 @@ MapService::MapService(kgc::app::net::Http& http, kgc::vehicle::registry::Vehicl
     d_->store = store;
     store->moveToThread(&d_->storeThread);
     d_->source = new TileSource(http, *store, tileHost, this);
+    // 지도 엔진이 생기기 전에 배수를 정해 첫 화면 타일을 두 번 받지 않아요.
+    d_->decideTileRatio(true);
+    connect(d_->source, &TileSource::tilePixelRatioChanged, this, &MapService::tilePixelRatioChanged);
+    // 화면 신호 안에서 바로 정하지 않고 큐로 미뤄, 바뀐 화면 목록과 배율을 읽어요.
+    const auto watch = [this](QScreen* screen) {
+        connect(screen, &QScreen::logicalDotsPerInchChanged, this, [this] { d_->decideTileRatio(false); }, Qt::QueuedConnection);
+        connect(screen, &QScreen::physicalDotsPerInchChanged, this, [this] { d_->decideTileRatio(false); }, Qt::QueuedConnection);
+    };
+    for (auto* screen : QGuiApplication::screens()) watch(screen);
+    connect(qGuiApp, &QGuiApplication::screenAdded, this, [this, watch](QScreen* screen) {
+        watch(screen);
+        QMetaObject::invokeMethod(this, [this] { d_->decideTileRatio(false); }, Qt::QueuedConnection);
+    });
+    // 빠진 화면은 신호 뒤 바로 지워지므로 람다는 그 포인터를 받지 않아요.
+    connect(qGuiApp, &QGuiApplication::screenRemoved, this, [this] { d_->decideTileRatio(false); }, Qt::QueuedConnection);
     d_->source->setLanguage(translator.language());
     connect(&translator, &kgc::app::i18n::Translator::languageChanged, this,
             [this, &translator] { d_->source->setLanguage(translator.language()); });
@@ -59,6 +95,7 @@ void MapService::setMapType(settings::MapType type)
     emit mapTypeChanged();
 }
 QString MapService::language() const { return d_->source->language(); }
+int MapService::tilePixelRatio() const { return d_->source->tilePixelRatio(); }
 kgc::vehicle::registry::VehicleRegistry& MapService::vehicles() const { return d_->vehicles; }
 qint64 MapService::tileCount(const QGeoRectangle& area, int minZoom, int maxZoom) const
 {
@@ -73,7 +110,7 @@ kgc::app::errors::Result<Job*> MapService::startDownload(const QGeoRectangle& ar
     if (const auto* job = downloadJob(); job && (job->state() == Job::State::Pending || job->state() == Job::State::Running))
         return std::unexpected(make(MapError::DownloadBusy));
     if (d_->download) d_->download->deleteLater();
-    d_->download = new MapDownloadJob(*d_->source, mapType(), language(), area, minZoom, maxZoom, *plan, this);
+    d_->download = new MapDownloadJob(*d_->source, mapType(), language(), tilePixelRatio(), area, minZoom, maxZoom, *plan, this);
     connect(d_->download->job(), &Job::finished, this, &MapService::downloadChanged);
     d_->download->start();
     emit downloadChanged();
@@ -100,7 +137,8 @@ QList<QGeoCoordinate> MapService::trailOf(int sysid) const { return d_->trails.t
 void MapService::clearTrails() { d_->trails.clear(); }
 SavedView MapService::lastView() const
 {
-    return {settings::lastLatitude(), settings::lastLongitude(), settings::lastZoom()};
+    // 0.5.0이 남긴 소수 확대(14.6 등)도 정수 층으로 열어요.
+    return {settings::lastLatitude(), settings::lastLongitude(), std::round(settings::lastZoom())};
 }
 void MapService::saveView(SavedView view)
 {

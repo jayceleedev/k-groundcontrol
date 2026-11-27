@@ -1,3 +1,4 @@
+// [0.5.1 5.9] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.9 T17 T18 T21 T22 T24] specs/features/0.5.0-map.md
 /** 타일 지도와 그 위의 입력·레이어·축척·출처·제어·지도 저장 카드를 묶은 지도 부품이에요. 다른 패널·창에도 같은 것을 놓을 수 있어요.
  * 입력: showControls(제어 단추와 카드), rememberView(보던 곳 저장, 가운데 지도만), follow(따라가기), selecting(영역 고르기)이에요.
@@ -42,7 +43,8 @@ Item {
         // 보던 곳에서 시작한 뒤, 지금 활성 기체로 따라가기를 한 번 정해요(따라가기 ②, 시작 순서를 지키려고 같은 곳에서 해요).
         Component.onCompleted: {
             const view = MapController.lastView()
-            canvas.zoomLevel = view.zoom
+            // 반올림한 확대(2)가 지도 폭에 맞춘 최소 확대(2.49 등)보다 작으면 최소 확대로 열어요.
+            canvas.zoomLevel = Math.max(canvas.minimumZoomLevel, view.zoom)
             canvas.center = QtPositioning.coordinate(view.lat, view.lon)
             const arm = MapController.activeSysid !== -1 && MapController.autoFollow
             pane.follow = arm && MapController.activeHasPosition

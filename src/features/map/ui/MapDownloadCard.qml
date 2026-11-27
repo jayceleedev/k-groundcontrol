@@ -1,3 +1,4 @@
+// [0.5.1 5.9] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.9 T22 T23 T25] specs/features/0.5.0-map.md
 /** 지도 제어 왼쪽에 뜨는 "지도 저장" 카드예요. 저장 크기 보기·비우기와 영역 받기(고르기 → 계획 → 받기)를 해요.
  * 입력: 카드가 다룰 지도 부품 mapPane이에요. 지도 부품이 고른 영역을 choose(chosen)로 넘겨요.
@@ -158,8 +159,9 @@ Item {
                 width: parent.width
                 text: {
                     if (card.area === undefined) return ""
-                    // estimateText는 C++에서 지도 종류를 읽어 알림이 없으므로, 종류가 바뀌면 다시 구하도록 여기서 읽어요.
+                    // estimateText는 C++에서 지도 종류와 타일 화소 배수를 읽어 알림이 없으므로, 둘이 바뀌면 다시 구하도록 여기서 읽어요.
                     void MapController.mapType
+                    void MapController.tilePixelRatio
                     const tiles = MapController.tileCount(card.area, card.zoomFrom, card.zoomTo)
                     return qsTr("타일 %1개 · 약 %2").arg(tiles.toLocaleString(Qt.locale("en_US"), 'f', 0)).arg(MapController.estimateText(tiles))
                 }

@@ -1,3 +1,4 @@
+// [0.5.1 5.5] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.7] specs/features/0.5.0-map.md
 #include "KgcTileFetcher.h"
 #include "TileImage.h"
@@ -6,7 +7,8 @@ KgcTileReply::KgcTileReply(const QGeoTileSpec& spec, TileSource& source, QObject
     : QGeoTiledMapReply(spec, parent), source_(&source)
 {
     // 공급의 콜백은 언제나 나중에 와서, 표를 받은 뒤에 deliver가 불려요. 답이 먼저 지워지면 콜백은 아무것도 하지 않아요.
-    ticket_ = source.fetch(settings::MapType(spec.mapId() - 1), source.language(), spec.zoom(), spec.x(), spec.y(), false,
+    ticket_ = source.fetch(settings::MapType(spec.mapId() - 1), source.language(), source.tilePixelRatio(), spec.zoom(),
+                           spec.x(), spec.y(), false,
                            [self = QPointer<KgcTileReply>(this)](const kgc::app::errors::Result<QByteArray>& result) {
                                if (self) self->deliver(result);
                            });

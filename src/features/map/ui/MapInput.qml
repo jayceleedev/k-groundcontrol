@@ -1,13 +1,16 @@
+// [0.5.1 5.8] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.9] specs/features/0.5.0-map.md
 /** 지도 위의 끌기·휠·핀치를 지도 이동·확대와 영역 고르기로 바꿔요.
  * 입력: 지도 map, 영역 고르기 중인지 selecting, 따라가기 중인지 follow예요.
  * 출력: 지도를 옮기고 확대하며, 사용자가 지도를 끌면 userPanned, 고르는 동안 selectionMoved, 손을 떼면 selectionDone(geoRectangle)을 내요.
+ *       확대는 정수 층으로 맞춰요(최소 확대만 예외). 휠은 모은 값 120마다 한 층, 핀치는 놓을 때 가까운 층으로 바로 맞춰요.
  *       따라가기 중의 휠·핀치는 지도 가운데(기체)를 기준으로 확대해요. 방위·기울기는 바꾸지 않아요.
  * 실패: 끌지 않은 클릭은 아무 일도 하지 않아요. 다른 항목·핸들러가 이미 쥔 누름은 가져가지 않아요.
  */
 import QtQuick
 import QtLocation
 import QtPositioning
+import Kgc.Map
 
 Item {
     id: input
@@ -19,6 +22,14 @@ Item {
     property var lastArea
     property var startCentroid
     property var dragAnchor
+    // 이 몸짓에서 모은 휠 값과, 이 몸짓이 잔 값 흐름(정밀 터치패드·부드러운 휠)인지예요.
+    property real wheelSum: 0
+    property bool wheelFine: false
+    // 마지막으로 층을 넘긴 때(Date.now())예요. 몸짓이 끝나면 0으로 돌려요.
+    property double lastStepTime: 0
+    // 핀치를 시작할 때의 확대와 핀치의 마지막 가운데 점이에요(놓은 뒤에는 centroid를 믿을 수 없어요).
+    property real pinchStartZoom: 0
+    property point pinchPoint
     signal userPanned()
     signal selectionMoved(var area)
     signal selectionDone(var area)
@@ -77,16 +88,42 @@ Item {
         objectName: "mapWheel"
         target: null
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
-        // 세로 각도만 봐요. 수정키와 pixelDelta는 보지 않아 Shift·Ctrl+휠도 같은 확대예요.
-        onWheel: (event) => input.zoomAround(input.map.zoomLevel + event.angleDelta.y / 120,
-                                             input.map.toCoordinate(wheelHandler.point.position, false), wheelHandler.point.position)
+        // 휠이 이만큼 쉬면 비활성이 되어 한 몸짓이 끝나요.
+        activeTimeout: MapController.wheelGestureTimeout
+        onActiveChanged: if (!active) { input.wheelSum = 0; input.wheelFine = false; input.lastStepTime = 0 }
+        // 세로 각도만 봐요. 수정키와 pixelDelta는 보지 않아 Shift·Ctrl+휠(Windows 터치패드 핀치)도 같은 확대예요.
+        // 손을 뗀 뒤의 관성 사건은 버려요. 층 판정은 MapController.wheelStep, 갈 층은 zoomStepTarget이 정해요.
+        onWheel: (event) => {
+            if (event.phase === Qt.ScrollMomentum) return
+            const now = Date.now()
+            const wheel = MapController.wheelStep(input.wheelSum, input.wheelFine, event.angleDelta.y, now - input.lastStepTime)
+            input.wheelSum = wheel.sum
+            input.wheelFine = wheel.fine
+            if (wheel.steps === 0) return
+            input.lastStepTime = now
+            input.zoomAround(MapController.zoomStepTarget(input.map.zoomLevel, wheel.steps, input.map.minimumZoomLevel, input.map.maximumZoomLevel),
+                             input.map.toCoordinate(wheelHandler.point.position, false), wheelHandler.point.position)
+        }
     }
     PinchHandler {
         objectName: "mapPinch"
         target: null
         rotationAxis.enabled: false
         grabPermissions: PointerHandler.TakeOverForbidden
-        onActiveChanged: if (active) input.startCentroid = input.map.toCoordinate(centroid.position, false)
-        onScaleChanged: (delta) => input.zoomAround(input.map.zoomLevel + Math.log2(delta), input.startCentroid, centroid.position)
+        // 하는 동안은 부드럽게 바뀌고, 놓으면 가까운 정수 층으로 애니메이션 없이 바로 맞춰요.
+        onActiveChanged: {
+            if (active) {
+                input.startCentroid = input.map.toCoordinate(centroid.position, false)
+                input.pinchStartZoom = input.map.zoomLevel
+                input.pinchPoint = centroid.position
+                return
+            }
+            input.zoomAround(MapController.pinchSnapTarget(input.pinchStartZoom, input.map.zoomLevel, input.map.minimumZoomLevel,
+                                                           input.map.maximumZoomLevel), input.startCentroid, input.pinchPoint)
+        }
+        onScaleChanged: (delta) => {
+            input.pinchPoint = centroid.position
+            input.zoomAround(input.map.zoomLevel + Math.log2(delta), input.startCentroid, centroid.position)
+        }
     }
 }

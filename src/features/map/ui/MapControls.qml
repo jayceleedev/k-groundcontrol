@@ -1,8 +1,9 @@
+// [0.5.1 5.9] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.9 T17 T18 T19 T22] specs/features/0.5.0-map.md
 /** 지도 오른쪽 아래의 단추 묶음이에요.
  * 입력: 단추가 다룰 지도 부품 mapPane과 열고 닫을 지도 저장 카드 downloadCard예요.
  * 출력: 위에서부터 지도 저장·궤적 지우기·지도 종류(왼쪽에 뜨는 고르기)·따라가기·축소·확대 단추예요.
- *       확대·축소는 지도 가운데를 기준으로 한 단계씩이에요.
+ *       확대·축소는 지도 가운데를 기준으로 그 방향의 다음 정수 층으로 가요(14.6에서 확대 15, 축소 14).
  * 실패: 확대는 지도의 가장 작은·큰 확대 밖으로 가지 않아요. 따라가기 단추는 활성 기체가 위치를 가질 때만 눌려요.
  * 흐름(따라가기 단추):
  * 1. mapFollow.clicked → mapPane.follow를 뒤집어요(따라가기 ⑤).
@@ -77,12 +78,14 @@ Column {
         objectName: "mapZoomOut"
         name: "minus"
         hint: qsTr("축소")
-        onClicked: mapPane.map.zoomLevel = Math.max(mapPane.map.minimumZoomLevel, mapPane.map.zoomLevel - 1)
+        onClicked: mapPane.map.zoomLevel = MapController.zoomStepTarget(mapPane.map.zoomLevel, -1, mapPane.map.minimumZoomLevel,
+                                                                        mapPane.map.maximumZoomLevel)
     }
     IconButton {
         objectName: "mapZoomIn"
         name: "plus"
         hint: qsTr("확대")
-        onClicked: mapPane.map.zoomLevel = Math.min(mapPane.map.maximumZoomLevel, mapPane.map.zoomLevel + 1)
+        onClicked: mapPane.map.zoomLevel = MapController.zoomStepTarget(mapPane.map.zoomLevel, 1, mapPane.map.minimumZoomLevel,
+                                                                        mapPane.map.maximumZoomLevel)
     }
 }

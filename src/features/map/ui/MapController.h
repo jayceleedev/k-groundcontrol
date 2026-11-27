@@ -1,3 +1,4 @@
+// [0.5.1 5.7] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.9 5.9] specs/features/0.5.0-map.md
 #pragma once
 #include <kgc/map/MapService.h>
@@ -34,6 +35,8 @@ class MapController : public QObject {
     Q_PROPERTY(int minZoom READ minZoom CONSTANT)
     Q_PROPERTY(int maxZoom READ maxZoom CONSTANT)
     Q_PROPERTY(int saveViewDelayMs READ saveViewDelayMs CONSTANT)
+    Q_PROPERTY(int tilePixelRatio READ tilePixelRatio NOTIFY tilePixelRatioChanged)
+    Q_PROPERTY(double wheelGestureTimeout READ wheelGestureTimeout CONSTANT)
     Q_PROPERTY(int tileStoreLimitMb READ tileStoreLimitMb WRITE setTileStoreLimitMb NOTIFY tileStoreLimitMbChanged)
     Q_PROPERTY(int tileStoreLimitMbMin READ tileStoreLimitMbMin CONSTANT)
     Q_PROPERTY(int tileStoreLimitMbMax READ tileStoreLimitMbMax CONSTANT)
@@ -96,6 +99,12 @@ public:
     int maxZoom() const;
     /** 입력: 없어요. 출력: 지도가 멈춘 뒤 본 곳을 저장하기까지의 시간(kSaveViewDelayMs, ms)이에요. 실패: 없어요. */
     int saveViewDelayMs() const;
+    /** 지금 타일 화소 배수를 읽어요. 입력: 없어요. 출력: 서비스의 타일 화소 배수(1 또는 2)예요. 실패: 없어요. */
+    int tilePixelRatio() const;
+    /** 휠 몸짓이 끝나는 쉼 시간을 읽어요(mapWheel의 activeTimeout이에요).
+     * 입력: 없어요. 출력: 휠이 이만큼 쉬면 한 몸짓이 끝나는 시간(kWheelGestureTimeout, 초, 0.25)이에요. 실패: 없어요.
+     */
+    double wheelGestureTimeout() const;
     /** 입력: 없어요. 출력: 운영 설정 map.tileStoreLimitMb(MB)예요. 실패: 없어요. */
     int tileStoreLimitMb() const;
     /** 입력: 새 한도 value(MB)예요. 출력: 생성 setter로 써요. 실패: 범위 밖 값은 저장되지 않아요. */
@@ -173,6 +182,25 @@ public:
  * 실패: 없어요.
  */
     Q_INVOKABLE QVariantMap scaleFor(double latitude, double zoom, int maxPixels) const;
+/** 휠 사건 하나를 휠 모음에 더해 몇 층 갈지 정해요(MapInput의 mapWheel이 불러요).
+ * 입력: 이 몸짓에서 모은 값 sum, 잔 값 흐름인지 fine, angleDelta.y인 delta, 마지막으로 층을 넘긴 뒤 지난 시간 sinceStepMs(ms)예요.
+ * 출력: {"steps": 옮길 층 수, "sum": 남은 모은 값, "fine": 잔 값 흐름인지}(순수 함수 wheelStep 그대로)예요.
+ *       DEBUG 로그 "Map wheel: …"를 남겨요(기본 로그 수준에서는 보이지 않아요).
+ * 실패: 없어요.
+ */
+    Q_INVOKABLE QVariantMap wheelStep(double sum, bool fine, int delta, double sinceStepMs) const;
+/** 지금 확대에서 steps만큼 정수 층을 옮긴 확대를 구해요(휠과 확대·축소 단추가 불러요).
+ * 입력: 지금 확대 current, 옮길 층 수 steps, 지도의 가장 작은 확대 minZoom과 가장 큰 확대 maxZoom이에요.
+ * 출력: 그 방향의 다음 정수 층(14.6에서 확대 15, 축소 14)을 범위로 자른 값이에요(순수 함수 zoomStepTarget 그대로).
+ * 실패: 없어요.
+ */
+    Q_INVOKABLE double zoomStepTarget(double current, int steps, double minZoom, double maxZoom) const;
+/** 핀치가 끝났을 때 맞출 정수 층을 구해요(MapInput의 mapPinch가 놓을 때 불러요).
+ * 입력: 핀치를 시작할 때의 확대 startZoom, 놓을 때의 확대 endZoom, 가장 작은 확대 minZoom과 가장 큰 확대 maxZoom이에요.
+ * 출력: 가까운 정수 층이며, 0.3층 넘게 움직였는데 시작 층으로 돌아가면 움직인 방향으로 한 층이에요(순수 함수 pinchSnapTarget 그대로).
+ * 실패: 없어요.
+ */
+    Q_INVOKABLE double pinchSnapTarget(double startZoom, double endZoom, double minZoom, double maxZoom) const;
 /** 영역을 받을 때의 타일 수를 세요.
  * 입력: 영역 area와 확대 범위 minZoom~maxZoom이에요.
  * 출력: 받을 타일 수예요(서비스의 tileCount 그대로).
@@ -181,8 +209,8 @@ public:
     Q_INVOKABLE qint64 tileCount(QGeoRectangle area, int minZoom, int maxZoom) const;
 /** 받을 타일의 크기를 어림해요.
  * 입력: 타일 수 tiles예요.
- * 출력: 지금 지도 종류의 평균 크기(kAvgTileBytes)로 어림한 크기 글자("28 MB" 꼴)예요.
- *       지도 종류가 바뀌면 값이 달라지므로, QML 바인딩은 mapType도 읽어 다시 구해요.
+ * 출력: 지금 지도 종류의 평균 크기(kAvgTileBytes)에, 타일 화소 배수가 2이면 kHighDpiBytesFactor(4)를 곱해 어림한 크기 글자("28 MB" 꼴)예요.
+ *       지도 종류나 배수가 바뀌면 값이 달라지므로, QML 바인딩은 mapType·tilePixelRatio도 읽어 다시 구해요.
  * 실패: 없어요.
  */
     Q_INVOKABLE QString estimateText(qint64 tiles) const;
@@ -240,6 +268,10 @@ signals:
     void mapTypeChanged();
     /** 입력: 없어요. 출력: language를 다시 읽도록 알려요. 실패: 없어요. */
     void languageChanged();
+    /** 타일 화소 배수가 바뀌었음을 알려요(서비스의 시그널을 그대로 넘겨요).
+     * 입력: 없어요. 출력: tilePixelRatio를 다시 읽도록 알려요(영역 받기 크기 어림이 다시 구해요). 실패: 없어요.
+     */
+    void tilePixelRatioChanged();
     /** 입력: 없어요. 출력: activeSysid를 다시 읽도록 알려요(활성 기체가 바뀜). 실패: 없어요. */
     void activeSysidChanged();
     /** 입력: 없어요. 출력: activeCoordinate·activeHasPosition을 다시 읽도록 알려요. 실패: 없어요. */

@@ -1,3 +1,4 @@
+// [0.5.1 5.6] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.8 T22] specs/features/0.5.0-map.md
 #pragma once
 #include "TileMath.h"
@@ -12,7 +13,7 @@
 namespace kgc::app::job { class Job; }
 namespace kgc::map {
 /** 고른 영역의 타일을 확대 범위만큼 받아 저장소에 고정하는 영역 받기 작업 하나예요(Job을 가져요, SitlDownload 선례).
- * 입력: 타일 공급, 지도 종류·언어, 영역과 확대 범위, 받을 타일 수(planDownload의 값)예요.
+ * 입력: 타일 공급, 지도 종류·언어·타일 화소 배수, 영역과 확대 범위, 받을 타일 수(planDownload의 값)예요.
  * 출력: job()으로 단계·진행률·남은 시간·취소를 보여요. 받은 타일은 미리 받은 것(pinned)으로 남아요.
  * 실패: 받지 못한 타일이 있으면 TileFailed로, 취소하면 공용 취소로 끝나요. 이미 받은 것은 어느 쪽이든 남아요.
  */
@@ -20,11 +21,12 @@ class MapDownloadJob : public QObject {
     Q_OBJECT
 public:
 /** 아직 시작하지 않은 영역 받기를 만들어요.
- * 입력: 타일 공급 source, 지도 종류 type, 지명 언어 language, 영역 area, 확대 범위 minZoom~maxZoom, 타일 수 total, parent예요.
+ * 입력: 타일 공급 source, 지도 종류 type, 지명 언어 language, 타일 화소 배수 ratio(받는 동안 배수가 바뀌어도 이 배수로 끝까지 받아요),
+ *       영역 area, 확대 범위 minZoom~maxZoom, 타일 수 total, parent예요.
  * 출력: Pending 상태의 Job(OperationKind::MapDownload)을 가진 객체예요.
  * 실패: 없어요.
  */
-    MapDownloadJob(TileSource& source, settings::MapType type, QString language, QGeoRectangle area,
+    MapDownloadJob(TileSource& source, settings::MapType type, QString language, int ratio, QGeoRectangle area,
                    int minZoom, int maxZoom, qint64 total, QObject* parent);
     /** 기다리는 타일 표를 모두 거둬요. 입력: 없어요. 출력: 없어요. 실패: 없어요. */
     ~MapDownloadJob() override;
@@ -50,6 +52,7 @@ private:
     QPointer<TileSource> source_;
     settings::MapType type_;
     QString language_;
+    int ratio_;
     QGeoRectangle area_;
     int maxZoom_;
     qint64 total_;

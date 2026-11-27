@@ -1,3 +1,4 @@
+// [0.5.1 5.5] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.7] specs/features/0.5.0-map.md
 #pragma once
 #include "TileSource.h"
@@ -7,8 +8,8 @@
 #include <QtLocation/private/qgeotilespec_p.h>
 namespace kgc::map {
 /** Qt Location의 타일 요청 하나를 타일 공급의 대기표 하나로 잇는 답이에요.
- * 입력: 타일 사양과 타일 공급이에요. 만들 때 공급의 지금 언어로 fetch(pin 거짓)해요.
- * 출력: 받은 바이트와 그림 형식을 넣고 끝나요.
+ * 입력: 타일 사양과 타일 공급이에요. 만들 때 공급의 지금 언어와 타일 화소 배수로 fetch(pin 거짓)해요.
+ * 출력: 받은 바이트와 그림 형식을 넣고 끝나요. 2배 그림(512 px)도 Qt가 256 칸에 줄여 그려요.
  * 실패: 오류면 CommunicationError와 tileErrorName 글자(영어만)예요. Qt가 다시 요청하다 다섯 번 뒤 포기해요.
  */
 class KgcTileReply : public QGeoTiledMapReply {
@@ -16,7 +17,7 @@ class KgcTileReply : public QGeoTiledMapReply {
 public:
 /** 타일을 청해요.
  * 입력: 타일 사양 spec(지도 id 1~3), 타일 공급 source, 부모 parent예요.
- * 출력: 대기표를 들고 답을 기다리는 객체예요.
+ * 출력: 공급의 지금 언어·배수로 청한 대기표를 들고 답을 기다리는 객체예요.
  * 실패: 없어요.
  */
     KgcTileReply(const QGeoTileSpec& spec, TileSource& source, QObject* parent);

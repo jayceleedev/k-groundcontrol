@@ -1,3 +1,4 @@
+// [0.5.1 5.6] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.2 5.6.5 5.6.8] specs/features/0.5.0-map.md
 #pragma once
 #include "MapDownloadJob.h"
@@ -11,6 +12,8 @@ class TileSource;
 // 서비스가 가진 저장소 스레드·타일 공급·궤적·영역 받기예요. 저장소는 그 스레드에서 지워져요(FcFlashService 선례).
 struct MapService::Private {
     explicit Private(kgc::vehicle::registry::VehicleRegistry& registry) : vehicles(registry), trails(registry) {}
+    // 연결된 모든 화면의 가장 큰 devicePixelRatio로 타일 화소 배수를 정해요. logAlways거나 배수가 바뀌면 로그를 남겨요.
+    void decideTileRatio(bool logAlways);
     kgc::vehicle::registry::VehicleRegistry& vehicles;
     QThread storeThread;
     TileStore* store = nullptr;

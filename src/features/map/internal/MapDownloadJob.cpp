@@ -1,3 +1,4 @@
+// [0.5.1 5.6] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.8 6 T22] specs/features/0.5.0-map.md
 #include "MapDownloadJob.h"
 #include "Constants.h"
@@ -10,9 +11,9 @@
 namespace kgc::map {
 using kgc::app::errors::Result;
 using kgc::app::job::Job;
-MapDownloadJob::MapDownloadJob(TileSource& source, settings::MapType type, QString language, QGeoRectangle area,
+MapDownloadJob::MapDownloadJob(TileSource& source, settings::MapType type, QString language, int ratio, QGeoRectangle area,
                                int minZoom, int maxZoom, qint64 total, QObject* parent)
-    : QObject(parent), source_(&source), type_(type), language_(std::move(language)), area_(std::move(area)),
+    : QObject(parent), source_(&source), type_(type), language_(std::move(language)), ratio_(ratio), area_(std::move(area)),
       maxZoom_(maxZoom), total_(total), z_(minZoom),
       job_(new Job(kgc::app::job::OperationKind::MapDownload, this))
 {
@@ -67,7 +68,8 @@ void MapDownloadJob::fill()
     while (!stopped_ && source_ && open_.size() < kDownloadParallel && nextTile(z, x, y)) {
         const quint64 serial = ++nextSerial_;
         // 콜백은 언제나 나중에 불리므로, fetch가 돌려준 표를 먼저 적어 둘 수 있어요.
-        const auto ticket = source_->fetch(type_, language_, z, x, y, true,
+        // 영역 받기는 시작할 때의 배수로만 받아요(다른 배수를 대신 쓰지 않아요).
+        const auto ticket = source_->fetch(type_, language_, ratio_, z, x, y, true,
             [self = QPointer<MapDownloadJob>(this), serial](const Result<QByteArray>& result) {
                 if (self) self->tileDone(serial, result);
             });

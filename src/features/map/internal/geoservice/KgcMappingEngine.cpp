@@ -1,3 +1,4 @@
+// [0.5.1 5.5] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.7] specs/features/0.5.0-map.md
 #include "KgcMappingEngine.h"
 #include "Constants.h"
@@ -25,10 +26,13 @@ KgcMappingEngine::KgcMappingEngine(TileSource& source, QGeoServiceProvider::Erro
         QGeoMapType(QGeoMapType::StreetMap, QStringLiteral("Road"), {}, false, false, 3, plugin, capabilities)});
     // 디스크 캐시는 TileStore가 맡으므로 Qt 캐시는 메모리만 써요. fetcher보다 먼저 정해요.
     setCacheHint(QAbstractGeoTileCache::MemoryCache);
-    setTileCache(new KgcTileCache);
+    setTileCache(new KgcTileCache(source.tilePixelRatio(), this));
     setTileFetcher(new KgcTileFetcher(source, this));
     // 언어가 바뀌면 모든 지도가 보이는 타일을 새 판으로 다시 청해요(하이브리드·일반은 서버, 위성은 저장소에서).
     connect(&source, &TileSource::languageChanged, this, [this] { setTileVersion(tileVersion() + 1); });
+    // 배수가 바뀌거나 대신 쓴 그림이 낡으면 보이는 칸을 지금 배수로 다시 청해요(저장소에 있으면 저장소에서).
+    connect(&source, &TileSource::tilePixelRatioChanged, this, [this] { setTileVersion(tileVersion() + 1); });
+    connect(&source, &TileSource::fallbackStale, this, [this] { setTileVersion(tileVersion() + 1); });
     connect(&source, &TileSource::onlineAgain, this, &KgcMappingEngine::refreshVisible);
     *error = QGeoServiceProvider::NoError;
     errorString->clear();

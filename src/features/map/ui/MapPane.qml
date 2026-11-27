@@ -152,6 +152,14 @@ Item {
         style: Text.Outline
         styleColor: Theme.osdShadow
     }
+    // 제어 바로 아래 겹에서, 꺼진 단추(위치 없는 따라가기)와 단추 사이 틈의 누르기·끌기·휠이 지도로 내려가지 않게 받아요.
+    MouseArea {
+        objectName: "mapControlsInputBlock"
+        anchors.fill: controls
+        visible: controls.visible
+        acceptedButtons: Qt.AllButtons
+        onWheel: (wheel) => wheel.accepted = true
+    }
     MapControls {
         id: controls
         visible: pane.showControls

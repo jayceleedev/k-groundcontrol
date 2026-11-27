@@ -18,6 +18,7 @@ Item {
     property bool follow: false
     property var lastArea
     property var startCentroid
+    property var dragAnchor
     signal userPanned()
     signal selectionMoved(var area)
     signal selectionDone(var area)
@@ -39,8 +40,15 @@ Item {
         acceptedButtons: Qt.LeftButton
         // CanTakeOver 깃발을 두지 않아 패널·카드·단추가 쥔 누름을 지도 끌기가 가져가지 않아요.
         grabPermissions: PointerHandler.ApprovesTakeOverByAnything
-        onActiveChanged: if (active) input.userPanned()
-        onTranslationChanged: (delta) => input.map.pan(-delta.x, -delta.y)
+        // 누른 곳의 좌표를 손 아래에 계속 맞춰요. Map.pan(int, int)은 움직임의 소수 부분을 버려
+        // 화면 배율 125·150 %나 터치에서 천천히 끌면 지도가 손을 따라오지 못해요.
+        onActiveChanged: {
+            if (!active) return
+            input.dragAnchor = input.map.toCoordinate(centroid.pressPosition, false)
+            input.userPanned()
+            input.map.alignCoordinateToPoint(input.dragAnchor, centroid.position)
+        }
+        onTranslationChanged: if (active) input.map.alignCoordinateToPoint(input.dragAnchor, centroid.position)
     }
     DragHandler {
         objectName: "mapSelectDrag"

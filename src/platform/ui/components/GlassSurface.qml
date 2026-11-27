@@ -1,5 +1,6 @@
 // [0.0.2 T8] specs/features/0.0.2-theme.md
 // [0.0.4 T45] specs/features/0.0.4-righttabs.md
+// [0.5.0 T14] specs/features/0.5.0-map.md
 /** 같은 화면 위치의 지도만 흐리게 비추는 바탕이에요.
  * 입력: source에 지도 바닥을 넘기고 radius와 solidColor로 모양을 정해요.
  * 출력: sourcePosition에 맞춰 지도 바닥만 영역 안에서 흐리게 그리고 유리 색과 광택, 테두리를 겹쳐요.
@@ -14,10 +15,14 @@ Rectangle {
     property Item source: null
     property color solidColor: Theme.surface
     readonly property point sourcePosition: {
-        // 스크롤과 조상 배치가 바뀌어도 지도와 같은 위치를 비추도록 좌표를 구독해요.
+        // 스크롤과 조상 배치가 바뀌어도 지도와 같은 위치를 비추도록 자기 조상의 좌표를 구독해요.
         let ancestor = surface
         let position = Qt.point(0, 0)
         while (ancestor) { position = Qt.point(position.x + ancestor.x, position.y + ancestor.y); ancestor = ancestor.parent }
+        // source와 그 조상의 좌표도 읽어 구독해요. 유리 아닌 테마에서 유리 테마로 바꾸면 지도 바닥 쪽만 (0, 0)으로 옮기고
+        // 바는 그대로라, 이것을 읽지 않으면 값이 옛 자리에 머물러 바 밑에 어긋난 지도가 비쳐요.
+        let sourceAncestor = source
+        while (sourceAncestor) { position = Qt.point(position.x - sourceAncestor.x, position.y - sourceAncestor.y); sourceAncestor = sourceAncestor.parent }
         return source ? mapToItem(source, 0, 0) : position
     }
     color: Theme.glass ? "transparent" : solidColor

@@ -43,7 +43,8 @@ public:
         const QString& shape = QStringLiteral("button"));
 /** 상단바 항목 하나를 숨기거나 다시 보여요(기체 종류·펌웨어가 지원하지 않는 단추).
  * 입력: 식별자 id와 숨길지 hidden.
- * 출력: 성공 결과. 값이 바뀌었으면 모든 행의 dataChanged를 내요(다른 행의 앞 구분선이 바뀔 수 있어요). 같은 값이면 알리지 않아요.
+ * 출력: 성공 결과. 값이 바뀌었으면 모든 행의 dataChanged를 hidden·separatorBefore 역할만 담아 내요(다른 행의 앞 구분선이 바뀔 수 있어요;
+ *       component 등 다른 역할은 알리지 않아 불러온 항목이 그대로예요). 같은 값이면 알리지 않아요.
  * 실패: 그 식별자가 없으면 UnknownId.
  */
     kgc::app::errors::Result<void> setHidden(const QString& id, bool hidden);

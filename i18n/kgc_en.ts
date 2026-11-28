@@ -180,39 +180,32 @@
 <context>
     <name>Bar</name>
     <message>
-        <location filename="../src/main/Composition.cpp" line="74"/>
         <source>기체</source>
-        <translation>Vehicle</translation>
+        <translation type="vanished">Vehicle</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="75"/>
         <source>모드: —</source>
-        <translation>Mode: —</translation>
+        <translation type="vanished">Mode: —</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="76"/>
         <source>ARM</source>
-        <translation>ARM</translation>
+        <translation type="vanished">ARM</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="77"/>
         <source>이륙</source>
-        <translation>Takeoff</translation>
+        <translation type="vanished">Takeoff</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="78"/>
         <source>착륙</source>
-        <translation>Land</translation>
+        <translation type="vanished">Land</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="79"/>
         <source>RTL</source>
-        <translation>RTL</translation>
+        <translation type="vanished">RTL</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="80"/>
         <source>일시정지</source>
-        <translation>Pause</translation>
+        <translation type="vanished">Pause</translation>
     </message>
     <message>
         <location filename="../src/main/Composition.cpp" line="81"/>
@@ -230,9 +223,8 @@
         <translation>WP</translation>
     </message>
     <message>
-        <location filename="../src/main/Composition.cpp" line="84"/>
         <source>비상 정지</source>
-        <translation>Emergency Stop</translation>
+        <translation type="vanished">Emergency Stop</translation>
     </message>
     <message>
         <location filename="../src/main/Composition.cpp" line="85"/>
@@ -3028,6 +3020,254 @@
         <location filename="../src/features/map/ui/MapController.cpp" line="152"/>
         <source>다 받았어요</source>
         <translation>Download complete</translation>
+    </message>
+</context>
+<context>
+    <name>Fly</name>
+    <message>
+        <source>기체 %1</source>
+        <translation>Vehicle %1</translation>
+    </message>
+    <message>
+        <source>기체 없음</source>
+        <translation>No vehicle</translation>
+    </message>
+    <message>
+        <source>모드: %1</source>
+        <translation>Mode: %1</translation>
+    </message>
+    <message>
+        <source>모드: —</source>
+        <translation>Mode: —</translation>
+    </message>
+    <message>
+        <source>기체 설정 %1(%2 m)까지 올라가요</source>
+        <translation>Climbs to the vehicle setting %1 (%2 m)</translation>
+    </message>
+    <message>
+        <source>기체 설정 %1까지 올라가요</source>
+        <translation>Climbs to the vehicle setting %1</translation>
+    </message>
+    <message>
+        <source>도착하면 그 자리를 돌아요</source>
+        <translation>Circles the point on arrival</translation>
+    </message>
+    <message>
+        <source>도착하면 그 자리에 떠 있어요</source>
+        <translation>Hovers at the point on arrival</translation>
+    </message>
+    <message>
+        <source>기체에서 %1 m 안까지만 갈 수 있어요</source>
+        <translation>Only places within %1 m of the vehicle</translation>
+    </message>
+    <message>
+        <source>고도는 %1~%2 m 사이로 넣어 주세요</source>
+        <translation>Enter an altitude from %1 to %2 m</translation>
+    </message>
+    <message>
+        <source>목표 %1 m</source>
+        <translation>Target %1 m</translation>
+    </message>
+    <message>
+        <source>반지름 %1 m</source>
+        <translation>Radius %1 m</translation>
+    </message>
+    <message>
+        <source>기체: %1</source>
+        <translation>Vehicle: %1</translation>
+    </message>
+    <message>
+        <source>시동을 걸지 못했어요</source>
+        <translation>Could not arm</translation>
+    </message>
+    <message>
+        <source>시동을 끄지 못했어요</source>
+        <translation>Could not disarm</translation>
+    </message>
+    <message>
+        <source>비상 정지하지 못했어요</source>
+        <translation>Emergency stop failed</translation>
+    </message>
+    <message>
+        <source>이륙하지 못했어요</source>
+        <translation>Could not take off</translation>
+    </message>
+    <message>
+        <source>착륙을 시작하지 못했어요</source>
+        <translation>Could not start landing</translation>
+    </message>
+    <message>
+        <source>RTL을 시작하지 못했어요</source>
+        <translation>Could not start RTL</translation>
+    </message>
+    <message>
+        <source>일시정지하지 못했어요</source>
+        <translation>Could not pause</translation>
+    </message>
+    <message>
+        <source>모드를 바꾸지 못했어요</source>
+        <translation>Could not change the mode</translation>
+    </message>
+    <message>
+        <source>그곳으로 가지 못했어요</source>
+        <translation>Could not go there</translation>
+    </message>
+    <message>
+        <source>기체와 연결이 없어요</source>
+        <translation>The vehicle is not connected</translation>
+    </message>
+    <message>
+        <source>기체가 응답하지 않았어요</source>
+        <translation>The vehicle did not respond</translation>
+    </message>
+    <message>
+        <source>기체가 거부했어요</source>
+        <translation>The vehicle refused</translation>
+    </message>
+    <message>
+        <source>기체가 이 명령을 지원하지 않아요</source>
+        <translation>The vehicle does not support this command</translation>
+    </message>
+    <message>
+        <source>기체가 지금은 받을 수 없다고 했어요</source>
+        <translation>The vehicle cannot accept it right now</translation>
+    </message>
+    <message>
+        <source>기체가 실행하지 못했어요</source>
+        <translation>The vehicle could not carry it out</translation>
+    </message>
+    <message>
+        <source>기체 모드가 바뀌지 않았어요</source>
+        <translation>The vehicle mode did not change</translation>
+    </message>
+    <message>
+        <source>기체 시동 상태가 바뀌지 않았어요</source>
+        <translation>The vehicle arming state did not change</translation>
+    </message>
+    <message>
+        <source>기체가 목표를 받지 않았어요</source>
+        <translation>The vehicle did not take the target</translation>
+    </message>
+    <message>
+        <source>다른 비행 명령을 보내는 중이에요</source>
+        <translation>Another flight command is in progress</translation>
+    </message>
+    <message>
+        <source>지금은 할 수 없어요</source>
+        <translation>Not possible right now</translation>
+    </message>
+    <message>
+        <source>홈 고도를 아직 몰라요</source>
+        <translation>The home altitude is not known yet</translation>
+    </message>
+    <message>
+        <source>기체 위치를 아직 몰라요</source>
+        <translation>The vehicle position is not known yet</translation>
+    </message>
+    <message>
+        <source>기체에서 너무 멀어요</source>
+        <translation>Too far from the vehicle</translation>
+    </message>
+    <message>
+        <source>고도가 허용 범위 밖이에요</source>
+        <translation>The altitude is outside the allowed range</translation>
+    </message>
+    <message>
+        <source>시동 끄기나 비상 정지 때문에 멈췄어요</source>
+        <translation>Stopped by a disarm or emergency stop</translation>
+    </message>
+    <message>
+        <source>지금은 이 명령을 보낼 수 없어요</source>
+        <translation>This command cannot be sent now</translation>
+    </message>
+    <message>
+        <source>기체가 사라졌어요</source>
+        <translation>The vehicle is gone</translation>
+    </message>
+    <message>
+        <source>기체가 목표를 받았지만 모드는 그대로예요. 그곳으로 갈 수 있어요</source>
+        <translation>The vehicle took the target but kept its mode. It may fly there.</translation>
+    </message>
+</context>
+<context>
+    <name>FlyArm</name>
+    <message>
+        <source>시동</source>
+        <translation>Arm</translation>
+    </message>
+    <message>
+        <source>시동 끄기</source>
+        <translation>Disarm</translation>
+    </message>
+</context>
+<context>
+    <name>FlyTakeoff</name>
+    <message>
+        <source>이륙</source>
+        <translation>Takeoff</translation>
+    </message>
+    <message>
+        <source>이륙 높이(지금 자리 위)</source>
+        <translation>Takeoff height (above current position)</translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation>m</translation>
+    </message>
+    <message>
+        <source>길게 눌러 이륙</source>
+        <translation>Hold to take off</translation>
+    </message>
+    <message>
+        <source>취소</source>
+        <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>FlyLand</name>
+    <message>
+        <source>착륙</source>
+        <translation>Land</translation>
+    </message>
+</context>
+<context>
+    <name>FlyRtl</name>
+    <message>
+        <source>RTL</source>
+        <translation>RTL</translation>
+    </message>
+</context>
+<context>
+    <name>FlyPause</name>
+    <message>
+        <source>일시정지</source>
+        <translation>Pause</translation>
+    </message>
+</context>
+<context>
+    <name>FlyEmergencyStop</name>
+    <message>
+        <source>비상 정지</source>
+        <translation>Emergency stop</translation>
+    </message>
+    <message>
+        <source>모터를 바로 꺼요. 공중이면 떨어져요.</source>
+        <translation>Stops the motors at once. In the air, the vehicle falls.</translation>
+    </message>
+</context>
+<context>
+    <name>FlyMode</name>
+    <message>
+        <source>바꿀 모드: %1</source>
+        <translation>New mode: %1</translation>
+    </message>
+    <message>
+        <source>길게 눌러 바꾸기</source>
+        <translation>Hold to change</translation>
+    </message>
+    <message>
+        <source>취소</source>
+        <translation>Cancel</translation>
     </message>
 </context>
 </TS>

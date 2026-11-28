@@ -1,4 +1,4 @@
-# [0.6.0 5.1] specs/features/0.6.0-fly.md
+# [0.6.0 5.1 5.13] specs/features/0.6.0-fly.md
 # [0.5.1 5.10] specs/features/0.5.1-map-sharp.md
 # [0.5.0 S1 S7 S11] specs/features/0.5.0-map.md
 # [0.4.1 6.4] specs/features/0.4.1-board-match.md
@@ -31,7 +31,7 @@ foreach(module app/errors app/log app/paths app/boot app/settings app/i18n app/c
     vehicle/firmware vehicle/states vehicle/outbound vehicle/command vehicle/registry vehicle/safety ui)
     add_subdirectory(src/platform/${module})
 endforeach()
-foreach(module shell link reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight fcFlash sitl map params)
+foreach(module shell link reference appSettings uiGallery analyze secondPanel vehicleInfo logs preflight fcFlash sitl map fly params)
     add_subdirectory(src/features/${module})
 endforeach()
 add_subdirectory(src/main)

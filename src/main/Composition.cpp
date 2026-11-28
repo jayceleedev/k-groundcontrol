@@ -1,3 +1,4 @@
+// [0.6.0 5.13] specs/features/0.6.0-fly.md
 // [0.5.0 5.8] specs/features/0.5.0-map.md
 // [0.4.0 5.4 10] specs/features/0.4.0-sitl.md
 // [0.3.0 6.1 6.8] specs/features/0.3.0-params.md
@@ -24,6 +25,8 @@
 #include <kgc/sitl/Ui.h>
 #include <kgc/map/MapService.h>
 #include <kgc/map/Ui.h>
+#include <kgc/fly/FlyService.h>
+#include <kgc/fly/Ui.h>
 #include <kgc/params/ParamRebootReconnect.h>
 #include <kgc/params/ParamService.h>
 #include <kgc/params/Ui.h>
@@ -59,6 +62,7 @@
 Q_IMPORT_QML_PLUGIN(Kgc_FcFlashPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_SitlPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_MapPlugin)
+Q_IMPORT_QML_PLUGIN(Kgc_FlyPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_ParamsPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_LinkPlugin)
 Q_IMPORT_QML_PLUGIN(Kgc_UiPlugin)
@@ -130,14 +134,6 @@ void registerBarPlaceholders(ui::TopbarSlot* topbar, ui::StatusChipSlot* chips)
         const auto result = topbar->registerPlaceholder(id, order, area, group, labelKey, icon, iconOnly, shape);
         Q_ASSERT(result.has_value());
     };
-    top("fly.vehicle", 1, "centre", 1, QT_TRANSLATE_NOOP("Bar", "기체"), "", false, "display");
-    top("fly.mode", 2, "centre", 2, QT_TRANSLATE_NOOP("Bar", "모드: —"), "", false, "dropdown");
-    top("fly.arm", 3, "centre", 2, QT_TRANSLATE_NOOP("Bar", "ARM"), "");
-    top("fly.takeoff", 4, "centre", 3, QT_TRANSLATE_NOOP("Bar", "이륙"), "plane-departure");
-    top("fly.land", 5, "centre", 3, QT_TRANSLATE_NOOP("Bar", "착륙"), "plane-arrival");
-    top("fly.rtl", 6, "centre", 3, QT_TRANSLATE_NOOP("Bar", "RTL"), "home");
-    top("fly.pause", 7, "centre", 3, QT_TRANSLATE_NOOP("Bar", "일시정지"), "player-pause");
-    top("fly.emergencyStop", 8, "centre", 4, QT_TRANSLATE_NOOP("Bar", "비상 정지"), "hand-stop");
     top("mission.select", 9, "centre", 5, QT_TRANSLATE_NOOP("Bar", "미션: —"), "", false, "dropdown");
     top("mission.start", 10, "centre", 5, QT_TRANSLATE_NOOP("Bar", "미션 시작"), "player-play");
     top("mission.progress", 11, "centre", 5, QT_TRANSLATE_NOOP("Bar", "WP"), "", false, "display");
@@ -166,6 +162,15 @@ void registerParams(QObject* owner, ui::UiRegistry& registry, comm::links::LinkM
         new params::ParamService(*added, *policy, *http, *reconnect, added);
     });
     params::registerUi(registry, *vehicles);
+}
+// 기체가 생길 때마다 비행 서비스를 만들어요. 같은 vehicleAdded에서 ParamService가 먼저 생기도록 registerParams 뒤에 불러요.
+void registerFly(QObject* owner, ui::UiRegistry& registry, vehicle::registry::VehicleRegistry* vehicles,
+                 vehicle::safety::ArmedPolicy* policy)
+{
+    QObject::connect(vehicles, &vehicle::registry::VehicleRegistry::vehicleAdded, owner, [policy](vehicle::registry::Vehicle* added) {
+        new fly::FlyService(*added, *policy, added);
+    });
+    fly::registerUi(registry, *vehicles);
 }
 // 전역 부분이 없는 기체별 모듈도 기체가 없을 때부터 화면 기여가 있어 앱 시작 때 한 번 등록해요(BASE §2).
 void registerVehicleViews(QObject* owner, ui::UiRegistry& registry, vehicle::registry::VehicleRegistry& vehicles)
@@ -212,6 +217,7 @@ Composition::Composition(QQmlEngine& engine, appSettings::AppInfo info, app::i18
     sitl::registerUi(registry, *new sitl::SitlService(*links, *http, sitlLifetime));
     map::registerUi(registry, *new map::MapService(*http, *vehicles, translator, boot.tileHost, mapLifetime));
     registerParams(this, registry, links, vehicles, policy, http);
+    registerFly(this, registry, vehicles, policy);
     registerVehicleViews(this, registry, *vehicles);
     registerPlaceholders(&registry.panels);
     registerBarPlaceholders(&registry.topbar, &registry.statusChips);

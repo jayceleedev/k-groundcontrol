@@ -9,6 +9,16 @@
 #include <kgc/ui/Errors.h>
 #include <algorithm>
 namespace kgc::ui {
+namespace {
+// 이름이 wanted에 든 역할 번호만 모아요. 바뀐 역할만 알려 다른 역할(component 등)에 묶인 화면이 다시 읽지 않게 해요.
+QList<int> rolesOf(const QHash<int, QByteArray>& names, const QList<QByteArray>& wanted)
+{
+    QList<int> roles;
+    for (auto it = names.cbegin(); it != names.cend(); ++it)
+        if (wanted.contains(it.value())) roles.append(it.key());
+    return roles;
+}
+}
 TopbarSlot::TopbarSlot(QObject* parent) : SlotModel(parent) {}
 kgc::app::errors::Result<void> TopbarSlot::registerPlaceholder(const QString& id, int order, const QString& area,
     int group, const QString& labelKey, const QString& icon, bool iconOnly, const QString& shape)
@@ -31,8 +41,10 @@ kgc::app::errors::Result<void> TopbarSlot::setHidden(const QString& id, bool hid
     for (int row = 0; row < rowCount(); ++row)
         if (entryAt(row).id == id) before = entryAt(row).values.value("hidden").toBool();
     const auto result = setValue(id, QStringLiteral("hidden"), hidden);
-    // 숨김이 바뀌면 다른 행의 앞 구분선도 바뀔 수 있어 모든 행을 다시 읽게 해요.
-    if (result && before != hidden && rowCount() > 0) emit dataChanged(index(0), index(rowCount() - 1));
+    // 숨김이 바뀌면 다른 행의 앞 구분선도 바뀔 수 있어 모든 행의 hidden·separatorBefore만 다시 읽게 해요.
+    // 역할을 좁히지 않으면 component에 묶인 상단바 Loader가 다시 계산되어 불러온 항목을 잃어요.
+    if (result && before != hidden && rowCount() > 0)
+        emit dataChanged(index(0), index(rowCount() - 1), rolesOf(roleNames(), {"hidden", "separatorBefore"}));
     return result;
 }
 QVariant TopbarSlot::data(const QModelIndex& index, int role) const
@@ -135,9 +147,11 @@ kgc::app::errors::Result<void> SlotModel::add(SlotEntry entry)
     beginInsertRows({}, row, row);
     entries_.insert(row, std::move(entry));
     endInsertRows();
-    // 끼어든 항목 때문에 뒤 항목의 앞 구분선 같은 이웃 기준 값이 바뀔 수 있어 다시 읽게 해요.
-    // 바로 뒤 행이 숨었으면 구분선이 바뀌는 행은 더 뒤에 있으므로 끝 행까지 알려요.
-    if (row + 1 < entries_.size()) emit dataChanged(index(row + 1), index(int(entries_.size()) - 1));
+    // 끼어든 항목 때문에 뒤 항목의 앞 구분선이 바뀔 수 있어 separatorBefore 역할만 다시 읽게 해요.
+    // 바로 뒤 행이 숨었으면 구분선이 바뀌는 행은 더 뒤에 있으므로 끝 행까지 알려요. 그 역할이 없는 슬롯은 알리지 않아요.
+    const auto roles = rolesOf(roleNames(), {"separatorBefore"});
+    if (row + 1 < entries_.size() && !roles.isEmpty())
+        emit dataChanged(index(row + 1), index(int(entries_.size()) - 1), roles);
     return {};
 }
 kgc::app::errors::Result<void> SlotModel::setValue(const QString& id, const QString& key, const QVariant& value)
@@ -147,7 +161,9 @@ kgc::app::errors::Result<void> SlotModel::setValue(const QString& id, const QStr
         if (entry.id != id) continue;
         if (entry.values.value(key) == value) return {};
         entry.values.insert(key, value);
-        emit dataChanged(index(row), index(row));
+        // 바뀐 값의 역할만 알려요. 그 이름의 역할이 없으면 화면이 읽을 값이 아니라 알리지 않아요.
+        const auto roles = rolesOf(roleNames(), {key.toLatin1()});
+        if (!roles.isEmpty()) emit dataChanged(index(row), index(row), roles);
         return {};
     }
     return std::unexpected(make(UiError::UnknownId));

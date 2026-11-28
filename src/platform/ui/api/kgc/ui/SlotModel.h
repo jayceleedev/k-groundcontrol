@@ -27,7 +27,7 @@ public:
     explicit SlotModel(QObject* parent = nullptr) : QAbstractListModel(parent) {}
     /** 새 기여를 정렬된 자리에 등록해요.
      * 입력: 등록 항목.
-     * 출력: 성공 결과.
+     * 출력: 성공 결과. 뒤 행들의 앞 구분선이 바뀔 수 있어 separatorBefore 역할이 있는 슬롯은 그 역할만 담은 dataChanged를 내요.
      * 실패: 식별자가 겹치면 DuplicateId.
      */
     kgc::app::errors::Result<void> add(SlotEntry entry);
@@ -58,7 +58,8 @@ protected:
     const SlotEntry& entryAt(int row) const { return entries_[row]; }
     /** 등록된 항목 하나의 역할 값을 바꿔요.
      * 입력: 식별자 id, 값 이름 key, 새 값 value.
-     * 출력: 성공 결과. 같은 값이면 아무것도 하지 않고, 아니면 값을 바꾸고 그 행의 dataChanged를 내요.
+     * 출력: 성공 결과. 같은 값이면 아무것도 하지 않고, 아니면 값을 바꾸고 이름이 key인 역할만 담은 그 행의 dataChanged를 내요
+     *       (그 이름의 역할이 없으면 알리지 않아요).
      * 실패: 그 식별자가 없으면 UnknownId.
      */
     kgc::app::errors::Result<void> setValue(const QString& id, const QString& key, const QVariant& value);

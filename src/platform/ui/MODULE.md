@@ -23,5 +23,5 @@
 3. 생성자·설정 변경·화면의 읽기 실패 → reportBackgroundImageMissing — 빈 경로와 손상 파일을 포함한 읽기 실패를 판정하고 현재 사진 배경의 경로마다 한 번 기록해요.
 
 연결 기여: TopbarSlot.registerItem·StatusChipSlot.registerItem이 component 주소를 등록해요. Theme.topbarFieldWidth는 연결 선택 칸의 공통 폭이에요.
-상단바 숨김(0.6.0): TopbarSlot.setHidden(id, hidden)과 역할 hidden(Qt::UserRole + 11, 없으면 거짓). 숨은 항목은 자리와 구분선이 사라지고 separatorBefore는 숨지 않은 행끼리 세요. 값이 바뀌면 모든 행의 dataChanged를 내요. 공통 바탕 SlotModel.setValue(protected, 같은 값이면 아무것도 안 함)와 UiError::UnknownId(없는 id, 문맥 "Ui" 문구).
+상단바 숨김(0.6.0): TopbarSlot.setHidden(id, hidden)과 역할 hidden(Qt::UserRole + 11, 없으면 거짓). 숨은 항목은 자리와 구분선이 사라지고 separatorBefore는 숨지 않은 행끼리 세요. 값이 바뀌면 모든 행의 dataChanged를 hidden·separatorBefore 역할만 담아 내요(component에 묶인 Loader가 항목을 잃지 않게). 공통 바탕 SlotModel.setValue(protected, 같은 값이면 아무것도 안 함, 바뀐 key 이름의 역할만 알림), add(뒤 행에는 separatorBefore 역할만 알림)와 UiError::UnknownId(없는 id, 문맥 "Ui" 문구).
 비행 토큰(0.6.0): 색 flyTarget·flyLoiter(둘 다 #d946ef 마젠타, 네 테마 같은 값, ThemeBase required), 크기 flyTargetSize·flyTargetLineWidth·flyLoiterWidth·flyWindowWidth·flyModePopupWidth(창 폭 둘은 테두리와 안쪽 여백을 포함한 바깥 폭)·mapLabelGap, 시간 flyToastMs(6000).

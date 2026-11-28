@@ -100,6 +100,25 @@ private slots:
         }
         QVERIFY(covered);
     }
+    /** T10: 숨김의 모든 행 dataChanged는 역할이 정확히 hidden·separatorBefore이고, 어느 알림에도 component가 없어요. */
+    void test_T10_hidden_roles()
+    {
+        TopbarSlot top;
+        registerFlyPlaceholders(top);
+        const auto names = top.roleNames();
+        const QSet<int> expected{names.key("hidden"), names.key("separatorBefore")};
+        QSignalSpy changed(&top, &TopbarSlot::dataChanged);
+        QVERIFY(top.setHidden("fly.land", true));
+        QVERIFY(coversAllRows(changed, top.rowCount()));
+        for (const auto& arguments : changed) {
+            const auto roles = arguments.at(2).value<QList<int>>();
+            QVERIFY(!roles.isEmpty());
+            QVERIFY(!roles.contains(names.key("component")));
+            const bool allRows = arguments.at(0).value<QModelIndex>().row() == 0
+                && arguments.at(1).value<QModelIndex>().row() == top.rowCount() - 1;
+            if (allRows) QCOMPARE(QSet<int>(roles.cbegin(), roles.cend()), expected);
+        }
+    }
     /** T10: 같은 값을 두 번 쓰면 둘째에는 dataChanged가 없어요. */
     void test_T10_same_value_is_silent()
     {

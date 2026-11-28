@@ -203,3 +203,8 @@ add_test(NAME T8_guided_limits COMMAND test_T8_guided_limits)
 qt_add_executable(test_T10_topbar_hidden test_T10_topbar_hidden.cpp)
 target_link_libraries(test_T10_topbar_hidden PRIVATE kgc_ui Qt6::Test)
 add_test(NAME T10_topbar_hidden COMMAND test_T10_topbar_hidden)
+# [0.6.0 T9] specs/features/0.6.0-fly.md
+qt_add_executable(test_T9_fly_logic test_T9_fly_logic.cpp)
+target_include_directories(test_T9_fly_logic PRIVATE "${PROJECT_SOURCE_DIR}/src/features/fly/internal")
+target_link_libraries(test_T9_fly_logic PRIVATE kgc_fly Qt6::Test)
+add_test(NAME T9_fly_logic COMMAND test_T9_fly_logic)

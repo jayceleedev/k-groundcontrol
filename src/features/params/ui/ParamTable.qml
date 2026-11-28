@@ -108,8 +108,8 @@ Item {
         property string range
         parent: Basic.Overlay.overlay
         anchors.centerIn: parent
-        title: qsTr("범위를 벗어났어요")
-        text: qsTr("%1의 범위는 %2예요. 이 값으로 둘까요?").arg(paramName).arg(range)
+        title: qsTr("값 범위 밖")
+        text: qsTr("%1 범위: %2. 이 값을 유지하시겠습니까?").arg(paramName).arg(range)
         onAccepted: { ParamsController.setPending(paramName, value); root.resetEditor() }
         onRejected: root.resetEditor()
         onClosed: root.focusEditor()

@@ -176,7 +176,7 @@ QString MapController::downloadResultText() const
     const auto* job = downloadJob();
     if (!job) return {};
     switch (job->state()) {
-    case Job::State::Succeeded: return tr("다 받았어요");
+    case Job::State::Succeeded: return tr("받기 완료");
     case Job::State::Failed:
     case Job::State::Cancelled: return job->errorText();
     default: return {};

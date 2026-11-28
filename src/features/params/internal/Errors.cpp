@@ -7,20 +7,20 @@ QString errorText(kgc::app::errors::ErrorCode error)
     if (error.module != kModuleId) return {};
     const char* key = nullptr;
     switch (static_cast<ParamError>(error.code)) {
-    case ParamError::Timeout: key = QT_TRANSLATE_NOOP("Params", "FC가 응답하지 않아요"); break;
-    case ParamError::Incomplete: key = QT_TRANSLATE_NOOP("Params", "FC가 파라미터를 다 보내지 않았어요"); break;
-    case ParamError::BackupFailed: key = QT_TRANSLATE_NOOP("Params", "백업을 저장하지 못해 쓰지 않았어요"); break;
-    case ParamError::Armed: key = QT_TRANSLATE_NOOP("Params", "시동 중에는 쓸 수 없어요"); break;
-    case ParamError::NotFound: key = QT_TRANSLATE_NOOP("Params", "이 파라미터는 FC에 없어요"); break;
-    case ParamError::NotANumber: key = QT_TRANSLATE_NOOP("Params", "숫자를 넣어 주세요"); break;
-    case ParamError::NotInteger: key = QT_TRANSLATE_NOOP("Params", "정수를 넣어 주세요"); break;
-    case ParamError::TypeLimit: key = QT_TRANSLATE_NOOP("Params", "이 파라미터가 담을 수 없는 값이에요"); break;
-    case ParamError::ReadOnly: key = QT_TRANSLATE_NOOP("Params", "읽기 전용이에요"); break;
-    case ParamError::FileOpen: key = QT_TRANSLATE_NOOP("Params", "파일을 열지 못했어요"); break;
-    case ParamError::FileEmpty: key = QT_TRANSLATE_NOOP("Params", "파일에 읽을 값이 없어요"); break;
-    case ParamError::FileWrite: key = QT_TRANSLATE_NOOP("Params", "파일을 저장하지 못했어요"); break;
-    case ParamError::Busy: key = QT_TRANSLATE_NOOP("Params", "다른 작업이 끝난 뒤 다시 해 주세요"); break;
-    case ParamError::RebootRefused: key = QT_TRANSLATE_NOOP("Params", "FC가 재부팅을 거부했어요"); break;
+    case ParamError::Timeout: key = QT_TRANSLATE_NOOP("Params", "FC 응답 없음"); break;
+    case ParamError::Incomplete: key = QT_TRANSLATE_NOOP("Params", "FC가 파라미터 일부 미전송"); break;
+    case ParamError::BackupFailed: key = QT_TRANSLATE_NOOP("Params", "백업 저장 실패로 쓰기 미실행"); break;
+    case ParamError::Armed: key = QT_TRANSLATE_NOOP("Params", "시동 중 쓰기 불가"); break;
+    case ParamError::NotFound: key = QT_TRANSLATE_NOOP("Params", "FC에 해당 파라미터 없음"); break;
+    case ParamError::NotANumber: key = QT_TRANSLATE_NOOP("Params", "숫자 입력"); break;
+    case ParamError::NotInteger: key = QT_TRANSLATE_NOOP("Params", "정수 입력"); break;
+    case ParamError::TypeLimit: key = QT_TRANSLATE_NOOP("Params", "이 파라미터에 저장할 수 없는 값"); break;
+    case ParamError::ReadOnly: key = QT_TRANSLATE_NOOP("Params", "읽기 전용 파라미터"); break;
+    case ParamError::FileOpen: key = QT_TRANSLATE_NOOP("Params", "파일 열기 실패"); break;
+    case ParamError::FileEmpty: key = QT_TRANSLATE_NOOP("Params", "파일에 읽을 값 없음"); break;
+    case ParamError::FileWrite: key = QT_TRANSLATE_NOOP("Params", "파일 저장 실패"); break;
+    case ParamError::Busy: key = QT_TRANSLATE_NOOP("Params", "현재 작업 완료 후 재시도"); break;
+    case ParamError::RebootRefused: key = QT_TRANSLATE_NOOP("Params", "FC가 재부팅 거부"); break;
     }
     return key ? QCoreApplication::translate("Params", key) : QString{};
 }

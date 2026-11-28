@@ -150,7 +150,7 @@ SettingsPage {
         }
         Toggle {
             objectName: "mapAutoFollowToggle"
-            text: qsTr("따라가기 자동 켜기")
+            text: qsTr("기체 자동 따라가기")
             checked: MapController.autoFollow
             onToggled: MapController.autoFollow = checked
         }

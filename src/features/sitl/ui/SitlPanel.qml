@@ -46,7 +46,7 @@ Basic.ScrollView {
             }
             Text {
                 width: parent.width
-                text: qsTr("ArduPilot SITL을 내려받아 이 PC에서 실행해요.")
+                text: qsTr("ArduPilot SITL을 받아 이 PC에서 실행")
                 color: Theme.inkMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSize
@@ -90,7 +90,7 @@ Basic.ScrollView {
                     }
                     Text {
                         leftPadding: Theme.iconSize + Theme.inset * 2
-                        text: qsTr("기본 파라미터로 처음부터 시작해요")
+                        text: qsTr("기본 파라미터로 처음부터 시작")
                         color: Theme.inkMuted
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.captionSize

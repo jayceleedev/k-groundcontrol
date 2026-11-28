@@ -30,7 +30,7 @@ Column {
             objectName: "sitlOutput"
             readOnly: true
             text: SitlController.outputText
-            placeholderText: qsTr("시작하면 여기에 시뮬레이터 출력이 보여요.")
+            placeholderText: qsTr("시작 후 여기에 시뮬레이터 출력 표시")
             placeholderTextColor: Theme.inkMuted
             color: Theme.ink
             font.family: Theme.monoFamily

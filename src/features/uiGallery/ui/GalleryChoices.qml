@@ -13,9 +13,9 @@ Card {
         Toggle { objectName: "gallery_Toggle"; text: qsTr("켬"); checked: true }
         Toggle { objectName: "gallery_Toggle_off"; text: qsTr("끔") }
         Toggle { text: qsTr("비활성"); enabled: false }
-        CheckRow { objectName: "gallery_CheckRow"; text: qsTr("고름"); checked: true }
+        CheckRow { objectName: "gallery_CheckRow"; text: qsTr("체크됨"); checked: true }
         CheckRow { objectName: "gallery_CheckRow_partial"; text: qsTr("일부"); checkState: Qt.PartiallyChecked }
-        CheckRow { text: qsTr("안 고름") }
+        CheckRow { text: qsTr("체크 안 됨") }
         RadioRow { objectName: "gallery_RadioRow"; text: qsTr("첫째"); checked: true }
         RadioRow { text: qsTr("둘째") }
         ChoiceCard { objectName: "gallery_ChoiceCard"; icon.name: "drone"; title: qsTr("선택 카드"); subtitle: qsTr("아이콘과 글자"); selected: true }

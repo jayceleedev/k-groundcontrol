@@ -40,7 +40,7 @@ Card {
     LogView {
         objectName: "gallery_LogView"
         width: parent.width
-        model: [{text: qsTr("포트 열기 시도"), level: "debug"}, {text: qsTr("연결 완료"), level: "info"},
+        model: [{text: qsTr("포트 열기 시도"), level: "debug"}, {text: qsTr("연결됨"), level: "info"},
                 {text: qsTr("위성 수 부족"), level: "warn"}, {text: qsTr("보정 실패: 흔들림"), level: "error"}]
     }
     GlassSurface {
@@ -49,6 +49,6 @@ Card {
         width: parent.width
         height: Theme.menuHeight * 2
         radius: Theme.radiusMedium
-        Text { anchors.centerIn: parent; text: qsTr("에어로에서는 뒤가 흐리게 비쳐요"); color: Theme.ink; font.pixelSize: Theme.fontSize }
+        Text { anchors.centerIn: parent; text: qsTr("에어로에서는 배경 흐림"); color: Theme.ink; font.pixelSize: Theme.fontSize }
     }
 }

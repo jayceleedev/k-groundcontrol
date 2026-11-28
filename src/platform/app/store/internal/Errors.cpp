@@ -6,9 +6,9 @@ QString errorText(kgc::app::errors::ErrorCode error)
 {
     if (error.module != kModuleId) return {};
     switch (static_cast<StoreError>(error.code)) {
-    case StoreError::OpenFailed: return QCoreApplication::translate("Store", QT_TRANSLATE_NOOP("Store", "저장소를 열지 못했어요"));
+    case StoreError::OpenFailed: return QCoreApplication::translate("Store", QT_TRANSLATE_NOOP("Store", "저장소 열기 실패"));
     case StoreError::QueryFailed:
-        return QCoreApplication::translate("Store", QT_TRANSLATE_NOOP("Store", "저장소를 읽거나 쓰지 못했어요"));
+        return QCoreApplication::translate("Store", QT_TRANSLATE_NOOP("Store", "저장소 읽기 또는 쓰기 실패"));
     }
     return {};
 }

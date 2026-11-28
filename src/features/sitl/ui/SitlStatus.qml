@@ -30,7 +30,7 @@ Column {
         closable: false
         level: "info"
         visible: SitlController.linkBusy && SitlController.editable
-        text: qsTr("다른 연결이 열려 있어요. 연결을 끊은 뒤 시작할 수 있어요.")
+        text: qsTr("다른 연결 사용 중. 연결 해제 후 시작 가능")
     }
     Banner {
         objectName: "sitlBanner"
@@ -57,8 +57,8 @@ Column {
                 Layout.alignment: Qt.AlignTop
                 level: root.sitlState === Sitl.Running ? "ok" : root.sitlState === Sitl.Failed ? "danger"
                     : root.downloading || root.sitlState === Sitl.Starting ? "info" : "idle"
-                text: root.sitlState === Sitl.Downloading ? qsTr("받는 중") : root.sitlState === Sitl.Starting ? qsTr("시작하는 중")
-                    : root.sitlState === Sitl.Running ? qsTr("실행 중") : root.sitlState === Sitl.Failed ? qsTr("멈췄어요") : qsTr("멈춤")
+                text: root.sitlState === Sitl.Downloading ? qsTr("받는 중") : root.sitlState === Sitl.Starting ? qsTr("시작 중")
+                    : root.sitlState === Sitl.Running ? qsTr("실행 중") : root.sitlState === Sitl.Failed ? qsTr("비정상 종료") : qsTr("멈춤")
             }
             ColumnLayout {
                 Layout.fillWidth: true
@@ -66,7 +66,7 @@ Column {
                 Text {
                     Layout.fillWidth: true
                     visible: root.sitlState === Sitl.Running
-                    text: SitlController.linkOpenedBySitl ? qsTr("UDP 14550으로 연결했어요") : qsTr("연결이 끊겼어요")
+                    text: SitlController.linkOpenedBySitl ? qsTr("UDP 14550으로 연결됨") : qsTr("연결 끊김")
                     color: Theme.ink
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSize
@@ -83,7 +83,7 @@ Column {
                     Layout.fillWidth: true
                     visible: !root.downloading
                     text: SitlController.cachedAt !== "" ? qsTr("받은 파일: %1").arg(SitlController.cachedAt)
-                        : qsTr("처음 시작하면 파일을 내려받아요 (약 15 MB)")
+                        : qsTr("처음 시작 시 파일 받기 (약 15 MB)")
                     color: Theme.inkMuted
                     font.family: Theme.fontFamily
                     font.pixelSize: Theme.fontSize
@@ -95,7 +95,7 @@ Column {
                 Layout.alignment: Qt.AlignTop
                 visible: root.sitlState === Sitl.Running && !SitlController.linkOpenedBySitl
                 kind: "secondary"
-                text: qsTr("다시 연결")
+                text: qsTr("재연결")
                 onClicked: SitlController.reconnect()
             }
             ActionButton {

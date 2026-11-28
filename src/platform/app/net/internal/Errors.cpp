@@ -7,17 +7,17 @@ QString errorText(kgc::app::errors::ErrorCode error)
 {
     if (error.module != kModuleId) return {};
     switch (static_cast<HttpError>(error.code)) {
-    case HttpError::NotHttps: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "HTTPS 주소만 쓸 수 있어요."));
-    case HttpError::TimedOut: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "요청 시간이 지났어요."));
-    case HttpError::RedirectRefused: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
-    case HttpError::NetworkFailed: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
-    case HttpError::WriteFailed: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
-    case HttpError::Aborted: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
-    case HttpError::BadGzip: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "내려받지 못했어요."));
+    case HttpError::NotHttps: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "HTTPS 주소만 지원"));
+    case HttpError::TimedOut: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "요청 시간 초과"));
+    case HttpError::RedirectRefused: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "받기 실패"));
+    case HttpError::NetworkFailed: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "받기 실패"));
+    case HttpError::WriteFailed: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "받기 실패"));
+    case HttpError::Aborted: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "받기 실패"));
+    case HttpError::BadGzip: return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "받기 실패"));
     case HttpError::BadCertificate:
-        return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "인증서 파일을 읽지 못했어요."));
+        return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "인증서 파일 읽기 실패"));
     case HttpError::HttpStatus:
-        return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "서버가 요청을 받아 주지 않았어요."));
+        return QCoreApplication::translate("Http", QT_TRANSLATE_NOOP("Http", "서버가 요청 거부"));
     }
     return {};
 }

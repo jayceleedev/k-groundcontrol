@@ -15,8 +15,8 @@ Item {
         EmptyState {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            title: qsTr("아직 메시지가 없어요")
-            detail: qsTr("기체가 보내는 상태 메시지가 여기에 쌓여요.")
+            title: qsTr("아직 메시지 없음")
+            detail: qsTr("기체의 상태 메시지가 쌓이는 곳")
         }
     }
 }

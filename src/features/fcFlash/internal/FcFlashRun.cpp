@@ -29,7 +29,7 @@ void FcFlashService::startFlash()
 }
 void FcFlashService::Private::downloadImage()
 {
-    job->setStep(QT_TRANSLATE_NOOP("Job", "내려받기"));
+    job->setStep(QT_TRANSLATE_NOOP("Job", "받기"));
     job->setCancellable(true);
     const auto directory = kgc::app::paths::Paths::cacheFirmware();
     if (directory.isEmpty()) { flashFinished(std::unexpected(make(FcFlashError::DownloadFailed))); return; }

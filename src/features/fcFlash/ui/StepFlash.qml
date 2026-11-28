@@ -24,12 +24,12 @@ Column {
         const reached = version ? name + " " + version : name
         switch (phase) {
         case FlashStates.Done:
-            return {icon: "circle-check", color: Theme.ok, title: qsTr("올라갔어요"), detail: reached}
+            return {icon: "circle-check", color: Theme.ok, title: qsTr("올리기 완료"), detail: reached}
         case FlashStates.Mismatch:
-            return {icon: "alert-triangle", color: Theme.warn, title: qsTr("올린 펌웨어와 달라요"), detail: reached}
+            return {icon: "alert-triangle", color: Theme.warn, title: qsTr("선택한 펌웨어와 불일치"), detail: reached}
         case FlashStates.NoReturn:
-            return {icon: "plug-connected", color: Theme.warn, title: qsTr("펌웨어를 올렸어요"),
-                detail: qsTr("FC가 다시 켜지지 않았어요. USB 케이블을 뽑았다 꽂거나 리셋 버튼을 누른 뒤 연결해 주세요.")}
+            return {icon: "plug-connected", color: Theme.warn, title: qsTr("펌웨어 굽기 완료"),
+                detail: qsTr("FC 재시작 안 됨. USB 케이블 분리 후 재연결 또는 리셋 버튼 누른 뒤 연결")}
         case FlashStates.Failed:
             return {icon: "circle-x", color: Theme.danger, title: FcFlashController.failureText(), detail: ""}
         default:
@@ -50,7 +50,7 @@ Column {
         StepList {
             anchors.verticalCenter: parent.verticalCenter
             model: {
-                const labels = [qsTr("내려받기"), qsTr("지우기"), qsTr("쓰기"), qsTr("검증"), qsTr("재부팅"), qsTr("재연결")]
+                const labels = [qsTr("받기"), qsTr("지우기"), qsTr("쓰기"), qsTr("검증"), qsTr("재부팅"), qsTr("재연결")]
                 const first = FcFlashController.source === FlashStates.LocalFile ? 1 : 0
                 const current = FcFlashController.flashStage
                 let rows = []
@@ -69,7 +69,7 @@ Column {
         width: parent.width
         visible: root.phase === FlashStates.Reconnecting
         wrapMode: Text.Wrap
-        text: qsTr("FC가 돌아오길 기다리고 있어요")
+        text: qsTr("FC 재연결 대기 중")
         color: Theme.warn
         font.family: Theme.fontFamily
         font.pixelSize: Theme.fontSize

@@ -25,9 +25,9 @@ inline kgc::app::errors::ErrorCode make(UiError error) { return {kModuleId, stat
  */
 inline QString errorText(kgc::app::errors::ErrorCode error)
 {
-    const auto duplicate = QT_TRANSLATE_NOOP("Ui", "같은 항목이 이미 등록되어 있어요.");
-    const auto topTaken = QT_TRANSLATE_NOOP("Ui", "우 사이드바 계기 자리는 하나만 쓸 수 있어요.");
-    const auto unknown = QT_TRANSLATE_NOOP("Ui", "등록되지 않은 항목이에요.");
+    const auto duplicate = QT_TRANSLATE_NOOP("Ui", "이미 등록된 ID");
+    const auto topTaken = QT_TRANSLATE_NOOP("Ui", "우 사이드바 계기 자리는 한 항목만 사용 가능");
+    const auto unknown = QT_TRANSLATE_NOOP("Ui", "미등록 항목");
     if (error == make(UiError::DuplicateId)) return QCoreApplication::translate("Ui", duplicate);
     if (error == make(UiError::TopTaken)) return QCoreApplication::translate("Ui", topTaken);
     if (error == make(UiError::UnknownId)) return QCoreApplication::translate("Ui", unknown);

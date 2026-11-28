@@ -7,7 +7,7 @@ Card {
         width: parent.width
         spacing: Theme.panelInset
         Chip { objectName: "gallery_Chip_ok"; text: qsTr("정상"); level: "ok" }
-        Chip { objectName: "gallery_Chip_warn"; text: qsTr("주의"); level: "warn" }
+        Chip { objectName: "gallery_Chip_warn"; text: qsTr("경고"); level: "warn" }
         Chip { objectName: "gallery_Chip_danger"; text: qsTr("위험"); level: "danger" }
         Chip { objectName: "gallery_Chip_info"; text: qsTr("정보"); level: "info" }
         Chip { objectName: "gallery_Chip_idle"; text: qsTr("없음"); level: "idle" }

@@ -14,7 +14,7 @@ Basic.Dialog {
     objectName: "paramsWriteDialog"
     property var rows: []
     property bool hold: false
-    title: qsTr("값 %1개를 쓸까요?").arg(rows.length)
+    title: qsTr("값 %1개를 쓰시겠습니까?").arg(rows.length)
     modal: true
     padding: Theme.panelInset
     implicitWidth: Theme.confirmDialogWidth
@@ -53,7 +53,7 @@ Basic.Dialog {
         }
         Text {
             Layout.fillWidth: true
-            text: qsTr("쓰기 전에 전체 값을 백업해요.")
+            text: qsTr("쓰기 전 전체 값 자동 백업")
             color: Theme.inkMuted
             font.family: Theme.fontFamily
             font.pixelSize: Theme.fontSize

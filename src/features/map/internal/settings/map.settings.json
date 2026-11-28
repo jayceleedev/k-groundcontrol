@@ -8,6 +8,6 @@
     {"id": "map.tileStoreLimitMb", "type": "int", "default": 2048, "min": 256, "max": 102400, "labelKey": "본 타일 저장 한도", "category": "map"},
     {"id": "map.trailMinMeters", "type": "double", "default": 1, "min": 0.1, "max": 100, "labelKey": "궤적 점 간격", "category": "map"},
     {"id": "map.trailMaxPoints", "type": "int", "default": 20000, "min": 1000, "max": 200000, "labelKey": "궤적 최대 점 수", "category": "map"},
-    {"id": "map.autoFollow", "type": "bool", "default": true, "labelKey": "따라가기 자동 켜기", "category": "map"}
+    {"id": "map.autoFollow", "type": "bool", "default": true, "labelKey": "기체 자동 따라가기", "category": "map"}
   ]
 }

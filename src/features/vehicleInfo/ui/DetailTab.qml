@@ -10,12 +10,12 @@ Item {
         anchors.fill: parent
         anchors.margins: Theme.inset
         spacing: Theme.inset
-        SearchBox { Layout.fillWidth: true; enabled: false; placeholderText: qsTr("값 이름 찾기") }
+        SearchBox { Layout.fillWidth: true; enabled: false; placeholderText: qsTr("값 찾기") }
         EmptyState {
             Layout.fillWidth: true
             Layout.fillHeight: true
             title: qsTr("기체 없음")
-            detail: qsTr("기체가 연결되면 받은 값이 묶음별로 떠요.")
+            detail: qsTr("기체 연결 시 묶음별 값 표시")
         }
     }
 }

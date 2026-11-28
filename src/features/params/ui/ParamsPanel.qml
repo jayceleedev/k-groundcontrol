@@ -48,7 +48,7 @@ Item {
         objectName: "paramsEmpty"
         anchors.fill: parent
         visible: !ParamsController.hasVehicle
-        title: qsTr("기체를 연결하면 파라미터가 보여요")
+        title: qsTr("기체 연결 후 파라미터 확인 가능")
     }
     ColumnLayout {
         anchors.fill: parent
@@ -66,20 +66,20 @@ Item {
             level: "warn"
             shown: ParamsController.downloadState === ParamStates.Incomplete
             text: ParamsController.totalCount > 0
-                ? qsTr("FC가 파라미터를 다 보내지 않았어요 (%1/%2)").arg(ParamsController.receivedCount).arg(ParamsController.totalCount)
-                : qsTr("FC가 파라미터를 다 보내지 않았어요")
+                ? qsTr("FC가 파라미터 일부 미전송 (%1/%2)").arg(ParamsController.receivedCount).arg(ParamsController.totalCount)
+                : qsTr("FC가 파라미터 일부 미전송")
         }
         NoticeBanner {
             objectName: "paramsSkipped"
             level: "info"
             shown: ParamsController.downloadState === ParamStates.SkippedArmed
-            text: qsTr("시동 중이라 파라미터를 받지 않았어요. 새로고침을 누르면 받아요.")
+            text: qsTr("시동 중 파라미터 받기 생략. 새로고침으로 받기")
         }
         NoticeBanner {
             objectName: "paramsReboot"
             level: "warn"
             shown: ParamsController.rebootNeeded
-            text: qsTr("재부팅해야 적용되는 값이 있어요")
+            text: qsTr("일부 값은 재부팅해야 적용")
         }
         RowLayout {
             Layout.fillWidth: true
@@ -107,7 +107,7 @@ Item {
             Text {
                 objectName: "paramsMetadataFailed"
                 visible: ParamsController.metadataState === ParamStates.Failed
-                text: qsTr("설명을 받지 못했어요")
+                text: qsTr("설명 받기 실패")
                 color: Theme.inkMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.captionSize
@@ -187,7 +187,7 @@ Item {
         id: rebootDialog
         parent: Basic.Overlay.overlay
         anchors.centerIn: parent
-        title: qsTr("FC를 재부팅할까요?")
+        title: qsTr("FC를 재부팅하시겠습니까?")
         onAccepted: ParamsController.reboot()
     }
     FileDialog {

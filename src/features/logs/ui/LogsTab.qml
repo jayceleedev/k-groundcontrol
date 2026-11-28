@@ -24,11 +24,11 @@ Item {
         EmptyState {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            title: qsTr("기체가 연결되면 목록을 읽어요")
+            title: qsTr("기체 연결 시 목록 자동 읽기")
         }
         Row {
             spacing: Theme.choiceGap
-            ActionButton { kind: "secondary"; enabled: false; text: qsTr("내려받기") }
+            ActionButton { kind: "secondary"; enabled: false; text: qsTr("받기") }
             ActionButton { kind: "secondary"; enabled: false; text: qsTr("모두 지우기") }
         }
     }

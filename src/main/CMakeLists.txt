@@ -23,7 +23,7 @@ qt_add_translations(kgc_composition
     TS_FILES "${PROJECT_SOURCE_DIR}/i18n/kgc_en.ts"
     RESOURCE_PREFIX /kgc/i18n
     SOURCE_TARGETS kgc_app_boot kgc_ui kgc_shell kgc_reference kgc_appSettings kgc_uiGallery kgc_analyze kgc_secondPanel
-        kgc_vehicleInfo kgc_logs kgc_preflight kgc_link kgc_comm_links kgc_fcFlash kgc_sitl kgc_map kgc_fly kgc_params kgc_vehicle_firmware kgc_app_job kgc_app_net kgc_app_store kgc_comm_rawport kgc_composition)
+        kgc_vehicleInfo kgc_logs kgc_preflight kgc_link kgc_comm_links kgc_fcFlash kgc_sitl kgc_map kgc_fly kgc_params kgc_vehicle_firmware kgc_vehicle_outbound kgc_app_job kgc_app_net kgc_app_store kgc_comm_rawport kgc_composition)
 qt_add_executable(KGroundControl main.cpp)
 if(WIN32)
     enable_language(RC)

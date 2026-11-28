@@ -107,6 +107,6 @@ void MapDownloadJob::finish()
         return;
     }
     job_->fail(make(MapError::TileFailed),
-               QCoreApplication::translate("Map", QT_TRANSLATE_NOOP("Map", "타일 %1개를 받지 못했어요")).arg(failed_));
+               QCoreApplication::translate("Map", QT_TRANSLATE_NOOP("Map", "타일 %1개 받기 실패")).arg(failed_));
 }
 }

@@ -20,5 +20,5 @@ FlyHoldButton {
     enabled: FlyController.canEmergencyStop
     onConfirmed: FlyController.emergencyStop(pressedSysid)
     // 흐린 단추에는 마우스 올림이 오지 않아 눌릴 수 있을 때만 보여요.
-    HintTip { objectName: "flyEmergencyStopTip"; text: qsTr("모터를 바로 꺼요. 공중이면 떨어져요."); visible: stopButton.hovered }
+    HintTip { objectName: "flyEmergencyStopTip"; text: qsTr("모터 즉시 정지. 공중이면 추락"); visible: stopButton.hovered }
 }

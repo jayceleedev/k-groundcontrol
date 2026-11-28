@@ -2,7 +2,7 @@
 역할: 기체로 보내는 모든 프레임을 하나의 문으로 통과시켜요.
 수명: 혼합(전역 LinkHeartbeat + 기체별 VehicleSender).
 받는 것: LinkManager, Scheduler, FirmwarePlugin.streamRequests, 대상 sysid·linkId.
-주는 것: 링크별 1Hz GCS 하트비트를 맡는 LinkHeartbeat, VehicleSender::send·sendStreamRequests, OutboundKind, NoLink. send의 성공은 전송 완료가 아니라 워커 송신 예약을 뜻해요.
+주는 것: 링크별 1Hz GCS 하트비트를 맡는 LinkHeartbeat, VehicleSender::send·sendStreamRequests, OutboundKind, NoLink(문맥 "Outbound"의 화면 문구, 0.6.0부터 번역 원문). send의 성공은 전송 완료가 아니라 워커 송신 예약을 뜻해요.
 송신 구분: CommandQueue의 명령은 명령마다 CommandOptions.kind(기본 Command; fly는 시동 Arm, 그 밖 Motion)로, 하트비트와 스트림 요청은 Other로 받아요.
 기여: 없음.
 의존: app/errors, app/constants, app/scheduler, comm/links, vehicle/firmware, Qt Core.

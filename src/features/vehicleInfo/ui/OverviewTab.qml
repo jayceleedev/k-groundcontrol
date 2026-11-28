@@ -17,7 +17,7 @@ Item {
             Layout.fillWidth: true
             visible: !VehicleInfoController.hasVehicle
             title: qsTr("기체 없음")
-            detail: qsTr("상단바에서 포트를 고르고 연결해요.")
+            detail: qsTr("상단바에서 포트 선택 후 연결")
         }
         Section {
             Layout.fillWidth: true

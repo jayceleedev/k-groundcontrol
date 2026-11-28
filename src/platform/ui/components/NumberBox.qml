@@ -26,7 +26,7 @@ FocusScope {
         id: field
         anchors.left: parent.left; anchors.right: up.left
         text: control.value.toFixed(control.decimals)
-        errorText: control.acceptableInput ? "" : qsTr("%1~%2 사이 값을 입력해 주세요").arg(control.from).arg(control.to)
+        errorText: control.acceptableInput ? "" : qsTr("%1~%2 사이 값 입력").arg(control.from).arg(control.to)
         rightPadding: unitLabel.implicitWidth + Theme.inset * 2
         onEditingFinished: control.commit(Number(text))
         Keys.onUpPressed: control.commit(Math.min(control.to, control.value + control.stepSize))

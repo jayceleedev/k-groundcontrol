@@ -72,7 +72,7 @@ void ParamsController::bindService()
     connect(service_, &ParamService::jobChanged, this, &ParamsController::watchJob);
     connect(service_, &ParamService::writeFinished, this, &ParamsController::writeDone);
     connect(service_, &ParamService::rebootFinished, this, [this](const kgc::app::errors::Result<void>& result) {
-        emit toast(result ? text(QT_TRANSLATE_NOOP("Params", "재부팅을 보냈어요")) : errorText(result.error()));
+        emit toast(result ? text(QT_TRANSLATE_NOOP("Params", "재부팅 명령 전송됨")) : errorText(result.error()));
     });
     auto* params = service_->params();
     connect(params, &Params::pendingCountChanged, this, &ParamsController::pendingChanged);
@@ -93,7 +93,7 @@ void ParamsController::watchJob()
         connect(current, &kgc::app::job::Job::finished, this, [this, current] {
             if (current->state() != kgc::app::job::Job::State::Failed) return;
             if (current->errorCode() == make(ParamError::Armed) && current->kind() != kgc::app::job::OperationKind::Read)
-                emit toast(text(QT_TRANSLATE_NOOP("Params", "%1개를 썼어요. 시동이 걸려 멈췄어요.")).arg(lastWritten_));
+                emit toast(text(QT_TRANSLATE_NOOP("Params", "%1개 쓰기 완료. 기체 시동으로 중단")).arg(lastWritten_));
             else emit toast(current->errorText());
         });
     }
@@ -103,13 +103,13 @@ void ParamsController::writeDone(int written, const QStringList& failed)
 {
     lastWritten_ = written;
     if (failed.isEmpty()) {
-        emit toast(text(QT_TRANSLATE_NOOP("Params", "%1개를 썼어요")).arg(written));
+        emit toast(text(QT_TRANSLATE_NOOP("Params", "%1개 쓰기 완료")).arg(written));
         return;
     }
     auto names = failed.first(std::min<qsizetype>(failed.size(), kToastNames)).join(QStringLiteral(", "));
     if (failed.size() > kToastNames)
         names += text(QT_TRANSLATE_NOOP("Params", " 외 %1개")).arg(failed.size() - kToastNames);
-    emit toast(text(QT_TRANSLATE_NOOP("Params", "%1개를 썼어요. %2개는 쓰지 못했어요: %3"))
+    emit toast(text(QT_TRANSLATE_NOOP("Params", "%1개 쓰기 완료. %2개 쓰기 실패: %3"))
                    .arg(written).arg(failed.size()).arg(names));
 }
 const Param* ParamsController::row(const QString& name) const { return service_ ? service_->params()->find(name) : nullptr; }
@@ -207,7 +207,7 @@ QVariantList ParamsController::diffRows() const
 }
 QString ParamsController::diffSummary() const
 {
-    auto line = text(QT_TRANSLATE_NOOP("Params", "바뀌는 값 %1 · 같은 값 %2 · FC에 없음 %3 · 읽기 전용 %4 · 건너뜀 %5"))
+    auto line = text(QT_TRANSLATE_NOOP("Params", "변경 %1 · 동일 %2 · FC에 없음 %3 · 읽기 전용 %4 · 건너뜀 %5"))
                     .arg(diff_.changed.size()).arg(diff_.same).arg(diff_.missing).arg(diff_.readOnly).arg(diff_.skipped);
     const int unread = diff_.badLines + diff_.otherComponent;
     if (unread > 0) line += text(QT_TRANSLATE_NOOP("Params", " · 읽지 못한 줄 %1")).arg(unread);
@@ -323,7 +323,7 @@ void ParamsController::saveFile(const QUrl& url)
 {
     if (!service_) return;
     const auto result = service_->saveFile(url.toLocalFile());
-    emit toast(result ? text(QT_TRANSLATE_NOOP("Params", "파일로 저장했어요")) : errorText(result.error()));
+    emit toast(result ? text(QT_TRANSLATE_NOOP("Params", "파일 저장 완료")) : errorText(result.error()));
 }
 bool ParamsController::openFile(const QUrl& url)
 {

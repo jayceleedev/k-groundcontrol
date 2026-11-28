@@ -136,7 +136,7 @@
     </message>
     <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="120"/>
-        <source>따라가기 자동 켜기</source>
+        <source>기체 자동 따라가기</source>
         <translation>Follow vehicle automatically</translation>
     </message>
     <message>
@@ -320,15 +320,15 @@
         <translation>Tile server address (for testing)</translation>
     </message>
     <message>
-        <source>타일 서버 인증서 PEM 파일(시험용, 이번 실행의 모든 HTTPS 요청이 믿음)</source>
+        <source>타일 서버 인증서 PEM 파일(시험용, 이번 실행의 모든 HTTPS 요청에서 신뢰)</source>
         <translation>Tile server certificate PEM file (for testing; every HTTPS request in this run trusts it)</translation>
     </message>
     <message>
-        <source>타일 주소는 https://호스트[:포트] 꼴이어야 함: %1</source>
+        <source>타일 주소는 https://호스트[:포트] 형식 필요: %1</source>
         <translation>Tile address must have the form https://host[:port]: %1</translation>
     </message>
     <message>
-        <source>시험용 인증서를 읽을 수 없음: %1</source>
+        <source>시험용 인증서 읽기 실패: %1</source>
         <translation>Cannot read the test certificate: %1</translation>
     </message>
 </context>
@@ -388,7 +388,7 @@
     <name>DetailTab</name>
     <message>
         <location filename="../src/features/vehicleInfo/ui/DetailTab.qml" line="13"/>
-        <source>값 이름 찾기</source>
+        <source>값 찾기</source>
         <translation>Find a value</translation>
     </message>
     <message>
@@ -398,7 +398,7 @@
     </message>
     <message>
         <location filename="../src/features/vehicleInfo/ui/DetailTab.qml" line="18"/>
-        <source>기체가 연결되면 받은 값이 묶음별로 떠요.</source>
+        <source>기체 연결 시 묶음별 값 표시</source>
         <translation>Values appear by group once a vehicle connects.</translation>
     </message>
 </context>
@@ -502,12 +502,12 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
-        <source>사용</source>
+        <source>사용량</source>
         <translation>Used</translation>
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="23"/>
-        <source>남음</source>
+        <source>잔량</source>
         <translation>Remaining</translation>
     </message>
     <message>
@@ -528,7 +528,7 @@
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="41"/>
         <location filename="../src/features/uiGallery/ui/GalleryCharts.qml" line="70"/>
-        <source>기체 값 있음</source>
+        <source>기체 값</source>
         <translation>Vehicle data</translation>
     </message>
     <message>
@@ -609,7 +609,7 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="15"/>
-        <source>고름</source>
+        <source>체크됨</source>
         <translation>Checked</translation>
     </message>
     <message>
@@ -619,7 +619,7 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryChoices.qml" line="17"/>
-        <source>안 고름</source>
+        <source>체크 안 됨</source>
         <translation>Unchecked</translation>
     </message>
     <message>
@@ -746,7 +746,7 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="43"/>
-        <source>연결 완료</source>
+        <source>연결됨</source>
         <translation>Connected</translation>
     </message>
     <message>
@@ -761,7 +761,7 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryContainers.qml" line="52"/>
-        <source>에어로에서는 뒤가 흐리게 비쳐요</source>
+        <source>에어로에서는 배경 흐림</source>
         <translation>Aero blurs the background</translation>
     </message>
 </context>
@@ -779,7 +779,7 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryIndicators.qml" line="10"/>
-        <source>주의</source>
+        <source>경고</source>
         <translation>Warning</translation>
     </message>
     <message>
@@ -863,12 +863,12 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="10"/>
-        <source>이름을 입력해 주세요</source>
+        <source>이름 입력</source>
         <translation>Enter a name</translation>
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="11"/>
-        <source>이름을 확인해 주세요</source>
+        <source>이름 확인</source>
         <translation>Check the name</translation>
     </message>
     <message>
@@ -903,7 +903,7 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryInputs.qml" line="16"/>
-        <source>견본 파일을 선택했어요</source>
+        <source>견본 파일 선택 완료</source>
         <translation>Sample file selected</translation>
     </message>
 </context>
@@ -916,17 +916,17 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="8"/>
-        <source>시동 중에는 펌웨어를 굽지 않아요</source>
+        <source>시동 중 펌웨어 굽기 금지</source>
         <translation>Do not flash firmware while armed</translation>
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="9"/>
-        <source>새 펌웨어가 있어요</source>
+        <source>새 펌웨어 사용 가능</source>
         <translation>New firmware is available</translation>
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="13"/>
-        <source>설정을 저장했어요</source>
+        <source>설정 저장 완료</source>
         <translation>Settings saved</translation>
     </message>
     <message>
@@ -946,22 +946,22 @@
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="21"/>
-        <source>아직 메시지가 없어요</source>
+        <source>아직 메시지 없음</source>
         <translation>No messages yet</translation>
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="21"/>
-        <source>기체가 보내는 상태 메시지가 여기에 쌓여요.</source>
+        <source>기체의 상태 메시지가 쌓이는 곳</source>
         <translation>Status messages from the vehicle collect here.</translation>
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="28"/>
-        <source>설정을 초기화할까요?</source>
+        <source>설정을 초기화하시겠습니까?</source>
         <translation>Reset settings?</translation>
     </message>
     <message>
         <location filename="../src/features/uiGallery/ui/GalleryNotices.qml" line="29"/>
-        <source>이 목록에서는 실제 설정을 바꾸지 않아요.</source>
+        <source>이 목록은 실제 설정에 영향 없음</source>
         <translation>This gallery does not change actual settings.</translation>
     </message>
     <message>
@@ -1072,12 +1072,12 @@
     </message>
     <message>
         <location filename="../src/features/logs/ui/LogsTab.qml" line="27"/>
-        <source>기체가 연결되면 목록을 읽어요</source>
+        <source>기체 연결 시 목록 자동 읽기</source>
         <translation>The list is read once a vehicle connects</translation>
     </message>
     <message>
         <location filename="../src/features/logs/ui/LogsTab.qml" line="31"/>
-        <source>내려받기</source>
+        <source>받기</source>
         <translation>Download</translation>
     </message>
     <message>
@@ -1206,12 +1206,12 @@
     </message>
     <message>
         <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="18"/>
-        <source>아직 메시지가 없어요</source>
+        <source>아직 메시지 없음</source>
         <translation>No messages yet</translation>
     </message>
     <message>
         <location filename="../src/features/vehicleInfo/ui/MessagesTab.qml" line="19"/>
-        <source>기체가 보내는 상태 메시지가 여기에 쌓여요.</source>
+        <source>기체의 상태 메시지가 쌓이는 곳</source>
         <translation>Status messages from the vehicle collect here.</translation>
     </message>
 </context>
@@ -1219,7 +1219,7 @@
     <name>NumberBox</name>
     <message>
         <location filename="../src/platform/ui/components/NumberBox.qml" line="29"/>
-        <source>%1~%2 사이 값을 입력해 주세요</source>
+        <source>%1~%2 사이 값 입력</source>
         <translation>Enter a value between %1 and %2</translation>
     </message>
     <message>
@@ -1316,7 +1316,7 @@
         <translation>Flight time · Distance</translation>
     </message>
     <message>
-        <source>상단바에서 포트를 고르고 연결해요.</source>
+        <source>상단바에서 포트 선택 후 연결</source>
         <translation>Choose a port in the top bar and connect.</translation>
     </message>
     <message>
@@ -1349,6 +1349,13 @@
     </message>
 </context>
 <context>
+    <name>Outbound</name>
+    <message>
+        <source>전송 가능한 연결 없음</source>
+        <translation>No link available to send on</translation>
+    </message>
+</context>
+<context>
     <name>PreflightTab</name>
     <message>
         <location filename="../src/features/preflight/ui/PreflightTab.qml" line="13"/>
@@ -1362,7 +1369,7 @@
     </message>
     <message>
         <location filename="../src/features/preflight/ui/PreflightTab.qml" line="18"/>
-        <source>점검표는 기체 종류에 맞춰 골라져요. 기체가 연결되면 떠요.</source>
+        <source>기체 연결 시 기체 종류에 맞는 점검표 표시</source>
         <translation>The checklist is chosen for the vehicle type and appears once a vehicle connects.</translation>
     </message>
 </context>
@@ -1506,17 +1513,17 @@
     <name>Ui</name>
     <message>
         <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="28"/>
-        <source>같은 항목이 이미 등록되어 있어요.</source>
+        <source>이미 등록된 ID</source>
         <translation>An item with the same ID is already registered.</translation>
     </message>
     <message>
         <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="29"/>
-        <source>우 사이드바 계기 자리는 하나만 쓸 수 있어요.</source>
+        <source>우 사이드바 계기 자리는 한 항목만 사용 가능</source>
         <translation>Only one item can use the right sidebar instrument area.</translation>
     </message>
     <message>
         <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="30"/>
-        <source>등록되지 않은 항목이에요.</source>
+        <source>미등록 항목</source>
         <translation>The item is not registered.</translation>
     </message>
 </context>
@@ -1531,31 +1538,31 @@
 <context>
     <name>ReferencePanel</name>
     <message>
-        <source>설정할 때 참고할 공식 문서예요. 바로가기를 누르면 브라우저에서 열려요.</source>
+        <source>설정 참고용 공식 문서. 바로가기 선택 시 브라우저에서 열기</source>
         <translation>Official documents for setup. Open shows them in your browser.</translation>
     </message>
     <message>
-        <source>멀티콥터, 비행기, 로버 등을 위한 오픈소스 자동조종 펌웨어의 공식 문서예요. 기체 설정과 파라미터를 찾아볼 수 있어요.</source>
+        <source>멀티콥터, 비행기, 로버 등을 위한 오픈소스 자동조종 펌웨어 공식 문서. 기체 설정과 파라미터 안내</source>
         <translation>Official documentation for the open-source autopilot for copters, planes, rovers and more. Covers vehicle setup and parameters.</translation>
     </message>
     <message>
-        <source>PX4 자동조종 펌웨어의 공식 사용자 안내서예요. 기체 조립, 설정, 비행 방법을 다뤄요.</source>
+        <source>PX4 자동조종 펌웨어 공식 사용자 안내서. 기체 조립, 설정, 비행 방법 안내</source>
         <translation>Official user guide for the PX4 autopilot. Covers assembly, configuration and flying.</translation>
     </message>
     <message>
-        <source>브러시리스 모터 ESC용 오픈소스 펌웨어예요. 펌웨어 내려받기와 웹 설정 도구가 있어요.</source>
+        <source>브러시리스 모터 ESC용 오픈소스 펌웨어. 펌웨어 받기와 웹 설정 도구 제공</source>
         <translation>Open-source firmware for brushless motor ESCs. Offers firmware downloads and a web configurator.</translation>
     </message>
     <message>
-        <source>BLHeli_S 계열 ESC용 오픈소스 디지털 펌웨어예요. 소스, 릴리스, 설정 정보를 GitHub에서 볼 수 있어요.</source>
+        <source>BLHeli_S ESC용 오픈소스 디지털 펌웨어. GitHub에서 소스, 릴리스, 설정 정보 제공</source>
         <translation>Open-source digital firmware for BLHeli_S ESCs. Source, releases and settings are on GitHub.</translation>
     </message>
     <message>
-        <source>오픈소스 무선 조종 링크예요. 송수신기 설정 안내와 지원 장비를 찾아볼 수 있어요.</source>
+        <source>오픈소스 무선 조종 링크. 송수신기 설정과 지원 장비 안내</source>
         <translation>Open-source radio control link. Covers transmitter and receiver setup and supported hardware.</translation>
     </message>
     <message>
-        <source>지상국과 기체가 주고받는 메시지 규격의 개발자 안내서예요. 메시지와 명령의 뜻을 찾아볼 수 있어요.</source>
+        <source>지상국과 기체 간 메시지 규격의 개발자 안내서. 메시지와 명령 안내</source>
         <translation>Developer guide for the messaging protocol between ground stations and vehicles. Covers messages and commands.</translation>
     </message>
 </context>
@@ -1594,11 +1601,11 @@
 <context>
     <name>LinkConnection</name>
     <message>
-        <source>신호가 없어요. 포트와 속도를 확인해요</source>
+        <source>신호 없음. 포트와 속도 확인</source>
         <translation>No signal. Check the port and speed</translation>
     </message>
     <message>
-        <source>신호가 없어요. 기체가 14550으로 보내는지 확인해요</source>
+        <source>신호 없음. 기체가 14550으로 보내는지 확인</source>
         <translation>No signal. Check that the vehicle sends to 14550</translation>
     </message>
     <message>
@@ -1652,27 +1659,27 @@
 <context>
     <name>Link</name>
     <message>
-        <source>이미 연결 중이에요.</source>
+        <source>이미 연결 중</source>
         <translation>A connection is already in progress.</translation>
     </message>
     <message>
-        <source>포트를 열 수 없어요.</source>
+        <source>포트 열기 실패</source>
         <translation>Unable to open the port.</translation>
     </message>
     <message>
-        <source>포트를 열 권한이 없거나 다른 프로그램이 쓰고 있어요.</source>
+        <source>포트 접근 권한 없음 또는 다른 프로그램이 사용 중</source>
         <translation>Permission denied or the port is in use by another program.</translation>
     </message>
     <message>
-        <source>다른 프로그램이 포트를 쓰고 있어요.</source>
+        <source>다른 프로그램이 포트 사용 중</source>
         <translation>Another program is using the port.</translation>
     </message>
     <message>
-        <source>UDP 수신 포트를 열 수 없어요.</source>
+        <source>UDP 수신 포트 열기 실패</source>
         <translation>Unable to open the UDP listening port.</translation>
     </message>
     <message>
-        <source>포트 연결이 끊어졌어요.</source>
+        <source>포트 연결 끊김</source>
         <translation>The port connection was lost.</translation>
     </message>
 </context>
@@ -1680,47 +1687,47 @@
     <name>FcFlash</name>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="10" />
-        <source>시동 중에는 구울 수 없어요.</source>
+        <source>기체 시동 중 굽기 불가</source>
         <translation>Cannot flash while a vehicle is armed.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="11" />
-        <source>다른 연결을 먼저 끊어요.</source>
+        <source>다른 링크 먼저 연결 해제</source>
         <translation>Disconnect the other link first.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="12" />
-        <source>부트로더를 찾지 못했어요. USB를 다시 꽂고 다시 해요.</source>
+        <source>부트로더 찾기 실패. USB 재연결 후 재시도</source>
         <translation>Bootloader not found. Reconnect USB and try again.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="13" />
-        <source>지원하지 않는 부트로더예요.</source>
+        <source>지원하지 않는 부트로더</source>
         <translation>This bootloader is not supported.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="14" />
-        <source>펌웨어가 FC 플래시보다 커요.</source>
+        <source>펌웨어가 FC 플래시 용량 초과</source>
         <translation>The firmware is larger than the FC flash memory.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="15" />
-        <source>펌웨어 파일을 읽을 수 없어요.</source>
+        <source>펌웨어 파일 읽기 실패</source>
         <translation>Cannot read the firmware file.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="16" />
-        <source>펌웨어를 내려받지 못했어요.</source>
+        <source>펌웨어 받기 실패</source>
         <translation>Could not download the firmware.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="17" />
-        <source>포트를 잃었어요. USB를 다시 꽂고 처음부터 해요.</source>
+        <source>포트 연결 끊김. USB 재연결 후 처음부터 시작</source>
         <translation>The port was lost. Reconnect USB and start over.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="18" />
-        <source>취소했어요.</source>
+        <source>취소 완료</source>
         <translation>Cancelled.</translation>
     </message>
     <message>
@@ -1740,7 +1747,7 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/Errors.cpp" line="25" />
-        <source>%1에 실패했어요. FC는 부트로더에서 기다리고 있어요.</source>
+        <source>%1 실패. FC는 부트로더에서 대기 중</source>
         <translation>%1 failed. The FC is waiting in the bootloader.</translation>
     </message>
     <message>
@@ -1750,7 +1757,7 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/internal/FcFlashService.cpp" line="150" />
-        <source>이 보드용 펌웨어가 아니에요: 보드 %1, 파일 %2</source>
+        <source>다른 보드용 펌웨어: 보드 %1, 파일 %2</source>
         <translation>This firmware is for a different board: board %1, file %2</translation>
     </message>
 </context>
@@ -1786,7 +1793,7 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/BoardList.qml" line="70"/>
-        <source>보드 ID %1 · 구울 수 없음</source>
+        <source>보드 ID %1 · 굽기 불가</source>
         <translation>Board ID %1 · cannot flash</translation>
     </message>
     <message>
@@ -1812,7 +1819,7 @@
     <name>Job</name>
     <message>
         <location filename="../src/features/fcFlash/internal/FcFlashRun.cpp" line="27" />
-        <source>내려받기</source>
+        <source>받기</source>
         <translation>Download</translation>
     </message>
     <message>
@@ -1832,7 +1839,7 @@
         <translation>Verify</translation>
     </message>
     <message>
-        <source>취소했어요.</source>
+        <source>취소 완료</source>
         <translation>Cancelled.</translation>
     </message>
     <message>
@@ -1872,27 +1879,27 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="48" />
-        <source>앱이 FC를 부트로더로 넣고 보드 정보를 읽어요.</source>
+        <source>앱이 FC 부트로더 진입 후 보드 정보 읽기</source>
         <translation>The app will enter the FC bootloader and read its board information.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="49" />
-        <source>포트를 확인하고 있어요</source>
+        <source>포트 확인 중</source>
         <translation>Checking the port</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="50" />
-        <source>FC를 부트로더로 넣고 있어요</source>
+        <source>FC 부트로더 진입 중</source>
         <translation>Entering the FC bootloader</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="51" />
-        <source>USB를 뽑았다가 다시 꽂아요 · %1초</source>
+        <source>USB 분리 후 재연결 · %1초</source>
         <translation>Unplug and reconnect USB · %1 seconds</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepBoard.qml" line="52" />
-        <source>부트로더 포트가 둘 이상이에요. 하나를 골라요.</source>
+        <source>부트로더 포트 여러 개 발견. 하나 선택</source>
         <translation>Multiple bootloader ports found. Select one.</translation>
     </message>
     <message>
@@ -1979,17 +1986,17 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="158"/>
-        <source>맞는 펌웨어 %1개. 직접 골라요.</source>
+        <source>맞는 펌웨어 %1개. 하나 선택</source>
         <translation>%1 matching firmware candidates. Select one.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="168"/>
-        <source>목록을 받지 못했어요. 인터넷을 확인하거나 파일을 직접 골라요.</source>
+        <source>목록 받기 실패. 인터넷 연결 확인 또는 내 PC 파일 선택</source>
         <translation>Could not retrieve the list. Check your internet connection or select a local file.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="169"/>
-        <source>공식 목록에 이 보드용 펌웨어가 없어요. 파일을 직접 골라요.</source>
+        <source>이 보드용 공식 펌웨어 없음. 내 PC 파일 선택</source>
         <translation>No official firmware matches this board. Select a local file.</translation>
     </message>
     <message>
@@ -2029,12 +2036,12 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="144"/>
-        <source>보드 이름 %1에 맞는 빌드가 %2개예요. 하나를 골라요.</source>
+        <source>보드 이름 %1에 맞는 빌드 %2개. 하나 선택</source>
         <translation>%2 builds match board name %1. Select one.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="154"/>
-        <source>공식 목록에 %1 빌드가 없어요. 아래에서 직접 고르거나 파일을 골라요.</source>
+        <source>공식 목록에 %1 빌드 없음. 아래에서 선택 또는 내 PC 파일 선택</source>
         <translation>The official list has no %1 build. Select one below or select a local file.</translation>
     </message>
     <message>
@@ -2049,7 +2056,7 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFirmware.qml" line="199"/>
-        <source>검색어와 맞는 보드가 없어요</source>
+        <source>검색어에 맞는 보드 없음</source>
         <translation>No boards match the search</translation>
     </message>
 </context>
@@ -2057,27 +2064,27 @@
     <name>StepFlash</name>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="27"/>
-        <source>올라갔어요</source>
+        <source>올리기 완료</source>
         <translation>Installed</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="29"/>
-        <source>올린 펌웨어와 달라요</source>
+        <source>선택한 펌웨어와 불일치</source>
         <translation>The firmware differs from the selected image</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="31"/>
-        <source>펌웨어를 올렸어요</source>
+        <source>펌웨어 굽기 완료</source>
         <translation>Firmware uploaded</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="32"/>
-        <source>FC가 다시 켜지지 않았어요. USB 케이블을 뽑았다 꽂거나 리셋 버튼을 누른 뒤 연결해 주세요.</source>
+        <source>FC 재시작 안 됨. USB 케이블 분리 후 재연결 또는 리셋 버튼 누른 뒤 연결</source>
         <translation>The FC did not restart. Unplug and replug the USB cable or press reset, then connect.</translation>
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="53"/>
-        <source>내려받기</source>
+        <source>받기</source>
         <translation>Download</translation>
     </message>
     <message>
@@ -2107,7 +2114,7 @@
     </message>
     <message>
         <location filename="../src/features/fcFlash/ui/StepFlash.qml" line="72"/>
-        <source>FC가 돌아오길 기다리고 있어요</source>
+        <source>FC 재연결 대기 중</source>
         <translation>Waiting for the FC to return</translation>
     </message>
     <message>
@@ -2124,49 +2131,49 @@
 <context>
     <name>Http</name>
     <message>
-        <source>HTTPS 주소만 쓸 수 있어요.</source>
+        <source>HTTPS 주소만 지원</source>
         <translation>Only HTTPS addresses are supported.</translation>
     </message>
     <message>
-        <source>요청 시간이 지났어요.</source>
+        <source>요청 시간 초과</source>
         <translation>The request timed out.</translation>
     </message>
     <message>
-        <source>내려받지 못했어요.</source>
+        <source>받기 실패</source>
         <translation>The download failed.</translation>
     </message>
     <message>
-        <source>인증서 파일을 읽지 못했어요.</source>
+        <source>인증서 파일 읽기 실패</source>
         <translation>Could not read the certificate file.</translation>
     </message>
     <message>
-        <source>서버가 요청을 받아 주지 않았어요.</source>
+        <source>서버가 요청 거부</source>
         <translation>The server refused the request.</translation>
     </message>
 </context>
 <context>
     <name>Store</name>
     <message>
-        <source>저장소를 열지 못했어요</source>
+        <source>저장소 열기 실패</source>
         <translation>Could not open the store</translation>
     </message>
     <message>
-        <source>저장소를 읽거나 쓰지 못했어요</source>
+        <source>저장소 읽기 또는 쓰기 실패</source>
         <translation>Could not read or write the store</translation>
     </message>
 </context>
 <context>
     <name>Port</name>
     <message>
-        <source>다른 작업이 포트를 쓰고 있어요.</source>
+        <source>다른 작업이 포트 사용 중</source>
         <translation>Another operation is using this port.</translation>
     </message>
     <message>
-        <source>포트를 잃었어요.</source>
+        <source>포트 연결 끊김</source>
         <translation>The port was lost.</translation>
     </message>
     <message>
-        <source>포트가 응답하지 않아요.</source>
+        <source>포트 응답 없음</source>
         <translation>The port is not responding.</translation>
     </message>
 </context>
@@ -2204,7 +2211,7 @@
         <translation>File value</translation>
     </message>
     <message>
-        <source>고른 값 올리기</source>
+        <source>선택한 값 불러오기</source>
         <translation>Load selected values</translation>
     </message>
     <message>
@@ -2462,78 +2469,78 @@
         <translation>Description</translation>
     </message>
     <message>
-        <source>범위를 벗어났어요</source>
+        <source>값 범위 밖</source>
         <translation>Value out of range</translation>
     </message>
     <message>
-        <source>%1의 범위는 %2예요. 이 값으로 둘까요?</source>
+        <source>%1 범위: %2. 이 값을 유지하시겠습니까?</source>
         <translation>The range of %1 is %2. Keep this value?</translation>
     </message>
 </context>
 <context>
     <name>Params</name>
     <message>
-        <source>FC가 응답하지 않아요</source>
+        <source>FC 응답 없음</source>
         <translation>The FC is not responding</translation>
     </message>
     <message>
-        <source>FC가 파라미터를 다 보내지 않았어요</source>
+        <source>FC가 파라미터 일부 미전송</source>
         <translation>The FC did not send all parameters</translation>
     </message>
     <message>
-        <source>백업을 저장하지 못해 쓰지 않았어요</source>
+        <source>백업 저장 실패로 쓰기 미실행</source>
         <translation>Nothing was written because the backup could not be saved</translation>
     </message>
     <message>
-        <source>시동 중에는 쓸 수 없어요</source>
+        <source>시동 중 쓰기 불가</source>
         <translation>Cannot write while armed</translation>
     </message>
     <message>
-        <source>이 파라미터는 FC에 없어요</source>
+        <source>FC에 해당 파라미터 없음</source>
         <translation>This parameter is not on the FC</translation>
     </message>
     <message>
-        <source>숫자를 넣어 주세요</source>
+        <source>숫자 입력</source>
         <translation>Enter a number</translation>
     </message>
     <message>
-        <source>정수를 넣어 주세요</source>
+        <source>정수 입력</source>
         <translation>Enter a whole number</translation>
     </message>
     <message>
-        <source>이 파라미터가 담을 수 없는 값이에요</source>
+        <source>이 파라미터에 저장할 수 없는 값</source>
         <translation>This parameter cannot hold that value</translation>
     </message>
     <message>
-        <source>읽기 전용이에요</source>
+        <source>읽기 전용 파라미터</source>
         <translation>This parameter is read-only</translation>
     </message>
     <message>
-        <source>파일을 열지 못했어요</source>
+        <source>파일 열기 실패</source>
         <translation>Could not open the file</translation>
     </message>
     <message>
-        <source>파일에 읽을 값이 없어요</source>
+        <source>파일에 읽을 값 없음</source>
         <translation>The file has no values to read</translation>
     </message>
     <message>
-        <source>파일을 저장하지 못했어요</source>
+        <source>파일 저장 실패</source>
         <translation>Could not save the file</translation>
     </message>
     <message>
-        <source>다른 작업이 끝난 뒤 다시 해 주세요</source>
+        <source>현재 작업 완료 후 재시도</source>
         <translation>Try again after the current task finishes</translation>
     </message>
     <message>
-        <source>FC가 재부팅을 거부했어요</source>
+        <source>FC가 재부팅 거부</source>
         <translation>The FC refused to reboot</translation>
     </message>
     <message>
-        <source>재부팅을 보냈어요</source>
+        <source>재부팅 명령 전송됨</source>
         <translation>Reboot sent</translation>
     </message>
     <message>
-        <source>%1개를 썼어요</source>
+        <source>%1개 쓰기 완료</source>
         <translation>Wrote %1 values</translation>
     </message>
     <message>
@@ -2541,11 +2548,11 @@
         <translation> and %1 more</translation>
     </message>
     <message>
-        <source>%1개를 썼어요. %2개는 쓰지 못했어요: %3</source>
+        <source>%1개 쓰기 완료. %2개 쓰기 실패: %3</source>
         <translation>Wrote %1 values. Could not write %2: %3</translation>
     </message>
     <message>
-        <source>바뀌는 값 %1 · 같은 값 %2 · FC에 없음 %3 · 읽기 전용 %4 · 건너뜀 %5</source>
+        <source>변경 %1 · 동일 %2 · FC에 없음 %3 · 읽기 전용 %4 · 건너뜀 %5</source>
         <translation>Changed %1 · Same %2 · Not on FC %3 · Read-only %4 · Skipped %5</translation>
     </message>
     <message>
@@ -2553,11 +2560,11 @@
         <translation> · Unreadable lines %1</translation>
     </message>
     <message>
-        <source>파일로 저장했어요</source>
+        <source>파일 저장 완료</source>
         <translation>Saved to file</translation>
     </message>
     <message>
-        <source>%1개를 썼어요. 시동이 걸려 멈췄어요.</source>
+        <source>%1개 쓰기 완료. 기체 시동으로 중단</source>
         <translation>Wrote %1 values. Stopped because the vehicle was armed.</translation>
     </message>
     <message>
@@ -2576,23 +2583,23 @@
 <context>
     <name>ParamsPanel</name>
     <message>
-        <source>기체를 연결하면 파라미터가 보여요</source>
+        <source>기체 연결 후 파라미터 확인 가능</source>
         <translation>Connect a vehicle to see its parameters</translation>
     </message>
     <message>
-        <source>FC가 파라미터를 다 보내지 않았어요</source>
+        <source>FC가 파라미터 일부 미전송</source>
         <translation>The FC did not send all parameters</translation>
     </message>
     <message>
-        <source>FC가 파라미터를 다 보내지 않았어요 (%1/%2)</source>
+        <source>FC가 파라미터 일부 미전송 (%1/%2)</source>
         <translation>The FC did not send all parameters (%1/%2)</translation>
     </message>
     <message>
-        <source>시동 중이라 파라미터를 받지 않았어요. 새로고침을 누르면 받아요.</source>
+        <source>시동 중 파라미터 받기 생략. 새로고침으로 받기</source>
         <translation>Parameters were not downloaded while armed. Press Refresh to download them.</translation>
     </message>
     <message>
-        <source>재부팅해야 적용되는 값이 있어요</source>
+        <source>일부 값은 재부팅해야 적용</source>
         <translation>Some values need a reboot to take effect</translation>
     </message>
     <message>
@@ -2608,7 +2615,7 @@
         <translation>Different from default</translation>
     </message>
     <message>
-        <source>설명을 받지 못했어요</source>
+        <source>설명 받기 실패</source>
         <translation>Could not download descriptions</translation>
     </message>
     <message>
@@ -2616,7 +2623,7 @@
         <translation>%1 items</translation>
     </message>
     <message>
-        <source>FC를 재부팅할까요?</source>
+        <source>FC를 재부팅하시겠습니까?</source>
         <translation>Reboot the FC?</translation>
     </message>
     <message>
@@ -2639,7 +2646,7 @@
 <context>
     <name>WriteConfirmDialog</name>
     <message>
-        <source>값 %1개를 쓸까요?</source>
+        <source>값 %1개를 쓰시겠습니까?</source>
         <translation>Write %1 values?</translation>
     </message>
     <message>
@@ -2655,7 +2662,7 @@
         <translation>New value</translation>
     </message>
     <message>
-        <source>쓰기 전에 전체 값을 백업해요.</source>
+        <source>쓰기 전 전체 값 자동 백업</source>
         <translation>All values are backed up before writing.</translation>
     </message>
     <message>
@@ -2670,31 +2677,31 @@
 <context>
     <name>Sitl</name>
     <message>
-        <source>연결을 끊은 뒤 시작할 수 있어요</source>
+        <source>연결 해제 후 시작 가능</source>
         <translation>Disconnect first, then you can start</translation>
     </message>
     <message>
-        <source>UDP 14550을 열지 못했어요. 다른 프로그램이 쓰고 있는지 확인해 주세요</source>
+        <source>UDP 14550 열기 실패. 다른 프로그램이 사용 중인지 확인</source>
         <translation>Could not open UDP 14550. Check whether another program is using it</translation>
     </message>
     <message>
-        <source>SITL 파일을 받지 못했어요. 인터넷 연결을 확인해 주세요</source>
+        <source>SITL 파일 받기 실패. 인터넷 연결 확인</source>
         <translation>Could not download the SITL files. Check your internet connection</translation>
     </message>
     <message>
-        <source>시뮬레이터를 실행하지 못했어요</source>
+        <source>시뮬레이터 실행 실패</source>
         <translation>Could not run the simulator</translation>
     </message>
     <message>
-        <source>시뮬레이터가 멈췄어요</source>
+        <source>시뮬레이터가 멈춤</source>
         <translation>The simulator stopped</translation>
     </message>
     <message>
-        <source>홈 위치가 범위를 벗어났어요</source>
+        <source>홈 위치 범위 밖</source>
         <translation>The home location is out of range</translation>
     </message>
     <message>
-        <source>다른 작업이 끝난 뒤 다시 해 주세요</source>
+        <source>다른 작업 완료 후 재시도</source>
         <translation>Try again after the other task finishes</translation>
     </message>
     <message>
@@ -2709,7 +2716,7 @@
         <translation>Simulation</translation>
     </message>
     <message>
-        <source>ArduPilot SITL을 내려받아 이 PC에서 실행해요.</source>
+        <source>ArduPilot SITL을 받아 이 PC에서 실행</source>
         <translation>Downloads ArduPilot SITL and runs it on this PC.</translation>
     </message>
     <message>
@@ -2725,7 +2732,7 @@
         <translation>Wipe saved parameters on start</translation>
     </message>
     <message>
-        <source>기본 파라미터로 처음부터 시작해요</source>
+        <source>기본 파라미터로 처음부터 시작</source>
         <translation>Starts fresh with the default parameters</translation>
     </message>
 </context>
@@ -2802,7 +2809,7 @@
 <context>
     <name>SitlStatus</name>
     <message>
-        <source>다른 연결이 열려 있어요. 연결을 끊은 뒤 시작할 수 있어요.</source>
+        <source>다른 연결 사용 중. 연결 해제 후 시작 가능</source>
         <translation>Another connection is open. Disconnect it to start.</translation>
     </message>
     <message>
@@ -2810,7 +2817,7 @@
         <translation>Downloading</translation>
     </message>
     <message>
-        <source>시작하는 중</source>
+        <source>시작 중</source>
         <translation>Starting</translation>
     </message>
     <message>
@@ -2818,7 +2825,7 @@
         <translation>Running</translation>
     </message>
     <message>
-        <source>멈췄어요</source>
+        <source>비정상 종료</source>
         <translation>Stopped unexpectedly</translation>
     </message>
     <message>
@@ -2826,11 +2833,11 @@
         <translation>Stopped</translation>
     </message>
     <message>
-        <source>UDP 14550으로 연결했어요</source>
+        <source>UDP 14550으로 연결됨</source>
         <translation>Connected over UDP 14550</translation>
     </message>
     <message>
-        <source>연결이 끊겼어요</source>
+        <source>연결 끊김</source>
         <translation>Disconnected</translation>
     </message>
     <message>
@@ -2838,11 +2845,11 @@
         <translation>Downloaded: %1</translation>
     </message>
     <message>
-        <source>처음 시작하면 파일을 내려받아요 (약 15 MB)</source>
+        <source>처음 시작 시 파일 받기 (약 15 MB)</source>
         <translation>Files are downloaded on the first start (about 15 MB)</translation>
     </message>
     <message>
-        <source>다시 연결</source>
+        <source>재연결</source>
         <translation>Reconnect</translation>
     </message>
     <message>
@@ -2865,7 +2872,7 @@
         <translation>Simulator output</translation>
     </message>
     <message>
-        <source>시작하면 여기에 시뮬레이터 출력이 보여요.</source>
+        <source>시작 후 여기에 시뮬레이터 출력 표시</source>
         <translation>Simulator output appears here after you start.</translation>
     </message>
 </context>
@@ -2887,27 +2894,27 @@
         <translation>Road</translation>
     </message>
     <message>
-        <source>한 번에 100,000개까지 받을 수 있어요. 영역이나 확대 범위를 줄여 주세요.</source>
+        <source>한 번에 최대 타일 100,000개. 영역이나 확대 범위 축소 필요</source>
         <translation>Up to 100,000 tiles at a time. Make the area or zoom range smaller.</translation>
     </message>
     <message>
-        <source>확대 범위가 맞지 않아요</source>
+        <source>잘못된 확대 범위</source>
         <translation>The zoom range is not valid</translation>
     </message>
     <message>
-        <source>다른 영역을 받는 중이에요</source>
+        <source>다른 영역 받는 중</source>
         <translation>Another area is downloading</translation>
     </message>
     <message>
-        <source>타일을 받지 못했어요</source>
+        <source>타일 받기 실패</source>
         <translation>Could not download the tiles</translation>
     </message>
     <message>
-        <source>지도 저장소를 쓰지 못했어요</source>
+        <source>지도 저장소 사용 실패</source>
         <translation>Could not use the map store</translation>
     </message>
     <message>
-        <source>타일 %1개를 받지 못했어요</source>
+        <source>타일 %1개 받기 실패</source>
         <translation>Could not download %1 tile(s)</translation>
     </message>
 </context>
@@ -2967,7 +2974,7 @@
     </message>
     <message>
         <location filename="../src/features/map/ui/MapDownloadCard.qml" line="70"/>
-        <source>저장한 지도 %1 · 미리 받은 것 %2</source>
+        <source>저장 지도 %1 · 받은 지도 %2</source>
         <translation>Saved maps %1 · Downloaded %2</translation>
     </message>
     <message>
@@ -2977,7 +2984,7 @@
     </message>
     <message>
         <location filename="../src/features/map/ui/MapDownloadCard.qml" line="107"/>
-        <source>지도에서 끌어서 영역을 고르세요</source>
+        <source>지도에서 끌어서 영역 선택</source>
         <translation>Drag on the map to choose an area</translation>
     </message>
     <message>
@@ -3003,7 +3010,7 @@
     </message>
     <message>
         <location filename="../src/features/map/ui/MapDownloadCard.qml" line="173"/>
-        <source>지금 지도 종류(%1)로 받아요</source>
+        <source>현재 지도 종류(%1)로 받기</source>
         <translation>Downloads the current map type (%1)</translation>
     </message>
     <message>
@@ -3034,7 +3041,7 @@
     <name>kgc::map::MapController</name>
     <message>
         <location filename="../src/features/map/ui/MapController.cpp" line="152"/>
-        <source>다 받았어요</source>
+        <source>받기 완료</source>
         <translation>Download complete</translation>
     </message>
 </context>
@@ -3057,27 +3064,27 @@
         <translation>Mode: —</translation>
     </message>
     <message>
-        <source>기체 설정 %1(%2 m)까지 올라가요</source>
+        <source>기체 설정 %1(%2 m)까지 상승</source>
         <translation>Climbs to the vehicle setting %1 (%2 m)</translation>
     </message>
     <message>
-        <source>기체 설정 %1까지 올라가요</source>
+        <source>기체 설정 %1까지 상승</source>
         <translation>Climbs to the vehicle setting %1</translation>
     </message>
     <message>
-        <source>도착하면 그 자리를 돌아요</source>
+        <source>도착 후 목표 지점 선회</source>
         <translation>Circles the point on arrival</translation>
     </message>
     <message>
-        <source>도착하면 그 자리에 떠 있어요</source>
+        <source>도착 후 제자리 정지</source>
         <translation>Hovers at the point on arrival</translation>
     </message>
     <message>
-        <source>기체에서 %1 m 안까지만 갈 수 있어요</source>
+        <source>기체에서 %1 m 이내만 이동 가능</source>
         <translation>Only places within %1 m of the vehicle</translation>
     </message>
     <message>
-        <source>고도는 %1~%2 m 사이로 넣어 주세요</source>
+        <source>고도 %1~%2 m 입력</source>
         <translation>Enter an altitude from %1 to %2 m</translation>
     </message>
     <message>
@@ -3093,115 +3100,115 @@
         <translation>Vehicle: %1</translation>
     </message>
     <message>
-        <source>시동을 걸지 못했어요</source>
+        <source>시동 실패</source>
         <translation>Could not arm</translation>
     </message>
     <message>
-        <source>시동을 끄지 못했어요</source>
+        <source>시동 끄기 실패</source>
         <translation>Could not disarm</translation>
     </message>
     <message>
-        <source>비상 정지하지 못했어요</source>
+        <source>비상 정지 실패</source>
         <translation>Emergency stop failed</translation>
     </message>
     <message>
-        <source>이륙하지 못했어요</source>
+        <source>이륙 실패</source>
         <translation>Could not take off</translation>
     </message>
     <message>
-        <source>착륙을 시작하지 못했어요</source>
+        <source>착륙 시작 실패</source>
         <translation>Could not start landing</translation>
     </message>
     <message>
-        <source>RTL을 시작하지 못했어요</source>
+        <source>RTL 시작 실패</source>
         <translation>Could not start RTL</translation>
     </message>
     <message>
-        <source>일시정지하지 못했어요</source>
+        <source>일시정지 실패</source>
         <translation>Could not pause</translation>
     </message>
     <message>
-        <source>모드를 바꾸지 못했어요</source>
+        <source>모드 변경 실패</source>
         <translation>Could not change the mode</translation>
     </message>
     <message>
-        <source>그곳으로 가지 못했어요</source>
+        <source>목표 이동 실패</source>
         <translation>Could not go there</translation>
     </message>
     <message>
-        <source>기체와 연결이 없어요</source>
+        <source>기체 연결 없음</source>
         <translation>The vehicle is not connected</translation>
     </message>
     <message>
-        <source>기체가 응답하지 않았어요</source>
+        <source>기체 응답 없음</source>
         <translation>The vehicle did not respond</translation>
     </message>
     <message>
-        <source>기체가 거부했어요</source>
+        <source>기체가 거부</source>
         <translation>The vehicle refused</translation>
     </message>
     <message>
-        <source>기체가 이 명령을 지원하지 않아요</source>
+        <source>기체가 지원하지 않는 명령</source>
         <translation>The vehicle does not support this command</translation>
     </message>
     <message>
-        <source>기체가 지금은 받을 수 없다고 했어요</source>
+        <source>기체가 현재 수락 불가</source>
         <translation>The vehicle cannot accept it right now</translation>
     </message>
     <message>
-        <source>기체가 실행하지 못했어요</source>
+        <source>기체에서 실행 안 됨</source>
         <translation>The vehicle could not carry it out</translation>
     </message>
     <message>
-        <source>기체 모드가 바뀌지 않았어요</source>
+        <source>기체 모드 변경 안 됨</source>
         <translation>The vehicle mode did not change</translation>
     </message>
     <message>
-        <source>기체 시동 상태가 바뀌지 않았어요</source>
+        <source>기체 시동 상태 변경 안 됨</source>
         <translation>The vehicle arming state did not change</translation>
     </message>
     <message>
-        <source>기체가 목표를 받지 않았어요</source>
+        <source>기체가 목표 미수락</source>
         <translation>The vehicle did not take the target</translation>
     </message>
     <message>
-        <source>다른 비행 명령을 보내는 중이에요</source>
+        <source>다른 비행 명령 진행 중</source>
         <translation>Another flight command is in progress</translation>
     </message>
     <message>
-        <source>지금은 할 수 없어요</source>
+        <source>현재 불가</source>
         <translation>Not possible right now</translation>
     </message>
     <message>
-        <source>홈 고도를 아직 몰라요</source>
+        <source>홈 고도 아직 모름</source>
         <translation>The home altitude is not known yet</translation>
     </message>
     <message>
-        <source>기체 위치를 아직 몰라요</source>
+        <source>기체 위치 아직 모름</source>
         <translation>The vehicle position is not known yet</translation>
     </message>
     <message>
-        <source>기체에서 너무 멀어요</source>
+        <source>기체에서 너무 먼 위치</source>
         <translation>Too far from the vehicle</translation>
     </message>
     <message>
-        <source>고도가 허용 범위 밖이에요</source>
+        <source>고도 허용 범위 밖</source>
         <translation>The altitude is outside the allowed range</translation>
     </message>
     <message>
-        <source>시동 끄기나 비상 정지 때문에 멈췄어요</source>
+        <source>시동 끄기 또는 비상 정지로 중단</source>
         <translation>Stopped by a disarm or emergency stop</translation>
     </message>
     <message>
-        <source>지금은 이 명령을 보낼 수 없어요</source>
+        <source>현재 이 명령 전송 불가</source>
         <translation>This command cannot be sent now</translation>
     </message>
     <message>
-        <source>기체가 사라졌어요</source>
+        <source>기체 사라짐</source>
         <translation>The vehicle is gone</translation>
     </message>
     <message>
-        <source>기체가 목표를 받았지만 모드는 그대로예요. 그곳으로 갈 수 있어요</source>
+        <source>기체가 목표 수락, 모드는 유지. 목표로 비행할 수도 있음</source>
         <translation>The vehicle took the target but kept its mode. It may fly there</translation>
     </message>
 </context>
@@ -3267,7 +3274,7 @@
         <translation>Emergency stop</translation>
     </message>
     <message>
-        <source>모터를 바로 꺼요. 공중이면 떨어져요.</source>
+        <source>모터 즉시 정지. 공중이면 추락</source>
         <translation>Stops the motors at once. In the air, the vehicle falls.</translation>
     </message>
 </context>

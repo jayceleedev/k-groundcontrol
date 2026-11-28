@@ -32,7 +32,7 @@ void ParamDownload::start(kgc::app::job::Job* job)
     total_ = 0;
     listRetries_ = 0;
     started_ = false;
-    job->setStep(QString::fromUtf8(QT_TRANSLATE_NOOP("Job", "내려받기")));
+    job->setStep(QString::fromUtf8(QT_TRANSLATE_NOOP("Job", "받기")));
     job->setProgress(0.0);
     job->setCancellable(true);
     connect(job, &kgc::app::job::Job::cancelRequested, this, [this] {

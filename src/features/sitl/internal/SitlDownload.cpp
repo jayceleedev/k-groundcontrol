@@ -54,7 +54,7 @@ kgc::app::job::Job* SitlDownload::job() const { return job_; }
 void SitlDownload::start()
 {
     KGC_LOG_INFO(kCategory, SitlEvent::SitlDownloadStarted, "SITL download started: %1", folderName_);
-    job_->setStep(QT_TRANSLATE_NOOP("Job", "내려받기"));
+    job_->setStep(QT_TRANSLATE_NOOP("Job", "받기"));
     job_->setCancellable(true);
     job_->setProgress(0);
     // 받는 중의 파일은 캐시 폴더 옆 .part-<무작위> 폴더에 두어 기존 캐시를 그대로 둬요.

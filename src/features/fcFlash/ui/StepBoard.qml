@@ -59,11 +59,11 @@ Column {
         font.pixelSize: Theme.fontSize
         text: {
             switch (root.phase) {
-            case FlashStates.Idle: return qsTr("앱이 FC를 부트로더로 넣고 보드 정보를 읽어요.")
-            case FlashStates.Probing: return qsTr("포트를 확인하고 있어요")
-            case FlashStates.Rebooting: return qsTr("FC를 부트로더로 넣고 있어요")
-            case FlashStates.WaitReplug: return qsTr("USB를 뽑았다가 다시 꽂아요 · %1초").arg(FcFlashController.secondsLeft)
-            case FlashStates.PickPort: return qsTr("부트로더 포트가 둘 이상이에요. 하나를 골라요.")
+            case FlashStates.Idle: return qsTr("앱이 FC 부트로더 진입 후 보드 정보 읽기")
+            case FlashStates.Probing: return qsTr("포트 확인 중")
+            case FlashStates.Rebooting: return qsTr("FC 부트로더 진입 중")
+            case FlashStates.WaitReplug: return qsTr("USB 분리 후 재연결 · %1초").arg(FcFlashController.secondsLeft)
+            case FlashStates.PickPort: return qsTr("부트로더 포트 여러 개 발견. 하나 선택")
             default: return ""
             }
         }

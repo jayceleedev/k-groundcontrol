@@ -141,7 +141,7 @@ Column {
                 text: matchInfo.matched.length === 1
                     ? qsTr("보드 이름 %1에 맞는 빌드: %2").arg(FcFlashController.usbName)
                         .arg(FcFlashController.candidates[matchInfo.matched[0]] ?? "")
-                    : qsTr("보드 이름 %1에 맞는 빌드가 %2개예요. 하나를 골라요.").arg(FcFlashController.usbName).arg(matchInfo.matched.length)
+                    : qsTr("보드 이름 %1에 맞는 빌드 %2개. 하나 선택").arg(FcFlashController.usbName).arg(matchInfo.matched.length)
                 color: Theme.ink
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSize
@@ -151,11 +151,11 @@ Column {
             width: parent.width
             visible: FcFlashController.matchKind === FlashStates.NoMatch
             closable: false; level: "warn"
-            text: qsTr("공식 목록에 %1 빌드가 없어요. 아래에서 직접 고르거나 파일을 골라요.").arg(FcFlashController.usbName)
+            text: qsTr("공식 목록에 %1 빌드 없음. 아래에서 선택 또는 내 PC 파일 선택").arg(FcFlashController.usbName)
         }
         Text {
             visible: FcFlashController.matchKind === FlashStates.NoName && FcFlashController.candidates.length > 1
-            text: qsTr("맞는 펌웨어 %1개. 직접 골라요.").arg(FcFlashController.candidates.length)
+            text: qsTr("맞는 펌웨어 %1개. 하나 선택").arg(FcFlashController.candidates.length)
             color: Theme.inkMuted
             font.pixelSize: Theme.fontSize
         }
@@ -165,8 +165,8 @@ Column {
             && (FcFlashController.listFailed || FcFlashController.candidates.length === 0)
         level: "warn"
         text: FcFlashController.listFailed
-            ? qsTr("목록을 받지 못했어요. 인터넷을 확인하거나 파일을 직접 골라요.")
-            : qsTr("공식 목록에 이 보드용 펌웨어가 없어요. 파일을 직접 골라요.")
+            ? qsTr("목록 받기 실패. 인터넷 연결 확인 또는 내 PC 파일 선택")
+            : qsTr("이 보드용 공식 펌웨어 없음. 내 PC 파일 선택")
     }
     RowLayout {
         width: parent.width
@@ -196,7 +196,7 @@ Column {
     EmptyState {
         width: parent.width
         visible: root.listShown && root.rows.length === 0
-        title: qsTr("검색어와 맞는 보드가 없어요")
+        title: qsTr("검색어에 맞는 보드 없음")
     }
     FileField {
         objectName: "fcFlashFile"

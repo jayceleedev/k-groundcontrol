@@ -23,7 +23,7 @@ inline kgc::app::errors::ErrorCode make(OutboundError error) { return {kModuleId
 inline QString errorText(kgc::app::errors::ErrorCode error)
 {
     if (error == make(OutboundError::NoLink))
-        return QCoreApplication::translate("Outbound", QT_TRANSLATE_NOOP("Outbound", "보낼 수 있는 연결이 없어요."));
+        return QCoreApplication::translate("Outbound", QT_TRANSLATE_NOOP("Outbound", "전송 가능한 연결 없음"));
     return {};
 }
 }

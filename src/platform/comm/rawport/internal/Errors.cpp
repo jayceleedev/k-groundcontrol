@@ -6,10 +6,10 @@ QString errorText(kgc::app::errors::ErrorCode error)
 {
     if (error.module != kModuleId) return {};
     switch (static_cast<PortError>(error.code)) {
-    case PortError::Busy: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "다른 작업이 포트를 쓰고 있어요."));
-    case PortError::OpenFailed: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "포트를 잃었어요."));
-    case PortError::Lost: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "포트를 잃었어요."));
-    case PortError::Timeout: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "포트가 응답하지 않아요."));
+    case PortError::Busy: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "다른 작업이 포트 사용 중"));
+    case PortError::OpenFailed: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "포트 연결 끊김"));
+    case PortError::Lost: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "포트 연결 끊김"));
+    case PortError::Timeout: return QCoreApplication::translate("Port", QT_TRANSLATE_NOOP("Port", "포트 응답 없음"));
     }
     return {};
 }

@@ -67,7 +67,7 @@ Rectangle {
                 spacing: Theme.inset
                 Chip { visible: row.modelData.matched; text: qsTr("인식됨"); level: "ok" }
                 Chip {
-                    text: row.modelData.other ? qsTr("보드 ID %1 · 구울 수 없음").arg(row.modelData.boardId)
+                    text: row.modelData.other ? qsTr("보드 ID %1 · 굽기 불가").arg(row.modelData.boardId)
                         : qsTr("보드 ID %1").arg(row.modelData.boardId)
                     level: row.modelData.other ? "idle" : "ok"
                 }

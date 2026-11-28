@@ -68,7 +68,7 @@ Item {
             Text {
                 objectName: "mapStoreText"
                 width: parent.width
-                text: qsTr("저장한 지도 %1 · 미리 받은 것 %2").arg(MapController.storeTotalText).arg(MapController.storePinnedText)
+                text: qsTr("저장 지도 %1 · 받은 지도 %2").arg(MapController.storeTotalText).arg(MapController.storePinnedText)
                 color: Theme.inkMuted
                 font.pixelSize: Theme.fontSize
                 wrapMode: Text.Wrap
@@ -105,7 +105,7 @@ Item {
             Text {
                 objectName: "mapSelectHint"
                 width: parent.width
-                text: qsTr("지도에서 끌어서 영역을 고르세요")
+                text: qsTr("지도에서 끌어서 영역 선택")
                 color: Theme.inkMuted
                 font.pixelSize: Theme.fontSize
                 wrapMode: Text.Wrap
@@ -172,7 +172,7 @@ Item {
             Text {
                 objectName: "mapPlanType"
                 width: parent.width
-                text: qsTr("지금 지도 종류(%1)로 받아요").arg(qsTranslate("Map", MapController.mapTypeNames[MapController.mapType]))
+                text: qsTr("현재 지도 종류(%1)로 받기").arg(qsTranslate("Map", MapController.mapTypeNames[MapController.mapType]))
                 color: Theme.inkMuted
                 font.pixelSize: Theme.fontSize
                 wrapMode: Text.Wrap

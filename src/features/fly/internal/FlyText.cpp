@@ -63,15 +63,15 @@ QString actionFailureText(FlyActionKind kind)
 {
     const char* key = nullptr;
     switch (kind) {
-    case FlyActionKind::Arm: key = QT_TRANSLATE_NOOP("Fly", "시동을 걸지 못했어요"); break;
-    case FlyActionKind::Disarm: key = QT_TRANSLATE_NOOP("Fly", "시동을 끄지 못했어요"); break;
-    case FlyActionKind::EmergencyStop: key = QT_TRANSLATE_NOOP("Fly", "비상 정지하지 못했어요"); break;
-    case FlyActionKind::Takeoff: key = QT_TRANSLATE_NOOP("Fly", "이륙하지 못했어요"); break;
-    case FlyActionKind::Land: key = QT_TRANSLATE_NOOP("Fly", "착륙을 시작하지 못했어요"); break;
-    case FlyActionKind::Rtl: key = QT_TRANSLATE_NOOP("Fly", "RTL을 시작하지 못했어요"); break;
-    case FlyActionKind::Pause: key = QT_TRANSLATE_NOOP("Fly", "일시정지하지 못했어요"); break;
-    case FlyActionKind::SetMode: key = QT_TRANSLATE_NOOP("Fly", "모드를 바꾸지 못했어요"); break;
-    case FlyActionKind::GoTo: key = QT_TRANSLATE_NOOP("Fly", "그곳으로 가지 못했어요"); break;
+    case FlyActionKind::Arm: key = QT_TRANSLATE_NOOP("Fly", "시동 실패"); break;
+    case FlyActionKind::Disarm: key = QT_TRANSLATE_NOOP("Fly", "시동 끄기 실패"); break;
+    case FlyActionKind::EmergencyStop: key = QT_TRANSLATE_NOOP("Fly", "비상 정지 실패"); break;
+    case FlyActionKind::Takeoff: key = QT_TRANSLATE_NOOP("Fly", "이륙 실패"); break;
+    case FlyActionKind::Land: key = QT_TRANSLATE_NOOP("Fly", "착륙 시작 실패"); break;
+    case FlyActionKind::Rtl: key = QT_TRANSLATE_NOOP("Fly", "RTL 시작 실패"); break;
+    case FlyActionKind::Pause: key = QT_TRANSLATE_NOOP("Fly", "일시정지 실패"); break;
+    case FlyActionKind::SetMode: key = QT_TRANSLATE_NOOP("Fly", "모드 변경 실패"); break;
+    case FlyActionKind::GoTo: key = QT_TRANSLATE_NOOP("Fly", "목표 이동 실패"); break;
     }
     return key ? QCoreApplication::translate("Fly", key) : QString{};
 }

@@ -60,7 +60,7 @@ private slots:
     /** T2: 계기 자리 오류 문구의 원문이 스펙 §5와 같고 번역 파일 문맥 "Ui"에 그 영어가 있는지 확인해요. */
     void test_T2_top_taken_text()
     {
-        const QString source = "우 사이드바 계기 자리는 하나만 쓸 수 있어요.";
+        const QString source = "우 사이드바 계기 자리는 한 항목만 사용 가능";
         QCOMPARE(kgc::ui::errorText(kgc::ui::make(UiError::TopTaken)), source);
         QCOMPARE(translationOf("Ui", source),
             QString("Only one item can use the right sidebar instrument area."));

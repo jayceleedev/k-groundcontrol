@@ -6,7 +6,7 @@ QString errorText(kgc::app::errors::ErrorCode error)
 {
     if (error.module != kModuleId) return {};
     switch (static_cast<JobError>(error.code)) {
-    case JobError::Cancelled: return QCoreApplication::translate("Job", QT_TRANSLATE_NOOP("Job", "취소했어요."));
+    case JobError::Cancelled: return QCoreApplication::translate("Job", QT_TRANSLATE_NOOP("Job", "취소 완료"));
     }
     return {};
 }

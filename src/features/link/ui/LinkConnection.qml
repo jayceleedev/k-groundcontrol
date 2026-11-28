@@ -15,8 +15,8 @@ Chip {
             if (LinkController.sysid < 0) {
                 if (LinkController.noVehicle)
                     return LinkController.serialLink
-                        ? qsTr("신호가 없어요. 포트와 속도를 확인해요")
-                        : qsTr("신호가 없어요. 기체가 14550으로 보내는지 확인해요")
+                        ? qsTr("신호 없음. 포트와 속도 확인")
+                        : qsTr("신호 없음. 기체가 14550으로 보내는지 확인")
                 return qsTr("기체 찾는 중")
             }
             if (LinkController.lost) return qsTr("기체 응답 없음")

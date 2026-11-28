@@ -85,7 +85,7 @@ Basic.Dialog {
         padding: Theme.panelInset
         ActionButton {
             objectName: "paramsCompareApply"
-            text: qsTr("고른 값 올리기")
+            text: qsTr("선택한 값 불러오기")
             enabled: dialog.rows.length > 0
             onClicked: {
                 ParamsController.applyFile(dialog.rows.map(row => row.name).filter(name => dialog.unchecked[name] !== true))

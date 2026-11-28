@@ -149,7 +149,7 @@ int FcFlashService::flashStage() const { return d_->flashStage; }
 QString FcFlashService::failureText() const
 {
     if (d_->error == make(FcFlashError::WrongBoard)) {
-        const auto format = QT_TRANSLATE_NOOP("FcFlash", "이 보드용 펌웨어가 아니에요: 보드 %1, 파일 %2");
+        const auto format = QT_TRANSLATE_NOOP("FcFlash", "다른 보드용 펌웨어: 보드 %1, 파일 %2");
         return QCoreApplication::translate("FcFlash", format).arg(d_->board.boardId).arg(d_->fileBoardId);
     }
     return errorText(d_->error);

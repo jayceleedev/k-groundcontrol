@@ -15,7 +15,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
             title: qsTr("기체 없음")
-            detail: qsTr("점검표는 기체 종류에 맞춰 골라져요. 기체가 연결되면 떠요.")
+            detail: qsTr("기체 연결 시 기체 종류에 맞는 점검표 표시")
         }
     }
 }

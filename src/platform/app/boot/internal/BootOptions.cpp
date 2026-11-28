@@ -20,7 +20,7 @@ BootOptions BootOptions::parse(const QStringList& args)
     parser.addOption({"extra-serial", QT_TRANSLATE_NOOP("BootOptions", "추가 시리얼 경로"), "path"});
     parser.addOption({"tile-host", QT_TRANSLATE_NOOP("BootOptions", "타일 서버 주소(시험용)"), "url"});
     parser.addOption({"tile-ca",
-        QT_TRANSLATE_NOOP("BootOptions", "타일 서버 인증서 PEM 파일(시험용, 이번 실행의 모든 HTTPS 요청이 믿음)"), "file"});
+        QT_TRANSLATE_NOOP("BootOptions", "타일 서버 인증서 PEM 파일(시험용, 이번 실행의 모든 HTTPS 요청에서 신뢰)"), "file"});
     parser.process(args);
     BootOptions options;
     options.extraSerial = parser.values("extra-serial");
@@ -29,7 +29,7 @@ BootOptions BootOptions::parse(const QStringList& args)
         const auto host = parseTileHost(value);
         if (!host)
             QCommandLineParser::showMessageAndExit(QCommandLineParser::MessageType::Error,
-                QString(QT_TRANSLATE_NOOP("BootOptions", "타일 주소는 https://호스트[:포트] 꼴이어야 함: %1")).arg(value), 1);
+                QString(QT_TRANSLATE_NOOP("BootOptions", "타일 주소는 https://호스트[:포트] 형식 필요: %1")).arg(value), 1);
         options.tileHost = *host;
     }
     options.tileCa = parser.value("tile-ca");
@@ -62,6 +62,6 @@ void BootOptions::exitBadCertificate(const QString& path)
 {
     // 번역기가 없는 부팅 단계라 다른 부팅 오류처럼 한국어 원문을 보여 줘요.
     QCommandLineParser::showMessageAndExit(QCommandLineParser::MessageType::Error,
-        QString(QT_TRANSLATE_NOOP("BootOptions", "시험용 인증서를 읽을 수 없음: %1")).arg(path), 1);
+        QString(QT_TRANSLATE_NOOP("BootOptions", "시험용 인증서 읽기 실패: %1")).arg(path), 1);
 }
 }

@@ -164,15 +164,15 @@ QString FlyController::takeoffFixedText() const
     if (!service_) return {};
     const auto caps = service_->capabilities();
     if (caps.takeoffFixedAltitudeM)
-        return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체 설정 %1(%2 m)까지 올라가요"))
+        return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체 설정 %1(%2 m)까지 상승"))
             .arg(caps.takeoffAltitudeParam, lengthNumber(*caps.takeoffFixedAltitudeM));
-    return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체 설정 %1까지 올라가요")).arg(caps.takeoffAltitudeParam);
+    return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체 설정 %1까지 상승")).arg(caps.takeoffAltitudeParam);
 }
 QString FlyController::goToHint() const
 {
     return service_ && service_->capabilities().loitersAtTarget
-        ? QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "도착하면 그 자리를 돌아요"))
-        : QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "도착하면 그 자리에 떠 있어요"));
+        ? QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "도착 후 목표 지점 선회"))
+        : QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "도착 후 제자리 정지"));
 }
 bool FlyController::canArm() const { return service_ && service_->readiness().arm; }
 bool FlyController::canDisarm() const { return service_ && service_->readiness().disarm; }
@@ -301,10 +301,10 @@ QString FlyController::goToProblem(double lat, double lon, double altitude) cons
     const auto check = service_->checkGoTo(lat, lon, altitude);
     if (check || check.error() == make(FlyError::NotReady)) return {};
     if (check.error() == make(FlyError::TooFar))
-        return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체에서 %1 m 안까지만 갈 수 있어요"))
+        return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체에서 %1 m 이내만 이동 가능"))
             .arg(lengthNumber(kgc::vehicle::safety::guidedLimits().maxDistanceM));
     if (check.error() == make(FlyError::AltitudeOutOfRange))
-        return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "고도는 %1~%2 m 사이로 넣어 주세요"))
+        return QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "고도 %1~%2 m 입력"))
             .arg(QString::number(guidedAltitudeFrom()), QString::number(guidedAltitudeTo()));
     return errorText(check.error());
 }

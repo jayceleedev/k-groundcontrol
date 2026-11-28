@@ -1,5 +1,6 @@
-// [0.6.0 T2] specs/features/0.6.0-fly.md
+// [0.6.0 §12 3 T2] specs/features/0.6.0-fly.md
 #include "updaters/FlightUpdater.h"
+#include "updaters/PositionUpdater.h"
 #include "updaters/NavTargetUpdater.h"
 #include "updaters/StatusTextUpdater.h"
 #include <QtTest>
@@ -114,6 +115,32 @@ private slots:
         const auto fullText = statusTextOf(fullMessage);
         QCOMPARE(fullText.text.size(), 50);
         QCOMPARE(fullText.text, QString(50, QChar('x')));
+    }
+    /** T2(§12 고침 3): GPS 고정 전 (0, 0) 근처 위치는 3D fix나 홈을 알 때까지 위도·경도만 버리고 나머지는 그대로 둬요. */
+    void test_T2_gate_position()
+    {
+        PositionBundle early;
+        early.latDeg = 0.0002982;
+        early.lonDeg = 0.0000568;
+        early.altRelM = 0.2;
+        const auto noFix = gatePosition(early, 1);
+        QVERIFY(std::isnan(noFix.latDeg));
+        QVERIFY(std::isnan(noFix.lonDeg));
+        QCOMPARE(noFix.altRelM, 0.2);
+        const auto unknownFix = gatePosition(early, -1);
+        QVERIFY(std::isnan(unknownFix.latDeg));
+        QVERIFY(std::isnan(unknownFix.lonDeg));
+        const auto fixed = gatePosition(early, 3);
+        QCOMPARE(fixed.latDeg, 0.0002982);
+        QCOMPARE(fixed.lonDeg, 0.0000568);
+        PositionBundle withHome;
+        withHome.latDeg = 35.1587;
+        withHome.lonDeg = 129.1604;
+        withHome.homeLatDeg = 35.1587;
+        withHome.homeLonDeg = 129.1604;
+        const auto kept = gatePosition(withHome, 0);
+        QCOMPARE(kept.latDeg, 35.1587);
+        QCOMPARE(kept.lonDeg, 129.1604);
     }
 };
 QTEST_GUILESS_MAIN(NavUpdatersTest)

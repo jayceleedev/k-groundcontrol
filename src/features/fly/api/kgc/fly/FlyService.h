@@ -1,3 +1,4 @@
+// [0.6.0 §12 2] specs/features/0.6.0-fly.md
 // [0.6.0 5.11.2 5.11.7] specs/features/0.6.0-fly.md
 #pragma once
 #include <kgc/fly/FlyTypes.h>
@@ -91,6 +92,8 @@ public:
  * 4. start — readiness().takeoff를 다시 보고(거짓이면 NotReady), 다른 비행 명령이 진행 중이면 Busy,
  *    ArmedPolicy::check(FlyAction)가 Deny면 PolicyDenied, 단계가 비면 Unsupported예요. 실패는 actionFinished로 큐를 거쳐 와요.
  * 5. FlyRunner — 단계마다 ACK와 모드·시동 확인을 기다리고 다음 단계를 보내요.
+ * 6. 이유 글 없이 실패하면(ArduPilot은 시동 거부 이유를 ACK 뒤에 보내요) FlyRunner가 1초(kReasonGrace) 더 듣고,
+ *    이유가 오면 actionReason으로 알려요.
  */
     void takeoff(double heightM);
 /** 착륙을 시작해요. 입력: 없어요. 출력: 결과는 actionFinished(Land)로 와요. 실패: 보내기 전 검사 실패도 actionFinished로 와요. */
@@ -153,9 +156,16 @@ signals:
  * 출력: 보통 동작마다 한 번이에요. 보내기 전 검사 실패도 큐를 거쳐 한 번 와요. 여기로 가기는 둘이 달라요:
  *       성공을 낸 뒤 5초 안 기체 목표가 다른 곳이면 TargetRejected로 한 번 더 와요. ModeNotChanged로 끝난 여기로 가기는
  *       그때 내지 않고 5초 지켜본 뒤 성공·TargetWithoutMode·ModeNotChanged 중 하나로 한 번 와요.
- * 실패: 없어요.
+ * 실패: 없어요. vehicleReason이 빈 실패 뒤 1초 안에 기체 이유가 오면 actionReason으로 따로 와요.
  */
     void actionFinished(kgc::fly::FlyActionKind kind, kgc::app::errors::Result<void> result, const QString& vehicleReason);
+/** 이유 없이 실패를 알린 동작의 기체 이유 글이 늦게 왔음을 알려요(ArduPilot은 시동 거부 이유를 ACK 뒤에 보내요).
+ * 입력: 실패한 동작 종류 kind와 기체 이유 글 reason(심각도 5 이하 STATUSTEXT)이에요.
+ * 출력: actionFinished의 vehicleReason이 비었던 실패 뒤 1초(kReasonGrace) 안에 온 첫 이유로 한 번이에요.
+ * 실패: 새 동작이 시작되거나 1초가 지나면 오지 않아요. ModeNotChanged로 지켜보는 여기로 가기는 이 신호 대신
+ *       지켜본 뒤의 actionFinished에 이유를 실어요.
+ */
+    void actionReason(kgc::fly::FlyActionKind kind, const QString& reason);
 private:
     void refresh();
     std::optional<double> paramValue(const QString& name) const;
@@ -173,5 +183,6 @@ private:
     bool busy_ = false;
     kgc::vehicle::firmware::LoiterCircle loiter_;
     QString pendingReason_;
+    bool goToWatching_ = false;
 };
 }

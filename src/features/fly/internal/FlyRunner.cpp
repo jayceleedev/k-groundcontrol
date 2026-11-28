@@ -1,3 +1,4 @@
+// [0.6.0 §12 2] specs/features/0.6.0-fly.md
 // [0.6.0 5.11.5] specs/features/0.6.0-fly.md
 #include "FlyRunner.h"
 #include "Constants.h"
@@ -18,12 +19,20 @@ bool modeMatches(const CommandStep& step, qint64 modeId)
 }
 }
 FlyRunner::FlyRunner(kgc::vehicle::registry::Vehicle& vehicle, QObject* parent)
-    : QObject(parent), vehicle_(vehicle), timeout_(new kgc::app::scheduler::Timeout(QStringLiteral("flyConfirm"), this))
+    : QObject(parent), vehicle_(vehicle), timeout_(new kgc::app::scheduler::Timeout(QStringLiteral("flyConfirm"), this)),
+      reasonGrace_(new kgc::app::scheduler::Timeout(QStringLiteral("flyReasonGrace"), this))
 {
     using kgc::vehicle::states::VehicleStates;
     connect(vehicle_.states(), &VehicleStates::vehicleMessage, this, [this](const kgc::vehicle::states::VehicleMessage& message) {
-        if (active_ && isReason(message)) reason_ = message.text;
+        if (!isReason(message)) return;
+        if (active_) { reason_ = message.text; return; }
+        // 실패가 끝난 뒤 1초 안에 온 첫 이유는 늦게 온 까닭으로 한 번만 알려요(§12 고침 2).
+        if (!lateListening_) return;
+        lateListening_ = false;
+        reasonGrace_->stop();
+        emit reasonArrived(lateKind_, message.text);
     });
+    connect(reasonGrace_, &kgc::app::scheduler::Timeout::expired, this, [this] { lateListening_ = false; });
     connect(vehicle_.states(), &VehicleStates::armingChanged, this, [this] {
         if (!waiting_ || !confirmed()) return;
         waiting_ = false;
@@ -43,6 +52,8 @@ void FlyRunner::start(FlyActionKind kind, QList<CommandStep> steps, bool preempt
 {
     // 남은 실행은 끼어든 명령에 밀린 것으로 먼저 끝내요(시동 끄기·비상 정지만 이렇게 불러요).
     if (active_) finish(std::unexpected(make(FlyError::Preempted)));
+    lateListening_ = false;
+    reasonGrace_->stop();
     ++run_;
     active_ = true;
     kind_ = kind;
@@ -112,6 +123,11 @@ void FlyRunner::finish(kgc::app::errors::Result<void> result)
     const QString reason = quiet ? QString{} : reason_;
     steps_.clear();
     reason_.clear();
+    // ArduPilot은 시동 거부 이유를 ACK 뒤에 보내므로, 이유 없이 실패했으면 kReasonGrace 동안 더 들어요.
+    lateListening_ = !quiet && reason.isEmpty();
+    lateKind_ = kind_;
+    if (lateListening_) reasonGrace_->start(kReasonGrace);
+    else reasonGrace_->stop();
     emit finished(kind_, result, reason);
 }
 }

@@ -1,4 +1,4 @@
-// [0.6.0 T5] specs/features/0.6.0-fly.md
+// [0.6.0 §12 1 T5] specs/features/0.6.0-fly.md
 #include <kgc/vehicle/firmware/FirmwarePlugin.h>
 #include <kgc/comm/mavlink/Mavlink.h>
 #include <QtTest>
@@ -9,7 +9,7 @@ using kgc::vehicle::firmware::vehicleClassOf;
 class VehicleClassTest : public QObject {
     Q_OBJECT
 private slots:
-    /** T5: type만으로 정하는 종류와, vtol_state 1~4가 고정익·멀티콥터·VTOL 종류를 VTOL로 바꾸는 규칙이에요. */
+    /** T5: type만으로 정하는 종류와, vtol_state 1~4가 고정익 type만 VTOL로 바꾸는 규칙이에요(멀티콥터 종류는 그대로 멀티콥터). */
     void test_T5_vehicle_class_of()
     {
         QCOMPARE(vehicleClassOf(MAV_TYPE_QUADROTOR, -1), VehicleClass::Multicopter);
@@ -22,9 +22,9 @@ private slots:
         QCOMPARE(vehicleClassOf(MAV_TYPE_GROUND_ROVER, -1), VehicleClass::Other);
         QCOMPARE(vehicleClassOf(MAV_TYPE_GENERIC, -1), VehicleClass::Unknown);
         QCOMPARE(vehicleClassOf(-1, -1), VehicleClass::Unknown);
-        QCOMPARE(vehicleClassOf(MAV_TYPE_QUADROTOR, 3), VehicleClass::Vtol);
-        QCOMPARE(vehicleClassOf(MAV_TYPE_HELICOPTER, 4), VehicleClass::Vtol);
-        QCOMPARE(vehicleClassOf(MAV_TYPE_COAXIAL, 1), VehicleClass::Vtol);
+        QCOMPARE(vehicleClassOf(MAV_TYPE_QUADROTOR, 3), VehicleClass::Multicopter);
+        QCOMPARE(vehicleClassOf(MAV_TYPE_HELICOPTER, 4), VehicleClass::Multicopter);
+        QCOMPARE(vehicleClassOf(MAV_TYPE_COAXIAL, 1), VehicleClass::Multicopter);
         QCOMPARE(vehicleClassOf(MAV_TYPE_QUADROTOR, 0), VehicleClass::Multicopter);
         QCOMPARE(vehicleClassOf(MAV_TYPE_VTOL_TILTROTOR, 0), VehicleClass::Vtol);
         QCOMPARE(vehicleClassOf(MAV_TYPE_GROUND_ROVER, 4), VehicleClass::Other);

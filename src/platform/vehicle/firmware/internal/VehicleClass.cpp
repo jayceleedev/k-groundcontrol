@@ -1,3 +1,4 @@
+// [0.6.0 §12 1] specs/features/0.6.0-fly.md
 // [0.6.0 5.5 T5] specs/features/0.6.0-fly.md
 #include <kgc/vehicle/firmware/FirmwarePlugin.h>
 #include <kgc/comm/mavlink/Mavlink.h>
@@ -26,10 +27,10 @@ bool isMulticopterType(int mavType)
 }
 VehicleClass vehicleClassOf(int mavType, int vtolState)
 {
-    // 쿼드플레인은 Q_MAV_TYPE에 따라 HEARTBEAT type이 고정익·멀티콥터·VTOL 종류 어느 것이든 될 수 있어서 vtol_state를 먼저 봐요.
-    // ArduCopter·PX4 멀티콥터는 vtol_state 0을 보내요.
-    const bool flyingType = mavType == MAV_TYPE_FIXED_WING || isMulticopterType(mavType) || isVtolType(mavType);
-    if (vtolState >= MAV_VTOL_STATE_TRANSITION_TO_FW && vtolState <= MAV_VTOL_STATE_FW && flyingType) return VehicleClass::Vtol;
+    // vtol_state는 고정익 type에서만 일반 Plane과 쿼드플레인을 갈라요(QGC와 같은 규칙).
+    // 멀티콥터 종류는 vtol_state를 보지 않아요 — ArduCopter는 늘 3(MC)을 보내요(GCS_MAVLink_Copter.h).
+    const bool vtolFlying = vtolState >= MAV_VTOL_STATE_TRANSITION_TO_FW && vtolState <= MAV_VTOL_STATE_FW;
+    if (vtolFlying && mavType == MAV_TYPE_FIXED_WING) return VehicleClass::Vtol;
     if (mavType == MAV_TYPE_FIXED_WING) return VehicleClass::FixedWing;
     if (isVtolType(mavType)) return VehicleClass::Vtol;
     if (isMulticopterType(mavType)) return VehicleClass::Multicopter;

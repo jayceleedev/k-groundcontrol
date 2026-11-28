@@ -1,3 +1,4 @@
+// [0.6.0 §12 3] specs/features/0.6.0-fly.md
 // [0.5.0 S3 T5] specs/features/0.5.0-map.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
@@ -8,6 +9,7 @@ namespace kgc::vehicle::states {
 /** 기체 위치와 속도를 화면에서 쓰는 단위로 전달해요.
  * 입력: GLOBAL_POSITION_INT에서 변환한 위치·고도·수평 속도·상승률·헤딩이에요. 홈 세 필드는 HOME_POSITION에서 와요.
  * 출력: 위경도와 헤딩은 도, 고도는 미터, 속도는 초당 미터이며 모르는 값은 NaN이에요. 홈 고도는 AMSL 미터예요.
+ *       위경도는 3D GPS를 잡았거나 홈을 안 뒤에만 채워요(그 전 (0, 0) 근처 값은 NaN, gatePosition).
  * 실패: 없어요.
  */
 struct PositionBundle {

@@ -1,7 +1,9 @@
+// [0.6.0 §12 3] specs/features/0.6.0-fly.md
 // [0.5.0 S3 T5] specs/features/0.5.0-map.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #include "PositionUpdater.h"
 #include "Constants.h"
+#include <kgc/app/geo/Geodesy.h>
 #include <cmath>
 #include <limits>
 namespace kgc::vehicle::states {
@@ -19,5 +21,13 @@ PositionBundle updatePosition(const mavlink_message_t& message, PositionBundle c
     current.headingDeg = position.hdg != kUnknownUnsigned16 ? position.hdg / kCentimetresPerMetre
                                                             : std::numeric_limits<double>::quiet_NaN();
     return current;
+}
+PositionBundle gatePosition(PositionBundle position, int fixType)
+{
+    // 홈을 알면 GPS를 잠깐 잃어도 위치는 그대로 둬요.
+    if (fixType >= kPositionFixMin || kgc::app::geo::isKnownPosition(position.homeLatDeg, position.homeLonDeg)) return position;
+    position.latDeg = std::numeric_limits<double>::quiet_NaN();
+    position.lonDeg = std::numeric_limits<double>::quiet_NaN();
+    return position;
 }
 }

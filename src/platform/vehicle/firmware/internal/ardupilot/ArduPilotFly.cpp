@@ -1,3 +1,4 @@
+// [0.6.0 §12 1] specs/features/0.6.0-fly.md
 // [0.6.0 5.5 T6 T7] specs/features/0.6.0-fly.md
 #include "ArduPilotPlugin.h"
 #include "Constants.h"
@@ -31,9 +32,10 @@ QList<MessageInterval> ArduPilotPlugin::messageIntervals() const
 }
 bool ArduPilotPlugin::vtolStateDecidesClass(int mavType) const
 {
-    // 쿼드플레인이 Q_MAV_TYPE에 따라 HEARTBEAT로 낼 수 있는 type이에요(Plane 4.7.3 quadplane.cpp).
+    // 고정익은 일반 Plane과 쿼드플레인을 가르고, VTOL 19~21은 모양을 정하려고 비행 상태가 필요해요.
+    // 쿼드·동축·헬리는 ArduCopter로 봐요(Q_MAV_TYPE 2·3·4 쿼드플레인도 멀티콥터로 보여요, QGC와 같음).
     switch (mavType) {
-    case MAV_TYPE_FIXED_WING: case MAV_TYPE_QUADROTOR: case MAV_TYPE_COAXIAL: case MAV_TYPE_HELICOPTER:
+    case MAV_TYPE_FIXED_WING:
     case MAV_TYPE_VTOL_TAILSITTER_DUOROTOR: case MAV_TYPE_VTOL_TAILSITTER_QUADROTOR: case MAV_TYPE_VTOL_TILTROTOR:
         return true;
     default:

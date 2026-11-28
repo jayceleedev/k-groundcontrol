@@ -1,3 +1,4 @@
+// [0.6.0 §12 2] specs/features/0.6.0-fly.md
 // [0.6.0 5.11.7] specs/features/0.6.0-fly.md
 #include <kgc/fly/FlyService.h>
 #include "Events.h"
@@ -39,6 +40,14 @@ FlyService::FlyService(kgc::vehicle::registry::Vehicle& vehicle, kgc::vehicle::s
         connect(model, &QAbstractItemModel::rowsInserted, this, &FlyService::refresh);
     }
     connect(runner_, &FlyRunner::finished, this, &FlyService::onRunnerFinished);
+    connect(runner_, &FlyRunner::reasonArrived, this, [this](FlyActionKind kind, const QString& reason) {
+        // ModeNotChanged로 5초 지켜보는 여기로 가기는 그 결과에 이유를 실어 보내므로 거기에만 넣어요(§12 고침 2).
+        if (kind == FlyActionKind::GoTo && goToWatching_) {
+            if (pendingReason_.isEmpty()) pendingReason_ = reason;
+            return;
+        }
+        emit actionReason(kind, reason);
+    });
     connect(tracker_, &GoToTracker::changed, this, [this] { emit targetChanged(); refresh(); });
     connect(tracker_, &GoToTracker::watchEnded, this, &FlyService::onWatchEnded);
     connect(tracker_, &GoToTracker::rejected, this, [this](const QString& reason) {
@@ -248,7 +257,7 @@ void FlyService::onRunnerFinished(FlyActionKind kind, kgc::app::errors::Result<v
     const bool modeMissed = kind == FlyActionKind::GoTo && !result && result.error() == make(FlyError::ModeNotChanged);
     if (kind == FlyActionKind::GoTo) {
         if (result) tracker_->accept();
-        else if (modeMissed) { tracker_->watch(); pendingReason_ = reason; }
+        else if (modeMissed) { tracker_->watch(); pendingReason_ = reason; goToWatching_ = true; }
         else tracker_->fail();
     } else if (result && kind != FlyActionKind::Arm && kind != FlyActionKind::SetMode) {
         // PX4 일시정지도 Hold라서 다른 동작이 성공하면 목표를 따로 지워요.
@@ -271,6 +280,7 @@ void FlyService::onWatchEnded(bool kept)
         emit actionFinished(FlyActionKind::GoTo, std::unexpected(error), pendingReason_);
     }
     pendingReason_.clear();
+    goToWatching_ = false;
     refresh();
 }
 }

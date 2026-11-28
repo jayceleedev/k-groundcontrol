@@ -1,3 +1,4 @@
+// [0.6.0 §12 2] specs/features/0.6.0-fly.md
 // [0.6.0 5.11.8] specs/features/0.6.0-fly.md
 #pragma once
 #include <kgc/fly/FlyService.h>
@@ -9,12 +10,14 @@
 #include <QPointer>
 #include <QQmlEngine>
 #include <QVariantList>
+#include <optional>
 namespace kgc::fly {
 /** 활성 기체의 비행 상태를 상단바·여기로 가기 화면의 표시값으로 옮기고 FlyService를 불러요.
  * 입력: 기체 등록부(activeChanged마다 FlyService::of(active)와 그 VehicleStates에 다시 묶어요), 상단바 슬롯(숨김)이에요.
  * 출력: 기체·모드·시동·바쁨 글, 누를 수 있는 단추, 이륙 높이, 유도 한계, 목표·선회 표시값, 실패 토스트 글이에요.
  *       판정은 서비스가 맡아요. 화면 글은 읽을 때마다 그때 언어로 만들어요(번역 문맥 "Fly").
- * 실패: 실패는 toast로 알리고, 누르기 시작한 기체가 지금 활성 기체가 아니면 아무것도 보내지 않아요.
+ * 실패: 실패는 toast로 알리고(늦게 온 기체 이유는 열린 실패 토스트에 덧붙여요), 누르기 시작한 기체가 지금 활성 기체가 아니면
+ *       아무것도 보내지 않아요.
  */
 class FlyController : public QObject {
     Q_OBJECT
@@ -151,6 +154,7 @@ public:
      * 흐름:
      * 1. sysid가 활성 기체인지 봐요.
      * 2. FlyService::arm — 시동 단계를 보내고 결과는 actionFinished로 와요.
+     * 3. 실패면 toast를 내고, 이유 없이 실패한 뒤 1초 안에 actionReason이 오면 그 토스트에 "기체: …" 줄을 덧붙여요.
      */
     Q_INVOKABLE bool arm(int sysid);
     /** 시동을 꺼요.
@@ -196,6 +200,7 @@ public:
      * 1. sysid가 활성 기체인지 봐요.
      * 2. takeoffAltitude = height예요(WithAltitude만).
      * 3. FlyService::takeoff — 높이 검사와 고도 틀 변환 뒤 모드·시동·이륙 단계를 보내요.
+     * 4. 실패면 toast를 내고, 이유 없이 실패한 뒤 1초 안에 actionReason이 오면 그 토스트에 "기체: …" 줄을 덧붙여요.
      */
     Q_INVOKABLE bool takeoff(int sysid, double height);
     /** 모드를 바꿔요.
@@ -239,7 +244,9 @@ signals:
     void targetChanged();
     /** 선회 원이 바뀌었음을 알려요. */
     void loiterChanged();
-    /** 활성 기체 동작의 실패 글을 알려요. 입력: "<동작 글>. <오류 글>"(+ 줄 바꿈 "기체: …")이에요. */
+    /** 활성 기체 동작의 실패 글을 알려요. 입력: "<동작 글>. <오류 글>"(+ 줄 바꿈 "기체: …")이에요.
+     * 이유 줄 없이 낸 실패 토스트 뒤 1초 안에 그 동작의 기체 이유가 늦게 오면, 같은 글에 "기체: …" 줄을 덧붙여 한 번 더 내요
+     * (화면은 열린 토스트의 글만 바꾸고 닫힘 시간을 다시 세지 않아요). */
     void toast(const QString& text);
 private:
     void rebind();
@@ -247,6 +254,7 @@ private:
     void refreshCoordinate();
     void applyHidden();
     void showFailure(FlyActionKind kind, const kgc::app::errors::Result<void>& result, const QString& reason);
+    void appendReason(FlyActionKind kind, const QString& reason);
     bool isActive(int sysid) const;
     QVariantList stateSnapshot() const;
     kgc::vehicle::registry::VehicleRegistry& vehicles_;
@@ -256,6 +264,8 @@ private:
     QVariantList state_;
     QGeoCoordinate coordinate_;
     double takeoffAltitude_;
+    std::optional<FlyActionKind> appendableKind_;
+    QString appendableText_;
     inline static QPointer<FlyController> instance_;
 };
 }

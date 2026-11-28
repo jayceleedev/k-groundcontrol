@@ -1,3 +1,4 @@
+// [0.6.0 §12 1] specs/features/0.6.0-fly.md
 // [0.6.0 5.5] specs/features/0.6.0-fly.md
 // [0.4.2 5.1] specs/features/0.4.2-param-tree.md
 // [0.3.0 5.2] specs/features/0.3.0-params.md
@@ -102,8 +103,8 @@ struct MessageInterval { std::uint16_t messageId = 0; std::int32_t intervalUs = 
 struct LoiterCircle { bool show = false; double radiusM = 0.0; bool clockwise = true; bool operator==(const LoiterCircle&) const = default; };
 /** HEARTBEAT type과 vtol_state로 기체 종류를 정해요(MAVLink 공통 규칙, 펌웨어를 보지 않아요).
  * 입력: HEARTBEAT type mavType(모르면 음수)과 EXTENDED_SYS_STATE vtol_state vtolState(모르면 -1)예요.
- * 출력: vtolState가 1~4이고 type이 고정익·멀티콥터 종류·VTOL 종류면 Vtol, 고정익 FixedWing, VTOL 종류 Vtol, 멀티콥터 종류 Multicopter,
- *       GENERIC·음수 Unknown, 그 밖 Other예요(쿼드플레인은 Q_MAV_TYPE에 따라 type이 1·2·3·4·19·20·21이에요).
+ * 출력: type이 고정익이고 vtolState가 1~4면 Vtol(쿼드플레인), 고정익 FixedWing, VTOL 종류 Vtol, 멀티콥터 종류 Multicopter
+ *       (vtolState와 상관없이 — ArduCopter는 늘 3을 보내요), GENERIC·음수 Unknown, 그 밖 Other예요(QGC와 같은 규칙).
  * 실패: 없어요.
  */
 VehicleClass vehicleClassOf(int mavType, int vtolState);
@@ -177,7 +178,7 @@ public:
     virtual QList<MessageInterval> messageIntervals() const = 0;
 /** 이 HEARTBEAT type이면 vtol_state를 받기 전에는 기체 종류를 정할 수 없는지 알려요.
  * 입력: HEARTBEAT type mavType이에요.
- * 출력: 참이면 비행 상태를 받기 전 종류를 모르는 것으로 봐요(쿼드플레인이 낼 수 있는 type, PX4 VTOL 종류, 범용 고정익).
+ * 출력: 참이면 비행 상태를 받기 전 종류를 모르는 것으로 봐요(ArduPilot 고정익·VTOL 19·20·21, PX4 VTOL 종류, 범용 고정익).
  * 실패: 없어요.
  */
     virtual bool vtolStateDecidesClass(int mavType) const = 0;

@@ -1,4 +1,4 @@
-// [0.6.0 T6] specs/features/0.6.0-fly.md
+// [0.6.0 §12 1 T6] specs/features/0.6.0-fly.md
 #include <kgc/vehicle/firmware/FirmwarePluginFactory.h>
 #include <kgc/comm/mavlink/Mavlink.h>
 #include <QtTest>
@@ -141,8 +141,9 @@ private slots:
         QCOMPARE(plugin->takeoffAltitudeFrame(VehicleClass::Vtol), AltitudeFrame::AboveCurrent);
         QCOMPARE(plugin->takeoffAltitudeFrame(VehicleClass::FixedWing), AltitudeFrame::RelativeHome);
         QCOMPARE(plugin->goToAltitudeFrame(), AltitudeFrame::RelativeHome);
-        for (const int type : {1, 2, 3, 4, 19, 20, 21}) QVERIFY2(plugin->vtolStateDecidesClass(type), qPrintable(QString::number(type)));
-        for (const int type : {0, 10, 13, 22}) QVERIFY2(!plugin->vtolStateDecidesClass(type), qPrintable(QString::number(type)));
+        // §12 고침 1: 고정익과 VTOL 19·20·21만 비행 상태가 필요해요(쿼드·동축·헬리는 ArduCopter로 봐요).
+        for (const int type : {1, 19, 20, 21}) QVERIFY2(plugin->vtolStateDecidesClass(type), qPrintable(QString::number(type)));
+        for (const int type : {0, 2, 3, 4, 10, 13, 22}) QVERIFY2(!plugin->vtolStateDecidesClass(type), qPrintable(QString::number(type)));
         QCOMPARE(plugin->launchOnArmModes(VehicleClass::FixedWing), Modes({13}));
         QCOMPARE(plugin->launchOnArmModes(VehicleClass::Vtol), Modes({13}));
         QCOMPARE(plugin->launchOnArmModes(VehicleClass::Multicopter), Modes());

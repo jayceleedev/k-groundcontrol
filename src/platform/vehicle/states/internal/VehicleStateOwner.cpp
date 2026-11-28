@@ -1,3 +1,4 @@
+// [0.6.0 §12 3] specs/features/0.6.0-fly.md
 // [0.6.0 5.4] specs/features/0.6.0-fly.md
 // [0.5.0 S3] specs/features/0.5.0-map.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
@@ -122,7 +123,8 @@ void VehicleStateOwner::consume(const mavlink_message_t& message)
         emit states_.attitudeChanged();
         break;
     case MAVLINK_MSG_ID_GLOBAL_POSITION_INT:
-        states_.position_ = updatePosition(message, states_.position_);
+        // GPS 고정 전 (0, 0) 근처 위치는 버려 지도 자취·화살표·fly가 모르는 위치로 보게 해요.
+        states_.position_ = gatePosition(updatePosition(message, states_.position_), states_.gps_.fixType);
         emit states_.positionChanged();
         break;
     case MAVLINK_MSG_ID_HOME_POSITION:

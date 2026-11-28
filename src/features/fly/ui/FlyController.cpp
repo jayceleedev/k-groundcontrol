@@ -1,3 +1,4 @@
+// [0.6.0 §12 2] specs/features/0.6.0-fly.md
 // [0.6.0 5.11.8] specs/features/0.6.0-fly.md
 #include "FlyController.h"
 #include "Constants.h"
@@ -34,6 +35,7 @@ void FlyController::rebind()
 {
     for (const auto& connection : std::as_const(connections_)) disconnect(connection);
     connections_.clear();
+    appendableKind_.reset();
     auto* vehicle = vehicles_.active();
     service_ = FlyService::of(vehicle);
     if (service_) {
@@ -51,6 +53,7 @@ void FlyController::rebind()
         connections_.append(connect(service_, &FlyService::loiterChanged, this, &FlyController::loiterChanged));
         connections_.append(connect(service_, &FlyService::actionFinished, this, &FlyController::showFailure));
         connections_.append(connect(service_, &FlyService::actionFinished, this, &FlyController::refreshState));
+        connections_.append(connect(service_, &FlyService::actionReason, this, &FlyController::appendReason));
     }
     emit vehicleChanged();
     applyHidden();
@@ -95,12 +98,27 @@ void FlyController::applyHidden()
 }
 void FlyController::showFailure(FlyActionKind kind, const kgc::app::errors::Result<void>& result, const QString& reason)
 {
+    // 늦은 이유는 바로 앞 결과의 실패 토스트에만 붙여요. 다른 결과가 오면 덧붙일 기회는 사라져요(§12 고침 2).
+    appendableKind_.reset();
     if (result || result.error() == make(FlyError::Preempted)) return;
     auto text = result.error() == make(FlyError::TargetWithoutMode)
         ? errorText(result.error()) : actionFailureText(kind) + QStringLiteral(". ") + errorText(result.error());
-    if (!reason.isEmpty())
+    if (!reason.isEmpty()) {
         text += QStringLiteral("\n") + QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체: %1")).arg(reason);
+    } else {
+        appendableKind_ = kind;
+        appendableText_ = text;
+    }
     emit toast(text);
+}
+void FlyController::appendReason(FlyActionKind kind, const QString& reason)
+{
+    // 그 동작의 실패 토스트에 이유 줄이 없을 때만 한 번 덧붙여요. 늦은 이유는 실패 뒤 1초(kReasonGrace) 안에만 오므로
+    // 6초 동안 떠 있는 그 토스트는 아직 열려 있어요. 그 사이 다른 결과의 토스트가 나왔으면 기록이 비어 아무것도 하지 않아요.
+    if (appendableKind_ != kind) return;
+    appendableKind_.reset();
+    emit toast(appendableText_ + QStringLiteral("\n")
+               + QCoreApplication::translate("Fly", QT_TRANSLATE_NOOP("Fly", "기체: %1")).arg(reason));
 }
 bool FlyController::isActive(int sysid) const { return service_ && service_->vehicle().sysid() == sysid; }
 bool FlyController::hasVehicle() const { return service_; }
@@ -116,7 +134,7 @@ QString FlyController::modeText() const
     if (!service_) return none;
     const auto caps = service_->capabilities();
     if (!caps.classKnown) return none;
-    // 그 종류의 모드 목록 이름을 먼저 써요(Q_MAV_TYPE 2 쿼드플레인에 Copter 이름이 보이지 않게).
+    // 그 종류의 모드 목록 이름을 먼저 써요(고정익 type 기체에 일반 Plane과 쿼드플레인 중 틀린 쪽 이름이 보이지 않게).
     const auto arming = service_->vehicle().states()->arming();
     const auto found = std::find_if(caps.modes.cbegin(), caps.modes.cend(),
         [&arming](const auto& mode) { return static_cast<qint64>(mode.customMode) == arming.modeId; });
@@ -273,6 +291,8 @@ bool FlyController::goTo(int sysid, double lat, double lon, double altitude)
     const auto result = service_->goTo(lat, lon, altitude);
     if (result) return true;
     showFailure(FlyActionKind::GoTo, result, QString{});
+    // 검사 실패는 기체에 보낸 동작이 아니라 늦은 이유가 따라오지 않아요.
+    appendableKind_.reset();
     return false;
 }
 QString FlyController::goToProblem(double lat, double lon, double altitude) const

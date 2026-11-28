@@ -1,3 +1,4 @@
+// [0.6.0 5.10] specs/features/0.6.0-fly.md
 // [0.4.0 5.4 6.2] specs/features/0.4.0-sitl.md
 #include "SitlSources.h"
 #include "Constants.h"
@@ -24,7 +25,8 @@ QString windowsFolder(SitlVehicle vehicle, SitlRelease release)
     switch (vehicle) {
     case SitlVehicle::Copter:
     case SitlVehicle::Heli: return QString::fromLatin1(kWindowsCopterStable);
-    case SitlVehicle::Plane: return QString::fromLatin1(kWindowsPlaneStable);
+    case SitlVehicle::Plane:
+    case SitlVehicle::QuadPlane: return QString::fromLatin1(kWindowsPlaneStable);
     case SitlVehicle::Rover: return QString::fromLatin1(kWindowsRoverStable);
     }
     return {};
@@ -34,19 +36,21 @@ QString windowsExecutableStem(SitlVehicle vehicle)
     switch (vehicle) {
     case SitlVehicle::Copter: return QStringLiteral("ArduCopter");
     case SitlVehicle::Heli: return QStringLiteral("ArduHeli");
-    case SitlVehicle::Plane: return QStringLiteral("ArduPlane");
+    case SitlVehicle::Plane:
+    case SitlVehicle::QuadPlane: return QStringLiteral("ArduPlane");
     case SitlVehicle::Rover: return QStringLiteral("ArduRover");
     }
     return {};
 }
-// Linux 실행 파일의 상위 폴더(Copter·Plane·Rover)와 그 아래 경로예요.
+// Linux 실행 파일의 상위 폴더(Copter·Plane·Rover)와 그 아래 경로예요. 쿼드플레인은 Plane과 같은 실행 파일이에요.
 QString linuxPath(SitlVehicle vehicle)
 {
     const auto folder = QString::fromLatin1(kLinuxFolder);
     switch (vehicle) {
     case SitlVehicle::Copter: return QStringLiteral("Copter/%1/") + folder + QStringLiteral("/arducopter");
     case SitlVehicle::Heli: return QStringLiteral("Copter/%1/") + QString::fromLatin1(kLinuxHeliFolder) + QStringLiteral("/arducopter-heli");
-    case SitlVehicle::Plane: return QStringLiteral("Plane/%1/") + folder + QStringLiteral("/arduplane");
+    case SitlVehicle::Plane:
+    case SitlVehicle::QuadPlane: return QStringLiteral("Plane/%1/") + folder + QStringLiteral("/arduplane");
     case SitlVehicle::Rover: return QStringLiteral("Rover/%1/") + folder + QStringLiteral("/ardurover");
     }
     return {};
@@ -57,6 +61,7 @@ QString paramsPath(SitlVehicle vehicle)
     case SitlVehicle::Copter: return QString::fromLatin1(kCopterParams);
     case SitlVehicle::Heli: return QString::fromLatin1(kHeliParams);
     case SitlVehicle::Plane: return QString::fromLatin1(kPlaneParams);
+    case SitlVehicle::QuadPlane: return QString::fromLatin1(kQuadPlaneParams);
     case SitlVehicle::Rover: return QString::fromLatin1(kRoverParams);
     }
     return {};
@@ -96,6 +101,7 @@ QString sitlRunFolderName(SitlVehicle vehicle)
     case SitlVehicle::Copter: return QStringLiteral("copter");
     case SitlVehicle::Heli: return QStringLiteral("heli");
     case SitlVehicle::Plane: return QStringLiteral("plane");
+    case SitlVehicle::QuadPlane: return QStringLiteral("quadplane");
     case SitlVehicle::Rover: return QStringLiteral("rover");
     }
     return {};

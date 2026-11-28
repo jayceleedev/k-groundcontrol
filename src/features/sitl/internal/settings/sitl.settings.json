@@ -1,7 +1,7 @@
 {
   "module": "sitl",
   "settings": [
-    {"id": "sitl.vehicle", "type": "enum", "enum": ["copter", "heli", "plane", "rover"], "default": "copter", "labelKey": "시뮬레이션 기체", "category": "sitl"},
+    {"id": "sitl.vehicle", "type": "enum", "enum": ["copter", "heli", "plane", "quadplane", "rover"], "default": "copter", "labelKey": "시뮬레이션 기체", "category": "sitl"},
     {"id": "sitl.release", "type": "enum", "enum": ["stable", "beta", "latest"], "default": "stable", "labelKey": "시뮬레이션 배포판", "category": "sitl"},
     {"id": "sitl.homeLatitude", "type": "double", "default": 35.1587, "min": -90, "max": 90, "labelKey": "홈 위도", "category": "sitl"},
     {"id": "sitl.homeLongitude", "type": "double", "default": 129.1604, "min": -180, "max": 180, "labelKey": "홈 경도", "category": "sitl"},

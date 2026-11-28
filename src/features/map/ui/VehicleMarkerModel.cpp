@@ -1,3 +1,4 @@
+// [0.6.0 5.9 T26] specs/features/0.6.0-fly.md
 // [0.5.0 5.6.9 T18 T20] specs/features/0.5.0-map.md
 #include "VehicleMarkerModel.h"
 #include "Trail.h"
@@ -10,7 +11,7 @@ using kgc::vehicle::registry::Vehicle;
 using kgc::vehicle::registry::VehicleRegistry;
 using kgc::vehicle::states::VehicleStates;
 namespace {
-enum Role { Sysid = Qt::UserRole + 1, Coordinate, Heading, Active, HomeCoordinate, HasHome, HasPosition };
+enum Role { Sysid = Qt::UserRole + 1, Coordinate, Heading, Active, HomeCoordinate, HasHome, HasPosition, AltitudeText };
 // 자세의 yaw가 먼저이고, 없으면 위치의 기수 방향, 그것도 없으면 위(0°)예요.
 double headingOf(const VehicleStates& states)
 {
@@ -47,13 +48,16 @@ QVariant VehicleMarkerModel::data(const QModelIndex& index, int role) const
     case HomeCoordinate: return QVariant::fromValue(QGeoCoordinate(position.homeLatDeg, position.homeLonDeg));
     case HasHome: return isMapPosition(position.homeLatDeg, position.homeLonDeg);
     case HasPosition: return isMapPosition(position.latDeg, position.lonDeg);
+    // 홈 기준 고도를 정수 m로 반올림한 글이에요(번역하지 않아요). 모르면 빈 값이라 글이 숨어요.
+    case AltitudeText: return std::isfinite(position.altRelM) ? QStringLiteral("%1 m").arg(qRound(position.altRelM)) : QString();
     default: return {};
     }
 }
 QHash<int, QByteArray> VehicleMarkerModel::roleNames() const
 {
     return {{Sysid, "sysid"}, {Coordinate, "coordinate"}, {Heading, "heading"}, {Active, "active"},
-            {HomeCoordinate, "homeCoordinate"}, {HasHome, "hasHome"}, {HasPosition, "hasPosition"}};
+            {HomeCoordinate, "homeCoordinate"}, {HasHome, "hasHome"}, {HasPosition, "hasPosition"},
+            {AltitudeText, "altitudeText"}};
 }
 void VehicleMarkerModel::add(Vehicle* vehicle)
 {
@@ -65,7 +69,7 @@ void VehicleMarkerModel::add(Vehicle* vehicle)
     endInsertRows();
     auto* states = vehicle->states();
     connect(states, &VehicleStates::positionChanged, this, [this, vehicle] {
-        changed(vehicle, {Coordinate, Heading, HomeCoordinate, HasHome, HasPosition});
+        changed(vehicle, {Coordinate, Heading, HomeCoordinate, HasHome, HasPosition, AltitudeText});
     });
     connect(states, &VehicleStates::attitudeChanged, this, [this, vehicle] { changed(vehicle, {Heading}); });
 }

@@ -1,3 +1,4 @@
+# [0.6.0 5.12] specs/features/0.6.0-fly.md
 # [0.5.0 5.9] specs/features/0.5.0-map.md
 # [0.0.1 T1] specs/features/0.0.1-shell.md
 file(GLOB headers CONFIGURE_DEPENDS api/kgc/appSettings/*.h)
@@ -9,5 +10,5 @@ qt_add_qml_module(kgc_appSettings STATIC URI Kgc.AppSettings
         ui/AppSettingsController.h ui/AppSettingsController.cpp ui/register.cpp)
 target_include_directories(kgc_appSettings PUBLIC api PRIVATE internal ui)
 target_link_libraries(kgc_appSettings PUBLIC kgc_app_errors kgc_app_i18n kgc_ui
-    PRIVATE kgc_app_log kgc_map)
+    PRIVATE kgc_app_log kgc_map kgc_fly)
 kgc_use_settings(kgc_appSettings appSettings)

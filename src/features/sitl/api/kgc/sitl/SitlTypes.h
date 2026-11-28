@@ -1,3 +1,4 @@
+// [0.6.0 5.10] specs/features/0.6.0-fly.md
 // [0.4.0 5.4] specs/features/0.4.0-sitl.md
 #pragma once
 #include <QObject>
@@ -9,10 +10,11 @@ Q_NAMESPACE
 QML_NAMED_ELEMENT(Sitl)
 /** 시뮬레이션할 기체 종류예요.
  * 입력: 없어요.
- * 출력: Copter·Heli·Plane·Rover 중 하나예요. QML에서는 Sitl.Copter 꼴이에요.
+ * 출력: Copter·Heli·Plane·QuadPlane·Rover 중 하나예요. QML에서는 Sitl.Copter 꼴이에요.
+ *       QuadPlane은 Plane과 같은 ArduPlane 실행 파일에 쿼드플레인 기본 파라미터를 써요.
  * 실패: 없어요.
  */
-enum class SitlVehicle { Copter, Heli, Plane, Rover };
+enum class SitlVehicle { Copter, Heli, Plane, QuadPlane, Rover };
 Q_ENUM_NS(SitlVehicle)
 /** 내려받을 배포판이에요.
  * 입력: 없어요.

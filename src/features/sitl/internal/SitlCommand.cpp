@@ -1,3 +1,4 @@
+// [0.6.0 5.10] specs/features/0.6.0-fly.md
 // [0.4.0 5.4 6.3] specs/features/0.4.0-sitl.md
 #include "SitlCommand.h"
 #include "SitlSources.h"
@@ -37,6 +38,7 @@ SitlVehicle sitlVehicleFromSetting(settings::Vehicle value)
     case settings::Vehicle::Copter: return SitlVehicle::Copter;
     case settings::Vehicle::Heli: return SitlVehicle::Heli;
     case settings::Vehicle::Plane: return SitlVehicle::Plane;
+    case settings::Vehicle::Quadplane: return SitlVehicle::QuadPlane;
     case settings::Vehicle::Rover: return SitlVehicle::Rover;
     }
     return SitlVehicle::Copter;
@@ -47,6 +49,7 @@ settings::Vehicle sitlVehicleToSetting(SitlVehicle vehicle)
     case SitlVehicle::Copter: return settings::Vehicle::Copter;
     case SitlVehicle::Heli: return settings::Vehicle::Heli;
     case SitlVehicle::Plane: return settings::Vehicle::Plane;
+    case SitlVehicle::QuadPlane: return settings::Vehicle::Quadplane;
     case SitlVehicle::Rover: return settings::Vehicle::Rover;
     }
     return settings::Vehicle::Copter;

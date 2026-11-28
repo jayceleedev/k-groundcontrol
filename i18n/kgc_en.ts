@@ -93,6 +93,18 @@
         <translation>ms</translation>
     </message>
     <message>
+        <source>유도 비행 최대 거리</source>
+        <translation>Guided flight maximum distance</translation>
+    </message>
+    <message>
+        <source>유도 비행 최저 고도</source>
+        <translation>Guided flight minimum altitude</translation>
+    </message>
+    <message>
+        <source>유도 비행 최고 고도</source>
+        <translation>Guided flight maximum altitude</translation>
+    </message>
+    <message>
         <location filename="../src/features/appSettings/ui/AppSettingsPanel.qml" line="89"/>
         <source>본 타일 저장 한도</source>
         <translation>Viewed tile storage limit</translation>
@@ -2736,6 +2748,10 @@
         <translation>Plane</translation>
     </message>
     <message>
+        <source>쿼드플레인</source>
+        <translation>QuadPlane</translation>
+    </message>
+    <message>
         <source>로버</source>
         <translation>Rover</translation>
     </message>
@@ -3186,7 +3202,7 @@
     </message>
     <message>
         <source>기체가 목표를 받았지만 모드는 그대로예요. 그곳으로 갈 수 있어요</source>
-        <translation>The vehicle took the target but kept its mode. It may fly there.</translation>
+        <translation>The vehicle took the target but kept its mode. It may fly there</translation>
     </message>
 </context>
 <context>
@@ -3264,6 +3280,37 @@
     <message>
         <source>길게 눌러 바꾸기</source>
         <translation>Hold to change</translation>
+    </message>
+    <message>
+        <source>취소</source>
+        <translation>Cancel</translation>
+    </message>
+</context>
+<context>
+    <name>FlyGoToWindow</name>
+    <message>
+        <source>여기로 가기</source>
+        <translation>Go here</translation>
+    </message>
+    <message>
+        <source>위치 %1</source>
+        <translation>Position %1</translation>
+    </message>
+    <message>
+        <source>기체에서 %1</source>
+        <translation>%1 from the vehicle</translation>
+    </message>
+    <message>
+        <source>고도(홈 기준)</source>
+        <translation>Altitude (above home)</translation>
+    </message>
+    <message>
+        <source>m</source>
+        <translation>m</translation>
+    </message>
+    <message>
+        <source>길게 눌러 가기</source>
+        <translation>Hold to go</translation>
     </message>
     <message>
         <source>취소</source>

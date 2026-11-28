@@ -1,9 +1,9 @@
 # [0.6.0 5.11.1] specs/features/0.6.0-fly.md
 file(GLOB headers CONFIGURE_DEPENDS api/kgc/fly/*.h)
 file(GLOB internal_sources CONFIGURE_DEPENDS internal/*.h internal/*.cpp)
-# 지도 레이어 셋(FlyTargetLayer·FlyGoToLayer·FlyGoToWindow)은 단계 C에서 더해요.
 set(qml_files ui/FlyVehicle.qml ui/FlyMode.qml ui/FlyArm.qml ui/FlyTakeoff.qml ui/FlyLand.qml ui/FlyRtl.qml
-    ui/FlyPause.qml ui/FlyEmergencyStop.qml ui/FlyHoldButton.qml)
+    ui/FlyPause.qml ui/FlyEmergencyStop.qml ui/FlyHoldButton.qml ui/FlyTargetLayer.qml ui/FlyGoToLayer.qml
+    ui/FlyGoToWindow.qml)
 foreach(file IN LISTS qml_files)
     get_filename_component(name "${file}" NAME)
     set_source_files_properties("${file}" PROPERTIES QT_RESOURCE_ALIAS "${name}")

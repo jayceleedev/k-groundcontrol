@@ -1,8 +1,10 @@
+// [0.6.0 5.9 T26] specs/features/0.6.0-fly.md
 // [0.5.0 5.6.9 T18 T24] specs/features/0.5.0-map.md
-/** 기체마다 기수 방향으로 돌아가는 화살표를 그리는 지도 레이어예요.
- * 입력: 얹힌 지도 부품 mapPane과 MapController의 기체 표식 목록(coordinate·heading·active·hasPosition)이에요.
+/** 기체마다 기수 방향으로 돌아가는 화살표와 홈 기준 고도 글을 그리는 지도 레이어예요.
+ * 입력: 얹힌 지도 부품 mapPane과 MapController의 기체 표식 목록(coordinate·heading·active·hasPosition·altitudeText)이에요.
  * 출력: 기체마다 MapQuickItem "mapVehicle_<sysid>" 하나예요. 활성 기체는 mapVehicle, 다른 기체는 mapVehicleOther 색이에요.
- * 실패: 위치 없음((0, 0)·NaN)이면 보이지 않아요.
+ *       화살표 오른쪽에 고도 글 "mapVehicleAltitude_<sysid>"("30 m")를 모든 기체에 그려요. 글은 돌지 않아요.
+ * 실패: 위치 없음((0, 0)·NaN)이면 보이지 않아요. 고도를 모르면 글만 숨어요.
  */
 import QtQuick
 import QtQuick.Shapes
@@ -42,6 +44,18 @@ MapItemGroup {
                         PathLine { x: Theme.mapVehicleSize * 0.1; y: Theme.mapVehicleSize * 0.9 }
                         PathLine { x: Theme.mapVehicleSize * 0.5; y: 0 }
                     }
+                }
+                // Shape 밖 형제라 화살표와 함께 돌지 않아요.
+                Text {
+                    objectName: "mapVehicleAltitude_" + marker.model.sysid
+                    visible: text !== ""
+                    text: marker.model.altitudeText
+                    x: parent.width + Theme.mapLabelGap
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pixelSize: Theme.captionSize
+                    color: Theme.osdInk
+                    style: Text.Outline
+                    styleColor: Theme.osdShadow
                 }
             }
         }

@@ -208,3 +208,9 @@ qt_add_executable(test_T9_fly_logic test_T9_fly_logic.cpp)
 target_include_directories(test_T9_fly_logic PRIVATE "${PROJECT_SOURCE_DIR}/src/features/fly/internal")
 target_link_libraries(test_T9_fly_logic PRIVATE kgc_fly Qt6::Test)
 add_test(NAME T9_fly_logic COMMAND test_T9_fly_logic)
+
+# [0.6.0 T11] specs/features/0.6.0-fly.md
+qt_add_executable(test_T11_sitl_quadplane test_T11_sitl_quadplane.cpp)
+target_include_directories(test_T11_sitl_quadplane PRIVATE "${PROJECT_SOURCE_DIR}/src/features/sitl/internal")
+target_link_libraries(test_T11_sitl_quadplane PRIVATE kgc_sitl Qt6::Test)
+add_test(NAME T11_sitl_quadplane COMMAND test_T11_sitl_quadplane)

@@ -1,3 +1,4 @@
+// [0.6.0 5.12 T28] specs/features/0.6.0-fly.md
 // [0.5.0 5.9 T27] specs/features/0.5.0-map.md
 // [0.0.4 T30 T31] specs/features/0.0.4-righttabs.md
 // [0.0.2 T4 T14 T15 T20 T24 T25] specs/features/0.0.2-theme.md
@@ -6,6 +7,7 @@ import QtQuick.Dialogs
 import QtQuick.Controls
 import Kgc.Ui
 import Kgc.Map
+import Kgc.Fly
 SettingsPage {
     id: panel
     categories: [
@@ -80,6 +82,37 @@ SettingsPage {
             to: uiSettingValues.holdToConfirmMsMax
             unit: qsTr("ms")
             onValueModified: value => { uiSettingValues.holdToConfirmMs = value }
+        }
+        // 유도 한계는 vehicle/safety의 설정이라 FlyController를 거쳐 읽고 써요(범위 밖 값은 저장되지 않아요).
+        Label { text: qsTr("유도 비행 최대 거리"); color: Theme.inkMuted }
+        NumberBox {
+            objectName: "guidedMaxDistanceField"
+            value: FlyController.guidedMaxDistanceM
+            from: FlyController.guidedMaxDistanceMMin
+            to: FlyController.guidedMaxDistanceMMax
+            decimals: 0
+            unit: qsTr("m")
+            onValueModified: value => { FlyController.guidedMaxDistanceM = value }
+        }
+        Label { text: qsTr("유도 비행 최저 고도"); color: Theme.inkMuted }
+        NumberBox {
+            objectName: "guidedMinAltitudeField"
+            value: FlyController.guidedMinAltitudeM
+            from: FlyController.guidedMinAltitudeMMin
+            to: FlyController.guidedMinAltitudeMMax
+            decimals: 1
+            unit: qsTr("m")
+            onValueModified: value => { FlyController.guidedMinAltitudeM = value }
+        }
+        Label { text: qsTr("유도 비행 최고 고도"); color: Theme.inkMuted }
+        NumberBox {
+            objectName: "guidedMaxAltitudeField"
+            value: FlyController.guidedMaxAltitudeM
+            from: FlyController.guidedMaxAltitudeMMin
+            to: FlyController.guidedMaxAltitudeMMax
+            decimals: 2
+            unit: qsTr("m")
+            onValueModified: value => { FlyController.guidedMaxAltitudeM = value }
         }
     }
     // 지도 설정은 지도 모듈의 설정이라 MapController를 거쳐 읽고 써요. 저장 크기 보기·비우기는 지도 저장 카드에 있어요.

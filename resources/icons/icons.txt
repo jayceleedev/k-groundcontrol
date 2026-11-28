@@ -45,6 +45,7 @@ drone outline/drone
 file-upload outline/file-upload
 helicopter outline/helicopter
 plane outline/plane
+plane-tilt outline/plane-tilt
 car outline/car
 submarine outline/submarine
 circle-check outline/circle-check

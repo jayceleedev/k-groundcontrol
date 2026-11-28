@@ -1,3 +1,4 @@
+// [0.6.0 5.10] specs/features/0.6.0-fly.md
 // [0.4.0 6.8] specs/features/0.4.0-sitl.md
 /** 시뮬레이션할 기체와 배포판을 골라요.
  * 입력: SitlController.vehicle·release·editable이에요.
@@ -33,6 +34,7 @@ Column {
                 {key: "copter", icon: "drone", title: qsTr("멀티콥터")},
                 {key: "heli", icon: "helicopter", title: qsTr("헬리콥터")},
                 {key: "plane", icon: "plane", title: qsTr("비행기")},
+                {key: "quadplane", icon: "plane-tilt", title: qsTr("쿼드플레인")},
                 {key: "rover", icon: "car", title: qsTr("로버")}
             ]
             ChoiceCard {

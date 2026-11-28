@@ -1,11 +1,13 @@
+// [0.6.0 5.9] specs/features/0.6.0-fly.md
 // [0.5.1 5.8] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.9] specs/features/0.5.0-map.md
-/** 지도 위의 끌기·휠·핀치를 지도 이동·확대와 영역 고르기로 바꿔요.
+/** 지도 위의 누르기·끌기·휠·핀치를 지도 이동·확대와 영역 고르기로 바꿔요.
  * 입력: 지도 map, 영역 고르기 중인지 selecting, 따라가기 중인지 follow예요.
  * 출력: 지도를 옮기고 확대하며, 사용자가 지도를 끌면 userPanned, 고르는 동안 selectionMoved, 손을 떼면 selectionDone(geoRectangle)을 내요.
+ *       끌지 않은 한 번 누르기는 지도를 바꾸지 않고 tapped(좌표, 화면 점)를 내요.
  *       확대는 정수 층으로 맞춰요(최소 확대만 예외). 휠은 모은 값 120마다 한 층, 핀치는 놓을 때 가까운 층으로 바로 맞춰요.
  *       따라가기 중의 휠·핀치는 지도 가운데(기체)를 기준으로 확대해요. 방위·기울기는 바꾸지 않아요.
- * 실패: 끌지 않은 클릭은 아무 일도 하지 않아요. 다른 항목·핸들러가 이미 쥔 누름은 가져가지 않아요.
+ * 실패: 영역 고르는 중의 누르기는 tapped를 내지 않아요. 다른 항목·핸들러가 이미 쥔 누름은 가져가지 않아요.
  */
 import QtQuick
 import QtLocation
@@ -33,6 +35,7 @@ Item {
     signal userPanned()
     signal selectionMoved(var area)
     signal selectionDone(var area)
+    signal tapped(var coordinate, point position)
     // 확대를 범위 안으로 자르고, 따라가기가 아니면 그 점 아래 좌표가 제자리에 있게 해요.
     function zoomAround(level, coordinate, point) {
         input.map.zoomLevel = Math.max(input.map.minimumZoomLevel, Math.min(input.map.maximumZoomLevel, level))
@@ -60,6 +63,15 @@ Item {
             input.map.alignCoordinateToPoint(input.dragAnchor, centroid.position)
         }
         onTranslationChanged: if (active) input.map.alignCoordinateToPoint(input.dragAnchor, centroid.position)
+    }
+    // 끌기 문턱을 넘으면 mapDrag가 누름을 가져가 누르기가 되지 않아요.
+    TapHandler {
+        objectName: "mapTap"
+        enabled: !input.selecting
+        acceptedButtons: Qt.LeftButton
+        gesturePolicy: TapHandler.DragThreshold
+        grabPermissions: PointerHandler.ApprovesTakeOverByAnything
+        onTapped: (eventPoint) => input.tapped(input.map.toCoordinate(eventPoint.position, false), eventPoint.position)
     }
     DragHandler {
         objectName: "mapSelectDrag"

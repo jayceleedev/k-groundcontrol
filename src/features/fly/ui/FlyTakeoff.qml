@@ -31,7 +31,12 @@ ActionButton {
         closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutsideParent
         background: Rectangle { color: Theme.surface; border.color: Theme.lineStrong; radius: Theme.radiusSmall }
         // 높이는 열 때 한 번 넣어요(바인딩이 아니라 적은 값을 지우지 않게).
-        onOpened: altitudeBox.value = FlyController.takeoffAltitude
+        // NumberBox의 글은 value가 바뀔 때만 value를 따라가요. 같은 값을 다시 넣으면 적다 만(확정하지 않은) 글이 남으므로
+        // 다른 값(NaN)을 먼저 넣은 뒤 진짜 값을 넣어 글이 늘 그 높이를 보이게 해요.
+        onOpened: {
+            altitudeBox.value = Number.NaN
+            altitudeBox.value = FlyController.takeoffAltitude
+        }
         Column {
             width: popup.availableWidth
             spacing: Theme.inset

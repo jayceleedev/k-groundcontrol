@@ -1,3 +1,4 @@
+// [0.6.0 5.10] specs/features/0.6.0-fly.md
 // [0.4.0 6.2 6.3 6.5 6.6] specs/features/0.4.0-sitl.md
 #pragma once
 #include <chrono>
@@ -22,6 +23,8 @@ inline constexpr auto kParamsBase = "https://raw.githubusercontent.com/ArduPilot
 inline constexpr auto kCopterParams = "default_params/copter.parm";
 inline constexpr auto kHeliParams = "default_params/copter-heli.parm";
 inline constexpr auto kPlaneParams = "models/plane.parm";
+// 쿼드플레인은 같은 ArduPlane 실행 파일에 이 기본 파라미터(Q_ENABLE 1)를 줘요.
+inline constexpr auto kQuadPlaneParams = "default_params/quadplane.parm";
 inline constexpr auto kRoverParams = "default_params/rover.parm";
 inline constexpr auto kDefaultsFile = "defaults.parm";
 // 명령줄 값이에요(스펙 §6.3).

@@ -1,3 +1,4 @@
+// [0.6.0 5.9] specs/features/0.6.0-fly.md
 // [0.5.1 5.9] specs/features/0.5.1-map-sharp.md
 // [0.5.0 5.6.9 T17 T18 T21 T22 T24] specs/features/0.5.0-map.md
 /** 타일 지도와 그 위의 입력·레이어·축척·출처·제어·지도 저장 카드를 묶은 지도 부품이에요. 다른 패널·창에도 같은 것을 놓을 수 있어요.
@@ -5,6 +6,7 @@
  *       타일 받기·저장·지도 종류는 MapController(전역 하나)를 같이 쓰고, 위치·확대·따라가기는 부품마다 따로예요.
  * 출력: 안의 Map을 map 별칭으로 내놓아요. MapController.lastView()의 가운데·확대에서 시작하고(처음이면 36.5·127.8·7),
  *       MapController.layers의 모든 레이어를 order 순서(z)로 얹어요. 따라가기가 켜져 있으면 활성 기체를 가운데에 둬요.
+ *       지도 누르기를 tapped로 내요(레이어가 mapPane으로 들어요).
  * 실패: 레이어 컴포넌트를 만들지 못하면 MapController.reportLayerFailed로 남기고 그 레이어만 빼요.
  */
 import QtQuick
@@ -22,6 +24,7 @@ Item {
     property bool follow: false
     property bool selecting: false
     readonly property alias map: canvas
+    signal tapped(var coordinate, point position)
     // 활성 기체가 바뀌었는데 아직 위치가 없어, 첫 위치가 오면 따라가기를 켤 차례인지예요(부품 안에서만 써요).
     property bool armPending: false
     // 영역 고르기에 들어가면 따라가기를 끄고, 위치를 기다리던 자동 켜기도 거둬요(따라가기 ④).
@@ -58,6 +61,7 @@ Item {
             onUserPanned: pane.follow = false
             onSelectionMoved: (area) => card.area = area
             onSelectionDone: (chosen) => card.choose(chosen)
+            onTapped: (coordinate, position) => pane.tapped(coordinate, position)
         }
         // 고르는 중(끈 뒤)과 계획 단계에서 고른 영역을 보여 줘요. 다른 레이어보다 위예요.
         MapRectangle {

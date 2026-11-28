@@ -19,6 +19,14 @@ void registerUi(kgc::ui::UiRegistry& registry, kgc::vehicle::registry::VehicleRe
     top("fly.rtl", 6, 3, "FlyRtl.qml");
     top("fly.pause", 7, 3, "FlyPause.qml");
     top("fly.emergencyStop", 8, 4, "FlyEmergencyStop.qml");
+    // 목표·선회는 홈(20)과 기체(30) 사이라 화살표가 위에 오고, 여기로 가기 창은 다른 레이어 위예요.
+    const auto layer = [&registry](const char* id, int order, const char* file) {
+        const auto result = registry.mapLayers.registerLayer(QString::fromLatin1(id), order,
+            QUrl(QStringLiteral("qrc:/qt/qml/Kgc/Fly/") + QLatin1StringView(file)));
+        Q_ASSERT(result.has_value());
+    };
+    layer("flyTarget", 25, "FlyTargetLayer.qml");
+    layer("flyGoTo", 90, "FlyGoToLayer.qml");
     new FlyController(vehicles, registry.topbar);
 }
 }

@@ -1,3 +1,4 @@
+// [0.6.0 5.8 T10] specs/features/0.6.0-fly.md
 // [0.5.0 S5 T7] specs/features/0.5.0-map.md
 // [0.1.0 T7] specs/features/0.1.0-link.md
 // [0.0.3 T2 T15 T21] specs/features/0.0.3-windows.md
@@ -24,14 +25,33 @@ kgc::app::errors::Result<void> TopbarSlot::registerItem(const QString& id, int o
     if (area != u"left" && area != u"centre" && area != u"right") qFatal("registerItem: unknown topbar area");
     return add({id, order, {{"area", area}, {"group", group}, {"component", component}}});
 }
+kgc::app::errors::Result<void> TopbarSlot::setHidden(const QString& id, bool hidden)
+{
+    bool before = false;
+    for (int row = 0; row < rowCount(); ++row)
+        if (entryAt(row).id == id) before = entryAt(row).values.value("hidden").toBool();
+    const auto result = setValue(id, QStringLiteral("hidden"), hidden);
+    // 숨김이 바뀌면 다른 행의 앞 구분선도 바뀔 수 있어 모든 행을 다시 읽게 해요.
+    if (result && before != hidden && rowCount() > 0) emit dataChanged(index(0), index(rowCount() - 1));
+    return result;
+}
 QVariant TopbarSlot::data(const QModelIndex& index, int role) const
 {
-    if (roleNames().value(role) != "separatorBefore") return SlotModel::data(index, role);
-    if (!index.isValid() || index.row() <= 0 || index.row() >= rowCount()) return false;
+    const auto name = roleNames().value(role);
+    const bool valid = index.isValid() && index.row() >= 0 && index.row() < rowCount();
+    if (name == "hidden") return valid ? QVariant(entryAt(index.row()).values.value("hidden").toBool()) : QVariant();
+    if (name != "separatorBefore") return SlotModel::data(index, role);
+    if (!valid) return false;
     const auto& current = entryAt(index.row());
-    const auto& previous = entryAt(index.row() - 1);
-    return previous.values.value("area") == current.values.value("area")
-        && previous.values.value("group") != current.values.value("group");
+    if (current.values.value("hidden").toBool()) return false;
+    // 숨은 행은 자리가 사라지므로 건너뛰고, 앞쪽으로 보이는 첫 행과 비교해요.
+    for (int row = index.row() - 1; row >= 0; --row) {
+        const auto& previous = entryAt(row);
+        if (previous.values.value("hidden").toBool()) continue;
+        return previous.values.value("area") == current.values.value("area")
+            && previous.values.value("group") != current.values.value("group");
+    }
+    return false;
 }
 QHash<int, QByteArray> TopbarSlot::roleNames() const
 {
@@ -44,6 +64,7 @@ QHash<int, QByteArray> TopbarSlot::roleNames() const
     roles.insert(Qt::UserRole + 8, "separatorBefore");
     roles.insert(Qt::UserRole + 9, "shape");
     roles.insert(Qt::UserRole + 10, "component");
+    roles.insert(Qt::UserRole + 11, "hidden");
     return roles;
 }
 StatusChipSlot::StatusChipSlot(QObject* parent) : SlotModel(parent) {}
@@ -114,9 +135,22 @@ kgc::app::errors::Result<void> SlotModel::add(SlotEntry entry)
     beginInsertRows({}, row, row);
     entries_.insert(row, std::move(entry));
     endInsertRows();
-    // 끼어든 항목 때문에 바로 뒤 항목의 앞 구분선 같은 이웃 기준 값이 바뀔 수 있어 다시 읽게 해요.
-    if (row + 1 < entries_.size()) emit dataChanged(index(row + 1), index(row + 1));
+    // 끼어든 항목 때문에 뒤 항목의 앞 구분선 같은 이웃 기준 값이 바뀔 수 있어 다시 읽게 해요.
+    // 바로 뒤 행이 숨었으면 구분선이 바뀌는 행은 더 뒤에 있으므로 끝 행까지 알려요.
+    if (row + 1 < entries_.size()) emit dataChanged(index(row + 1), index(int(entries_.size()) - 1));
     return {};
+}
+kgc::app::errors::Result<void> SlotModel::setValue(const QString& id, const QString& key, const QVariant& value)
+{
+    for (int row = 0; row < entries_.size(); ++row) {
+        auto& entry = entries_[row];
+        if (entry.id != id) continue;
+        if (entry.values.value(key) == value) return {};
+        entry.values.insert(key, value);
+        emit dataChanged(index(row), index(row));
+        return {};
+    }
+    return std::unexpected(make(UiError::UnknownId));
 }
 int SlotModel::rowCount(const QModelIndex& parent) const
 {

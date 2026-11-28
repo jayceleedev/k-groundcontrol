@@ -1,3 +1,4 @@
+// [0.6.0 5.8] specs/features/0.6.0-fly.md
 // [0.5.0 S5] specs/features/0.5.0-map.md
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
 // [0.0.4 T9 T9a T16] specs/features/0.0.4-righttabs.md
@@ -68,6 +69,8 @@ ThemeBase {
     mapHome: "#f59e0b"
     mapHomeInk: "#1f2530"
     mapSelection: "#2563eb"
+    flyTarget: "#d946ef"
+    flyLoiter: "#d946ef"
     order: 40
     dark: true
     glass: true

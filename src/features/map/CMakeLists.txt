@@ -1,3 +1,4 @@
+# [0.6.0 5.1] specs/features/0.6.0-fly.md
 # [0.5.0 5.6.1 5.6.9] specs/features/0.5.0-map.md
 # Qt 비공개 API는 지도 geoservice만 써요(BASE §2, 검사 qt_private). 그래서 비공개 구성 요소는 이 파일에서만 찾아요.
 # GLOBAL이 없으면 이 폴더에서만 보이는 XKB::XKB를 src/main·tests의 실행 파일이 찾지 못해 구성 경고가 남아요.
@@ -24,6 +25,6 @@ target_include_directories(kgc_map PUBLIC api PRIVATE internal ui api/kgc/map)
 # qt_add_plugin은 쓰지 않아요(둘째 대상은 순환 검사에 걸리고 숨은 Q_IMPORT_PLUGIN을 하나 더 퍼뜨려요).
 target_compile_definitions(kgc_map PRIVATE QT_STATICPLUGIN)
 target_link_libraries(kgc_map PUBLIC kgc_app_errors kgc_app_job kgc_ui Qt6::Positioning
-    PRIVATE kgc_app_log kgc_app_net kgc_app_paths kgc_app_scheduler kgc_app_store kgc_app_i18n
+    PRIVATE kgc_app_geo kgc_app_log kgc_app_net kgc_app_paths kgc_app_scheduler kgc_app_store kgc_app_i18n
         kgc_vehicle_registry kgc_vehicle_states Qt6::Location Qt6::LocationPrivate)
 kgc_use_settings(kgc_map map)

@@ -1501,14 +1501,19 @@
 <context>
     <name>Ui</name>
     <message>
-        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="26"/>
+        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="28"/>
         <source>같은 항목이 이미 등록되어 있어요.</source>
         <translation>An item with the same ID is already registered.</translation>
     </message>
     <message>
-        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="27"/>
+        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="29"/>
         <source>우 사이드바 계기 자리는 하나만 쓸 수 있어요.</source>
         <translation>Only one item can use the right sidebar instrument area.</translation>
+    </message>
+    <message>
+        <location filename="../src/platform/ui/api/kgc/ui/Errors.h" line="30"/>
+        <source>등록되지 않은 항목이에요.</source>
+        <translation>The item is not registered.</translation>
     </message>
 </context>
 <context>

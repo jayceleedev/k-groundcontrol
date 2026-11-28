@@ -1,3 +1,4 @@
+// [0.6.0 5.5 T4] specs/features/0.6.0-fly.md
 // [0.1.0 T4 T5] specs/features/0.1.0-link.md
 #include <kgc/vehicle/firmware/FirmwarePluginFactory.h>
 #include <kgc/comm/mavlink/Mavlink.h>
@@ -32,7 +33,8 @@ private slots:
     {
         const auto plugin = FirmwarePluginFactory::create(MAV_AUTOPILOT_ARDUPILOTMEGA);
         QCOMPARE(plugin->modeName(5, MAV_TYPE_GENERIC), QString("LOITER"));
-        QVERIFY(plugin->modeName(5, MAV_TYPE_FIXED_WING).isEmpty());
+        QCOMPARE(plugin->modeName(5, MAV_TYPE_FIXED_WING), QString("FBWA"));
+        QVERIFY(plugin->modeName(5, MAV_TYPE_GROUND_ROVER).isEmpty());
     }
     /** T5: Copter의 기체 종류에만 모드 이름을 붙이고 스트림 요청을 제공해요. */
     void test_T5_copter_modes()
@@ -46,7 +48,8 @@ private slots:
             QCOMPARE(plugin->modeName(6, type), QString("RTL"));
         }
         QVERIFY(plugin->modeName(255, MAV_TYPE_QUADROTOR).isEmpty());
-        QVERIFY(plugin->modeName(0, MAV_TYPE_FIXED_WING).isEmpty());
+        QCOMPARE(plugin->modeName(0, MAV_TYPE_FIXED_WING), QString("MANUAL"));
+        QVERIFY(plugin->modeName(0, MAV_TYPE_GROUND_ROVER).isEmpty());
         const auto streams = plugin->streamRequests();
         QCOMPARE(streams.size(), 3);
         QCOMPARE(streams[0].streamId, int(MAV_DATA_STREAM_EXTENDED_STATUS));

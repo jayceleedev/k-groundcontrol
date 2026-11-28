@@ -1,3 +1,4 @@
+// [0.6.0 5.6] specs/features/0.6.0-fly.md
 // [0.3.0 5.1] specs/features/0.3.0-params.md
 // [0.2.0 5.7] specs/features/0.2.0-fcflash.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
@@ -11,7 +12,7 @@ struct __mavlink_message;
 namespace kgc::app::scheduler { class Scheduler; }
 namespace kgc::comm::links { class LinkManager; }
 namespace kgc::vehicle::command { class CommandQueue; }
-namespace kgc::vehicle::firmware { class FirmwarePlugin; }
+namespace kgc::vehicle::firmware { class FirmwarePlugin; struct MessageInterval; }
 namespace kgc::vehicle::outbound { class VehicleSender; }
 namespace kgc::vehicle::registry {
 class VehicleRegistry;
@@ -81,6 +82,12 @@ private:
     void consume(const __mavlink_message& message);
     void stop();
     std::uint8_t autopilot() const;
+    // 플러그인의 메시지 주기마다 SET_MESSAGE_INTERVAL을 넣어요.
+    void requestMessageIntervals();
+    // 메시지 주기 하나를 청하고, 응답 없음·링크 없음·끼어든 명령에 밀림이면 retry일 때 한 번만 다시 넣어요.
+    void requestMessageInterval(const kgc::vehicle::firmware::MessageInterval& interval, bool retry = true);
+    // REQUEST_MESSAGE 하나를 청하고, 같은 규칙으로 한 번만 다시 넣어요.
+    void requestMessage(std::uint16_t messageId, bool retry = true);
     struct Private;
     std::unique_ptr<Private> d_;
 };

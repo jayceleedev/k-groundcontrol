@@ -1,10 +1,14 @@
+// [0.6.0 T1] specs/features/0.6.0-fly.md
 // [0.2.0 T6] specs/features/0.2.0-fcflash.md
 #include <kgc/vehicle/command/CommandQueue.h>
 #include <kgc/vehicle/outbound/Errors.h>
 #include <QtTest>
+#include <cmath>
+#include <limits>
 using namespace std::chrono_literals;
 using kgc::app::errors::Result;
 using kgc::vehicle::command::CommandFailure;
+using kgc::vehicle::command::CommandInt;
 using kgc::vehicle::command::CommandLong;
 using kgc::vehicle::command::CommandOptions;
 using kgc::vehicle::command::CommandQueue;
@@ -17,10 +21,12 @@ constexpr int kVehicleSysid = 7;
 constexpr std::uint8_t kGcsSysid = 255;
 constexpr std::uint8_t kGcsCompid = 190;
 constexpr std::uint8_t kChannel = 0;
-/** 큐가 보낸 프레임을 풀어 기록하고, 정해진 결과를 돌려주는 가짜 송신 함수예요. */
+/** 큐가 보낸 프레임을 기록하는 가짜 송신 함수예요. sent는 COMMAND_LONG만, frames·commands는 두 꼴 모두 보낸 차례대로예요. */
 class FakeSender {
 public:
     QList<mavlink_command_long_t> sent;
+    QList<mavlink_message_t> frames;
+    QList<std::uint16_t> commands;
     QList<OutboundKind> kinds;
     bool linkUp = true;
     CommandQueue::SendFn fn()
@@ -30,6 +36,10 @@ public:
             if (!linkUp) return std::unexpected(kgc::vehicle::outbound::make(OutboundError::NoLink));
             mavlink_message_t message{};
             pack(kGcsSysid, kGcsCompid, kChannel, message);
+            frames << message;
+            const bool isInt = message.msgid == MAVLINK_MSG_ID_COMMAND_INT;
+            commands << (isInt ? mavlink_msg_command_int_get_command(&message) : mavlink_msg_command_long_get_command(&message));
+            if (isInt) return {};
             mavlink_command_long_t command{};
             mavlink_msg_command_long_decode(&message, &command);
             sent << command;
@@ -50,6 +60,20 @@ CommandLong requestCommand()
     command.command = MAV_CMD_REQUEST_MESSAGE;
     command.param1 = 148.0F;
     return command;
+}
+// T1의 여기로 가기 COMMAND_INT예요(DO_REPOSITION, 홈 기준 고도 틀).
+CommandInt repositionCommand()
+{
+    return {MAV_CMD_DO_REPOSITION, MAV_FRAME_GLOBAL_RELATIVE_ALT_INT, -1.0F, 1.0F, 0.0F,
+            std::numeric_limits<float>::quiet_NaN(), 351605000, 1291622000, 50.0F};
+}
+CommandLong longCommand(std::uint16_t number, float param2 = 0.0F)
+{
+    return {number, 0.0F, param2};
+}
+QByteArray payloadOf(const mavlink_message_t& message)
+{
+    return QByteArray(reinterpret_cast<const char*>(_MAV_PAYLOAD(&message)), message.len);
 }
 }
 class CommandQueueTest : public QObject {
@@ -264,6 +288,111 @@ private slots:
         QTRY_COMPARE_WITH_TIMEOUT(results.size(), 2, 1000);
         QVERIFY(results[0].failure == CommandFailure::NoLink);
         QVERIFY(results[1].failure == CommandFailure::NoLink);
+    }
+    /** T1 ①: CommandInt를 Motion 종류로 보내면 COMMAND_INT 한 통에 칸이 그대로 담기고 current·autocontinue는 0이에요. */
+    void test_T1_command_int_fields()
+    {
+        FakeSender sender;
+        CommandQueue queue(sender.fn(), kVehicleSysid);
+        CommandOptions options;
+        options.kind = OutboundKind::Motion;
+        queue.send(repositionCommand(), options, [](CommandResult) {}, this);
+        QTRY_COMPARE_WITH_TIMEOUT(sender.frames.size(), 1, 500);
+        const auto& message = sender.frames.first();
+        QCOMPARE(message.msgid, std::uint32_t(MAVLINK_MSG_ID_COMMAND_INT));
+        mavlink_command_int_t frame{};
+        mavlink_msg_command_int_decode(&message, &frame);
+        QCOMPARE(frame.target_system, std::uint8_t(kVehicleSysid));
+        QCOMPARE(frame.target_component, std::uint8_t(1));
+        QCOMPARE(frame.frame, std::uint8_t(MAV_FRAME_GLOBAL_RELATIVE_ALT_INT));
+        QCOMPARE(frame.command, std::uint16_t(MAV_CMD_DO_REPOSITION));
+        QCOMPARE(frame.current, std::uint8_t(0));
+        QCOMPARE(frame.autocontinue, std::uint8_t(0));
+        QCOMPARE(frame.param1, -1.0F);
+        QCOMPARE(frame.param2, 1.0F);
+        QCOMPARE(frame.param3, 0.0F);
+        QVERIFY(std::isnan(frame.param4));
+        QCOMPARE(frame.x, 351605000);
+        QCOMPARE(frame.y, 1291622000);
+        QCOMPARE(frame.z, 50.0F);
+        QCOMPARE(sender.kinds.first(), OutboundKind::Motion);
+    }
+    /** T1 ②: ACK가 없으면 같은 페이로드를 네 번 보내고 Timeout으로 한 번 끝나요. */
+    void test_T1_command_int_retries_same_payload()
+    {
+        FakeSender sender;
+        CommandQueue queue(sender.fn(), kVehicleSysid);
+        int done = 0;
+        CommandResult last;
+        queue.send(repositionCommand(), {60ms, 3, OutboundKind::Motion}, [&](CommandResult result) { ++done; last = result; }, this);
+        QTRY_COMPARE_WITH_TIMEOUT(done, 1, 2000);
+        QCOMPARE(sender.frames.size(), 4);
+        for (const auto& message : sender.frames) QCOMPARE(payloadOf(message), payloadOf(sender.frames.first()));
+        QVERIFY(last.failure == CommandFailure::Timeout);
+    }
+    /** T1 ③: 첫 송신 뒤 같은 번호의 ACCEPTED가 오면 한 번만 보내고 ACCEPTED로 끝나요. */
+    void test_T1_command_int_ack()
+    {
+        FakeSender sender;
+        CommandQueue queue(sender.fn(), kVehicleSysid);
+        int done = 0;
+        CommandResult last;
+        queue.send(repositionCommand(), {80ms, 3, OutboundKind::Motion}, [&](CommandResult result) { ++done; last = result; }, this);
+        QTRY_COMPARE_WITH_TIMEOUT(sender.frames.size(), 1, 500);
+        queue.receiveAck(MAV_CMD_DO_REPOSITION, MAV_RESULT_ACCEPTED);
+        QTRY_COMPARE_WITH_TIMEOUT(done, 1, 500);
+        QVERIFY(last.result == MAV_RESULT_ACCEPTED);
+        QTest::qWait(200);
+        QCOMPARE(sender.frames.size(), 1);
+    }
+    /** T1 ⑤: 끼어드는 명령은 곧바로 나가고, 기다리던 명령과 같은 context의 줄만 Preempted로 끝내요. 다른 context의 줄은 그 뒤에 나가요. */
+    void test_T1_preempt_same_context()
+    {
+        FakeSender sender;
+        CommandQueue queue(sender.fn(), kVehicleSysid);
+        QObject x;
+        QObject y;
+        QMap<QChar, QList<CommandResult>> results;
+        auto record = [&](QChar name) { return [&results, name](CommandResult result) { results[name] << result; }; };
+        queue.send(longCommand(MAV_CMD_REQUEST_MESSAGE), {5s, 0}, record('A'), &x);
+        QTRY_COMPARE_WITH_TIMEOUT(sender.commands.size(), 1, 500);
+        queue.send(longCommand(MAV_CMD_COMPONENT_ARM_DISARM), {5s, 0}, record('B'), &y);
+        queue.send(repositionCommand(), {5s, 0}, record('C'), &y);
+        queue.send(longCommand(MAV_CMD_SET_MESSAGE_INTERVAL), {5s, 0}, record('E'), &x);
+        queue.send(longCommand(MAV_CMD_COMPONENT_ARM_DISARM, 21196.0F), {5s, 0, OutboundKind::Arm, true}, record('D'), &y);
+        QCOMPARE(sender.commands, QList<std::uint16_t>({MAV_CMD_REQUEST_MESSAGE, MAV_CMD_COMPONENT_ARM_DISARM}));
+        QTRY_COMPARE_WITH_TIMEOUT(results['C'].size(), 1, 500);
+        for (QChar name : {QChar('A'), QChar('B'), QChar('C')}) {
+            QCOMPARE(results[name].size(), 1);
+            QVERIFY(results[name].first().failure == CommandFailure::Preempted);
+        }
+        QVERIFY(results['E'].isEmpty());
+        QVERIFY(results['D'].isEmpty());
+        QCOMPARE(sender.commands.size(), 2);
+        queue.receiveAck(MAV_CMD_COMPONENT_ARM_DISARM, MAV_RESULT_ACCEPTED);
+        QTRY_COMPARE_WITH_TIMEOUT(results['D'].size(), 1, 500);
+        QVERIFY(results['D'].first().result == MAV_RESULT_ACCEPTED);
+        QTRY_COMPARE_WITH_TIMEOUT(sender.commands.size(), 3, 500);
+        QCOMPARE(sender.commands, QList<std::uint16_t>(
+            {MAV_CMD_REQUEST_MESSAGE, MAV_CMD_COMPONENT_ARM_DISARM, MAV_CMD_SET_MESSAGE_INTERVAL}));
+        QVERIFY(results['E'].isEmpty());
+    }
+    /** T1 ④⑥: 기본 옵션은 Command 종류·끼어들지 않음이에요(옵션 없는 COMMAND_LONG은 test_T6_sends_command_fields가 Command로 확인).
+     * 멈춘 큐에 끼어드는 명령을 보내면 보내지 않고 Gone으로 끝나요. */
+    void test_T1_preempt_after_stop_is_gone()
+    {
+        QCOMPARE(CommandOptions{}.kind, OutboundKind::Command);
+        QVERIFY(!CommandOptions{}.preempt);
+        FakeSender sender;
+        CommandQueue queue(sender.fn(), kVehicleSysid);
+        queue.stop();
+        int done = 0;
+        CommandResult last;
+        queue.send(longCommand(MAV_CMD_COMPONENT_ARM_DISARM, 21196.0F), {1s, 0, OutboundKind::Arm, true},
+            [&](CommandResult result) { ++done; last = result; }, this);
+        QTRY_COMPARE_WITH_TIMEOUT(done, 1, 500);
+        QVERIFY(last.failure == CommandFailure::Gone);
+        QCOMPARE(sender.frames.size(), 0);
     }
 };
 QTEST_GUILESS_MAIN(CommandQueueTest)

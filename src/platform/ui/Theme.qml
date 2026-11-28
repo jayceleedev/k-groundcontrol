@@ -1,3 +1,4 @@
+// [0.6.0 5.8] specs/features/0.6.0-fly.md
 // [0.5.0 S5] specs/features/0.5.0-map.md
 // [0.4.2 6.4] specs/features/0.4.2-param-tree.md
 // [0.3.0 6.8 6.8-1] specs/features/0.3.0-params.md
@@ -152,6 +153,17 @@ QtObject {
     readonly property int mapControlGap: Math.round(6 * uiScale)
     readonly property int mapCardWidth: Math.round(300 * uiScale)
     readonly property int mapSelectionWidth: Math.round(2 * uiScale)
+    // 여기로 가기 목표 표식의 크기와 선 두께, 선회 원 선 두께예요.
+    readonly property int flyTargetSize: Math.round(22 * uiScale)
+    readonly property int flyTargetLineWidth: Math.round(2 * uiScale)
+    readonly property int flyLoiterWidth: Math.round(2 * uiScale)
+    // 이륙 창·여기로 가기 창과 모드 창의 바깥 폭(테두리와 안쪽 여백 포함)이에요.
+    readonly property int flyWindowWidth: Math.round(260 * uiScale)
+    readonly property int flyModePopupWidth: Math.round(300 * uiScale)
+    // 지도 표식 오른쪽에 붙는 글과의 간격이에요.
+    readonly property int mapLabelGap: Math.round(4 * uiScale)
+    // 비행 명령 실패 토스트를 보여 주는 시간이에요(밀리초).
+    readonly property int flyToastMs: 6000
     // ThemeSwitcher만 current를 바꿔요. 부품은 Theme의 토큰만 읽어요.
     property ThemeBase current: Light {}
     readonly property color series1: current.series1
@@ -220,6 +232,8 @@ QtObject {
     readonly property color mapHome: current.mapHome
     readonly property color mapHomeInk: current.mapHomeInk
     readonly property color mapSelection: current.mapSelection
+    readonly property color flyTarget: current.flyTarget
+    readonly property color flyLoiter: current.flyLoiter
     readonly property int order: current.order
     readonly property bool dark: current.dark
     readonly property bool glass: current.glass

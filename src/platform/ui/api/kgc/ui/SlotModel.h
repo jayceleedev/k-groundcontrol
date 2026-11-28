@@ -1,3 +1,4 @@
+// [0.6.0 5.8] specs/features/0.6.0-fly.md
 // [0.0.3 T2 T15 T21] specs/features/0.0.3-windows.md
 #pragma once
 #include <kgc/app/errors/Result.h>
@@ -55,6 +56,12 @@ protected:
      * 실패: 범위 밖 행은 부르는 쪽의 프로그래밍 오류예요.
      */
     const SlotEntry& entryAt(int row) const { return entries_[row]; }
+    /** 등록된 항목 하나의 역할 값을 바꿔요.
+     * 입력: 식별자 id, 값 이름 key, 새 값 value.
+     * 출력: 성공 결과. 같은 값이면 아무것도 하지 않고, 아니면 값을 바꾸고 그 행의 dataChanged를 내요.
+     * 실패: 그 식별자가 없으면 UnknownId.
+     */
+    kgc::app::errors::Result<void> setValue(const QString& id, const QString& key, const QVariant& value);
 private:
     QList<SlotEntry> entries_;
     mutable QHash<int, QByteArray> roles_;

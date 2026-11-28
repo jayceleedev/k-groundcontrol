@@ -1,3 +1,4 @@
+// [0.6.0 5.8] specs/features/0.6.0-fly.md
 // [0.5.0 S5] specs/features/0.5.0-map.md
 // [0.0.2 T2–T9 T16 T20] specs/features/0.0.2-theme.md
 // 테마는 이 파일의 required 토큰을 모두 채운 파일 하나로 더해요.
@@ -76,6 +77,9 @@ QtObject {
     required property color mapHome
     required property color mapHomeInk
     required property color mapSelection
+    // 여기로 가기 목표 표식·미리 보기와 선회 원 색이에요. 위성 사진 위에서 보이는 마젠타(항공 계기의 항법 목표 관례 색)이고 네 테마가 같은 값을 줘요.
+    required property color flyTarget
+    required property color flyLoiter
     required property int order
     required property bool dark
     required property bool glass

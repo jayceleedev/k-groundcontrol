@@ -1,3 +1,4 @@
+// [0.6.0 5.8 T10] specs/features/0.6.0-fly.md
 // [0.5.0 S5 T7] specs/features/0.5.0-map.md
 // [0.1.0 T7] specs/features/0.1.0-link.md
 // [0.0.3 T2 T21] specs/features/0.0.3-windows.md
@@ -11,9 +12,9 @@
 
 namespace kgc::ui {
 /** 상단바의 왼쪽·가운데·오른쪽 자리에 기능 기여와 자리 표시를 순서대로 담아요.
- * 입력: 등록 항목과 자리 표시.
- * 출력: 순서대로 정렬된 목록과 영역·묶음·이름·아이콘·앞 구분선·모양 역할.
- * 실패: 같은 식별자는 DuplicateId.
+ * 입력: 등록 항목과 자리 표시, 항목 숨김.
+ * 출력: 순서대로 정렬된 목록과 영역·묶음·이름·아이콘·앞 구분선·모양·숨김 역할. 숨은 항목은 자리와 구분선이 사라지고 구분선은 보이는 항목끼리 세요.
+ * 실패: 같은 식별자는 DuplicateId, 없는 식별자를 숨기면 UnknownId.
  */
 class TopbarSlot : public SlotModel {
     Q_OBJECT
@@ -40,15 +41,21 @@ public:
     kgc::app::errors::Result<void> registerPlaceholder(const QString& id, int order, const QString& area,
         int group, const QString& labelKey, const QString& icon, bool iconOnly = false,
         const QString& shape = QStringLiteral("button"));
-/** 등록 값과 같은 영역 앞 항목과 묶음이 바뀌는지를 읽어요.
+/** 상단바 항목 하나를 숨기거나 다시 보여요(기체 종류·펌웨어가 지원하지 않는 단추).
+ * 입력: 식별자 id와 숨길지 hidden.
+ * 출력: 성공 결과. 값이 바뀌었으면 모든 행의 dataChanged를 내요(다른 행의 앞 구분선이 바뀔 수 있어요). 같은 값이면 알리지 않아요.
+ * 실패: 그 식별자가 없으면 UnknownId.
+ */
+    kgc::app::errors::Result<void> setHidden(const QString& id, bool hidden);
+/** 등록 값과 앞 구분선·숨김을 읽어요.
  * 입력: 인덱스와 역할.
- * 출력: 역할 값, separatorBefore는 앞 항목과 묶음이 다를 때 참.
+ * 출력: 역할 값. separatorBefore는 이 행이 숨지 않았고, 앞쪽으로 숨지 않은 첫 행이 같은 영역이며 묶음이 다를 때 참이에요. hidden은 없으면 거짓이에요.
  * 실패: 범위 밖이면 빈 값.
  */
     QVariant data(const QModelIndex& index, int role) const override;
 /** 상단바 항목의 표시 역할을 알려줘요.
  * 입력: 없음.
- * 출력: 공통 역할과 area·group·labelKey·icon·iconOnly·separatorBefore·shape·component.
+ * 출력: 공통 역할과 area·group·labelKey·icon·iconOnly·separatorBefore·shape·component·hidden.
  * 실패: 없음.
  */
     QHash<int, QByteArray> roleNames() const override;

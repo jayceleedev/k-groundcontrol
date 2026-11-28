@@ -1,3 +1,4 @@
+// [0.6.0 5.4] specs/features/0.6.0-fly.md
 // [0.5.0 S3] specs/features/0.5.0-map.md
 // [0.2.0 S3 S4] specs/features/0.2.0-fcflash.md
 // [0.1.1 T1 T2 T3] specs/features/0.1.1-link-hardening.md
@@ -16,6 +17,11 @@
 #include "updaters/BatteryUpdater.h"
 #include "updaters/CapabilitiesUpdater.h"
 #include "updaters/AutopilotVersionUpdater.h"
+#include "updaters/FlightUpdater.h"
+#include "updaters/NavTargetUpdater.h"
+#include "updaters/StatusTextUpdater.h"
+#include "Constants.h"
+#include <limits>
 namespace kgc::vehicle::states {
 VehicleStateOwner::VehicleStateOwner(VehicleStates& states, const kgc::vehicle::firmware::FirmwarePlugin& plugin,
                                    kgc::app::scheduler::Scheduler& scheduler, int sysid, QObject* parent)
@@ -23,7 +29,7 @@ VehicleStateOwner::VehicleStateOwner(VehicleStates& states, const kgc::vehicle::
 {
     clock_.start();
     scheduler.registerTask(QString("linkLoss.%1").arg(sysid), kgc::app::constants::kGcsHeartbeatPeriod,
-                           this, this, [this] { checkLinkLoss(); });
+                           this, this, [this] { checkLinkLoss(); expireFlight(); expireNavTarget(); });
 }
 void VehicleStateOwner::checkLinkLoss()
 {
@@ -31,6 +37,65 @@ void VehicleStateOwner::checkLinkLoss()
     if (states_.link_.lost == lost) return;
     states_.link_.lost = lost;
     emit states_.linkChanged();
+    // 끊긴 동안 마지막 착륙·VTOL 상태가 단추를 정하지 않게 비워요.
+    if (lost) clearFlight();
+}
+void VehicleStateOwner::clearFlight()
+{
+    flightAtMs_ = -1;
+    if (states_.flight_.landedState == -1 && states_.flight_.vtolState == -1) return;
+    states_.flight_ = {};
+    emit states_.flightChanged();
+}
+void VehicleStateOwner::expireFlight()
+{
+    if (flightAtMs_ >= 0 && isStale(flightAtMs_, clock_.elapsed(), kFlightStale)) clearFlight();
+}
+void VehicleStateOwner::expireNavTarget()
+{
+    // NaN끼리 비교하지 않고 받은 때만 봐서, 목표가 없을 때 1초마다 알림이 나지 않게 해요.
+    constexpr double unknown = std::numeric_limits<double>::quiet_NaN();
+    const auto now = clock_.elapsed();
+    bool cleared = false;
+    if (targetAtMs_ >= 0 && isStale(targetAtMs_, now, kNavTargetStale)) {
+        states_.navTarget_.latDeg = unknown;
+        states_.navTarget_.lonDeg = unknown;
+        states_.navTarget_.altM = unknown;
+        targetAtMs_ = -1;
+        cleared = true;
+    }
+    if (orbitAtMs_ >= 0 && isStale(orbitAtMs_, now, kNavTargetStale)) {
+        states_.navTarget_.orbitRadiusM = unknown;
+        states_.navTarget_.orbitLatDeg = unknown;
+        states_.navTarget_.orbitLonDeg = unknown;
+        orbitAtMs_ = -1;
+        cleared = true;
+    }
+    if (cleared) emit states_.navTargetChanged();
+}
+void VehicleStateOwner::consumeNavigation(const mavlink_message_t& message)
+{
+    switch (message.msgid) {
+    case MAVLINK_MSG_ID_EXTENDED_SYS_STATE:
+        states_.flight_ = updateFlight(message);
+        flightAtMs_ = clock_.elapsed();
+        emit states_.flightChanged();
+        break;
+    case MAVLINK_MSG_ID_POSITION_TARGET_GLOBAL_INT:
+        states_.navTarget_ = updateNavTarget(message, states_.navTarget_);
+        targetAtMs_ = clock_.elapsed();
+        emit states_.navTargetChanged();
+        break;
+    case MAVLINK_MSG_ID_ORBIT_EXECUTION_STATUS:
+        states_.navTarget_ = updateOrbit(message, states_.navTarget_);
+        orbitAtMs_ = clock_.elapsed();
+        emit states_.navTargetChanged();
+        break;
+    case MAVLINK_MSG_ID_STATUSTEXT:
+        emit states_.vehicleMessage(statusTextOf(message));
+        break;
+    default: break;
+    }
 }
 void VehicleStateOwner::consume(const mavlink_message_t& message)
 {
@@ -72,7 +137,9 @@ void VehicleStateOwner::consume(const mavlink_message_t& message)
         states_.battery_ = updateBattery(message);
         emit states_.batteryChanged();
         break;
-    default: break;
+    default:
+        consumeNavigation(message);
+        break;
     }
 }
 }

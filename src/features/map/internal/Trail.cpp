@@ -1,10 +1,11 @@
+// [0.6.0 5.1] specs/features/0.6.0-fly.md
 // [0.5.0 5.6.3 T4] specs/features/0.5.0-map.md
 #include "Trail.h"
-#include <cmath>
+#include <kgc/app/geo/Geodesy.h>
 namespace kgc::map {
 bool isMapPosition(double latDeg, double lonDeg)
 {
-    return std::isfinite(latDeg) && std::isfinite(lonDeg) && !(latDeg == 0 && lonDeg == 0);
+    return kgc::app::geo::isKnownPosition(latDeg, lonDeg);
 }
 bool appendTrailPoint(QList<QGeoCoordinate>& points, const QGeoCoordinate& next, double minMeters, int maxPoints)
 {

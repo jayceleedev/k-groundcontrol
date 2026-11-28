@@ -1,0 +1,4 @@
+{"module": "safety", "settings": [
+ {"id": "safety.guidedMaxDistanceM", "type": "double", "default": 1000, "min": 10, "max": 100000, "labelKey": "유도 비행 최대 거리", "category": "safety"},
+ {"id": "safety.guidedMinAltitudeM", "type": "double", "default": 2, "min": 0.5, "max": 1000, "labelKey": "유도 비행 최저 고도", "category": "safety"},
+ {"id": "safety.guidedMaxAltitudeM", "type": "double", "default": 121.92, "min": 1, "max": 10000, "labelKey": "유도 비행 최고 고도", "category": "safety"}]}

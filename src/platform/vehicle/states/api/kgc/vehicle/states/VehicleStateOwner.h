@@ -1,3 +1,4 @@
+// [0.6.0 5.4] specs/features/0.6.0-fly.md
 // [0.1.0 T1–T6] specs/features/0.1.0-link.md
 #pragma once
 #include <QObject>
@@ -14,9 +15,9 @@ class VehicleStates;
  */
 class VehicleStateOwner : public QObject {
 public:
-/** 기체별 끊김 검사 작업을 등록해요.
+/** 기체별 끊김·만료 검사 작업을 등록해요.
  * 입력: 갱신할 states, 모드를 읽을 plugin, scheduler, 작업 이름에 붙일 sysid, 선택적인 parent예요.
- * 출력: 단조 시계와 기체별 1Hz 끊김 검사 작업을 준비해요.
+ * 출력: 단조 시계와 기체별 1Hz 작업 linkLoss.<sysid>를 준비해요. 그 작업이 끊김을 보고, 5초 안 온 비행 상태와 3초 안 온 항법 목표·선회를 비워요.
  * 실패: 살아 있는 같은 sysid의 검사 작업이 이미 있으면 스케줄러가 프로그래밍 오류로 처리해요.
  */
     VehicleStateOwner(VehicleStates& states, const kgc::vehicle::firmware::FirmwarePlugin& plugin,
@@ -29,8 +30,16 @@ public:
     void consume(const __mavlink_message& message);
 private:
     void checkLinkLoss();
+    // EXTENDED_SYS_STATE·POSITION_TARGET_GLOBAL_INT·ORBIT_EXECUTION_STATUS·STATUSTEXT를 옮겨요(consume이 60줄을 넘지 않게 나눴어요).
+    void consumeNavigation(const __mavlink_message& message);
+    void clearFlight();
+    void expireFlight();
+    void expireNavTarget();
     VehicleStates& states_;
     const kgc::vehicle::firmware::FirmwarePlugin& plugin_;
     QElapsedTimer clock_;
+    qint64 flightAtMs_ = -1;
+    qint64 targetAtMs_ = -1;
+    qint64 orbitAtMs_ = -1;
 };
 }
